@@ -1,0 +1,1462 @@
+﻿[
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\correct.mp3",
+        "bytes":  26112
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\intro.mp3",
+        "bytes":  60864
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_a.mp3",
+        "bytes":  23552
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_b.mp3",
+        "bytes":  22852
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_c.mp3",
+        "bytes":  17152
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_d.mp3",
+        "bytes":  17552
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_e.mp3",
+        "bytes":  17637
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_f.mp3",
+        "bytes":  20919
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_g.mp3",
+        "bytes":  20909
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_h.mp3",
+        "bytes":  22872
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_i.mp3",
+        "bytes":  23437
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_j.mp3",
+        "bytes":  20923
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_k.mp3",
+        "bytes":  18467
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_l.mp3",
+        "bytes":  17996
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_m.mp3",
+        "bytes":  22566
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_n.mp3",
+        "bytes":  19437
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_o.mp3",
+        "bytes":  18471
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_p.mp3",
+        "bytes":  17207
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_q.mp3",
+        "bytes":  16189
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_r.mp3",
+        "bytes":  15632
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_s.mp3",
+        "bytes":  17185
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_t.mp3",
+        "bytes":  15445
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_u.mp3",
+        "bytes":  17469
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_v.mp3",
+        "bytes":  14070
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_w.mp3",
+        "bytes":  20052
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_x.mp3",
+        "bytes":  19424
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_y.mp3",
+        "bytes":  15331
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\name_z.mp3",
+        "bytes":  17389
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\win.mp3",
+        "bytes":  24768
+    },
+    {
+        "path":  "assets\\audio\\phonics\\alphabet_order\\wrong.mp3",
+        "bytes":  25344
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\all_pairs.mp3",
+        "bytes":  23040
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\all_spelled.mp3",
+        "bytes":  22272
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\alphabet_master.mp3",
+        "bytes":  25344
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\amazing.mp3",
+        "bytes":  9024
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\correct.mp3",
+        "bytes":  7488
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\doing_great.mp3",
+        "bytes":  12096
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\emma_wow_great_job.mp3",
+        "bytes":  41725
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\feedback_listen_carefully.mp3",
+        "bytes":  25344
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\feedback_try_again.mp3",
+        "bytes":  30278
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\feedback_try_again_hint.mp3",
+        "bytes":  19584
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\great_job.mp3",
+        "bytes":  9216
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\keep_going.mp3",
+        "bytes":  9408
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\lesson_abc_intro.mp3",
+        "bytes":  29568
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\lesson_alphabet_order_intro.mp3",
+        "bytes":  60864
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\lesson_rhyming_intro.mp3",
+        "bytes":  25344
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\lesson_vowels_intro.mp3",
+        "bytes":  102144
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\listen_carefully.mp3",
+        "bytes":  25344
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\praise_all_pairs.mp3",
+        "bytes":  31421
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\praise_correct.mp3",
+        "bytes":  19424
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\praise_great_job.mp3",
+        "bytes":  26696
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\praise_wonderful.mp3",
+        "bytes":  24280
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\quiz_done.mp3",
+        "bytes":  17664
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\round_complete.mp3",
+        "bytes":  18816
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\try_again.mp3",
+        "bytes":  8832
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\try_again_hint.mp3",
+        "bytes":  19584
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\well_done.mp3",
+        "bytes":  9216
+    },
+    {
+        "path":  "assets\\audio\\phonics\\feedback\\wonderful.mp3",
+        "bytes":  8832
+    },
+    {
+        "path":  "assets\\audio\\phonics\\lesson_audio\\words\\word-monkey.mp3",
+        "bytes":  29186
+    },
+    {
+        "path":  "assets\\audio\\phonics\\lesson_audio\\words\\word-nest.mp3",
+        "bytes":  29186
+    },
+    {
+        "path":  "assets\\audio\\phonics\\lesson_audio\\words\\word-orange.mp3",
+        "bytes":  30022
+    },
+    {
+        "path":  "assets\\audio\\phonics\\lesson_audio\\words\\word-queen.mp3",
+        "bytes":  29186
+    },
+    {
+        "path":  "assets\\audio\\phonics\\lesson_audio\\words\\word-rabbit.mp3",
+        "bytes":  30022
+    },
+    {
+        "path":  "assets\\audio\\phonics\\lesson_audio\\words\\word-umbrella.mp3",
+        "bytes":  31276
+    },
+    {
+        "path":  "assets\\audio\\phonics\\lesson_audio\\words\\word-whale.mp3",
+        "bytes":  30440
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\instruction.mp3",
+        "bytes":  22656
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\intro.mp3",
+        "bytes":  19392
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\match.mp3",
+        "bytes":  10368
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_a.mp3",
+        "bytes":  23552
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_b.mp3",
+        "bytes":  22852
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_c.mp3",
+        "bytes":  17152
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_d.mp3",
+        "bytes":  17552
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_e.mp3",
+        "bytes":  17637
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_f.mp3",
+        "bytes":  20919
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_g.mp3",
+        "bytes":  20909
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_h.mp3",
+        "bytes":  22872
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_i.mp3",
+        "bytes":  23437
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_j.mp3",
+        "bytes":  20923
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_k.mp3",
+        "bytes":  18467
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_l.mp3",
+        "bytes":  17996
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_m.mp3",
+        "bytes":  22566
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_n.mp3",
+        "bytes":  19437
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_o.mp3",
+        "bytes":  18471
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_p.mp3",
+        "bytes":  17207
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_q.mp3",
+        "bytes":  16189
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_r.mp3",
+        "bytes":  15632
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_s.mp3",
+        "bytes":  17185
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_t.mp3",
+        "bytes":  15445
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_u.mp3",
+        "bytes":  17469
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_v.mp3",
+        "bytes":  14070
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_w.mp3",
+        "bytes":  20052
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_x.mp3",
+        "bytes":  19424
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_y.mp3",
+        "bytes":  15331
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\name_z.mp3",
+        "bytes":  17389
+    },
+    {
+        "path":  "assets\\audio\\phonics\\memory_flip\\win.mp3",
+        "bytes":  23040
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\done.mp3",
+        "bytes":  17664
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\question.mp3",
+        "bytes":  17088
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_apple.mp3",
+        "bytes":  32256
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_banana.mp3",
+        "bytes":  34752
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_cat.mp3",
+        "bytes":  31488
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_dog.mp3",
+        "bytes":  33408
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_egg.mp3",
+        "bytes":  37440
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_fish.mp3",
+        "bytes":  39936
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_grapes.mp3",
+        "bytes":  38208
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_house.mp3",
+        "bytes":  43008
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_ice_cream.mp3",
+        "bytes":  42432
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_juice.mp3",
+        "bytes":  37056
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_kite.mp3",
+        "bytes":  33216
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_lion.mp3",
+        "bytes":  38976
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_moon.mp3",
+        "bytes":  34560
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_rainbow.mp3",
+        "bytes":  40128
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_sun.mp3",
+        "bytes":  39936
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_turtle.mp3",
+        "bytes":  34368
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_umbrella.mp3",
+        "bytes":  35904
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_violin.mp3",
+        "bytes":  42240
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_whale.mp3",
+        "bytes":  44736
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_yarn.mp3",
+        "bytes":  39936
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\quiz_zebra.mp3",
+        "bytes":  38208
+    },
+    {
+        "path":  "assets\\audio\\phonics\\phonics_quiz\\tap_listen.mp3",
+        "bytes":  10752
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\explain.mp3",
+        "bytes":  22464
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\hint_bee_tree.mp3",
+        "bytes":  25728
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\hint_bug_mug.mp3",
+        "bytes":  27072
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\hint_cake_lake.mp3",
+        "bytes":  28608
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\hint_cat_bat.mp3",
+        "bytes":  25152
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\hint_fox_box.mp3",
+        "bytes":  30912
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\hint_frog_log.mp3",
+        "bytes":  28032
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\hint_hat_mat.mp3",
+        "bytes":  25344
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\hint_house_mouse.mp3",
+        "bytes":  32448
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\hint_moon_balloon.mp3",
+        "bytes":  29568
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\hint_moon_spoon.mp3",
+        "bytes":  29568
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\hint_pig_big.mp3",
+        "bytes":  26496
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\hint_star_car.mp3",
+        "bytes":  27648
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\instruction.mp3",
+        "bytes":  17088
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\intro.mp3",
+        "bytes":  25344
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\question.mp3",
+        "bytes":  18240
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\rhyme_bee_tree.mp3",
+        "bytes":  25728
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\rhyme_bug_mug.mp3",
+        "bytes":  27072
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\rhyme_cake_lake.mp3",
+        "bytes":  28608
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\rhyme_cat_bat.mp3",
+        "bytes":  25152
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\rhyme_fox_box.mp3",
+        "bytes":  30912
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\rhyme_frog_log.mp3",
+        "bytes":  28032
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\rhyme_hat_mat.mp3",
+        "bytes":  25344
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\rhyme_house_mouse.mp3",
+        "bytes":  32448
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\rhyme_moon_balloon.mp3",
+        "bytes":  29568
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\rhyme_moon_spoon.mp3",
+        "bytes":  29568
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\rhyme_pig_big.mp3",
+        "bytes":  26496
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\rhyme_star_car.mp3",
+        "bytes":  27648
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\word_bee.mp3",
+        "bytes":  5760
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\word_cat.mp3",
+        "bytes":  5760
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\word_frog.mp3",
+        "bytes":  7296
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\word_house.mp3",
+        "bytes":  7872
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\word_moon.mp3",
+        "bytes":  6720
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\word_pig.mp3",
+        "bytes":  6144
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\word_spoon.mp3",
+        "bytes":  7680
+    },
+    {
+        "path":  "assets\\audio\\phonics\\rhyming_words\\word_star.mp3",
+        "bytes":  7680
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\correct.mp3",
+        "bytes":  21696
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\done.mp3",
+        "bytes":  21888
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\hint_word_apple.mp3",
+        "bytes":  20544
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\hint_word_ball.mp3",
+        "bytes":  12672
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\hint_word_cat.mp3",
+        "bytes":  12672
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\hint_word_dog.mp3",
+        "bytes":  14208
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\hint_word_egg.mp3",
+        "bytes":  16128
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\hint_word_fish.mp3",
+        "bytes":  15552
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\hint_word_grapes.mp3",
+        "bytes":  19584
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\hint_word_house.mp3",
+        "bytes":  17280
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\hint_word_ice_cream.mp3",
+        "bytes":  21120
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\hint_word_juice.mp3",
+        "bytes":  23232
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\hint_word_kite.mp3",
+        "bytes":  17664
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\hint_word_lion.mp3",
+        "bytes":  16512
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\hint_word_moon.mp3",
+        "bytes":  14784
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\hint_word_rainbow.mp3",
+        "bytes":  15744
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\hint_word_umbrella.mp3",
+        "bytes":  17664
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\hint_word_violin.mp3",
+        "bytes":  18240
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\hint_word_xylophone.mp3",
+        "bytes":  23040
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\hint_word_zebra.mp3",
+        "bytes":  15552
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\instruction.mp3",
+        "bytes":  18048
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\listening.mp3",
+        "bytes":  15744
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\try_again.mp3",
+        "bytes":  20544
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\word_apple.mp3",
+        "bytes":  19865
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\word_ball.mp3",
+        "bytes":  6336
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\word_dog.mp3",
+        "bytes":  19880
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\word_grapes.mp3",
+        "bytes":  20001
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\word_hop.mp3",
+        "bytes":  5952
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\word_house.mp3",
+        "bytes":  19750
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\word_ice_cream.mp3",
+        "bytes":  22566
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\word_moon.mp3",
+        "bytes":  19048
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\word_octopus.mp3",
+        "bytes":  19013
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\word_queen.mp3",
+        "bytes":  18489
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\word_umbrella.mp3",
+        "bytes":  18461
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\word_violin.mp3",
+        "bytes":  18446
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\word_whale.mp3",
+        "bytes":  18232
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\word_xray.mp3",
+        "bytes":  16704
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\word_xylophone.mp3",
+        "bytes":  22493
+    },
+    {
+        "path":  "assets\\audio\\phonics\\say_it_right\\word_yarn.mp3",
+        "bytes":  17912
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_apple.mp3",
+        "bytes":  50844
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_banana.mp3",
+        "bytes":  44560
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_cat.mp3",
+        "bytes":  35991
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_dog.mp3",
+        "bytes":  41166
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_egg.mp3",
+        "bytes":  43664
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_fish.mp3",
+        "bytes":  43418
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_grapes.mp3",
+        "bytes":  22080
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_house.mp3",
+        "bytes":  26304
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_kite.mp3",
+        "bytes":  43132
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_lion.mp3",
+        "bytes":  52078
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_moon.mp3",
+        "bytes":  45650
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_nut.mp3",
+        "bytes":  19392
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_octopus.mp3",
+        "bytes":  26688
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_pig.mp3",
+        "bytes":  19392
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_queen.mp3",
+        "bytes":  40364
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_rainbow.mp3",
+        "bytes":  64841
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_sun.mp3",
+        "bytes":  48237
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_turtle.mp3",
+        "bytes":  20928
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_umbrella.mp3",
+        "bytes":  44021
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_violin.mp3",
+        "bytes":  45988
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_whale.mp3",
+        "bytes":  42601
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_xylophone.mp3",
+        "bytes":  37248
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_yarn.mp3",
+        "bytes":  22464
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\hint_zebra.mp3",
+        "bytes":  46704
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\question.mp3",
+        "bytes":  16896
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\tap_letter.mp3",
+        "bytes":  19200
+    },
+    {
+        "path":  "assets\\audio\\phonics\\sound_match\\tap_to_hear.mp3",
+        "bytes":  14016
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\achievement_13.mp3",
+        "bytes":  24384
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\achievement_26.mp3",
+        "bytes":  31872
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\achievement_5.mp3",
+        "bytes":  24960
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\achievement_first.mp3",
+        "bytes":  25728
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\achievement_streak.mp3",
+        "bytes":  26688
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\achievement_xp.mp3",
+        "bytes":  33408
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\intro_alphabet.mp3",
+        "bytes":  27456
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\intro_memory.mp3",
+        "bytes":  28224
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\intro_quiz.mp3",
+        "bytes":  27264
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\intro_rhyming.mp3",
+        "bytes":  28608
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\intro_sound_match.mp3",
+        "bytes":  27840
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\intro_voice.mp3",
+        "bytes":  23040
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\intro_word_builder.mp3",
+        "bytes":  24576
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\level_up.mp3",
+        "bytes":  24960
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\praise_1.mp3",
+        "bytes":  18624
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\praise_2.mp3",
+        "bytes":  18048
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\praise_3.mp3",
+        "bytes":  20928
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\praise_4.mp3",
+        "bytes":  18624
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\praise_5.mp3",
+        "bytes":  22080
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\praise_6.mp3",
+        "bytes":  19008
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\praise_7.mp3",
+        "bytes":  19776
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\praise_8.mp3",
+        "bytes":  16896
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\win_alphabet.mp3",
+        "bytes":  28608
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\win_good.mp3",
+        "bytes":  22272
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\win_great.mp3",
+        "bytes":  22272
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\win_memory.mp3",
+        "bytes":  25152
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\win_perfect.mp3",
+        "bytes":  23232
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\win_quiz.mp3",
+        "bytes":  27072
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\win_rhyming.mp3",
+        "bytes":  28992
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\win_sound_match.mp3",
+        "bytes":  26304
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\win_voice.mp3",
+        "bytes":  27648
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\win_word_builder.mp3",
+        "bytes":  22656
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\wrong_1.mp3",
+        "bytes":  23616
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\wrong_2.mp3",
+        "bytes":  27648
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\wrong_3.mp3",
+        "bytes":  28416
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\wrong_4.mp3",
+        "bytes":  21504
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\wrong_5.mp3",
+        "bytes":  20928
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\wrong_alphabet.mp3",
+        "bytes":  33216
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\wrong_memory.mp3",
+        "bytes":  30720
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\wrong_quiz.mp3",
+        "bytes":  28992
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\wrong_rhyming.mp3",
+        "bytes":  32064
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\wrong_sound_match.mp3",
+        "bytes":  30720
+    },
+    {
+        "path":  "assets\\audio\\phonics\\voice_feedback\\wrong_word.mp3",
+        "bytes":  26880
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_a.mp3",
+        "bytes":  42622
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_b.mp3",
+        "bytes":  50079
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_c.mp3",
+        "bytes":  45988
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_d.mp3",
+        "bytes":  45417
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_e.mp3",
+        "bytes":  45988
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_f.mp3",
+        "bytes":  50844
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_g.mp3",
+        "bytes":  47988
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_h.mp3",
+        "bytes":  43754
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_i.mp3",
+        "bytes":  50126
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_j.mp3",
+        "bytes":  48053
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_k.mp3",
+        "bytes":  42129
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_l.mp3",
+        "bytes":  47081
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_m.mp3",
+        "bytes":  50844
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_n.mp3",
+        "bytes":  47232
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_o.mp3",
+        "bytes":  45835
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_p.mp3",
+        "bytes":  48923
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_q.mp3",
+        "bytes":  44560
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_r.mp3",
+        "bytes":  58271
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_s.mp3",
+        "bytes":  45291
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_t.mp3",
+        "bytes":  50748
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_u.mp3",
+        "bytes":  48005
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_v.mp3",
+        "bytes":  44560
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_w.mp3",
+        "bytes":  48389
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_x.mp3",
+        "bytes":  55415
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_y.mp3",
+        "bytes":  49113
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\letter_z.mp3",
+        "bytes":  53177
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\vowels_all.mp3",
+        "bytes":  102144
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\vowels_intro.mp3",
+        "bytes":  43008
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\vowel_a.mp3",
+        "bytes":  17472
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\vowel_e.mp3",
+        "bytes":  24192
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\vowel_i.mp3",
+        "bytes":  26304
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\vowel_o.mp3",
+        "bytes":  20928
+    },
+    {
+        "path":  "assets\\audio\\phonics\\vowel_sounds\\vowel_u.mp3",
+        "bytes":  18816
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_ape.mp3",
+        "bytes":  27072
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_banana.mp3",
+        "bytes":  36672
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_cat.mp3",
+        "bytes":  28608
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_dog.mp3",
+        "bytes":  24768
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_fin.mp3",
+        "bytes":  32640
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_fish.mp3",
+        "bytes":  32256
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_grapes.mp3",
+        "bytes":  28608
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_house.mp3",
+        "bytes":  32064
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_hut.mp3",
+        "bytes":  26880
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_lion.mp3",
+        "bytes":  26112
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_lip.mp3",
+        "bytes":  29184
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_moon.mp3",
+        "bytes":  24384
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_mop.mp3",
+        "bytes":  24576
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_rainbow.mp3",
+        "bytes":  32256
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_rat.mp3",
+        "bytes":  26880
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_sun.mp3",
+        "bytes":  26688
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_turtle.mp3",
+        "bytes":  33024
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_umbrella.mp3",
+        "bytes":  28416
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\hint_zebra.mp3",
+        "bytes":  39360
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\spell_word.mp3",
+        "bytes":  10752
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\tap_missing.mp3",
+        "bytes":  13824
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_apple.mp3",
+        "bytes":  19865
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_banana.mp3",
+        "bytes":  20852
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_cat.mp3",
+        "bytes":  19138
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_dog.mp3",
+        "bytes":  19880
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_egg.mp3",
+        "bytes":  17282
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_fish.mp3",
+        "bytes":  19424
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_grapes.mp3",
+        "bytes":  20001
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_house.mp3",
+        "bytes":  19750
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_hut.mp3",
+        "bytes":  5376
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_ice_cream.mp3",
+        "bytes":  22566
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_juice.mp3",
+        "bytes":  16536
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_kite.mp3",
+        "bytes":  16403
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_lion.mp3",
+        "bytes":  22178
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_moon.mp3",
+        "bytes":  19048
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_nut.mp3",
+        "bytes":  14279
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_octopus.mp3",
+        "bytes":  19013
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_pig.mp3",
+        "bytes":  15581
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_queen.mp3",
+        "bytes":  18489
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_rainbow.mp3",
+        "bytes":  21847
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_sun.mp3",
+        "bytes":  16472
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_turtle.mp3",
+        "bytes":  20567
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_umbrella.mp3",
+        "bytes":  18461
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_violin.mp3",
+        "bytes":  18446
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_whale.mp3",
+        "bytes":  18232
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_xylophone.mp3",
+        "bytes":  22493
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_yarn.mp3",
+        "bytes":  17912
+    },
+    {
+        "path":  "assets\\audio\\phonics\\word_builder\\word_zebra.mp3",
+        "bytes":  19766
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\monkey_M.png",
+        "bytes":  1433814
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\monkey_M1.png",
+        "bytes":  1415382
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\monkey_M2.png",
+        "bytes":  1384111
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\nest_N.png",
+        "bytes":  1008662
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\nest_N1.png",
+        "bytes":  998792
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\nest_N2.png",
+        "bytes":  1002740
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\orange_O.png",
+        "bytes":  883182
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\orange_O1.png",
+        "bytes":  892303
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\orange_O2.png",
+        "bytes":  893482
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\queen_Q.png",
+        "bytes":  1405046
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\queen_Q1.png",
+        "bytes":  1403852
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\queen_Q2.png",
+        "bytes":  1440840
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\rabbit_R.png",
+        "bytes":  1370837
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\rabbit_R1.png",
+        "bytes":  1372509
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\rabbit_R2.png",
+        "bytes":  1346409
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\umbrella_U.png",
+        "bytes":  974489
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\umbrella_U1.png",
+        "bytes":  944985
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\umbrella_U2.png",
+        "bytes":  945675
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\whale_W.png",
+        "bytes":  924028
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\whale_W1.png",
+        "bytes":  870029
+    },
+    {
+        "path":  "assets\\images\\lesson_frames\\whale_W2.png",
+        "bytes":  900365
+    }
+]

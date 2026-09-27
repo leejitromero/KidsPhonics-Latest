@@ -1,0 +1,783 @@
+﻿[
+    {
+        "tier":  "easy",
+        "word":  "axe",
+        "slug":  "axe",
+        "letter":  "A",
+        "frames":  [
+                       "assets/images/game_words/axe-0.png",
+                       "assets/images/game_words/axe-0.png"
+                   ],
+        "audio":  "assets/audio/game_words/axe.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "bag",
+        "slug":  "bag",
+        "letter":  "B",
+        "frames":  [
+                       "assets/images/game_words/bag-0.png",
+                       "assets/images/game_words/bag-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/bag.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "cow",
+        "slug":  "cow",
+        "letter":  "C",
+        "frames":  [
+                       "assets/images/game_words/cow-0.png",
+                       "assets/images/game_words/cow-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/cow.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "dog",
+        "slug":  "dog",
+        "letter":  "D",
+        "frames":  [
+                       "assets/images/game_words/dog-0.png",
+                       "assets/images/game_words/dog-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/dog.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "ear",
+        "slug":  "ear",
+        "letter":  "E",
+        "frames":  [
+                       "assets/images/game_words/ear-0.png",
+                       "assets/images/game_words/ear-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/ear.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "fan",
+        "slug":  "fan",
+        "letter":  "F",
+        "frames":  [
+                       "assets/images/game_words/fan-0.png",
+                       "assets/images/game_words/fan-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/fan.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "goat",
+        "slug":  "goat",
+        "letter":  "G",
+        "frames":  [
+                       "assets/images/game_words/goat-0.png",
+                       "assets/images/game_words/goat-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/goat.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "hand",
+        "slug":  "hand",
+        "letter":  "H",
+        "frames":  [
+                       "assets/images/game_words/hand-0.png",
+                       "assets/images/game_words/hand-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/hand.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "ice",
+        "slug":  "ice",
+        "letter":  "I",
+        "frames":  [
+                       "assets/images/game_words/ice-0.png",
+                       "assets/images/game_words/ice-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/ice.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "jar",
+        "slug":  "jar",
+        "letter":  "J",
+        "frames":  [
+                       "assets/images/game_words/jar-0.png",
+                       "assets/images/game_words/jar-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/jar.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "key",
+        "slug":  "key",
+        "letter":  "K",
+        "frames":  [
+                       "assets/images/game_words/key-0.png",
+                       "assets/images/game_words/key-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/key.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "lips",
+        "slug":  "lips",
+        "letter":  "L",
+        "frames":  [
+                       "assets/images/game_words/lips-0.png",
+                       "assets/images/game_words/lips-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/lips.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "moon",
+        "slug":  "moon",
+        "letter":  "M",
+        "frames":  [
+                       "assets/images/game_words/moon-0.png",
+                       "assets/images/game_words/moon-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/moon.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "net",
+        "slug":  "net",
+        "letter":  "N",
+        "frames":  [
+                       "assets/images/game_words/net-0.png",
+                       "assets/images/game_words/net-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/net.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "onion",
+        "slug":  "onion",
+        "letter":  "O",
+        "frames":  [
+                       "assets/images/game_words/onion-0.png",
+                       "assets/images/game_words/onion-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/onion.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "pen",
+        "slug":  "pen",
+        "letter":  "P",
+        "frames":  [
+                       "assets/images/game_words/pen-0.png",
+                       "assets/images/game_words/pen-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/pen.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "quill",
+        "slug":  "quill",
+        "letter":  "Q",
+        "frames":  [
+                       "assets/images/game_words/quill-0.png",
+                       "assets/images/game_words/quill-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/quill.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "rose",
+        "slug":  "rose",
+        "letter":  "R",
+        "frames":  [
+                       "assets/images/game_words/rose-0.png",
+                       "assets/images/game_words/rose-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/rose.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "star",
+        "slug":  "star",
+        "letter":  "S",
+        "frames":  [
+                       "assets/images/game_words/star-0.png",
+                       "assets/images/game_words/star-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/star.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "tub",
+        "slug":  "tub",
+        "letter":  "T",
+        "frames":  [
+                       "assets/images/game_words/tub-0.png",
+                       "assets/images/game_words/tub-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/tub.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "umbrella",
+        "slug":  "umbrella",
+        "letter":  "U",
+        "frames":  [
+                       "assets/images/game_words/umbrella-0.png",
+                       "assets/images/game_words/umbrella-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/umbrella.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "vase",
+        "slug":  "vase",
+        "letter":  "V",
+        "frames":  [
+                       "assets/images/game_words/vase-0.png",
+                       "assets/images/game_words/vase-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/vase.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "web",
+        "slug":  "web",
+        "letter":  "W",
+        "frames":  [
+                       "assets/images/game_words/web-0.png",
+                       "assets/images/game_words/web-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/web.mp3"
+    },
+    {
+        "tier":  "easy",
+        "word":  "yarn",
+        "slug":  "yarn",
+        "letter":  "Y",
+        "frames":  [
+                       "assets/images/game_words/yarn-0.png",
+                       "assets/images/game_words/yarn-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/yarn.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "apple",
+        "slug":  "apple",
+        "letter":  "A",
+        "frames":  [
+                       "assets/images/game_words/apple-0.png",
+                       "assets/images/game_words/apple-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/apple.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "book",
+        "slug":  "book",
+        "letter":  "B",
+        "frames":  [
+                       "assets/images/game_words/book-0.png",
+                       "assets/images/game_words/book-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/book.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "corn",
+        "slug":  "corn",
+        "letter":  "C",
+        "frames":  [
+                       "assets/images/game_words/corn-0.png",
+                       "assets/images/game_words/corn-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/corn.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "door",
+        "slug":  "door",
+        "letter":  "D",
+        "frames":  [
+                       "assets/images/game_words/door-0.png",
+                       "assets/images/game_words/door-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/door.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "elephant",
+        "slug":  "elephant",
+        "letter":  "E",
+        "frames":  [
+                       "assets/images/game_words/elephant-0.png",
+                       "assets/images/game_words/elephant-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/elephant.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "frog",
+        "slug":  "frog",
+        "letter":  "F",
+        "frames":  [
+                       "assets/images/game_words/frog-0.png",
+                       "assets/images/game_words/frog-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/frog.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "grapes",
+        "slug":  "grapes",
+        "letter":  "G",
+        "frames":  [
+                       "assets/images/game_words/grapes-0.png",
+                       "assets/images/game_words/grapes-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/grapes.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "heart",
+        "slug":  "heart",
+        "letter":  "H",
+        "frames":  [
+                       "assets/images/game_words/heart-0.png",
+                       "assets/images/game_words/heart-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/heart.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "ice cream",
+        "slug":  "ice_cream",
+        "letter":  "I",
+        "frames":  [
+                       "assets/images/game_words/ice_cream-0.png",
+                       "assets/images/game_words/ice_cream-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/ice_cream.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "jacket",
+        "slug":  "jacket",
+        "letter":  "J",
+        "frames":  [
+                       "assets/images/game_words/jacket-0.png",
+                       "assets/images/game_words/jacket-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/jacket.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "king",
+        "slug":  "king",
+        "letter":  "K",
+        "frames":  [
+                       "assets/images/game_words/king-0.png",
+                       "assets/images/game_words/king-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/king.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "lamb",
+        "slug":  "lamb",
+        "letter":  "L",
+        "frames":  [
+                       "assets/images/game_words/lamb-0.png",
+                       "assets/images/game_words/lamb-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/lamb.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "mango",
+        "slug":  "mango",
+        "letter":  "M",
+        "frames":  [
+                       "assets/images/game_words/mango-0.png",
+                       "assets/images/game_words/mango-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/mango.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "nest",
+        "slug":  "nest",
+        "letter":  "N",
+        "frames":  [
+                       "assets/images/game_words/nest-0.png",
+                       "assets/images/game_words/nest-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/nest.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "orange",
+        "slug":  "orange",
+        "letter":  "O",
+        "frames":  [
+                       "assets/images/game_words/orange-0.png",
+                       "assets/images/game_words/orange-0.png"
+                   ],
+        "audio":  "assets/audio/game_words/orange.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "plate",
+        "slug":  "plate",
+        "letter":  "P",
+        "frames":  [
+                       "assets/images/game_words/plate-0.png",
+                       "assets/images/game_words/plate-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/plate.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "queen",
+        "slug":  "queen",
+        "letter":  "Q",
+        "frames":  [
+                       "assets/images/game_words/queen-0.png",
+                       "assets/images/game_words/queen-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/queen.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "rabbit",
+        "slug":  "rabbit",
+        "letter":  "R",
+        "frames":  [
+                       "assets/images/game_words/rabbit-0.png",
+                       "assets/images/game_words/rabbit-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/rabbit.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "sheep",
+        "slug":  "sheep",
+        "letter":  "S",
+        "frames":  [
+                       "assets/images/game_words/sheep-0.png",
+                       "assets/images/game_words/sheep-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/sheep.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "tiger",
+        "slug":  "tiger",
+        "letter":  "T",
+        "frames":  [
+                       "assets/images/game_words/tiger-0.png",
+                       "assets/images/game_words/tiger-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/tiger.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "uniform",
+        "slug":  "uniform",
+        "letter":  "U",
+        "frames":  [
+                       "assets/images/game_words/uniform-0.png",
+                       "assets/images/game_words/uniform-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/uniform.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "violin",
+        "slug":  "violin",
+        "letter":  "V",
+        "frames":  [
+                       "assets/images/game_words/violin-0.png",
+                       "assets/images/game_words/violin-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/violin.mp3"
+    },
+    {
+        "tier":  "medium",
+        "word":  "wolf",
+        "slug":  "wolf",
+        "letter":  "W",
+        "frames":  [
+                       "assets/images/game_words/wolf-0.png",
+                       "assets/images/game_words/wolf-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/wolf.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "airplane",
+        "slug":  "airplane",
+        "letter":  "A",
+        "frames":  [
+                       "assets/images/game_words/airplane-0.png",
+                       "assets/images/game_words/airplane-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/airplane.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "bottle",
+        "slug":  "bottle",
+        "letter":  "B",
+        "frames":  [
+                       "assets/images/game_words/bottle-0.png",
+                       "assets/images/game_words/bottle-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/bottle.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "chicken",
+        "slug":  "chicken",
+        "letter":  "C",
+        "frames":  [
+                       "assets/images/game_words/chicken-0.png",
+                       "assets/images/game_words/chicken-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/chicken.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "donkey",
+        "slug":  "donkey",
+        "letter":  "D",
+        "frames":  [
+                       "assets/images/game_words/donkey-0.png",
+                       "assets/images/game_words/donkey-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/donkey.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "eggplant",
+        "slug":  "eggplant",
+        "letter":  "E",
+        "frames":  [
+                       "assets/images/game_words/eggplant-0.png",
+                       "assets/images/game_words/eggplant-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/eggplant.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "fairy",
+        "slug":  "fairy",
+        "letter":  "F",
+        "frames":  [
+                       "assets/images/game_words/fairy-0.png",
+                       "assets/images/game_words/fairy-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/fairy.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "gorilla",
+        "slug":  "gorilla",
+        "letter":  "G",
+        "frames":  [
+                       "assets/images/game_words/gorilla-0.png",
+                       "assets/images/game_words/gorilla-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/gorilla.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "house",
+        "slug":  "house",
+        "letter":  "H",
+        "frames":  [
+                       "assets/images/game_words/house-0.png",
+                       "assets/images/game_words/house-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/house.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "island",
+        "slug":  "island",
+        "letter":  "I",
+        "frames":  [
+                       "assets/images/game_words/island-0.png",
+                       "assets/images/game_words/island-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/island.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "jellyfish",
+        "slug":  "jellyfish",
+        "letter":  "J",
+        "frames":  [
+                       "assets/images/game_words/jellyfish-0.png",
+                       "assets/images/game_words/jellyfish-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/jellyfish.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "kangaroo",
+        "slug":  "kangaroo",
+        "letter":  "K",
+        "frames":  [
+                       "assets/images/game_words/kangaroo-0.png",
+                       "assets/images/game_words/kangaroo-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/kangaroo.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "lollipop",
+        "slug":  "lollipop",
+        "letter":  "L",
+        "frames":  [
+                       "assets/images/game_words/lollipop-0.png",
+                       "assets/images/game_words/lollipop-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/lollipop.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "monkey",
+        "slug":  "monkey",
+        "letter":  "M",
+        "frames":  [
+                       "assets/images/game_words/monkey-0.png",
+                       "assets/images/game_words/monkey-0.png"
+                   ],
+        "audio":  "assets/audio/game_words/monkey.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "notebook",
+        "slug":  "notebook",
+        "letter":  "N",
+        "frames":  [
+                       "assets/images/game_words/notebook-0.png",
+                       "assets/images/game_words/notebook-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/notebook.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "octopus",
+        "slug":  "octopus",
+        "letter":  "O",
+        "frames":  [
+                       "assets/images/game_words/octopus-0.png",
+                       "assets/images/game_words/octopus-0.png"
+                   ],
+        "audio":  "assets/audio/game_words/octopus.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "potato",
+        "slug":  "potato",
+        "letter":  "P",
+        "frames":  [
+                       "assets/images/game_words/potato-0.png",
+                       "assets/images/game_words/potato-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/potato.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "quack",
+        "slug":  "quack",
+        "letter":  "Q",
+        "frames":  [
+                       "assets/images/game_words/quack-0.png",
+                       "assets/images/game_words/quack-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/quack.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "rooster",
+        "slug":  "rooster",
+        "letter":  "R",
+        "frames":  [
+                       "assets/images/game_words/rooster-0.png",
+                       "assets/images/game_words/rooster-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/rooster.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "spoon",
+        "slug":  "spoon",
+        "letter":  "S",
+        "frames":  [
+                       "assets/images/game_words/spoon-0.png",
+                       "assets/images/game_words/spoon-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/spoon.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "train",
+        "slug":  "train",
+        "letter":  "T",
+        "frames":  [
+                       "assets/images/game_words/train-0.png",
+                       "assets/images/game_words/train-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/train.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "unicorn",
+        "slug":  "unicorn",
+        "letter":  "U",
+        "frames":  [
+                       "assets/images/game_words/unicorn-0.png",
+                       "assets/images/game_words/unicorn-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/unicorn.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "vacuum",
+        "slug":  "vacuum",
+        "letter":  "V",
+        "frames":  [
+                       "assets/images/game_words/vacuum-0.png",
+                       "assets/images/game_words/vacuum-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/vacuum.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "whale",
+        "slug":  "whale",
+        "letter":  "W",
+        "frames":  [
+                       "assets/images/game_words/whale-0.png",
+                       "assets/images/game_words/whale-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/whale.mp3"
+    },
+    {
+        "tier":  "hard",
+        "word":  "yogurt",
+        "slug":  "yogurt",
+        "letter":  "Y",
+        "frames":  [
+                       "assets/images/game_words/yogurt-0.png",
+                       "assets/images/game_words/yogurt-1.png"
+                   ],
+        "audio":  "assets/audio/game_words/yogurt.mp3"
+    }
+]

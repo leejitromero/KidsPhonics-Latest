@@ -1,0 +1,62 @@
+name: kidsphonics
+description: KidsPhonics - Mobile App for Grade 1 Learners
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  crypto: ^3.0.7               # Offline salted Parent PIN hashing
+  flutter:
+    sdk: flutter
+  shared_preferences: ^2.2.2    # Progress saving
+  google_fonts: ^6.1.0          # Nunito + Fredoka One fonts
+  provider: ^6.1.1              # State management
+  audioplayers: ^6.0.0          # Sound effects
+  speech_to_text: ^7.0.0        # Word recognition (not pronunciation scoring)
+  permission_handler: ^11.3.1   # Microphone permission
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  http: ^1.2.2                    # used by tools/generate_audio.dart only
+  flutter_launcher_icons: ^0.14.3 # generates the Android app icon
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/Nunito-Regular.ttf
+        - asset: assets/fonts/Nunito-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Nunito-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Nunito-Black.ttf
+          weight: 900
+  assets:
+    - assets/fonts/
+    - assets/images/
+    - assets/images/game_words/
+    - assets/audio/game_words/
+    - assets/images/lesson_frames/
+    - assets/audio/phonics/lesson_audio/letters/
+    - assets/audio/phonics/lesson_audio/sounds/
+    - assets/audio/phonics/lesson_audio/words/
+    - assets/audio/
+    - assets/audio/phonics/rhyming_words/
+    - assets/audio/phonics/word_builder/
+    - assets/audio/phonics/say_it_right/
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/images/app_icon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#5636A6"
+  adaptive_icon_foreground: "assets/images/app_mascot.png"
+  adaptive_icon_foreground_inset: 22
+
+

@@ -1,0 +1,162 @@
+import '../data/game_session_order.dart';
+import '../widgets/game_word_picture.dart';
+// lib/screens/word_builder_screen.dart
+import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
+
+import '../data/phonics_activity_data.dart';
+import '../providers/app_provider.dart';
+
+import '../models/difficulty.dart';
+import '../widgets/learner_widgets.dart';
+
+class WordBuilderScreen extends StatefulWidget {
+  final Difficulty difficulty;
+  const WordBuilderScreen({super.key, this.difficulty = Difficulty.medium});
+  @override
+  State<WordBuilderScreen> createState() => _WordBuilderScreenState();
+}
+
+class _WordBuilderScreenState extends State<WordBuilderScreen>
+    with GameSessionUi<WordBuilderScreen> {
+  int _puzzleIndex = 0;
+  bool? _feedback;
+
+  // For multi-blank: track which blank is currently being filled (0-based)
+  int _activeBlankIndex = 0;
+  // Filled answers so far — index = blank slot index
+  late List<String?> _filledAnswers;
+
+  bool _busy = false;
+  bool _allCorrect = false; // true when all blanks filled correctly
+
+  late List<WordPuzzle> _activePuzzles = _newSession();
+  List<WordPuzzle> _newSession() => GameSessionOrder.next(
+      'word_builder-${widget.difficulty.name}',
+      wordPuzzlesForDifficulty(widget.difficulty),
+      (item) => item.word);
+  WordPuzzle get _puzzle => _activePuzzles[_puzzleIndex];
+  late List<String> _shuffledTiles;
+
+  int get _blankCount => _puzzle.correctLetters.length;
+
+  @override
+  void initState() {
+    super.initState();
+    _initPuzzle();
+  }
+
+  void _initPuzzle() {
+    _activeBlankIndex = 0;
+    _filledAnswers = List<String?>.filled(_blankCount, null);
+    _allCorrect = false;
+    _feedback = null;
+    _shuffledTiles = List<String>.from(_puzzle.tiles)..shuffle();
+  }
+
+  // ── tap a letter tile ──────────────────────────────────────────────────
+  void _tapTile(String letter) async {
+    if (_allCorrect || _busy || resultOpen) return;
+    _busy = true;
+    // Still blanks left to fill
+    if (_activeBlankIndex >= _blankCount) return;
+
+    final provider = context.read<AppProvider>();
+    provider.audio.playTap();
+
+    final isCorrect = letter == _puzzle.correctLetters[_activeBlankIndex];
+    recordGameAnswer(correct: isCorrect);
+    setState(() => _feedback = isCorrect);
+
+    if (isCorrect) {
+      setState(() {
+        _filledAnswers[_activeBlankIndex] = letter;
+        _activeBlankIndex++;
+        if (_activeBlankIndex >= _blankCount) _allCorrect = true;
+      });
+
+      if (_allCorrect) {
+        // All blanks correct — play correct.mp3 tone only
+        provider.audio.playCorrect();
+        awardGameXp((10 * widget.difficulty.xpMultiplier).round());
+        awardGameStar();
+        await Future.delayed(const Duration(milliseconds: 1000));
+        if (!mounted) return;
+        if (_puzzleIndex < _activePuzzles.length - 1) {
+          setState(() {
+            _puzzleIndex++;
+            _initPuzzle();
+          });
+        } else {
+          _showWinDialog();
+        }
+      } else {
+        // Correct blank filled — play correct.mp3, move to next blank
+        provider.audio.playCorrect();
+        await Future.delayed(const Duration(milliseconds: 300));
+      }
+    } else {
+      // Wrong letter — play wrong.mp3 only, no voice
+      provider.audio.playWrong();
+      await Future.delayed(const Duration(milliseconds: 300));
+    }
+    if (mounted) setState(() => _busy = false);
+  }
+
+  void _restart() {
+    setState(() {
+      _puzzleIndex = 0;
+      _activePuzzles = _newSession();
+      _initPuzzle();
+    });
+  }
+
+  void _showWinDialog() {
+    if (resultOpen) return;
+    resultOpen = true;
+    final provider = context.read<AppProvider>();
+    provider.recordActivityCompleted();
+    awardGameXp((15 * widget.difficulty.xpMultiplier).round());
+    provider.audio.playWin();
+    showGameResult(_restart);
+  }
+
+  // ── Build the word display row ─────────────────────────────────────────
+  Widget _buildWordRow() {
+    var blank = 0;
+    final word = _puzzle.blanks
+        .map((letter) => letter ?? (_filledAnswers[blank++] ?? '_'))
+        .join(' ');
+    return Text(word,
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold));
+  }
+
+  @override
+  Widget build(BuildContext context) => GameScaffold(
+      title: 'Word Builder',
+      instructions:
+          'Hear the word. Choose letters to fill the blanks from left to right.',
+      difficulty: widget.difficulty,
+      current: _puzzleIndex + 1,
+      total: _activePuzzles.length,
+      hasProgress: scoredAttempts > 0 && !resultOpen,
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Center(child: GameWordPicture(word: _puzzle.word)),
+        const SizedBox(height: 16),
+        _buildWordRow(),
+        AudioButton(
+            phrase: _puzzle.word[0] + _puzzle.word.substring(1).toLowerCase()),
+        const SizedBox(height: 16),
+        GameChoiceGrid(
+            children: _shuffledTiles
+                .map((letter) => GameAnswerButton(
+                    label: letter,
+                    onPressed: _allCorrect || _busy || resultOpen
+                        ? null
+                        : () => _tapTile(letter)))
+                .toList()),
+        if (_feedback != null) GameFeedback(correct: _feedback!),
+      ]));
+}
