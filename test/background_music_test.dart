@@ -15,6 +15,7 @@ class MusicPlayer extends AudioPlayer {
   double actualVolume = 0;
   ReleaseMode? actualReleaseMode;
   bool fail = false;
+  Source? loadedSource;
   @override
   PlayerState get state => current;
   @override
@@ -24,11 +25,13 @@ class MusicPlayer extends AudioPlayer {
   @override
   Future<void> setVolume(double value) async => actualVolume = value;
   @override
-  Future<void> setReleaseMode(ReleaseMode value) async => actualReleaseMode = value;
+  Future<void> setReleaseMode(ReleaseMode value) async =>
+      actualReleaseMode = value;
   @override
   Future<void> setAudioContext(AudioContext ctx) async {}
   @override
   Future<void> setSource(Source source) async {
+    loadedSource = source;
     loads++;
   }
 
@@ -83,7 +86,9 @@ void main() {
     final music = BackgroundMusicService(player: player);
     await music.setActive(true);
     expect(player.actualReleaseMode, ReleaseMode.loop);
-    expect(player.actualVolume, .12);
+    expect(player.actualVolume, .06);
+    expect(
+        (player.loadedSource as AssetSource).path, 'audio/backgroundtheme.mp3');
     final voice = Object(), microphone = Object();
     await music.hold(voice);
     await music.hold(microphone);
@@ -97,6 +102,7 @@ void main() {
     await music.configure(enabled: true, volume: .2);
     expect(player.state, PlayerState.paused);
     await music.setActive(true);
+    expect(player.actualVolume, .1);
     await music.configure(enabled: false, volume: .2);
     expect(player.state, PlayerState.paused);
     await player.dispose();
@@ -146,12 +152,10 @@ void main() {
     restored.dispose();
   });
 
-  test('music and attribution are bundled offline', () {
-    final audio = File('assets/audio/carefree.mp3').readAsBytesSync();
+  test('replacement music is bundled offline and the old track is removed', () {
+    final audio = File('assets/audio/backgroundtheme.mp3').readAsBytesSync();
     expect(audio.length, greaterThan(1000000));
-    expect(String.fromCharCodes(audio.take(3)), 'ID3');
-    final credit = File('assets/audio/carefree-LICENSE.txt').readAsStringSync();
-    expect(credit, contains('Kevin MacLeod'));
-    expect(credit, contains('https://creativecommons.org/licenses/by/4.0/'));
+    expect(File('assets/audio/carefree.mp3').existsSync(), isFalse);
+    expect(File('assets/audio/carefree-LICENSE.txt').existsSync(), isFalse);
   });
 }

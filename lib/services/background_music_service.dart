@@ -44,7 +44,8 @@ class BackgroundMusicService {
         return;
       }
       final player = _player ??= AudioPlayer();
-      await player.setVolume(_volume);
+      // Keep the replacement theme quieter, including existing saved settings.
+      await player.setVolume(_volume * .5);
       if (!shouldPlay) return;
       if (!_loaded) {
         await player.setReleaseMode(ReleaseMode.loop);
@@ -54,7 +55,7 @@ class BackgroundMusicService {
               const AudioContextAndroid(audioFocus: AndroidAudioFocus.none),
           iOS: AudioContextIOS(category: AVAudioSessionCategory.ambient),
         ));
-        await player.setSource(AssetSource('audio/carefree.mp3'));
+        await player.setSource(AssetSource('audio/backgroundtheme.mp3'));
         _loaded = true;
       }
       if (shouldPlay && player.state != PlayerState.playing) {

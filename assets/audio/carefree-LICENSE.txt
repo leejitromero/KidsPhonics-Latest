@@ -1,8 +1,0 @@
-Carefree — Kevin MacLeod (incompetech.com)
-ISRC: USUAN1400037
-Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400037
-Audio: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Carefree.mp3
-Licensed under Creative Commons Attribution 4.0 International (CC BY 4.0).
-License: https://creativecommons.org/licenses/by/4.0/
-Audio file unchanged. The app loops playback, reduces its volume, and pauses it
-during instructional audio, speech practice, and while the app is inactive.

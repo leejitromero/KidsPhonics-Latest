@@ -249,17 +249,15 @@ class _ParentScreenState extends State<ParentScreen> {
                         provider.musicEnabled ? provider.setMusicVolume : null),
                 TextButton.icon(
                     icon: const Icon(Icons.info_outline),
-                    label: const Text('Music Credits'),
+                    label: const Text('Background Theme'),
                     onPressed: () => showDialog<void>(
                         context: context,
                         builder: (ctx) => AlertDialog(
-                              title: const Text('Music Credits'),
+                              title: const Text('Background Theme'),
                               content: const SingleChildScrollView(
                                   child: SelectableText(
-                                      'Carefree — Kevin MacLeod (incompetech.com)\n\n'
-                                      'Licensed under CC BY 4.0\nhttps://creativecommons.org/licenses/by/4.0/\n\n'
-                                      'Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400037\n\n'
-                                      'Original audio, looped at reduced volume in the app.')),
+                                      'A gentle background theme, played at reduced volume.\n\n'
+                                      'Music pauses while words, letters, and sound effects play.')),
                               actions: [
                                 TextButton(
                                     onPressed: () => Navigator.pop(ctx),

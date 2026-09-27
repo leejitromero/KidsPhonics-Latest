@@ -15,8 +15,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoogleFonts.config.allowRuntimeFetching = false;
   LicenseRegistry.addLicense(() async* {
-    yield LicenseEntryWithLineBreaks(['Carefree — Kevin MacLeod'],
-        await rootBundle.loadString('assets/audio/carefree-LICENSE.txt'));
     for (final family in ['nunito', 'fredoka']) {
       yield LicenseEntryWithLineBreaks([family],
           await rootBundle.loadString('assets/fonts/$family-OFL.txt'));

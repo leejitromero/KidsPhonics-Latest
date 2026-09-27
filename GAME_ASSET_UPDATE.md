@@ -48,10 +48,11 @@ The first release-build attempt was interrupted. The resumed release build and
 the APK's asset hash audit are tracked in `build/asset_apk_build_resume.log` and
 `build/game_apk_verification.json` respectively.
 
-Release build completed successfully in 320.3 seconds on the resumed run.
-The local APK is `build/app/outputs/flutter-apk/app-release.apk` (276,561,686
+The game-asset release build completed successfully in 320.3 seconds on the resumed run.
+That version's APK was `build/app/outputs/flutter-apk/app-release.apk` (276,561,686
 bytes). All 209 unique supplied media files (138 PNGs and 71 MP3s) match their
 source SHA-256 hashes inside the APK. All 365 retired files are absent.
 
-APK SHA-256: `94A95B6F3F689F98CB06C921984A10A93F97BE450B9D716C42A8A6ECD681083D`.
-The APK has not been sent; delivery waits for the user's instruction.
+Game-asset release SHA-256: `94A95B6F3F689F98CB06C921984A10A93F97BE450B9D716C42A8A6ECD681083D`.
+That release was delivered after the user's go signal. A subsequent background
+theme update replaces the APK at the same path; see `BACKGROUND_MUSIC.md`.
