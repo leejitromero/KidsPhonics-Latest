@@ -9,6 +9,7 @@ import '../theme/kids_ui.dart';
 import 'learning_progress_widgets.dart';
 import 'adventure_background.dart';
 import 'mascot_guide.dart';
+import 'game_tutorial.dart';
 
 class LearnerActivityCard extends StatelessWidget {
   const LearnerActivityCard(
@@ -327,6 +328,7 @@ class LearnerPage extends StatelessWidget {
       required this.title,
       required this.child,
       this.onBack,
+      this.onHelp,
       this.showBack = true,
       this.fitViewport = false,
       this.answerResult,
@@ -335,6 +337,7 @@ class LearnerPage extends StatelessWidget {
   final String title;
   final Widget child;
   final VoidCallback? onBack;
+  final VoidCallback? onHelp;
   final bool showBack;
   final bool fitViewport;
   final bool? answerResult;
@@ -347,6 +350,13 @@ class LearnerPage extends StatelessWidget {
         builder: (ctx) => Scaffold(
           backgroundColor: const Color(0xFFEEE9FF),
           appBar: AppBar(
+              actions: [
+                if (onHelp != null)
+                  IconButton(
+                      tooltip: 'How to Play',
+                      onPressed: onHelp,
+                      icon: const Icon(Icons.help_outline_rounded))
+              ],
               backgroundColor: const Color(0xFFEEE9FF),
               surfaceTintColor: Colors.transparent,
               scrolledUnderElevation: 0,
@@ -434,7 +444,8 @@ class GameChoiceGrid extends StatelessWidget {
             for (var i = 0; i < children.length; i++)
               SizedBox(
                   width: diameter,
-                  height: diameter,
+                  height:
+                      children[i].visual != null ? diameter * 1.08 : diameter,
                   child: _CircularChoiceStyle(
                       color: const [
                         Color(0xFF7052CA),
@@ -497,7 +508,8 @@ class GameAnswerButton extends StatelessWidget {
             disabledBackgroundColor: color,
             foregroundColor: Colors.white,
             disabledForegroundColor: Colors.white,
-            shape: CircleBorder(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(visual != null ? 24 : 80),
                 side: BorderSide(
                     color: selected || result != null
                         ? Colors.white
@@ -511,8 +523,8 @@ class GameAnswerButton extends StatelessWidget {
                     child: Column(mainAxisSize: MainAxisSize.min, children: [
                       if (visual != null)
                         SizedBox(
-                            width: box.maxHeight * .48,
-                            height: box.maxHeight * .48,
+                            width: box.maxWidth * .88,
+                            height: box.maxHeight * .68,
                             child: FittedBox(
                                 child: SizedBox(
                                     width: 64, height: 64, child: visual!))),
@@ -812,31 +824,64 @@ class _GameResultDialogState extends State<GameResultDialog> {
       child: PopScope(
         canPop: false,
         child: AlertDialog(
-          title: const Text('Great Work!'),
+          backgroundColor: const Color(0xFFF8F3FF),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+          title: Text(
+              widget.attempts > 0 && widget.correct / widget.attempts >= .8
+                  ? 'Amazing work!'
+                  : 'Every try helps you grow!',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                  fontWeight: FontWeight.w900, color: KidsUi.ink)),
           content: SingleChildScrollView(
               child: Column(mainAxisSize: MainAxisSize.min, children: [
-            const Icon(Icons.emoji_events_outlined,
-                size: 56, color: KidsUi.correct),
+            const MascotPortrait(mascot: LearningMascot.zoplet, size: 100),
+            const SizedBox(height: 12),
+            const Text('Round complete!',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+            const SizedBox(height: 8),
             Text('Score: ${widget.correct} / ${widget.attempts}',
                 style: const TextStyle(fontSize: 24)),
             Text(
                 'Activity Accuracy: ${widget.attempts == 0 ? 'No attempts yet' : '${(widget.correct / widget.attempts * 100).round()}%'}'),
             const Text('Scored attempts, including retries.',
                 style: TextStyle(fontSize: 16)),
-            Text('XP Earned: +${widget.earnedXp}'),
-            if (widget.earnedStars > 0)
-              Text('Stars Earned: +${widget.earnedStars}'),
+            const SizedBox(height: 14),
+            Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                    color: const Color(0xFFFFEEC6),
+                    borderRadius: BorderRadius.circular(20)),
+                child: Column(children: [
+                  const Icon(Icons.stars_rounded,
+                      color: Color(0xFF99600E), size: 36),
+                  Text('XP Earned: +${widget.earnedXp}',
+                      style: const TextStyle(fontWeight: FontWeight.w800)),
+                  Text('Stars Earned: +${widget.earnedStars}',
+                      style: const TextStyle(fontWeight: FontWeight.w800)),
+                ])),
+            const SizedBox(height: 12),
+            const Text(
+                'Ready for another little adventure? You can also take a break.',
+                textAlign: TextAlign.center),
             const SizedBox(height: 16),
             SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF7052CA),
+                        foregroundColor: Colors.white),
                     onPressed: _used ? null : () => _act(widget.onAgain),
                     child: const Text('Play Again'))),
             SizedBox(
                 width: double.infinity,
-                child: TextButton(
+                child: OutlinedButton(
                     onPressed: _used ? null : () => _act(widget.onBack),
-                    child: Text(widget.backLabel))),
+                    child: Text(widget.backLabel == 'Back to Games'
+                        ? 'Choose Next Game'
+                        : widget.backLabel))),
           ])),
         ),
       ));
@@ -850,6 +895,7 @@ class GameScaffold extends StatefulWidget {
       required this.child,
       required this.hasProgress,
       this.instructionPanel,
+      this.tutorial,
       this.answerResult,
       this.current,
       this.total,
@@ -864,6 +910,7 @@ class GameScaffold extends StatefulWidget {
   final LearningMascot mascot;
   final String title, instructions, progressLabel;
   final Widget? instructionPanel;
+  final GameTutorial? tutorial;
   final bool? answerResult;
   final Widget child;
   final bool hasProgress;
@@ -913,12 +960,17 @@ class _GameScaffoldState extends State<GameScaffold> {
   }
 
   @override
-  Widget build(BuildContext context) => PopScope(
+  Widget build(BuildContext context) => widget.tutorial == null
+      ? _page(context, null)
+      : GameTutorialHost(tutorial: widget.tutorial!, builder: _page);
+
+  Widget _page(BuildContext context, VoidCallback? onHelp) => PopScope(
         canPop: _allowPop,
         onPopInvokedWithResult: (didPop, _) {
           if (!didPop) _leave();
         },
         child: LearnerPage(
+            onHelp: onHelp,
             answerResult: widget.answerResult,
             title: widget.title,
             onBack: _leave,

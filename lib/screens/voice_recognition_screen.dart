@@ -40,7 +40,8 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
   List<Map<String, String>> _newSession() => GameSessionOrder.next(
       'voice-${widget.difficulty.name}',
       voiceWords[widget.difficulty]!,
-      (w) => w['word']!);
+      (w) => w['word']!,
+      count: GameSessionOrder.roundLength(widget.difficulty));
 
   Map<String, String> get _current => _words[_wordIndex];
 
@@ -262,6 +263,7 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+      answerResult: _isCorrect,
       title: 'Speak & Recognize',
       instructions: 'Hear the word. Say the word clearly.',
       difficulty: widget.difficulty,

@@ -38,7 +38,8 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
   List<VowelPuzzle> _newSession() => GameSessionOrder.next(
       'missing_vowel-${widget.difficulty.name}',
       vowelPuzzlesFor(widget.difficulty),
-      (item) => item.word);
+      (item) => item.word,
+      count: GameSessionOrder.roundLength(widget.difficulty));
   List<String> get _vowels => vowelChoicesFor(widget.difficulty, _puzzle.vowel);
   VowelPuzzle get _puzzle => _puzzles[_index];
 
@@ -107,6 +108,7 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+        answerResult: _picked == null ? null : _picked == _puzzle.vowel,
         title: 'Missing Vowel',
         instructions: 'Hear the word. Choose the missing vowel.',
         difficulty: widget.difficulty,

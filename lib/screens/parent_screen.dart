@@ -9,6 +9,7 @@ import '../widgets/dashboard_widgets.dart';
 import '../widgets/shared_widgets.dart';
 import '../widgets/parent_pin_form.dart';
 import '../widgets/mascot_guide.dart';
+import '../widgets/parent_weekly_summary.dart';
 
 class ParentScreen extends StatefulWidget {
   const ParentScreen({super.key});
@@ -224,6 +225,11 @@ class _ParentScreenState extends State<ParentScreen> {
                     icon: Icons.school_rounded,
                     description:
                         'A clear picture of your child’s letter learning.',
+                    title: 'This Week at a Glance',
+                    child: ParentWeeklySummary()),
+                const _ParentSection(
+                    icon: Icons.school_rounded,
+                    description: 'Progress across all learning sessions.',
                     title: 'Child Learning Summary',
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

@@ -8,6 +8,8 @@ import 'lessons_screen.dart';
 import 'games_screen.dart';
 import 'parent_screen.dart';
 import 'progress_screen.dart';
+import 'letter_mastery_check_screen.dart';
+import '../data/letter_data.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -15,6 +17,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.watch<AppProvider>();
+    final next = p.recommendedNextPractice;
     return LearnerPage(
       title: 'KidsPhonics',
       showBack: false,
@@ -88,9 +91,23 @@ class HomeScreen extends StatelessWidget {
                 style:
                     TextStyle(color: Colors.white, fontSize: 17, height: 1.5)),
             const SizedBox(height: 20),
+            Text(
+                next == null
+                    ? 'All letters mastered! Choose a lesson to explore again.'
+                    : 'Your next little step: Letter ${next.letter}',
+                style: const TextStyle(
+                    color: Color(0xFFFFE6A0),
+                    fontSize: 17,
+                    fontWeight: FontWeight.w800)),
+            const SizedBox(height: 10),
             ElevatedButton.icon(
-                onPressed: () =>
-                    LearnerNavigation.open(context, const LessonsScreen()),
+                key: const ValueKey('continue-learning'),
+                onPressed: () => LearnerNavigation.open(
+                    context,
+                    next == null
+                        ? const LessonsScreen()
+                        : LetterMasteryCheckScreen(
+                            letter: letterContent(next.letter))),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFDB75),
                     foregroundColor: const Color(0xFF39235E),
@@ -98,7 +115,8 @@ class HomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 14)),
                 icon: const Icon(Icons.play_arrow_rounded),
-                label: const Text('Start Learning')),
+                label: Text(
+                    next == null ? 'Explore Lessons' : 'Continue Learning')),
           ]),
         ),
         const SizedBox(height: 24),

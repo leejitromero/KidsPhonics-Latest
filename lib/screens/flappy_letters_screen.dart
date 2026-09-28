@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../models/difficulty.dart';
 import '../models/flappy_letters_game.dart';
 import '../providers/app_provider.dart';
+import '../widgets/game_tutorial.dart';
 
 class FlappyLettersScreen extends StatefulWidget {
   const FlappyLettersScreen({super.key, this.difficulty = Difficulty.easy});
@@ -22,6 +23,7 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
   final _focus = FocusNode();
   Duration? _last;
   String? _letter;
+  double _successGlow = 0;
 
   @override
   void initState() {
@@ -48,7 +50,9 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
       return;
     }
     setState(() {
+      _successGlow = (_successGlow - dt).clamp(0, .7);
       for (final letter in _game.advance(dt)) {
+        _successGlow = .7;
         _letter = letter;
         if (_provider.voiceEnabled) {
           unawaited(_provider.phonicsAudio.tryPlay('lesson-letter-$letter'));
@@ -83,6 +87,7 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
     setState(() {
       _game = FlappyLettersGame(widget.difficulty);
       _letter = null;
+      _successGlow = 0;
     });
     _focus.requestFocus();
   }
@@ -97,11 +102,20 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) => GameTutorialHost(
+      tutorial: GameTutorial.flappyLetters,
+      onOpen: _pause,
+      builder: (context, onHelp) => _page(context, onHelp));
+
+  Widget _page(BuildContext context, VoidCallback onHelp) => Scaffold(
         backgroundColor: const Color(0xFFEEE9FF),
         appBar: AppBar(
           title: const Text('Flappy Letters'),
           actions: [
+            IconButton(
+                tooltip: 'How to Play',
+                onPressed: onHelp,
+                icon: const Icon(Icons.help_outline_rounded)),
             IconButton(
               tooltip: 'Pause',
               onPressed: _game.state == FlightState.flying ? _pause : null,
@@ -146,8 +160,9 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
                             child: GestureDetector(
                               behavior: HitTestBehavior.opaque,
                               onTapDown: (_) => _flap(),
-                              child:
-                                  CustomPaint(painter: _CoursePainter(_game)),
+                              child: CustomPaint(
+                                  painter:
+                                      _CoursePainter(_game, _successGlow > 0)),
                             ),
                           ),
                         ),
@@ -236,17 +251,22 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
 }
 
 class _CoursePainter extends CustomPainter {
-  _CoursePainter(this.game);
+  _CoursePainter(this.game, this.successGlow);
+  final bool successGlow;
   final FlappyLettersGame game;
   @override
   void paint(Canvas canvas, Size size) {
     canvas.drawRect(
         Offset.zero & size,
         Paint()
-          ..shader = const LinearGradient(
+          ..shader = LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF9DDEFA), Color(0xFFF0FBFF)],
+            colors: game.state == FlightState.lost
+                ? const [Color(0xFFF6B5B5), Color(0xFFFFF0EC)]
+                : game.state == FlightState.won || successGlow
+                    ? const [Color(0xFF92DEB7), Color(0xFFEFFFF1)]
+                    : const [Color(0xFF9DDEFA), Color(0xFFF0FBFF)],
           ).createShader(Offset.zero & size));
     final cloud = Paint()..color = Colors.white.withValues(alpha: .75);
     for (final origin in [

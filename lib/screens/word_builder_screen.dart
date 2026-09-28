@@ -10,6 +10,7 @@ import '../providers/app_provider.dart';
 
 import '../models/difficulty.dart';
 import '../widgets/learner_widgets.dart';
+import '../widgets/game_tutorial.dart';
 
 class WordBuilderScreen extends StatefulWidget {
   final Difficulty difficulty;
@@ -35,7 +36,8 @@ class _WordBuilderScreenState extends State<WordBuilderScreen>
   List<WordPuzzle> _newSession() => GameSessionOrder.next(
       'word_builder-${widget.difficulty.name}',
       wordPuzzlesForDifficulty(widget.difficulty),
-      (item) => item.word);
+      (item) => item.word,
+      count: GameSessionOrder.roundLength(widget.difficulty));
   WordPuzzle get _puzzle => _activePuzzles[_puzzleIndex];
   late List<String> _shuffledTiles;
 
@@ -135,6 +137,8 @@ class _WordBuilderScreenState extends State<WordBuilderScreen>
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+      tutorial: GameTutorial.wordBuilder,
+      answerResult: _feedback,
       title: 'Word Builder',
       instructions:
           'Hear the word. Choose letters to fill the blanks from left to right.',

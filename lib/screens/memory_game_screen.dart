@@ -11,6 +11,7 @@ import '../data/game_session_order.dart';
 import '../widgets/game_word_picture.dart';
 import '../models/difficulty.dart';
 import '../widgets/learner_widgets.dart';
+import '../widgets/game_tutorial.dart';
 
 class _MemCard {
   final String id;
@@ -33,6 +34,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
   Set<_MemCard> _wrongCardIds = {}; // tracks cards showing red flash
   int _matchCount = 0;
   bool _locked = false;
+  bool? _answerResult;
 
   @override
   void initState() {
@@ -56,6 +58,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
       _wrongCardIds = {};
       _matchCount = 0;
       _locked = false;
+      _answerResult = null;
     });
   }
 
@@ -64,6 +67,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
   void _tapCard(_MemCard card) async {
     if (_locked || card.isFlipped || card.isMatched) return;
     final provider = context.read<AppProvider>();
+    setState(() => _answerResult = null);
     provider.audio.playFlip();
     setState(() {
       card.isFlipped = true;
@@ -77,6 +81,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
       if (!mounted) return;
       final a = _flipped[0], b = _flipped[1];
       final isMatch = a.id == b.id;
+      setState(() => _answerResult = isMatch);
       recordGameAnswer(correct: isMatch);
 
       if (isMatch) {
@@ -113,6 +118,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
           if (!mounted) return;
           setState(() {
             _wrongCardIds = {};
+            _answerResult = null;
             _flipped = [];
             _locked = false;
           });
@@ -129,6 +135,8 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+        tutorial: GameTutorial.memoryFlip,
+        answerResult: _answerResult,
         title: 'Memory Flip',
         instructions: 'Tap two cards. Match the same pictures!',
         fitViewport: true,

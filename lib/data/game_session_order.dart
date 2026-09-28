@@ -1,7 +1,13 @@
 import 'dart:math';
+import '../models/difficulty.dart';
 
 /// Shuffle once per round set, never during build. Separate history per game/tier.
 class GameSessionOrder {
+  static int roundLength(Difficulty difficulty) => switch (difficulty) {
+        Difficulty.easy => 5,
+        Difficulty.medium => 6,
+        Difficulty.hard => 8,
+      };
   static final _random = Random();
   static final Map<String, String> _previousFirst = {};
   static List<T> next<T>(

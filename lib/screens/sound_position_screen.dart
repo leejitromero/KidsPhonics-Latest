@@ -41,7 +41,8 @@ class SoundPositionitionScreenState extends State<SoundPositionScreen>
   List<SoundPositionRound> _newSession() => GameSessionOrder.next(
       'sound_position-${widget.difficulty.name}',
       positionRoundsFor(widget.difficulty),
-      (item) => item.word);
+      (item) => item.word,
+      count: GameSessionOrder.roundLength(widget.difficulty));
   SoundPositionRound get _round => _rounds[_index];
 
   @override
@@ -108,6 +109,7 @@ class SoundPositionitionScreenState extends State<SoundPositionScreen>
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+        answerResult: _picked == null ? null : _picked == _round.correctPos,
         title: 'Sound Position',
         instructions: 'Listen to the word. Choose where you hear the sound.',
         difficulty: widget.difficulty,

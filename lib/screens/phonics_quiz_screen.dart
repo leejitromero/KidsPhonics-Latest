@@ -31,7 +31,8 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
   List<QuizQuestion> _newSession() => GameSessionOrder.next(
       'phonics_quiz-${widget.difficulty.name}',
       quizQuestionsForDifficulty(widget.difficulty),
-      (item) => item.word);
+      (item) => item.word,
+      count: GameSessionOrder.roundLength(widget.difficulty));
 
   @override
   void initState() {
@@ -104,6 +105,7 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+        answerResult: _selected == null ? null : _selected == _q.correctLetter,
         title: 'Phonics Quiz',
         instructions: 'Listen to the word. Tap the matching letter or letters.',
         difficulty: widget.difficulty,

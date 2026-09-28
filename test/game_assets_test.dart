@@ -8,6 +8,23 @@ import 'package:kidsphonics/models/difficulty.dart';
 import 'package:kidsphonics/services/phonics_audio_service.dart';
 
 void main() {
+  test('short rounds keep unique words and vary the first word on replay', () {
+    for (final d in Difficulty.values) {
+      final pool = gameWordsFor(d);
+      final length = [5, 6, 8][d.index];
+      expect(GameSessionOrder.roundLength(d), length);
+      String? previous;
+      for (var i = 0; i < 20; i++) {
+        final round = GameSessionOrder.next(
+            'short-${d.name}', pool, (w) => w.slug,
+            count: GameSessionOrder.roundLength(d));
+        expect(round, hasLength(length));
+        expect(round.toSet(), hasLength(length));
+        expect(round.first.slug, isNot(previous));
+        previous = round.first.slug;
+      }
+    }
+  });
   test('all 71 supplied words have paired artwork and new audio', () {
     expect(gameWords, hasLength(71));
     expect(gameWords.map((w) => w.slug).toSet(), hasLength(71));

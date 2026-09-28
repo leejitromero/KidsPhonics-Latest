@@ -12,6 +12,7 @@ import 'package:kidsphonics/screens/letter_mastery_check_screen.dart';
 import 'package:kidsphonics/widgets/dashboard_widgets.dart';
 import 'package:kidsphonics/widgets/learning_progress_widgets.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
+import 'package:kidsphonics/widgets/parent_weekly_summary.dart';
 
 void main() {
   setUp(() {
@@ -87,6 +88,37 @@ void main() {
     p.dispose();
   }
 
+  testWidgets(
+      'parent weekly snapshot uses weekly activity and real mastery dates',
+      (tester) async {
+    final p = await make(tester);
+    await tester.pumpWidget(app(
+        p,
+        const Scaffold(
+            body: SingleChildScrollView(child: ParentWeeklySummary()))));
+    await tester.pumpAndSettle();
+    expect(find.text('1 of 7 days with learning activity'), findsOneWidget);
+    expect(find.text('New letters mastered: A'), findsOneWidget);
+    expect(find.text('11'), findsOneWidget);
+    expect(find.text('73%'), findsOneWidget);
+    expect(find.text('Practice letter B with a short Quick Check.'),
+        findsOneWidget);
+    await finish(tester, p);
+  });
+  testWidgets('parent weekly snapshot has an honest empty state',
+      (tester) async {
+    final p = await make(tester, empty: true);
+    await tester.pumpWidget(app(
+        p,
+        const Scaffold(
+            body: SingleChildScrollView(child: ParentWeeklySummary()))));
+    await tester.pumpAndSettle();
+    expect(find.text('A fresh week of little discoveries awaits.'),
+        findsOneWidget);
+    expect(find.text('Not yet'), findsOneWidget);
+    expect(find.text('Explore letter A in Letter Sounds.'), findsOneWidget);
+    await finish(tester, p);
+  });
   testWidgets('progress tabs filter letters and open the selected practice',
       (tester) async {
     final p = await make(tester);

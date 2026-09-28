@@ -30,7 +30,8 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
   List<SoundRound> _newSession() => GameSessionOrder.next(
       'sound_match-${widget.difficulty.name}',
       soundRoundsForDifficulty(widget.difficulty),
-      (item) => item.word);
+      (item) => item.word,
+      count: GameSessionOrder.roundLength(widget.difficulty));
   SoundRound get _round => _rounds[_roundIndex];
   List<String> get _shuffledOpts {
     final opts = List<String>.from(_round.options);
@@ -112,6 +113,7 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+        answerResult: _picks.isEmpty ? null : _roundDone,
         title: 'Sound Match',
         instructions:
             'Listen to the word. Choose the matching letter or letters.',

@@ -119,6 +119,7 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+      answerResult: _busy ? _wrongLetter == null : null,
       title: 'Alphabet Order',
       instructions: 'Tap the letters in alphabetical order. Start with A.',
       difficulty: widget.difficulty,

@@ -23,7 +23,8 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
   List<GameWord> _newSession() => GameSessionOrder.next(
       'rumbled-${widget.difficulty.name}',
       rumbledWordsFor(widget.difficulty),
-      (w) => w.word);
+      (w) => w.word,
+      count: GameSessionOrder.roundLength(widget.difficulty));
   late List<String> _tiles;
   final List<int> _selected = [];
   bool _hintUsed = false;
@@ -84,6 +85,7 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+        answerResult: _correct,
         title: 'Rumbled Words',
         instructions: 'Look at the picture. Tap letters to spell the word.',
         difficulty: widget.difficulty,

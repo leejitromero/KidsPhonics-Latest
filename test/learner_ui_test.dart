@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kidsphonics/data/game_session_order.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,10 @@ import 'learning_progress_test.dart' show mockProgressAudio;
 Future<AppProvider> mount(WidgetTester t, Widget page) async {
   late AppProvider p;
   await t.runAsync(() async {
+    final prefs = await SharedPreferences.getInstance();
+    for (final name in ['wordBuilder', 'memoryFlip', 'flappyLetters']) {
+      await prefs.setBool('gameTutorialV1.$name', true);
+    }
     p = AppProvider();
     await p.ready;
   });
@@ -140,8 +145,7 @@ void main() {
     await t.pump();
     expect(again, 1);
   });
-  testWidgets('zero attempts are safe and unawarded stars are omitted',
-      (t) async {
+  testWidgets('zero attempts and zero stars are displayed honestly', (t) async {
     await t.pumpWidget(MaterialApp(
         home: GameResultDialog(
             correct: 0,
@@ -151,7 +155,7 @@ void main() {
             onAgain: () {},
             onBack: () {})));
     expect(find.text('Activity Accuracy: No attempts yet'), findsOneWidget);
-    expect(find.textContaining('Stars Earned'), findsNothing);
+    expect(find.text('Stars Earned: +0'), findsOneWidget);
   });
   testWidgets(
       'progress and all four learning status badges reflect supplied data',
@@ -332,8 +336,13 @@ void main() {
         '$name actual rewards match result including rounded difficulty and bonus',
         (t) async {
       final p = await mount(t, page);
-      final firstPhrase = t.widget<AudioButton>(find.byType(AudioButton).first).phrase;
-      for (var index = 0; index < answers.length; index++) {
+      final firstPhrase =
+          t.widget<AudioButton>(find.byType(AudioButton).first).phrase;
+      final roundCount =
+          answers.length.clamp(0, GameSessionOrder.roundLength(d));
+      for (var index = 0; index < roundCount; index++) {
+        expect(t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult,
+            isNull);
         final phrase =
             t.widget<AudioButton>(find.byType(AudioButton).first).phrase;
         final word = phrase.toUpperCase();
@@ -367,18 +376,19 @@ void main() {
           _ => throw StateError(name),
         };
         await choose(t, answer);
+        expect(t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult,
+            isTrue);
         await advance(t, automatic: automatic);
       }
       await flushWrites(t);
-      final expectedXp = answers.length * (eachXp * d.xpMultiplier).round() +
+      final expectedXp = roundCount * (eachXp * d.xpMultiplier).round() +
           (bonus * d.xpMultiplier).round();
       expect(p.xp, expectedXp);
-      expect(p.stars, answers.length);
+      expect(p.stars, roundCount);
       expect(find.text('XP Earned: +${p.xp}'), findsOneWidget);
       expect(find.text('Stars Earned: +${p.stars}'), findsOneWidget);
-      expect(find.text('Score: ${answers.length} / ${answers.length}'),
-          findsOneWidget);
-      expect(p.dailyActivity.values.single.questionsAnswered, answers.length);
+      expect(find.text('Score: $roundCount / $roundCount'), findsOneWidget);
+      expect(p.dailyActivity.values.single.questionsAnswered, roundCount);
       await t.ensureVisible(find.text('Play Again'));
       await t.tap(find.text('Play Again'));
       await t.pumpAndSettle();
@@ -430,12 +440,15 @@ void main() {
       (t) async {
     final p = await mount(t, const WordBuilderScreen(difficulty: d));
     final puzzles = wordPuzzlesForDifficulty(d);
-    for (var i = 0; i < puzzles.length; i++) {
+    final roundCount = puzzles.length.clamp(0, GameSessionOrder.roundLength(d));
+    var attempts = 0;
+    for (var i = 0; i < roundCount; i++) {
       final word = t
           .widget<AudioButton>(find.byType(AudioButton).first)
           .phrase
           .toUpperCase();
       final puzzle = puzzles.firstWhere((q) => q.word == word);
+      attempts += puzzle.correctLetters.length;
       for (final letter in puzzle.correctLetters) {
         await choose(t, letter);
         await t.pump(const Duration(milliseconds: 1100));
@@ -446,12 +459,11 @@ void main() {
       }
     }
     await flushWrites(t);
-    expect(p.xp, puzzles.length * 15 + 23);
-    expect(p.stars, puzzles.length);
+    expect(p.xp, roundCount * 15 + 23);
+    expect(p.stars, roundCount);
     expect(find.text('XP Earned: +${p.xp}'), findsOneWidget);
     expect(find.text('Stars Earned: +${p.stars}'), findsOneWidget);
-    final attempts =
-        puzzles.fold<int>(0, (n, q) => n + q.correctLetters.length);
+
     expect(find.text('Score: $attempts / $attempts'), findsOneWidget);
     await close(t, p);
   });
@@ -530,7 +542,8 @@ void main() {
     await t.tap(find.text('Open game'));
     await t.pumpAndSettle();
     final questions = quizQuestionsForDifficulty(Difficulty.easy);
-    for (var i = 0; i < questions.length; i++) {
+    final roundCount = GameSessionOrder.roundLength(Difficulty.easy);
+    for (var i = 0; i < roundCount; i++) {
       final word = t.widget<AudioButton>(find.byType(AudioButton).first).phrase;
       final q = questions.firstWhere((q) => q.word == word);
       final choice = i == 0
@@ -540,12 +553,11 @@ void main() {
       await advance(t);
     }
     await flushWrites(t);
-    expect(find.text('Score: ${questions.length - 1} / ${questions.length}'),
-        findsOneWidget);
-    expect(p.xp, (questions.length - 1) * 5 + 20);
-    expect(p.stars, questions.length - 1);
-    final back =
-        t.widget<TextButton>(find.widgetWithText(TextButton, 'Back to Games'));
+    expect(find.text('Score: ${roundCount - 1} / $roundCount'), findsOneWidget);
+    expect(p.xp, (roundCount - 1) * 5 + 20);
+    expect(p.stars, roundCount - 1);
+    final back = t.widget<OutlinedButton>(
+        find.widgetWithText(OutlinedButton, 'Choose Next Game'));
     back.onPressed!();
     back.onPressed!();
     await t.pumpAndSettle();
@@ -560,7 +572,9 @@ void main() {
       addTearDown(() => t.binding.setSurfaceSize(null));
       final p = await mount(t, RumbledWordsScreen(difficulty: difficulty));
       final rounds = rumbledWordsFor(difficulty);
-      for (var roundIndex = 0; roundIndex < rounds.length; roundIndex++) {
+      final roundCount =
+          rounds.length.clamp(0, GameSessionOrder.roundLength(difficulty));
+      for (var roundIndex = 0; roundIndex < roundCount; roundIndex++) {
         final shownWord =
             t.widget<GameWordPicture>(find.byType(GameWordPicture).first).word;
         final round = rounds.firstWhere((w) => w.word == shownWord);
@@ -592,6 +606,8 @@ void main() {
         await t.pump();
         expect(
             find.text('Try again! Tap a letter to change it.'), findsOneWidget);
+        expect(t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult,
+            isFalse);
         for (var i = word.length - 1; i >= 0; i--) {
           await t.ensureVisible(find.byKey(ValueKey('word-slot-$i')));
           await t.tap(find.byKey(ValueKey('word-slot-$i')));
@@ -621,13 +637,13 @@ void main() {
         await flushWrites(t);
         expect(t.takeException(), isNull);
       }
-      expect(p.stars, rounds.length);
+      expect(p.stars, roundCount);
       expect(
           p.xp,
-          rounds.length * (8 * difficulty.xpMultiplier).round() +
+          roundCount * (8 * difficulty.xpMultiplier).round() +
               (15 * difficulty.xpMultiplier).round());
-      expect(find.text('Score: ${rounds.length} / ${rounds.length * 2}'),
-          findsOneWidget);
+      expect(
+          find.text('Score: $roundCount / ${roundCount * 2}'), findsOneWidget);
       await t.ensureVisible(find.text('Play Again'));
       await t.pumpAndSettle();
       await t.tap(find.text('Play Again'));

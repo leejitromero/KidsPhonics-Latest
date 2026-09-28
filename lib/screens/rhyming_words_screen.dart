@@ -41,7 +41,8 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
   List<RhymeRound> _newSession() => GameSessionOrder.next(
       'rhyming_words-${widget.difficulty.name}',
       rhymeRoundsForDifficulty(widget.difficulty),
-      (item) => item.word);
+      (item) => item.word,
+      count: GameSessionOrder.roundLength(widget.difficulty));
   RhymeRound get _round => _rounds[_roundIndex];
 
   @override
@@ -111,6 +112,7 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+        answerResult: _picked == null ? null : _picked == _round.correctRhyme,
         compactGuide: true,
         mascot: LearningMascot.wigloo,
         title: 'Rhyming Words',

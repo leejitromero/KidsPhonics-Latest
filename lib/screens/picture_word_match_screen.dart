@@ -10,6 +10,7 @@ import '../widgets/game_word_picture.dart';
 // Hard   : 5 choices + longer words
 
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 import 'package:provider/provider.dart';
 
@@ -29,10 +30,74 @@ class PictureWordMatchScreen extends StatefulWidget {
 }
 
 class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
-    with GameSessionUi<PictureWordMatchScreen> {
+    with SingleTickerProviderStateMixin, GameSessionUi<PictureWordMatchScreen> {
   int _index = 0;
   String? _picked;
   bool _answered = false;
+  bool _landed = false, _flying = false;
+  final _targetKey = GlobalKey();
+  final Map<int, GlobalKey> _pictureKeys = {};
+  late final AnimationController _flight;
+  OverlayEntry? _flightEntry;
+
+  @override
+  void dispose() {
+    _flightEntry?.remove();
+    _flight.dispose();
+    super.dispose();
+  }
+
+  Future<void> _flyToFrame(int option) async {
+    final source = _pictureKeys[option]?.currentContext?.findRenderObject();
+    final overlay = Overlay.of(context);
+    final overlayBox = overlay.context.findRenderObject() as RenderBox;
+    final start = source is RenderBox
+        ? source.localToGlobal(Offset.zero, ancestor: overlayBox) & source.size
+        : null;
+    final reducedMotion = MediaQuery.disableAnimationsOf(context);
+    setState(() => _flying = true);
+    await Scrollable.ensureVisible(_targetKey.currentContext!, alignment: .15);
+    if (!mounted) return;
+    final target = _targetKey.currentContext!.findRenderObject() as RenderBox;
+    final end =
+        target.localToGlobal(Offset.zero, ancestor: overlayBox) & target.size;
+    if (!reducedMotion && start != null) {
+      _flightEntry = OverlayEntry(
+          builder: (_) => AnimatedBuilder(
+                animation: _flight,
+                builder: (_, __) {
+                  final t = Curves.easeInOutCubic.transform(_flight.value);
+                  final rect = Rect.lerp(start, end, t)!.shift(Offset(
+                      28 * math.sin(t * math.pi), -36 * math.sin(t * math.pi)));
+                  return Positioned.fromRect(
+                      rect: rect,
+                      child: IgnorePointer(
+                          child: ExcludeSemantics(
+                              child: Material(
+                        color: Colors.transparent,
+                        child: GameWordPicture(
+                            key: const ValueKey('flying-match-picture'),
+                            word: _round.labels[option],
+                            size: rect.width),
+                      ))));
+                },
+              ));
+      overlay.insert(_flightEntry!);
+      try {
+        await _flight.forward(from: 0).orCancel;
+      } on TickerCanceled {
+        return;
+      }
+      _flightEntry?.remove();
+      _flightEntry = null;
+    }
+    if (mounted) {
+      setState(() {
+        _landed = true;
+        _flying = false;
+      });
+    }
+  }
 
   late List<int> _shuffledIdx;
 
@@ -40,12 +105,15 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
   List<PictureWordRound> _newSession() => GameSessionOrder.next(
       'picture_word_match-${widget.difficulty.name}',
       pictureRoundsFor(widget.difficulty),
-      (item) => item.word);
+      (item) => item.word,
+      count: GameSessionOrder.roundLength(widget.difficulty));
   PictureWordRound get _round => _rounds[_index];
 
   @override
   void initState() {
     super.initState();
+    _flight = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 700));
     _shuffleIdx();
   }
 
@@ -67,6 +135,7 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
       provider.audio.playCorrect();
       awardGameXp((8 * widget.difficulty.xpMultiplier).round());
       awardGameStar();
+      await _flyToFrame(_round.options.indexOf(emoji));
       // No competing voice — correct.mp3 plays cleanly
     } else {
       // Wrong — play wrong.mp3 tone, show red flash, then clear so child can retry
@@ -77,12 +146,13 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
   }
 
   void _next() {
-    if (!_answered || resultOpen) return;
+    if (!_answered || _flying || resultOpen) return;
     if (_index < _rounds.length - 1) {
       setState(() {
         _index++;
         _picked = null;
         _answered = false;
+        _landed = false;
         _shuffleIdx();
       });
     } else {
@@ -95,6 +165,7 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
         _rounds = _newSession();
         _picked = null;
         _answered = false;
+        _landed = false;
 
         _shuffleIdx();
       });
@@ -112,6 +183,7 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+        answerResult: _picked == null ? null : _picked == _round.correctEmoji,
         title: 'Picture Match',
         instructions: 'Read or hear the word. Tap its picture.',
         difficulty: widget.difficulty,
@@ -120,7 +192,42 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
         total: _rounds.length,
         child:
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          const Center(child: GameImageCard(emoji: '🖼️')),
+          Center(
+              child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color:
+                  _landed ? const Color(0xFFE4F8ED) : const Color(0xFFF2ECFC),
+              borderRadius: BorderRadius.circular(26),
+              border: Border.all(
+                  color: _landed ? KidsUi.correct : const Color(0xFFCDBCEB),
+                  width: 3),
+              boxShadow: const [
+                BoxShadow(
+                    color: Color(0x227052CA),
+                    blurRadius: 16,
+                    offset: Offset(0, 6))
+              ],
+            ),
+            child: Column(children: [
+              SizedBox(
+                  key: _targetKey,
+                  width: 150,
+                  height: 150,
+                  child: _landed
+                      ? GameWordPicture(
+                          key: const ValueKey('matched-picture'),
+                          word: _round.word)
+                      : const Icon(Icons.add_photo_alternate_outlined,
+                          size: 64, color: Color(0xFF8A72B6))),
+              const SizedBox(height: 8),
+              Text(_landed ? 'Correct match!' : 'Your picture goes here',
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                      color: _landed ? KidsUi.correct : KidsUi.muted)),
+            ]),
+          )),
           const SizedBox(height: KidsUi.padding),
           Text(_round.word,
               textAlign: TextAlign.center,
@@ -133,7 +240,16 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
               children: _shuffledIdx
                   .map((option) => GameAnswerButton(
                       label: 'Picture ${option + 1}',
-                      visual: GameWordPicture(word: _round.labels[option]),
+                      visual: SizedBox(
+                          key: _pictureKeys.putIfAbsent(
+                              option, () => GlobalKey()),
+                          child: Opacity(
+                              opacity:
+                                  _answered && _picked == _round.options[option]
+                                      ? 0
+                                      : 1,
+                              child: GameWordPicture(
+                                  word: _round.labels[option]))),
                       selected: _picked == _round.options[option],
                       result: _picked == _round.options[option]
                           ? _round.options[option] == _round.correctEmoji
@@ -146,7 +262,7 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
             GameFeedback(correct: _picked == _round.correctEmoji),
           if (_answered)
             ElevatedButton(
-                onPressed: resultOpen ? null : _next,
+                onPressed: resultOpen || _flying ? null : _next,
                 child: const Text('Next')),
         ]),
       );
