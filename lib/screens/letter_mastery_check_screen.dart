@@ -119,6 +119,7 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
         .getLetterProgress(widget.letter.letter)
         .mastered;
     return GameScaffold(
+      answerResult: _finished || _picked == null ? null : _picked == _answer,
       compactGuide: true,
       mascot: LearningMascot.wigloo,
       title: 'Quick Check',

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 /// Lightweight, offline artwork that scales to phones and tablets.
 class AdventureBackground extends StatelessWidget {
-  const AdventureBackground({super.key, required this.child});
+  const AdventureBackground(
+      {super.key, required this.child, this.answerResult});
   final Widget child;
+  final bool? answerResult;
 
   @override
   Widget build(BuildContext context) => DecoratedBox(
@@ -19,6 +21,28 @@ class AdventureBackground extends StatelessWidget {
           ),
         ),
         child: Stack(children: [
+          Positioned.fill(
+            child: IgnorePointer(
+              child: AnimatedOpacity(
+                opacity: answerResult == null ? 0 : 1,
+                duration: MediaQuery.disableAnimationsOf(context)
+                    ? Duration.zero
+                    : const Duration(milliseconds: 280),
+                child: DecoratedBox(
+                  key: const ValueKey('answer-background-effect'),
+                  decoration: BoxDecoration(
+                    gradient: RadialGradient(
+                      center: const Alignment(0, -.3),
+                      radius: 1.2,
+                      colors: answerResult == false
+                          ? const [Color(0xFFFFF0EC), Color(0xFFF6B5B5)]
+                          : const [Color(0xFFEFFFF1), Color(0xFF92DEB7)],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
           const Positioned.fill(
             child: IgnorePointer(child: CustomPaint(painter: _SkyPainter())),
           ),

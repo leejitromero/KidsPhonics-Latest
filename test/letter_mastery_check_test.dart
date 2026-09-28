@@ -8,6 +8,7 @@ import 'package:kidsphonics/data/letter_data.dart';
 import 'package:kidsphonics/providers/app_provider.dart';
 import 'package:kidsphonics/screens/letter_mastery_check_screen.dart';
 import 'package:kidsphonics/services/mastery_audio_service.dart';
+import 'package:kidsphonics/widgets/adventure_background.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 
 class _Audio implements MasteryAudio {
@@ -120,6 +121,11 @@ void main() {
     var completed = 0;
     for (final score in [3, 4, 2]) {
       for (var index = 0; index < 5; index++) {
+        expect(
+            tester
+                .widget<AdventureBackground>(find.byType(AdventureBackground))
+                .answerResult,
+            isNull);
         expect(find.text('${index + 1} / 5 question'), findsOneWidget);
         final speaker = find.byKey(const ValueKey('hear-sound'));
         if (speaker.evaluate().isNotEmpty) {
@@ -156,12 +162,32 @@ void main() {
           await Future<void>.delayed(Duration.zero);
         });
         await tester.pumpAndSettle();
+        expect(
+            tester
+                .widget<AdventureBackground>(find.byType(AdventureBackground))
+                .answerResult,
+            index < score);
+        final effect = find.byKey(const ValueKey('answer-background-effect'));
+        final opacity = tester.widget<AnimatedOpacity>(find
+            .ancestor(of: effect, matching: find.byType(AnimatedOpacity))
+            .first);
+        expect(opacity.opacity, 1);
+        expect(opacity.duration, Duration.zero);
+        final decoration =
+            tester.widget<DecoratedBox>(effect).decoration as BoxDecoration;
+        expect((decoration.gradient! as RadialGradient).colors.last,
+            index < score ? const Color(0xFF92DEB7) : const Color(0xFFF6B5B5));
         final next = find.text(index == 4 ? 'See Result' : 'Next Question');
         await tester.ensureVisible(next);
         await tester.tap(next);
         await tester.pumpAndSettle();
       }
       completed++;
+      expect(
+          tester
+              .widget<AdventureBackground>(find.byType(AdventureBackground))
+              .answerResult,
+          isNull);
       expect(find.text('Score: $score / 5'), findsOneWidget);
       expect(
           find.text(completed == 1

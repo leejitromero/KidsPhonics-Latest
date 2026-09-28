@@ -329,6 +329,7 @@ class LearnerPage extends StatelessWidget {
       this.onBack,
       this.showBack = true,
       this.fitViewport = false,
+      this.answerResult,
       this.bottom,
       this.scrollController});
   final String title;
@@ -336,6 +337,7 @@ class LearnerPage extends StatelessWidget {
   final VoidCallback? onBack;
   final bool showBack;
   final bool fitViewport;
+  final bool? answerResult;
   final Widget? bottom;
   final ScrollController? scrollController;
   @override
@@ -360,6 +362,7 @@ class LearnerPage extends StatelessWidget {
                       icon: const Icon(Icons.arrow_back_rounded),
                       onPressed: onBack ?? () => Navigator.maybePop(ctx))),
           body: AdventureBackground(
+              answerResult: answerResult,
               child: SafeArea(
                   top: false,
                   child: Align(
@@ -847,6 +850,7 @@ class GameScaffold extends StatefulWidget {
       required this.child,
       required this.hasProgress,
       this.instructionPanel,
+      this.answerResult,
       this.current,
       this.total,
       this.progressLabel = 'Question',
@@ -860,6 +864,7 @@ class GameScaffold extends StatefulWidget {
   final LearningMascot mascot;
   final String title, instructions, progressLabel;
   final Widget? instructionPanel;
+  final bool? answerResult;
   final Widget child;
   final bool hasProgress;
   final int? current, total;
@@ -914,6 +919,7 @@ class _GameScaffoldState extends State<GameScaffold> {
           if (!didPop) _leave();
         },
         child: LearnerPage(
+            answerResult: widget.answerResult,
             title: widget.title,
             onBack: _leave,
             fitViewport: widget.fitViewport,
