@@ -8,6 +8,7 @@ import 'package:kidsphonics/models/learning_progress.dart';
 import 'package:kidsphonics/providers/app_provider.dart';
 import 'package:kidsphonics/screens/parent_screen.dart';
 import 'package:kidsphonics/screens/progress_screen.dart';
+import 'package:kidsphonics/screens/letter_mastery_check_screen.dart';
 import 'package:kidsphonics/widgets/dashboard_widgets.dart';
 import 'package:kidsphonics/widgets/learning_progress_widgets.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
@@ -85,6 +86,66 @@ void main() {
     await tester.pump();
     p.dispose();
   }
+
+  testWidgets('progress tabs filter letters and open the selected practice',
+      (tester) async {
+    final p = await make(tester);
+    await tester.pumpWidget(app(p, const ProgressScreen()));
+    await tester.pumpAndSettle();
+    expect(find.text('1 of 26 letters mastered'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('progress-tab-1')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(ChoiceChip, 'Mastered (1)'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('progress-letter-B')), findsNothing);
+    final letter = find.byKey(const ValueKey('progress-letter-A'));
+    await tester.ensureVisible(letter);
+    await tester.tap(letter);
+    await tester.pumpAndSettle();
+    expect(find.text('4 / 5'), findsNWidgets(2));
+    expect(find.text('80%'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('progress-practice-letter')));
+    await tester.pumpAndSettle();
+    expect(
+        tester
+            .widget<LetterMasteryCheckScreen>(
+                find.byType(LetterMasteryCheckScreen))
+            .letter
+            .letter,
+        'A');
+    expect(p.getLetterProgress('A').attempts, 5);
+    await finish(tester, p);
+  });
+
+  testWidgets('all progress tabs fit small screens and enlarged text',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(320, 568));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final p = await make(tester, empty: true);
+    await tester.pumpWidget(app(p, const ProgressScreen(), scale: 1.6));
+    for (var index = 0; index < 3; index++) {
+      await tester.tap(find.byKey(ValueKey('progress-tab-$index')));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      final scrollable =
+          tester.state<ScrollableState>(find.byType(Scrollable).first);
+      scrollable.position.jumpTo(scrollable.position.maxScrollExtent);
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+    }
+    await tester.tap(find.byKey(const ValueKey('progress-tab-1')));
+    await tester.pumpAndSettle();
+    final filter = find.widgetWithText(ChoiceChip, 'Mastered (0)');
+    await tester.ensureVisible(filter);
+    await tester.pumpAndSettle();
+    await tester.tap(filter);
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('No letters here yet.'), 180,
+        scrollable: find.byType(Scrollable).first);
+    expect(find.text('No letters here yet.'), findsOneWidget);
+    expect(p.xp, 0);
+    await finish(tester, p);
+  });
 
   testWidgets(
       'letter details distinguish empty, practiced and mastered without invalid values',
@@ -221,6 +282,16 @@ void main() {
           expect(tester.takeException(), isNull);
         }
         if (parent) {
+          for (final tab in [1, 2]) {
+            await tester.tap(find.byKey(ValueKey('parent-tab-$tab')));
+            await tester.pumpAndSettle();
+            expect(tester.takeException(), isNull);
+            for (var i = 0; i < 12; i++) {
+              await tester.drag(scroll, const Offset(0, -300));
+              await tester.pumpAndSettle();
+              expect(tester.takeException(), isNull);
+            }
+          }
           await tester.scrollUntilVisible(find.text('Data / Reset'), 300,
               scrollable: find.byType(Scrollable).first, maxScrolls: 50);
           expect(find.text('Data / Reset'), findsOneWidget);

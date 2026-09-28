@@ -846,6 +846,7 @@ class GameScaffold extends StatefulWidget {
       required this.instructions,
       required this.child,
       required this.hasProgress,
+      this.instructionPanel,
       this.current,
       this.total,
       this.progressLabel = 'Question',
@@ -858,6 +859,7 @@ class GameScaffold extends StatefulWidget {
   final bool fitViewport;
   final LearningMascot mascot;
   final String title, instructions, progressLabel;
+  final Widget? instructionPanel;
   final Widget child;
   final bool hasProgress;
   final int? current, total;
@@ -947,7 +949,9 @@ class _GameScaffoldState extends State<GameScaffold> {
                                 fontSize: 14, fontWeight: FontWeight.w700))),
                 ]),
                 const SizedBox(height: 8),
-                Text(widget.instructions, style: const TextStyle(fontSize: 14)),
+                widget.instructionPanel ??
+                    Text(widget.instructions,
+                        style: const TextStyle(fontSize: 14)),
                 const SizedBox(height: 12),
                 if (widget.fitViewport)
                   Expanded(child: widget.child)

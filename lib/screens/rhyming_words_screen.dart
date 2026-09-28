@@ -147,13 +147,6 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
                         const Color(0xFFB45731)
                       ][_shuffled.indexOf(option) % 3],
                       label: option.word,
-                      visual: lessonExamples
-                              .any((e) => e.word.toUpperCase() == option.word)
-                          ? LessonPicture(
-                              example: lessonExamples.firstWhere(
-                                  (e) => e.word.toUpperCase() == option.word),
-                              size: 56)
-                          : null,
                       selected: _picked == option.word,
                       result: _picked == option.word
                           ? option.word == _round.correctRhyme

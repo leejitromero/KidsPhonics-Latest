@@ -123,6 +123,7 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
       mascot: LearningMascot.wigloo,
       title: 'Quick Check',
       instructions: 'Listen or read the question. Choose one answer.',
+      instructionPanel: _finished ? null : _instructionPanel(),
       current: _finished ? null : _question + 1,
       total: _finished ? null : 5,
       hasProgress: (_question > 0 || _picked != null) && !_finished,
@@ -166,17 +167,8 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
               onPressed: () => Navigator.pop(context),
               child: const Text('Back to Lesson')),
         ] else ...[
-          Text(_current.prompt,
-              style:
-                  const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
-          if (_current.picture != null)
-            Center(
-                child: LessonPicture(
-                    example: lessonExamples
-                        .firstWhere((e) => e.word == _current.picture),
-                    size: 120)),
           if (_current.requiresAudio) ...[
-            const SizedBox(height: 16),
+            const SizedBox(height: 4),
             Align(
                 alignment: Alignment.center,
                 child: ElevatedButton.icon(
@@ -239,4 +231,70 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
       ]),
     );
   }
+
+  Widget _instructionPanel() => Container(
+        width: double.infinity,
+        margin: const EdgeInsets.only(top: 4, bottom: 8),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Colors.white, Color(0xFFF5F0FF)],
+          ),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: const Color(0xFFD7C9F0), width: 1.5),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF7052CA).withValues(alpha: .15),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
+            ),
+            BoxShadow(
+              color: const Color(0xFF392657).withValues(alpha: .06),
+              blurRadius: 3,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.lightbulb_outline_rounded,
+                    color: Color(0xFF7052CA), size: 22),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Listen or read the question. Choose one answer.',
+                    style: TextStyle(
+                        fontSize: 14, height: 1.4, color: Color(0xFF625477)),
+                  ),
+                ),
+              ],
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              child: Divider(height: 1, color: Color(0xFFE6DDF3)),
+            ),
+            Text(_current.prompt,
+                style: const TextStyle(
+                    fontSize: 26,
+                    height: 1.35,
+                    fontWeight: FontWeight.w800,
+                    color: KidsUi.ink)),
+            if (_current.picture != null) ...[
+              const SizedBox(height: 12),
+              Center(
+                child: LessonPicture(
+                    example: lessonExamples
+                        .firstWhere((e) => e.word == _current.picture),
+                    size: 120),
+              ),
+            ],
+          ],
+        ),
+      );
 }
