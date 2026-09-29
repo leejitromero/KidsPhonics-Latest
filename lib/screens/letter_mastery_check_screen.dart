@@ -175,11 +175,25 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
                 child: ElevatedButton.icon(
                     key: const ValueKey('hear-sound'),
                     onPressed: _playing || _picked != null ? null : _hear,
-                    icon: const Icon(Icons.volume_up, size: 20),
-                    label: Text(_playing ? 'Playing…' : 'Hear Word'),
+                    icon: Icon(
+                        _playing
+                            ? Icons.graphic_eq_rounded
+                            : _heard
+                                ? Icons.replay_rounded
+                                : Icons.volume_up,
+                        size: 20),
+                    label: Text(_playing
+                        ? 'Listening…'
+                        : _heard
+                            ? 'Listen Again'
+                            : 'Hear Word'),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF087F86),
                         foregroundColor: Colors.white,
+                        disabledBackgroundColor:
+                            _playing ? const Color(0xFFFFDF88) : null,
+                        disabledForegroundColor:
+                            _playing ? const Color(0xFF49315D) : null,
                         textStyle: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w800),
                         padding: const EdgeInsets.symmetric(

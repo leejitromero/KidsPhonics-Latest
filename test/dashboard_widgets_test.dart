@@ -13,6 +13,7 @@ import 'package:kidsphonics/widgets/dashboard_widgets.dart';
 import 'package:kidsphonics/widgets/learning_progress_widgets.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'package:kidsphonics/widgets/parent_weekly_summary.dart';
+import 'package:kidsphonics/screens/tricky_letters_screen.dart';
 
 void main() {
   setUp(() {
@@ -117,6 +118,38 @@ void main() {
         findsOneWidget);
     expect(find.text('Not yet'), findsOneWidget);
     expect(find.text('Explore letter A in Letter Sounds.'), findsOneWidget);
+    await finish(tester, p);
+  });
+  testWidgets(
+      'tricky letters excludes mastered and unattempted letters and opens practice',
+      (tester) async {
+    final p = await make(tester);
+    await tester.pumpWidget(app(p, const TrickyLettersScreen()));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('tricky-letter-B')), findsOneWidget);
+    expect(find.byKey(const ValueKey('tricky-letter-A')), findsNothing);
+    expect(find.byKey(const ValueKey('tricky-letter-C')), findsNothing);
+    final before = p.getLetterProgress('B').attempts;
+    await tester.ensureVisible(find.text('Practice B'));
+    await tester.tap(find.text('Practice B'));
+    await tester.pumpAndSettle();
+    expect(
+        tester
+            .widget<LetterMasteryCheckScreen>(
+                find.byType(LetterMasteryCheckScreen))
+            .letter
+            .letter,
+        'B');
+    expect(p.getLetterProgress('B').attempts, before);
+    await finish(tester, p);
+  });
+  testWidgets('tricky letters does not invent weak letters for a new learner',
+      (tester) async {
+    final p = await make(tester, empty: true);
+    await tester.pumpWidget(app(p, const TrickyLettersScreen()));
+    await tester.pumpAndSettle();
+    expect(find.text('Explore Letter Sounds'), findsOneWidget);
+    expect(find.text('Choose one little challenge'), findsNothing);
     await finish(tester, p);
   });
   testWidgets('progress tabs filter letters and open the selected practice',

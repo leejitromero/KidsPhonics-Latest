@@ -1,3 +1,4 @@
+import '../data/game_session_order.dart';
 import '../widgets/mascot_guide.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +8,7 @@ import '../data/phonics_activity_data.dart';
 import '../widgets/learner_widgets.dart';
 import 'letter_sounds_screen.dart';
 import 'rhyming_words_screen.dart';
+import 'tricky_letters_screen.dart';
 
 class LessonsScreen extends StatefulWidget {
   const LessonsScreen({super.key});
@@ -24,7 +26,7 @@ class _LessonsScreenState extends State<LessonsScreen> {
           context,
           'Rhyming Words',
           (d) =>
-              '${rhymeRoundsForDifficulty(d).length} words · ${rhymeRoundsForDifficulty(d).first.options.length} choices',
+              '${rhymeRoundsForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} words · ${rhymeRoundsForDifficulty(d).first.options.length} choices',
           mascot: LearningMascot.wigloo,
           lessonStyle: true);
       if (!mounted || difficulty == null) return;
@@ -70,6 +72,15 @@ class _LessonsScreenState extends State<LessonsScreen> {
               mascot: LearningMascot.wigloo,
               message: 'Choose a lesson. Explore letters, sounds, and words.'),
           const SizedBox(height: 16),
+          LearnerActivityCard(
+              compactFloating: true,
+              title: 'Practice My Tricky Letters',
+              description: 'A short practice picked from your letter progress.',
+              icon: Icons.auto_awesome_rounded,
+              accent: const Color(0xFF167769),
+              actionLabel: 'Practice',
+              onPressed: () =>
+                  LearnerNavigation.open(context, const TrickyLettersScreen())),
           lesson('Letter Sounds A–Z', 'Learn letters and their sounds.',
               List.generate(26, (i) => String.fromCharCode(65 + i)), false),
           lesson('Short Vowel Sounds', 'Practice A, E, I, O, U.',

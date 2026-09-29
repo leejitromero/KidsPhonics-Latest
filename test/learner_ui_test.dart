@@ -451,6 +451,12 @@ void main() {
       attempts += puzzle.correctLetters.length;
       for (final letter in puzzle.correctLetters) {
         await choose(t, letter);
+        expect(
+            t
+                .widget<IconButton>(find.byWidgetPredicate(
+                    (w) => w is IconButton && w.tooltip == 'How to Play'))
+                .onPressed,
+            isNull);
         await t.pump(const Duration(milliseconds: 1100));
         await t.runAsync(() async {
           await Future<void>.delayed(Duration.zero);

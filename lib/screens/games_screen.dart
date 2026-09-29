@@ -1,3 +1,4 @@
+import '../data/game_session_order.dart';
 import '../widgets/mascot_guide.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -104,7 +105,7 @@ class _GamesScreenState extends State<GamesScreen> {
                 Icons.hearing,
                 (d) => SoundMatchScreen(difficulty: d),
                 (d) =>
-                    '${soundRoundsForDifficulty(d).length} rounds · ${soundRoundsForDifficulty(d).first.options.length} choices'),
+                    '${soundRoundsForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} rounds · ${soundRoundsForDifficulty(d).first.options.length} choices'),
             _card(
                 'Memory Flip',
                 'Find matching picture pairs.',
@@ -116,20 +117,22 @@ class _GamesScreenState extends State<GamesScreen> {
                 'Listen and choose the matching letters.',
                 Icons.quiz_outlined,
                 (d) => PhonicsQuizScreen(difficulty: d),
-                (d) => '${quizQuestionsForDifficulty(d).length} questions'),
+                (d) =>
+                    '${quizQuestionsForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} questions'),
             _card(
                 'Word Builder',
                 'Fill the blanks to complete the word.',
                 Icons.extension_outlined,
                 (d) => WordBuilderScreen(difficulty: d),
                 (d) =>
-                    '${wordPuzzlesForDifficulty(d).length} words · ${wordPuzzlesForDifficulty(d).first.correctLetters.length} blanks in the first word'),
+                    '${wordPuzzlesForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} words · Fill missing letters'),
             _card(
                 'Speak & Recognize',
                 'Say the word aloud.',
                 Icons.mic_none,
                 (d) => VoiceRecognitionScreen(difficulty: d),
-                (d) => '${voiceWords[d]!.length} words'),
+                (d) =>
+                    '${voiceWords[d]!.length.clamp(0, GameSessionOrder.roundLength(d))} words'),
             _card(
                 'Alphabet Order',
                 'Tap letters in alphabetical order.',
@@ -145,20 +148,22 @@ class _GamesScreenState extends State<GamesScreen> {
                 'Choose the missing vowel.',
                 Icons.text_fields,
                 (d) => MissingVowelScreen(difficulty: d),
-                (d) => '${vowelPuzzlesFor(d).length} words'),
+                (d) =>
+                    '${vowelPuzzlesFor(d).length.clamp(0, GameSessionOrder.roundLength(d))} words'),
             _card(
                 'Picture Match',
                 'Match the word to its picture.',
                 Icons.image_outlined,
                 (d) => PictureWordMatchScreen(difficulty: d),
                 (d) =>
-                    '${pictureRoundsFor(d).length} words · ${pictureRoundsFor(d).first.options.length} pictures'),
+                    '${pictureRoundsFor(d).length.clamp(0, GameSessionOrder.roundLength(d))} words · ${pictureRoundsFor(d).first.options.length} pictures'),
             _card(
                 'Rumbled Words',
                 'Arrange letters to spell the picture.',
                 Icons.shuffle_rounded,
                 (d) => RumbledWordsScreen(difficulty: d),
-                (d) => '${rumbledWordsFor(d).length} words · 1 hint per word'),
+                (d) =>
+                    '${rumbledWordsFor(d).length.clamp(0, GameSessionOrder.roundLength(d))} words · 1 hint per word'),
           ]),
         ]));
   }

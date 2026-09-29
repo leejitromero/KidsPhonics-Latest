@@ -138,6 +138,7 @@ class _WordBuilderScreenState extends State<WordBuilderScreen>
   @override
   Widget build(BuildContext context) => GameScaffold(
       tutorial: GameTutorial.wordBuilder,
+      canOpenTutorial: () => !_busy && !resultOpen,
       answerResult: _feedback,
       title: 'Word Builder',
       instructions:

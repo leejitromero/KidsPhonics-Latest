@@ -136,6 +136,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
   @override
   Widget build(BuildContext context) => GameScaffold(
         tutorial: GameTutorial.memoryFlip,
+        canOpenTutorial: () => !_locked && !resultOpen,
         answerResult: _answerResult,
         title: 'Memory Flip',
         instructions: 'Tap two cards. Match the same pictures!',

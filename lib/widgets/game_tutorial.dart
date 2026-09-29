@@ -6,10 +6,15 @@ enum GameTutorial { flappyLetters, wordBuilder, memoryFlip }
 
 class GameTutorialHost extends StatefulWidget {
   const GameTutorialHost(
-      {super.key, required this.tutorial, required this.builder, this.onOpen});
+      {super.key,
+      required this.tutorial,
+      required this.builder,
+      this.onOpen,
+      this.canOpen});
   final GameTutorial tutorial;
   final Widget Function(BuildContext, VoidCallback) builder;
   final VoidCallback? onOpen;
+  final bool Function()? canOpen;
   @override
   State<GameTutorialHost> createState() => _GameTutorialHostState();
 }
@@ -34,7 +39,12 @@ class _GameTutorialHostState extends State<GameTutorialHost> {
   }
 
   Future<void> _show() async {
-    if (_open) return;
+    if (_open ||
+        !mounted ||
+        widget.canOpen?.call() == false ||
+        ModalRoute.of(context)?.isCurrent != true) {
+      return;
+    }
     _open = true;
     widget.onOpen?.call();
     final dismissed = await showDialog<bool>(

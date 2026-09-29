@@ -58,6 +58,9 @@ void main() {
       await tester.tap(find.text('Set PIN'));
     });
     await tester.pump();
+    expect(p.parentAuth.isAuthenticated, isTrue);
+    await tester.scrollUntilVisible(find.text('Child Learning Summary'), 250,
+        scrollable: find.byType(Scrollable).first);
     expect(find.text('Child Learning Summary'), findsOneWidget);
     expect(p.parentAuth.isAuthenticated, isTrue);
     await finish(tester, p);

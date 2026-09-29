@@ -329,6 +329,7 @@ class LearnerPage extends StatelessWidget {
       required this.child,
       this.onBack,
       this.onHelp,
+      this.helpEnabled = true,
       this.showBack = true,
       this.fitViewport = false,
       this.answerResult,
@@ -338,6 +339,7 @@ class LearnerPage extends StatelessWidget {
   final Widget child;
   final VoidCallback? onBack;
   final VoidCallback? onHelp;
+  final bool helpEnabled;
   final bool showBack;
   final bool fitViewport;
   final bool? answerResult;
@@ -354,7 +356,7 @@ class LearnerPage extends StatelessWidget {
                 if (onHelp != null)
                   IconButton(
                       tooltip: 'How to Play',
-                      onPressed: onHelp,
+                      onPressed: helpEnabled ? onHelp : null,
                       icon: const Icon(Icons.help_outline_rounded))
               ],
               backgroundColor: const Color(0xFFEEE9FF),
@@ -688,6 +690,7 @@ class AudioButton extends StatefulWidget {
 
 class _AudioButtonState extends State<AudioButton> {
   bool _playing = false;
+  bool _heard = false;
   int _attempt = 0;
   AppProvider? _provider;
   @override
@@ -709,6 +712,7 @@ class _AudioButtonState extends State<AudioButton> {
       _attempt++;
       if (_playing) unawaited(_provider?.phonicsAudio.stop());
       _playing = false;
+      _heard = false;
       _message = null;
     }
   }
@@ -729,6 +733,7 @@ class _AudioButtonState extends State<AudioButton> {
     if (!mounted || attempt != _attempt) return;
     setState(() {
       _playing = false;
+      _heard = success;
       if (!success) _message = 'Audio unavailable. Please try again.';
     });
   }
@@ -737,9 +742,20 @@ class _AudioButtonState extends State<AudioButton> {
   Widget build(BuildContext context) {
     final enabled = widget.enabled && context.watch<AppProvider>().voiceEnabled;
     final available = PhonicsAudioService.assetForPhrase(widget.phrase) != null;
+    final label = _playing
+        ? 'Listening…'
+        : _heard
+            ? 'Listen Again'
+            : widget.label;
+    final icon = _playing
+        ? Icons.graphic_eq_rounded
+        : _heard
+            ? Icons.replay_rounded
+            : widget.icon;
     return Column(mainAxisSize: MainAxisSize.min, children: [
       Semantics(
-          label: '${widget.label}: ${widget.phrase}',
+          liveRegion: true,
+          label: '$label: ${widget.phrase}',
           child: widget.compact
               ? SizedBox(
                   width: double.infinity,
@@ -747,6 +763,10 @@ class _AudioButtonState extends State<AudioButton> {
                     style: OutlinedButton.styleFrom(
                       backgroundColor: widget.color ?? const Color(0xFF087F86),
                       foregroundColor: Colors.white,
+                      disabledBackgroundColor:
+                          _playing ? const Color(0xFFFFDF88) : null,
+                      disabledForegroundColor:
+                          _playing ? const Color(0xFF49315D) : null,
                       side: BorderSide.none,
                       minimumSize: const Size(0, 64),
                       padding: const EdgeInsets.symmetric(
@@ -757,9 +777,9 @@ class _AudioButtonState extends State<AudioButton> {
                     onPressed:
                         !enabled || _playing || !available ? null : _play,
                     child: Column(mainAxisSize: MainAxisSize.min, children: [
-                      Icon(_playing ? Icons.graphic_eq : widget.icon, size: 22),
+                      Icon(icon, size: 22),
                       const SizedBox(height: 4),
-                      Text(widget.label,
+                      Text(label,
                           style: const TextStyle(
                               fontSize: 13, fontWeight: FontWeight.w900)),
                     ]),
@@ -769,6 +789,10 @@ class _AudioButtonState extends State<AudioButton> {
                   style: OutlinedButton.styleFrom(
                     backgroundColor: widget.color ?? const Color(0xFF087F86),
                     foregroundColor: Colors.white,
+                    disabledBackgroundColor:
+                        _playing ? const Color(0xFFFFDF88) : null,
+                    disabledForegroundColor:
+                        _playing ? const Color(0xFF49315D) : null,
                     side: BorderSide.none,
                     minimumSize: const Size(96, 48),
                     padding: const EdgeInsets.symmetric(
@@ -782,8 +806,8 @@ class _AudioButtonState extends State<AudioButton> {
                         .withValues(alpha: .35),
                   ),
                   onPressed: !enabled || _playing || !available ? null : _play,
-                  icon: Icon(_playing ? Icons.graphic_eq : widget.icon),
-                  label: Text(_playing ? 'Playing…' : widget.label))),
+                  icon: Icon(icon),
+                  label: Text(label))),
       if (!enabled)
         const Text('Audio is turned off.', style: TextStyle(fontSize: 16)),
       if (!available || _message != null)
@@ -896,6 +920,7 @@ class GameScaffold extends StatefulWidget {
       required this.hasProgress,
       this.instructionPanel,
       this.tutorial,
+      this.canOpenTutorial,
       this.answerResult,
       this.current,
       this.total,
@@ -911,6 +936,7 @@ class GameScaffold extends StatefulWidget {
   final String title, instructions, progressLabel;
   final Widget? instructionPanel;
   final GameTutorial? tutorial;
+  final bool Function()? canOpenTutorial;
   final bool? answerResult;
   final Widget child;
   final bool hasProgress;
@@ -962,7 +988,10 @@ class _GameScaffoldState extends State<GameScaffold> {
   @override
   Widget build(BuildContext context) => widget.tutorial == null
       ? _page(context, null)
-      : GameTutorialHost(tutorial: widget.tutorial!, builder: _page);
+      : GameTutorialHost(
+          tutorial: widget.tutorial!,
+          canOpen: widget.canOpenTutorial,
+          builder: _page);
 
   Widget _page(BuildContext context, VoidCallback? onHelp) => PopScope(
         canPop: _allowPop,
@@ -971,6 +1000,7 @@ class _GameScaffoldState extends State<GameScaffold> {
         },
         child: LearnerPage(
             onHelp: onHelp,
+            helpEnabled: widget.canOpenTutorial?.call() ?? true,
             answerResult: widget.answerResult,
             title: widget.title,
             onBack: _leave,

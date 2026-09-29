@@ -25,6 +25,12 @@ void main() {
       value: provider,
       child: const MaterialApp(home: FlappyLettersScreen()),
     ));
+    await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('How to Play'), findsOneWidget);
+    await tester.tap(find.text('Skip'));
+    await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+    await tester.pump(const Duration(milliseconds: 500));
     await tester.tap(find.text('Start flying'));
     await tester.pump();
     expect(find.text('Ready to fly?'), findsNothing);
