@@ -89,6 +89,9 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
       _saving = true;
       if (correct) _correct++;
     });
+    unawaited(correct
+        ? provider.audio.playCorrect()
+        : provider.audio.playWrong());
     await provider.recordLetterPractice(widget.letter.letter, correct);
     if (_question == 4) {
       await provider.completeLetterAssessment(
@@ -202,7 +205,7 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
             if (!_heard && !_playing) const Text('Listen first, then choose.'),
             if (_audioError != null) Text(_audioError!),
           ],
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           LayoutBuilder(
               builder: (context, box) => Wrap(spacing: 10, children: [
                     ..._current.options.map((option) => SizedBox(
@@ -216,9 +219,10 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
                               const Color(0xFFB45731),
                               const Color(0xFF256AB0)
                             ][_current.options.indexOf(option) % 4],
-                            visual: lessonExamples.any((e) => e.word == option)
+                            visual: practiceExamples
+                                    .any((e) => e.word == option)
                                 ? LessonPicture(
-                                    example: lessonExamples
+                                    example: practiceExamples
                                         .firstWhere((e) => e.word == option),
                                     size: 56)
                                 : null,
@@ -250,7 +254,7 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
   Widget _instructionPanel() => Container(
         width: double.infinity,
         margin: const EdgeInsets.only(top: 4, bottom: 8),
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
@@ -296,17 +300,17 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
             ),
             Text(_current.prompt,
                 style: const TextStyle(
-                    fontSize: 26,
-                    height: 1.35,
+                    fontSize: 22,
+                    height: 1.2,
                     fontWeight: FontWeight.w800,
                     color: KidsUi.ink)),
             if (_current.picture != null) ...[
               const SizedBox(height: 12),
               Center(
                 child: LessonPicture(
-                    example: lessonExamples
+                    example: practiceExamples
                         .firstWhere((e) => e.word == _current.picture),
-                    size: 120),
+                    size: 88),
               ),
             ],
           ],

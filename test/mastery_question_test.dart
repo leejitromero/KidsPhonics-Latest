@@ -6,6 +6,23 @@ import 'package:kidsphonics/models/mastery_question.dart';
 import 'package:kidsphonics/services/phonics_audio_service.dart';
 
 void main() {
+  test('A practice varies examples without ambiguous starting-letter choices',
+      () {
+    for (var seed = 0; seed < 20; seed++) {
+      final questions = buildLessonPracticeQuestions('A', random: Random(seed));
+      final words = {
+        questions[0].audioPhrase == 'lesson-word-A'
+            ? 'Ant'
+            : questions[0].audioPhrase,
+        questions[1].picture,
+        questions[2].answer,
+        questions[3].answer,
+      };
+      expect(words, {'Ant', 'Axe', 'Apple', 'Airplane'});
+      expect(questions[2].options.where((word) => word.startsWith('A')),
+          [questions[2].answer]);
+    }
+  });
   test('lesson practice uses only new recordings and supplied picture words',
       () {
     for (final letter in allLetters) {

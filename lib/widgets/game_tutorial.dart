@@ -132,14 +132,45 @@ class _TutorialDialogState extends State<_TutorialDialog> {
         child: AlertDialog(
           key: const ValueKey('game-tutorial'),
           backgroundColor: const Color(0xFFF7F1FF),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-          title: const Text('How to Play', textAlign: TextAlign.center),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(28),
+              side: const BorderSide(color: Color(0xFFBBA5E8), width: 2)),
+          title: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                      colors: [Color(0xFF7052CA), Color(0xFF398EAA)]),
+                  borderRadius: BorderRadius.circular(18)),
+              child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.auto_awesome_rounded, color: Color(0xFFFFDF88)),
+                    SizedBox(width: 8),
+                    Flexible(
+                        child: Text('How to Play',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w900))),
+                  ])),
           content: SingleChildScrollView(
               child: Column(mainAxisSize: MainAxisSize.min, children: [
             Text('Step ${_step + 1} of ${_steps.length}',
                 style: const TextStyle(fontSize: 14, color: KidsUi.muted)),
-            const SizedBox(height: 14),
+            const SizedBox(height: 10),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              for (var i = 0; i < _steps.length; i++)
+                Container(
+                    width: 28,
+                    height: 6,
+                    margin: const EdgeInsets.symmetric(horizontal: 3),
+                    decoration: BoxDecoration(
+                        color: i <= _step
+                            ? const Color(0xFF7052CA)
+                            : const Color(0xFFDDD3EF),
+                        borderRadius: BorderRadius.circular(6))),
+            ]),
+            const SizedBox(height: 12),
             TweenAnimationBuilder<double>(
                 key: ValueKey(_step),
                 tween: Tween(begin: .8, end: 1),
@@ -151,10 +182,12 @@ class _TutorialDialogState extends State<_TutorialDialog> {
                 child: Container(
                     padding: const EdgeInsets.all(20),
                     decoration: const BoxDecoration(
-                        color: Color(0xFFE3D8FC), shape: BoxShape.circle),
+                        gradient: LinearGradient(
+                            colors: [Color(0xFFE3D8FC), Color(0xFFD4F3ED)]),
+                        shape: BoxShape.circle),
                     child:
-                        Icon(icon, size: 64, color: const Color(0xFF7052CA)))),
-            const SizedBox(height: 18),
+                        Icon(icon, size: 52, color: const Color(0xFF7052CA)))),
+            const SizedBox(height: 12),
             Text(title,
                 textAlign: TextAlign.center,
                 style:

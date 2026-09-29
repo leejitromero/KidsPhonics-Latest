@@ -22,6 +22,7 @@ class LearnerActivityCard extends StatelessWidget {
       this.status,
       this.progress,
       this.mascot,
+      this.imageAsset,
       this.compactFloating = false,
       this.stackedHeader = false,
       this.accent = const Color(0xFF7052CA),
@@ -30,6 +31,7 @@ class LearnerActivityCard extends StatelessWidget {
   final bool compactFloating;
   final bool stackedHeader;
   final LearningMascot? mascot;
+  final String? imageAsset;
   final String actionLabel;
   final String title, description;
   final IconData icon;
@@ -107,7 +109,7 @@ class LearnerActivityCard extends StatelessWidget {
           ));
 
   Widget _compactCard(BuildContext context) => Container(
-        margin: const EdgeInsets.fromLTRB(6, 2, 6, 18),
+        margin: EdgeInsets.fromLTRB(6, 2, 6, imageAsset == null ? 18 : 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(22),
           boxShadow: [
@@ -132,7 +134,7 @@ class LearnerActivityCard extends StatelessWidget {
           child: InkWell(
             onTap: onPressed,
             child: Padding(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(imageAsset == null ? 12 : 10),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -143,16 +145,40 @@ class LearnerActivityCard extends StatelessWidget {
                             ? CrossAxisAlignment.start
                             : CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.all(9),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(13)),
-                            child: Icon(icon, size: 24, color: accent),
-                          ),
+                          if (imageAsset != null)
+                            SizedBox(
+                              width: double.infinity,
+                              height: 80,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                    gradient: RadialGradient(colors: [
+                                      Colors.white,
+                                      accent.withValues(alpha: .06),
+                                    ]),
+                                    borderRadius: BorderRadius.circular(16)),
+                                child: Image.asset(imageAsset!,
+                                    fit: BoxFit.contain,
+                                    excludeFromSemantics: true,
+                                    cacheWidth: (80 *
+                                            MediaQuery.devicePixelRatioOf(
+                                                context))
+                                        .ceil()),
+                              ),
+                            )
+                          else
+                            Container(
+                              padding: const EdgeInsets.all(9),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(13)),
+                              child: Icon(icon, size: 24, color: accent),
+                            ),
                           if (stackedHeader) ...[
                             const SizedBox(height: 8),
                             Text(title,
+                                textAlign: imageAsset == null
+                                    ? TextAlign.start
+                                    : TextAlign.center,
                                 style: const TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w800,
@@ -169,8 +195,13 @@ class LearnerActivityCard extends StatelessWidget {
                         ]),
                     const SizedBox(height: 6),
                     Text(description,
-                        style:
-                            const TextStyle(fontSize: 15, color: KidsUi.muted)),
+                        textAlign: imageAsset == null
+                            ? TextAlign.start
+                            : TextAlign.center,
+                        style: TextStyle(
+                            fontSize: imageAsset == null ? 15 : 13,
+                            height: 1.25,
+                            color: KidsUi.muted)),
                     if (detail != null) ...[
                       const SizedBox(height: 8),
                       Text(detail!,
@@ -322,6 +353,62 @@ class LearnerNavigation {
   }
 }
 
+/// Compact floating controls on the page background.
+class LearnerHeader extends StatelessWidget {
+  const LearnerHeader(
+      {super.key,
+      required this.title,
+      this.onBack,
+      this.onHelp,
+      this.helpEnabled = true,
+      this.showBack = true,
+      this.trailing});
+  final String title;
+  final VoidCallback? onBack, onHelp;
+  final bool helpEnabled, showBack;
+  final Widget? trailing;
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.fromLTRB(8, 4, 8, 6),
+        child: Row(children: [
+          if (showBack)
+            IconButton.filledTonal(
+                tooltip: 'Back',
+                onPressed: onBack ?? () => Navigator.maybePop(context),
+                icon: const Icon(Icons.arrow_back_rounded),
+                style: IconButton.styleFrom(
+                    backgroundColor: const Color(0xDD263858),
+                    foregroundColor: Colors.white)),
+          const SizedBox(width: 6),
+          Expanded(
+              child: Center(
+                  child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                    colors: [Color(0xF0263858), Color(0xE048427D)]),
+                borderRadius: BorderRadius.circular(28),
+                border: Border.all(color: const Color(0xFFB7ADD9))),
+            child: Text(title,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900)),
+          ))),
+          const SizedBox(width: 6),
+          if (onHelp != null)
+            IconButton.filledTonal(
+                tooltip: 'How to Play',
+                onPressed: helpEnabled ? onHelp : null,
+                icon: const Icon(Icons.help_outline_rounded))
+          else if (showBack && trailing == null)
+            const SizedBox(width: 48),
+          if (trailing != null) trailing!,
+        ]),
+      );
+}
+
 class LearnerPage extends StatelessWidget {
   const LearnerPage(
       {super.key,
@@ -351,44 +438,32 @@ class LearnerPage extends StatelessWidget {
       child: Builder(
         builder: (ctx) => Scaffold(
           backgroundColor: const Color(0xFFEEE9FF),
-          appBar: AppBar(
-              actions: [
-                if (onHelp != null)
-                  IconButton(
-                      tooltip: 'How to Play',
-                      onPressed: helpEnabled ? onHelp : null,
-                      icon: const Icon(Icons.help_outline_rounded))
-              ],
-              backgroundColor: const Color(0xFFEEE9FF),
-              surfaceTintColor: Colors.transparent,
-              scrolledUnderElevation: 0,
-              foregroundColor: KidsUi.ink,
-              title: Text(title,
-                  style: const TextStyle(
-                      fontSize: KidsUi.titleSize, fontWeight: FontWeight.bold)),
-              automaticallyImplyLeading: false,
-              leading: !showBack
-                  ? null
-                  : IconButton(
-                      tooltip: 'Back',
-                      icon: const Icon(Icons.arrow_back_rounded),
-                      onPressed: onBack ?? () => Navigator.maybePop(ctx))),
           body: AdventureBackground(
               answerResult: answerResult,
               child: SafeArea(
-                  top: false,
-                  child: Align(
-                      alignment: Alignment.topCenter,
-                      child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 720),
-                          child: fitViewport
-                              ? Padding(
-                                  padding: const EdgeInsets.all(16),
-                                  child: child)
-                              : SingleChildScrollView(
-                                  controller: scrollController,
-                                  padding: const EdgeInsets.all(KidsUi.padding),
-                                  child: child))))),
+                  child: Column(children: [
+                LearnerHeader(
+                    title: title,
+                    showBack: showBack,
+                    onBack: onBack ?? () => Navigator.maybePop(ctx),
+                    onHelp: onHelp,
+                    helpEnabled: helpEnabled),
+                Expanded(
+                    child: Align(
+                        alignment: Alignment.topCenter,
+                        child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 720),
+                            child: fitViewport
+                                ? Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(12, 4, 12, 8),
+                                    child: child)
+                                : SingleChildScrollView(
+                                    controller: scrollController,
+                                    padding: const EdgeInsets.fromLTRB(
+                                        12, 4, 12, 12),
+                                    child: child)))),
+              ]))),
           bottomNavigationBar:
               bottom == null ? null : SafeArea(top: false, child: bottom!),
         ),
@@ -848,65 +923,137 @@ class _GameResultDialogState extends State<GameResultDialog> {
       child: PopScope(
         canPop: false,
         child: AlertDialog(
+          constraints: const BoxConstraints(maxWidth: 360),
+          insetPadding:
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+          titlePadding: EdgeInsets.zero,
+          contentPadding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+          actionsPadding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+          clipBehavior: Clip.antiAlias,
           backgroundColor: const Color(0xFFF8F3FF),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-          title: Text(
-              widget.attempts > 0 && widget.correct / widget.attempts >= .8
-                  ? 'Amazing work!'
-                  : 'Every try helps you grow!',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  fontWeight: FontWeight.w900, color: KidsUi.ink)),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+              side: const BorderSide(color: Color(0xFFD7C8F3), width: 1.5)),
+          title: Container(
+              padding: const EdgeInsets.all(14),
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [Color(0xFF7052CA), Color(0xFF398EAA)])),
+              child: Column(mainAxisSize: MainAxisSize.min, children: [
+                const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.auto_awesome_rounded,
+                          color: Color(0xFFFFDF88), size: 22),
+                      SizedBox(width: 8),
+                      Flexible(
+                          child: Text('Round complete!',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900))),
+                    ]),
+                const SizedBox(height: 8),
+                const MascotPortrait(mascot: LearningMascot.zoplet, size: 64),
+                const SizedBox(height: 4),
+                Text(
+                    widget.attempts > 0 &&
+                            widget.correct / widget.attempts >= .8
+                        ? 'Amazing work!'
+                        : 'Every try helps you grow!',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white)),
+              ])),
           content: SingleChildScrollView(
               child: Column(mainAxisSize: MainAxisSize.min, children: [
-            const MascotPortrait(mascot: LearningMascot.zoplet, size: 100),
-            const SizedBox(height: 12),
-            const Text('Round complete!',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-            const SizedBox(height: 8),
             Text('Score: ${widget.correct} / ${widget.attempts}',
-                style: const TextStyle(fontSize: 24)),
+                style:
+                    const TextStyle(fontSize: 23, fontWeight: FontWeight.w900)),
+            const SizedBox(height: 8),
+            LinearProgressIndicator(
+                value: widget.attempts == 0
+                    ? 0
+                    : (widget.correct / widget.attempts).clamp(0.0, 1.0),
+                minHeight: 7,
+                borderRadius: BorderRadius.circular(6),
+                color: const Color(0xFF398EAA),
+                backgroundColor: const Color(0xFFE3DAF3)),
+            const SizedBox(height: 6),
             Text(
-                'Activity Accuracy: ${widget.attempts == 0 ? 'No attempts yet' : '${(widget.correct / widget.attempts * 100).round()}%'}'),
+                'Activity Accuracy: ${widget.attempts == 0 ? 'No attempts yet' : '${(widget.correct / widget.attempts * 100).round()}%'}',
+                textAlign: TextAlign.center,
+                style:
+                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
             const Text('Scored attempts, including retries.',
-                style: TextStyle(fontSize: 16)),
-            const SizedBox(height: 14),
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 12, color: KidsUi.muted)),
+            const SizedBox(height: 10),
             Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                    color: const Color(0xFFFFEEC6),
-                    borderRadius: BorderRadius.circular(20)),
-                child: Column(children: [
+                    gradient: const LinearGradient(
+                        colors: [Color(0xFFFFEEC6), Color(0xFFFFE2AC)]),
+                    border: Border.all(color: const Color(0xFFF0D18A)),
+                    borderRadius: BorderRadius.circular(16)),
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   const Icon(Icons.stars_rounded,
-                      color: Color(0xFF99600E), size: 36),
-                  Text('XP Earned: +${widget.earnedXp}',
-                      style: const TextStyle(fontWeight: FontWeight.w800)),
-                  Text('Stars Earned: +${widget.earnedStars}',
-                      style: const TextStyle(fontWeight: FontWeight.w800)),
+                      color: Color(0xFF99600E), size: 28),
+                  const SizedBox(width: 10),
+                  Flexible(
+                      child: Column(mainAxisSize: MainAxisSize.min, children: [
+                    Text('XP Earned: +${widget.earnedXp}',
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w800)),
+                    Text('Stars Earned: +${widget.earnedStars}',
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w800)),
+                  ])),
                 ])),
-            const SizedBox(height: 12),
-            const Text(
-                'Ready for another little adventure? You can also take a break.',
-                textAlign: TextAlign.center),
-            const SizedBox(height: 16),
-            SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF7052CA),
-                        foregroundColor: Colors.white),
-                    onPressed: _used ? null : () => _act(widget.onAgain),
-                    child: const Text('Play Again'))),
-            SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                    onPressed: _used ? null : () => _act(widget.onBack),
-                    child: Text(widget.backLabel == 'Back to Games'
-                        ? 'Choose Next Game'
-                        : widget.backLabel))),
+            const SizedBox(height: 8),
+            const Text('Play again or take a little break.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 13, color: KidsUi.muted)),
           ])),
+          actions: [
+            Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(0, 48),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              textStyle: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w800),
+                              backgroundColor: const Color(0xFF7052CA),
+                              foregroundColor: Colors.white),
+                          onPressed: _used ? null : () => _act(widget.onAgain),
+                          child: const Text('Play Again'))),
+                  const SizedBox(height: 6),
+                  SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                              minimumSize: const Size(0, 48),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              textStyle: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w800)),
+                          onPressed: _used ? null : () => _act(widget.onBack),
+                          child: Text(widget.backLabel == 'Back to Games'
+                              ? 'Choose Next Game'
+                              : widget.backLabel))),
+                ])
+          ],
         ),
       ));
 }

@@ -54,19 +54,13 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
       child: Builder(
           builder: (themedContext) => Scaffold(
                 backgroundColor: const Color(0xFFF4F0FF),
-                appBar: AppBar(
-                  title: const Text('My Progress',
-                      style: TextStyle(fontWeight: FontWeight.w900)),
-                  backgroundColor: const Color(0xFFF4F0FF),
-                  foregroundColor: KidsUi.ink,
-                  surfaceTintColor: Colors.transparent,
-                ),
                 body: SafeArea(
-                  top: false,
+                  top: true,
                   child: Center(
                       child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 720),
                     child: Column(children: [
+                      const LearnerHeader(title: 'My Progress'),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
                         child: LayoutBuilder(

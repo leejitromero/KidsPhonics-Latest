@@ -7,6 +7,7 @@ import '../models/difficulty.dart';
 import '../models/flappy_letters_game.dart';
 import '../providers/app_provider.dart';
 import '../widgets/game_tutorial.dart';
+import '../widgets/learner_widgets.dart';
 
 class FlappyLettersScreen extends StatefulWidget {
   const FlappyLettersScreen({super.key, this.difficulty = Difficulty.easy});
@@ -109,22 +110,16 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
 
   Widget _page(BuildContext context, VoidCallback onHelp) => Scaffold(
         backgroundColor: const Color(0xFFEEE9FF),
-        appBar: AppBar(
-          title: const Text('Flappy Letters'),
-          actions: [
-            IconButton(
-                tooltip: 'How to Play',
-                onPressed: onHelp,
-                icon: const Icon(Icons.help_outline_rounded)),
-            IconButton(
-              tooltip: 'Pause',
-              onPressed: _game.state == FlightState.flying ? _pause : null,
-              icon: const Icon(Icons.pause_rounded),
-            ),
-          ],
-        ),
         body: SafeArea(
           child: Column(children: [
+            LearnerHeader(
+                title: 'Flappy Letters',
+                onHelp: onHelp,
+                trailing: IconButton(
+                    tooltip: 'Pause',
+                    onPressed:
+                        _game.state == FlightState.flying ? _pause : null,
+                    icon: const Icon(Icons.pause_rounded))),
             Padding(
               padding: const EdgeInsets.all(12),
               child: Text(

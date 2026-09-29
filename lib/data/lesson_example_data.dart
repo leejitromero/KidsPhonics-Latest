@@ -54,3 +54,11 @@ const lessonExamples = [
   LessonExample('Y', 'yoyo', 'Yo-yo'),
   LessonExample('Z', 'zebra', 'Zebra'),
 ];
+
+/// Quick Check vocabulary with existing pictures and recordings.
+final practiceExamples = <LessonExample>[
+  ...lessonExamples,
+  for (final word in gameWords)
+    if (!lessonExamples.any((example) => example.word == word.word))
+      LessonExample(word.letter, word.slug, word.word),
+];

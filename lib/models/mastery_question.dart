@@ -32,9 +32,16 @@ class MasteryQuestion {
 List<MasteryQuestion> buildLessonPracticeQuestions(String letter,
     {Random? random}) {
   final rng = random ?? Random();
-  final example =
-      lessonExamples.firstWhere((e) => e.letter == letter.toUpperCase());
-  final target = example.letter;
+  final target = letter.toUpperCase();
+  final examples = practiceExamples.where((e) => e.letter == target).toList()
+    ..shuffle(rng);
+  if (examples.isEmpty) throw ArgumentError.value(letter, 'letter');
+  LessonExample example(int index) => examples[index % examples.length];
+  String audio(int index) {
+    final item = example(index);
+    return lessonExamples.contains(item) ? item.wordAudioKey : item.word;
+  }
+
   List<String> choices(String answer, Iterable<String> pool) {
     final others = pool.where((value) => value != answer).toSet().toList()
       ..shuffle(rng);
@@ -42,36 +49,37 @@ List<MasteryQuestion> buildLessonPracticeQuestions(String letter,
   }
 
   final letters = lessonExamples.map((e) => e.letter);
-  final words = lessonExamples.map((e) => e.word);
+  final words =
+      practiceExamples.where((e) => e.letter != target).map((e) => e.word);
   return [
     MasteryQuestion(
         type: MasteryQuestionType.soundLetter,
         prompt: 'Listen. Which letter comes first when you write the word?',
-        audioPhrase: example.wordAudioKey,
+        audioPhrase: audio(0),
         answer: target,
         options: choices(target, letters)),
     MasteryQuestion(
         type: MasteryQuestionType.pictureLetter,
-        prompt: 'Which letter does ${example.word} start with?',
-        picture: example.word,
+        prompt: 'Which letter does ${example(1).word} start with?',
+        picture: example(1).word,
         answer: target,
         options: choices(target, letters)),
     MasteryQuestion(
         type: MasteryQuestionType.letterWord,
         prompt: 'Which word starts with $target?',
-        answer: example.word,
-        options: choices(example.word, words)),
+        answer: example(2).word,
+        options: choices(example(2).word, words)),
     MasteryQuestion(
         type: MasteryQuestionType.soundPicture,
         prompt: 'Listen. Which word do you hear?',
-        audioPhrase: example.wordAudioKey,
-        answer: example.word,
-        options: choices(example.word, words)),
+        audioPhrase: audio(3),
+        answer: example(3).word,
+        options: choices(example(3).word, words)),
     MasteryQuestion(
         type: MasteryQuestionType.missingLetter,
         prompt:
-            'Listen. Which letter is missing?\n_${example.word.substring(1)}',
-        audioPhrase: example.wordAudioKey,
+            'Listen. Which letter is missing?\n_${example(4).word.substring(1)}',
+        audioPhrase: audio(4),
         answer: target,
         options: choices(target, letters)),
   ];

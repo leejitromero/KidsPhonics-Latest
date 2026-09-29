@@ -57,6 +57,10 @@ class _GamesScreenState extends State<GamesScreen> {
       LearnerActivityCard(
           compactFloating: true,
           stackedHeader: true,
+          imageAsset: 'assets/images/game_logos/${switch (title) {
+            'Speak & Recognize' => 'speak_and_recognize',
+            _ => title.toLowerCase().replaceAll(' ', '_'),
+          }}.png',
           accent: switch (title) {
             'Sound Match' ||
             'Word Builder' ||
@@ -86,8 +90,9 @@ class _GamesScreenState extends State<GamesScreen> {
               child: Text('Little challenges. Big discoveries!',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800))),
           const SizedBox(height: 8),
-          const MascotGuide(message: 'Pick a game and give it a go.'),
-          const SizedBox(height: 20),
+          const MascotGuide(
+              compact: true, message: 'Pick a game and give it a go.'),
+          const SizedBox(height: 12),
           _gameRows([
             _card(
                 'Flappy Letters',

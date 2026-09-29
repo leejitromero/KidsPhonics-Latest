@@ -157,6 +157,44 @@ void main() {
     expect(find.text('Activity Accuracy: No attempts yet'), findsOneWidget);
     expect(find.text('Stars Earned: +0'), findsOneWidget);
   });
+  for (final scale in [1.0, 1.5]) {
+    testWidgets('result actions stay visible on a small phone at text $scale',
+        (t) async {
+      t.view.physicalSize = const Size(320, 568);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.resetPhysicalSize);
+      addTearDown(t.view.resetDevicePixelRatio);
+      await t.pumpWidget(MaterialApp(
+          builder: (context, child) => MediaQuery(
+              data: MediaQuery.of(context)
+                  .copyWith(textScaler: TextScaler.linear(scale)),
+              child: child!),
+          home: GameResultDialog(
+              correct: 4,
+              attempts: 6,
+              earnedXp: 30,
+              earnedStars: 4,
+              onAgain: () {},
+              onBack: () {})));
+      expect(t.takeException(), isNull);
+      for (final label in ['Play Again', 'Choose Next Game']) {
+        final finder = find.text(label);
+        expect(finder.hitTestable(), findsOneWidget);
+        expect(t.getRect(finder).bottom, lessThan(568));
+      }
+      if (scale == 1) {
+        expect(
+            t
+                .getSize(find
+                    .descendant(
+                        of: find.byType(AlertDialog),
+                        matching: find.byType(Material))
+                    .first)
+                .height,
+            lessThanOrEqualTo(520));
+      }
+    });
+  }
   testWidgets(
       'progress and all four learning status badges reflect supplied data',
       (t) async {
