@@ -1,5 +1,5 @@
 import '../data/game_session_order.dart';
-import '../widgets/game_word_picture.dart';
+import '../widgets/word_game_layout.dart';
 // lib/screens/missing_vowel_screen.dart
 //
 // Missing Vowel — shows a word with the vowel blanked out (C_T, D_G, S_N).
@@ -18,7 +18,6 @@ import '../providers/app_provider.dart';
 import '../models/difficulty.dart';
 
 import '../widgets/learner_widgets.dart';
-import '../theme/kids_ui.dart';
 
 class MissingVowelScreen extends StatefulWidget {
   final Difficulty difficulty;
@@ -107,7 +106,11 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
   }
 
   @override
+  int get totalGameItems => _puzzles.length;
+
+  @override
   Widget build(BuildContext context) => GameScaffold(
+        fitViewport: true,
         answerResult: _picked == null ? null : _picked == _puzzle.vowel,
         title: 'Missing Vowel',
         instructions: 'Hear the word. Choose the missing vowel.',
@@ -115,21 +118,20 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
         hasProgress: scoredAttempts > 0 && !resultOpen,
         current: _index + 1,
         total: _puzzles.length,
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          Center(child: GameWordPicture(word: _puzzle.word)),
-          const SizedBox(height: KidsUi.padding),
+        child: WordGameLayout(word: _puzzle.word, children: [
+          const SizedBox(height: 4),
           Text(_puzzle.display,
               textAlign: TextAlign.center,
               style:
-                  const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+                  const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           AudioButton(
               phrase:
                   _puzzle.word[0] + _puzzle.word.substring(1).toLowerCase()),
-          const SizedBox(height: KidsUi.section),
-          GameChoiceGrid(
+          const SizedBox(height: 8),
+          WordChoiceGrid(
               children: _vowels
                   .map((option) => GameAnswerButton(
+                      compact: true,
                       label: option,
                       selected: _picked == option,
                       result:

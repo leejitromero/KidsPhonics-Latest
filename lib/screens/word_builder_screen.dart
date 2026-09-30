@@ -1,5 +1,5 @@
 import '../data/game_session_order.dart';
-import '../widgets/game_word_picture.dart';
+import '../widgets/word_game_layout.dart';
 // lib/screens/word_builder_screen.dart
 import 'package:flutter/material.dart';
 
@@ -132,8 +132,14 @@ class _WordBuilderScreenState extends State<WordBuilderScreen>
         .join(' ');
     return Text(word,
         textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold));
+        style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold));
   }
+
+  @override
+  int get totalGameItems => _activePuzzles.length;
+
+  @override
+  int get correctGameItems => _puzzleIndex + (_allCorrect ? 1 : 0);
 
   @override
   Widget build(BuildContext context) => GameScaffold(
@@ -147,21 +153,42 @@ class _WordBuilderScreenState extends State<WordBuilderScreen>
       current: _puzzleIndex + 1,
       total: _activePuzzles.length,
       hasProgress: scoredAttempts > 0 && !resultOpen,
-      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Center(child: GameWordPicture(word: _puzzle.word)),
-        const SizedBox(height: 16),
-        _buildWordRow(),
+      fitViewport: true,
+      child: WordGameLayout(word: _puzzle.word, children: [
+        FittedBox(fit: BoxFit.scaleDown, child: _buildWordRow()),
         AudioButton(
             phrase: _puzzle.word[0] + _puzzle.word.substring(1).toLowerCase()),
-        const SizedBox(height: 16),
-        GameChoiceGrid(
+        const SizedBox(height: 8),
+        WordChoiceGrid(
             children: _shuffledTiles
                 .map((letter) => GameAnswerButton(
-                    label: letter,
-                    onPressed: _allCorrect || _busy || resultOpen
-                        ? null
-                        : () => _tapTile(letter)))
+                      buttonKey: ValueKey('builder-choice-$letter'),
+                      compact: true,
+                      label: letter,
+                      onPressed: _allCorrect || _busy || resultOpen
+                          ? null
+                          : () => _tapTile(letter),
+                    ))
                 .toList()),
-        if (_feedback != null) GameFeedback(correct: _feedback!),
+        const SizedBox(height: 6),
+        SizedBox(
+            height: 36,
+            child: Center(
+                child: Semantics(
+              liveRegion: true,
+              child: Text(
+                  _feedback == null
+                      ? ''
+                      : _feedback!
+                          ? 'Correct!'
+                          : 'Nice try! Keep practicing.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: _feedback == true
+                          ? const Color(0xFF167769)
+                          : const Color(0xFFB63D50))),
+            ))),
       ]));
 }

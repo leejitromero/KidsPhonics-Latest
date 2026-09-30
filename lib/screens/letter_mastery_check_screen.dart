@@ -213,12 +213,6 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
                             ? box.maxWidth
                             : (box.maxWidth - 10) / 2,
                         child: GameAnswerButton(
-                            accent: [
-                              const Color(0xFF7052CA),
-                              const Color(0xFF167769),
-                              const Color(0xFFB45731),
-                              const Color(0xFF256AB0)
-                            ][_current.options.indexOf(option) % 4],
                             visual: practiceExamples
                                     .any((e) => e.word == option)
                                 ? LessonPicture(

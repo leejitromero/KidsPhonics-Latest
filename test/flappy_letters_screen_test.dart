@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kidsphonics/providers/app_provider.dart';
 import 'package:kidsphonics/screens/flappy_letters_screen.dart';
+import 'package:kidsphonics/widgets/learner_widgets.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 
 void main() {
@@ -31,6 +32,9 @@ void main() {
     await tester.tap(find.text('Skip'));
     await tester.runAsync(() => Future<void>.delayed(Duration.zero));
     await tester.pump(const Duration(milliseconds: 500));
+    expect(tester.getSize(find.byKey(const ValueKey('flight-play-area'))),
+        const Size(390, 844));
+    expect(tester.widget<GameLives>(find.byType(GameLives)).lives, 3);
     await tester.tap(find.text('Start flying'));
     await tester.pump();
     expect(find.text('Ready to fly?'), findsNothing);
@@ -44,10 +48,21 @@ void main() {
     for (var i = 0; i < 40; i++) {
       await tester.pump(const Duration(milliseconds: 50));
     }
+    for (var lives = 2; lives > 0; lives--) {
+      expect(find.text('Oops! Keep going!'), findsOneWidget);
+      expect(tester.widget<GameLives>(find.byType(GameLives)).lives, lives);
+      await tester.tap(find.text('Continue'));
+      await tester.pump();
+      for (var i = 0; i < 40; i++) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
+    }
     expect(find.text('Nice flying! Try again!'), findsOneWidget);
+    expect(tester.widget<GameLives>(find.byType(GameLives)).lives, 0);
     await tester.tap(find.text('Play again'));
     await tester.pump();
     expect(find.text('Ready to fly?'), findsOneWidget);
+    expect(tester.widget<GameLives>(find.byType(GameLives)).lives, 3);
     expect(find.textContaining('0 / 26 letters'), findsOneWidget);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());

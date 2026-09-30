@@ -182,88 +182,126 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
   }
 
   @override
+  int get totalGameItems => _rounds.length;
+
+  @override
   Widget build(BuildContext context) => GameScaffold(
         answerResult: _picked == null ? null : _picked == _round.correctEmoji,
         title: 'Picture Match',
+        fitViewport: true,
         instructions: 'Read or hear the word. Tap its picture.',
         difficulty: widget.difficulty,
         hasProgress: scoredAttempts > 0 && !resultOpen,
         current: _index + 1,
         total: _rounds.length,
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          Center(
-              child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color:
-                  _landed ? const Color(0xFFE4F8ED) : const Color(0xFFF2ECFC),
-              borderRadius: BorderRadius.circular(26),
-              border: Border.all(
-                  color: _landed ? KidsUi.correct : const Color(0xFFCDBCEB),
-                  width: 3),
-              boxShadow: const [
-                BoxShadow(
-                    color: Color(0x227052CA),
-                    blurRadius: 16,
-                    offset: Offset(0, 6))
-              ],
-            ),
-            child: Column(children: [
-              SizedBox(
-                  key: _targetKey,
-                  width: 150,
-                  height: 150,
-                  child: _landed
-                      ? GameWordPicture(
-                          key: const ValueKey('matched-picture'),
-                          word: _round.word)
-                      : const Icon(Icons.add_photo_alternate_outlined,
-                          size: 64, color: Color(0xFF8A72B6))),
-              const SizedBox(height: 8),
-              Text(_landed ? 'Correct match!' : 'Your picture goes here',
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w800,
-                      color: _landed ? KidsUi.correct : KidsUi.muted)),
-            ]),
-          )),
-          const SizedBox(height: KidsUi.padding),
-          Text(_round.word,
-              textAlign: TextAlign.center,
-              style:
-                  const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
-          AudioButton(
-              phrase: _round.word[0] + _round.word.substring(1).toLowerCase()),
-          const SizedBox(height: KidsUi.section),
-          GameChoiceGrid(
-              children: _shuffledIdx
-                  .map((option) => GameAnswerButton(
-                      label: 'Picture ${option + 1}',
-                      visual: SizedBox(
-                          key: _pictureKeys.putIfAbsent(
-                              option, () => GlobalKey()),
-                          child: Opacity(
-                              opacity:
-                                  _answered && _picked == _round.options[option]
-                                      ? 0
-                                      : 1,
-                              child: GameWordPicture(
-                                  word: _round.labels[option]))),
-                      selected: _picked == _round.options[option],
-                      result: _picked == _round.options[option]
-                          ? _round.options[option] == _round.correctEmoji
-                          : null,
-                      onPressed: _answered || _picked != null || resultOpen
-                          ? null
-                          : () => _pick(_round.options[option])))
-                  .toList()),
-          if (_picked != null)
-            GameFeedback(correct: _picked == _round.correctEmoji),
-          if (_answered)
-            ElevatedButton(
-                onPressed: resultOpen || _flying ? null : _next,
-                child: const Text('Next')),
-        ]),
+        child: LayoutBuilder(
+            builder: (_, box) => Center(
+                child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: SizedBox(
+                        width: box.maxWidth,
+                        child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Center(
+                                  child: Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: _landed
+                                      ? const Color(0xFFE4F8ED)
+                                      : const Color(0xFFF2ECFC),
+                                  borderRadius: BorderRadius.circular(26),
+                                  border: Border.all(
+                                      color: _landed
+                                          ? KidsUi.correct
+                                          : const Color(0xFFCDBCEB),
+                                      width: 3),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                        color: Color(0x227052CA),
+                                        blurRadius: 16,
+                                        offset: Offset(0, 6))
+                                  ],
+                                ),
+                                child: Column(children: [
+                                  SizedBox(
+                                      key: _targetKey,
+                                      width: (box.maxHeight * .32)
+                                          .clamp(130.0, 200.0),
+                                      height: (box.maxHeight * .32)
+                                          .clamp(130.0, 200.0),
+                                      child: _landed
+                                          ? GameWordPicture(
+                                              key: const ValueKey(
+                                                  'matched-picture'),
+                                              word: _round.word)
+                                          : const Icon(
+                                              Icons
+                                                  .add_photo_alternate_outlined,
+                                              size: 64,
+                                              color: Color(0xFF8A72B6))),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                      _landed
+                                          ? 'Correct match!'
+                                          : 'Your picture goes here',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w800,
+                                          color: _landed
+                                              ? KidsUi.correct
+                                              : KidsUi.muted)),
+                                ]),
+                              )),
+                              const SizedBox(height: 6),
+                              Text(_round.word,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold)),
+                              AudioButton(
+                                  phrase: _round.word[0] +
+                                      _round.word.substring(1).toLowerCase()),
+                              const SizedBox(height: 6),
+                              GameChoiceGrid(
+                                  compact: true,
+                                  children: _shuffledIdx
+                                      .map((option) => GameAnswerButton(
+                                          label: 'Picture ${option + 1}',
+                                          visual: SizedBox(
+                                              key: _pictureKeys.putIfAbsent(
+                                                  option, () => GlobalKey()),
+                                              child: Opacity(
+                                                  opacity:
+                                                      _answered && _picked == _round.options[option]
+                                                          ? 0
+                                                          : 1,
+                                                  child: GameWordPicture(
+                                                      word: _round
+                                                          .labels[option]))),
+                                          selected:
+                                              _picked == _round.options[option],
+                                          result:
+                                              _picked == _round.options[option]
+                                                  ? _round.options[option] ==
+                                                      _round.correctEmoji
+                                                  : null,
+                                          onPressed: _answered ||
+                                                  _picked != null ||
+                                                  resultOpen
+                                              ? null
+                                              : () =>
+                                                  _pick(_round.options[option])))
+                                      .toList()),
+                              if (_picked != null)
+                                GameFeedback(
+                                    correct: _picked == _round.correctEmoji),
+                              if (_answered)
+                                ElevatedButton(
+                                    onPressed:
+                                        resultOpen || _flying ? null : _next,
+                                    child: const Text('Next')),
+                            ]))))),
       );
 }

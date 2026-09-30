@@ -81,7 +81,7 @@ class _TutorialDialogState extends State<_TutorialDialog> {
             (
               Icons.compare_arrows_rounded,
               'Fly through the gap',
-              'Go between the pipes. Watch out for the edges!'
+              'Go between the pipes. You have 3 lives. Each crash costs one!'
             ),
             (
               Icons.abc_rounded,
@@ -120,7 +120,7 @@ class _TutorialDialogState extends State<_TutorialDialog> {
             (
               Icons.stars_rounded,
               'Find every pair',
-              'Keep matching until all the pictures are revealed.'
+              'Matched pictures fly into your collection. Find them all for a fireworks celebration!'
             ),
           ],
       };

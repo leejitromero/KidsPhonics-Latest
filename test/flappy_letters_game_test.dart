@@ -28,17 +28,45 @@ void main() {
     expect(game.distance, greaterThan(0));
   });
 
-  test('pipe and ground collisions end the round', () {
+  test('pipe and ground collisions cost one life and wait for continue', () {
     final game = FlappyLettersGame(Difficulty.easy)..flap();
     game.distance = 340;
     game.y = 80;
     expect(game.advance(.01), isEmpty);
-    expect(game.state, FlightState.lost);
+    expect(game.state, FlightState.hit);
+    expect(game.lives, 2);
+    game.advance(.1);
+    expect(game.lives, 2);
     expect(game.passed, 0);
     final ground = FlappyLettersGame(Difficulty.easy)..flap();
     ground.y = 590;
     ground.advance(.01);
-    expect(ground.state, FlightState.lost);
+    expect(ground.state, FlightState.hit);
+    expect(ground.lives, 2);
+  });
+
+  test('three crashes end the game; continue keeps cleared letters', () {
+    final game = FlappyLettersGame(Difficulty.easy)..flap();
+    game.passed = 4;
+    for (var remaining = 2; remaining >= 0; remaining--) {
+      game.y = 590;
+      game.advance(.01);
+      expect(game.lives, remaining);
+      expect(game.passed, 4);
+      if (remaining > 0) {
+        game.continueFlight();
+        expect(game.state, FlightState.ready);
+        expect(game.pipeX(4), 440);
+        game.flap();
+      }
+    }
+    expect(game.state, FlightState.lost);
+    game.continueFlight();
+    game.flap();
+    game.advance(.1);
+    expect(game.lives, 0);
+    expect(game.state, FlightState.lost);
+    expect(FlappyLettersGame(Difficulty.easy).lives, 3);
   });
 
   test('each fully cleared pipe emits one name, ending exactly at Z', () {

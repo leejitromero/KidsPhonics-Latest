@@ -10,6 +10,7 @@ import 'learning_progress_widgets.dart';
 import 'adventure_background.dart';
 import 'mascot_guide.dart';
 import 'game_tutorial.dart';
+import 'floating_choice.dart';
 
 class LearnerActivityCard extends StatelessWidget {
   const LearnerActivityCard(
@@ -500,19 +501,31 @@ class GameProgressHeader extends StatelessWidget {
 }
 
 class GameChoiceGrid extends StatelessWidget {
-  const GameChoiceGrid({super.key, required this.children});
+  const GameChoiceGrid(
+      {super.key, required this.children, this.compact = false});
   final List<GameAnswerButton> children;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(builder: (context, box) {
         final scale = MediaQuery.textScalerOf(context).scale(16) / 16;
         final detailed = children
             .any((choice) => choice.visual != null || choice.label.length > 6);
-        final minimum = (detailed ? 112.0 : 80.0) * scale;
+        final minimum = (compact
+                ? 80.0
+                : detailed
+                    ? 112.0
+                    : 80.0) *
+            scale;
         final columns =
             ((box.maxWidth + 12) / (minimum + 12)).floor().clamp(1, 3);
-        final diameter = ((box.maxWidth - 12 * (columns - 1)) / columns)
-            .clamp(0.0, detailed ? 160.0 * scale : 112.0 * scale);
+        final diameter = ((box.maxWidth - 12 * (columns - 1)) / columns).clamp(
+            0.0,
+            compact
+                ? 100.0 * scale
+                : detailed
+                    ? 160.0 * scale
+                    : 112.0 * scale);
         return Wrap(
           alignment: WrapAlignment.center,
           spacing: 12,
@@ -524,12 +537,7 @@ class GameChoiceGrid extends StatelessWidget {
                   height:
                       children[i].visual != null ? diameter * 1.08 : diameter,
                   child: _CircularChoiceStyle(
-                      color: const [
-                        Color(0xFF7052CA),
-                        Color(0xFF167769),
-                        Color(0xFFB45731),
-                      ][i % 3],
-                      child: children[i])),
+                      color: choiceBlue, child: children[i])),
           ],
         );
       });
@@ -551,6 +559,7 @@ class GameAnswerButton extends StatelessWidget {
       this.result,
       this.visual,
       this.selected = false,
+      this.compact = false,
       this.accent,
       this.buttonKey});
   final Color? accent;
@@ -559,16 +568,49 @@ class GameAnswerButton extends StatelessWidget {
   final bool? result;
   final Widget? visual;
   final bool selected;
+  final bool compact;
   final Key? buttonKey;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => FloatingChoice(
+        enabled: onPressed != null && result == null,
+        seed: label.codeUnits.fold(0, (a, b) => a + b),
+        child: _button(context),
+      );
+
+  Widget _button(BuildContext context) {
     final circle =
         context.dependOnInheritedWidgetOfExactType<_CircularChoiceStyle>();
     final color = result == true
         ? KidsUi.correct
         : result == false
             ? KidsUi.incorrect
-            : circle?.color ?? accent ?? KidsUi.ink;
+            : accent ?? circle?.color ?? choiceBlue;
+    if (compact) {
+      return Semantics(
+        label: label,
+        child: ElevatedButton(
+          key: buttonKey,
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            minimumSize: Size.zero,
+            padding: EdgeInsets.zero,
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            backgroundColor: color,
+            disabledBackgroundColor: color,
+            foregroundColor: Colors.white,
+            disabledForegroundColor: Colors.white,
+            elevation: 3,
+            shadowColor: color.withValues(alpha: .3),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: const BorderSide(color: Color(0x99FFFFFF), width: 1.5)),
+          ),
+          child: Text(label,
+              style:
+                  const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+        ),
+      );
+    }
     if (circle != null) {
       return Semantics(
         selected: selected,
@@ -586,11 +628,11 @@ class GameAnswerButton extends StatelessWidget {
             foregroundColor: Colors.white,
             disabledForegroundColor: Colors.white,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(visual != null ? 24 : 80),
+                borderRadius: BorderRadius.circular(22),
                 side: BorderSide(
                     color: selected || result != null
                         ? Colors.white
-                        : color.withValues(alpha: .3),
+                        : const Color(0x99FFFFFF),
                     width: 3)),
             elevation: 4,
             shadowColor: color.withValues(alpha: .4),
@@ -640,21 +682,15 @@ class GameAnswerButton extends StatelessWidget {
                 foregroundColor: color,
                 disabledForegroundColor: color,
                 backgroundColor: result == null
-                    ? (accent == null
-                        ? Colors.white
-                        : Color.lerp(Colors.white, accent, .12))
+                    ? Color.lerp(Colors.white, color, .10)
                     : color.withValues(alpha: .10),
                 disabledBackgroundColor: result == null
-                    ? (accent == null
-                        ? Colors.white
-                        : Color.lerp(Colors.white, accent, .12))
+                    ? Color.lerp(Colors.white, color, .10)
                     : color.withValues(alpha: .10),
                 side: BorderSide(color: color.withValues(alpha: .35)),
-                shape: accent == null
-                    ? null
-                    : RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18)),
-                elevation: accent == null ? 0 : 2),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18)),
+                elevation: 2),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
               if (visual != null) ...[
                 SizedBox(width: 64, child: visual!),
@@ -901,8 +937,11 @@ class GameResultDialog extends StatefulWidget {
       required this.earnedStars,
       required this.onAgain,
       required this.onBack,
+      this.totalItems,
+      this.correctItems,
       this.backLabel = 'Back to Games'});
   final int correct, attempts, earnedXp, earnedStars;
+  final int? totalItems, correctItems;
   final VoidCallback onAgain, onBack;
   final String backLabel;
   @override
@@ -910,6 +949,8 @@ class GameResultDialog extends StatefulWidget {
 }
 
 class _GameResultDialogState extends State<GameResultDialog> {
+  int get _total => widget.totalItems ?? widget.attempts;
+  int get _score => widget.correctItems ?? widget.correct;
   bool _used = false;
   void _act(VoidCallback action) {
     if (_used) return;
@@ -970,14 +1011,12 @@ class _GameResultDialogState extends State<GameResultDialog> {
               ])),
           content: SingleChildScrollView(
               child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Text('Score: ${widget.correct} / ${widget.attempts}',
+            Text('Score: $_score / $_total',
                 style:
                     const TextStyle(fontSize: 23, fontWeight: FontWeight.w900)),
             const SizedBox(height: 8),
             LinearProgressIndicator(
-                value: widget.attempts == 0
-                    ? 0
-                    : (widget.correct / widget.attempts).clamp(0.0, 1.0),
+                value: _total == 0 ? 0 : (_score / _total).clamp(0.0, 1.0),
                 minHeight: 7,
                 borderRadius: BorderRadius.circular(6),
                 color: const Color(0xFF398EAA),
@@ -988,9 +1027,10 @@ class _GameResultDialogState extends State<GameResultDialog> {
                 textAlign: TextAlign.center,
                 style:
                     const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-            const Text('Scored attempts, including retries.',
+            Text(
+                'Attempts: ${widget.attempts} • Wrong attempts: ${widget.attempts - widget.correct}\nAccuracy includes retries.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, color: KidsUi.muted)),
+                style: const TextStyle(fontSize: 12, color: KidsUi.muted)),
             const SizedBox(height: 10),
             Container(
                 width: double.infinity,
@@ -1056,6 +1096,26 @@ class _GameResultDialogState extends State<GameResultDialog> {
           ],
         ),
       ));
+}
+
+class GameLives extends StatelessWidget {
+  const GameLives({super.key, required this.lives});
+  final int lives;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+        label: '$lives of 3 lives remaining',
+        child: ExcludeSemantics(
+          child: Row(mainAxisSize: MainAxisSize.min, children: [
+            for (var i = 0; i < 3; i++)
+              Icon(i < lives ? Icons.favorite : Icons.favorite_border,
+                  size: 22,
+                  color: i < lives
+                      ? const Color(0xFFB63D50)
+                      : const Color(0xFF746B80)),
+          ]),
+        ),
+      );
 }
 
 class GameScaffold extends StatefulWidget {
@@ -1197,8 +1257,7 @@ class _GameScaffoldState extends State<GameScaffold> {
       );
 }
 
-/// A per-play display ledger mirrors existing reward/answer writes unchanged.
-/// No progress, streak, time-limit or reward formula is calculated here.
+/// Tracks per-play rewards and answers without changing reward formulas.
 mixin GameSessionUi<T extends StatefulWidget> on State<T> {
   AppProvider? _audioProvider;
   @override
@@ -1216,6 +1275,9 @@ mixin GameSessionUi<T extends StatefulWidget> on State<T> {
 
   int earnedXp = 0, earnedStars = 0, scoredAttempts = 0, correctAttempts = 0;
   bool resultOpen = false;
+  int get totalGameItems;
+  int get correctGameItems => correctAttempts;
+
   Future<void> _saved = Future.value();
 
   /// Completion lets callers await the actual persisted reward writes.
@@ -1233,6 +1295,7 @@ mixin GameSessionUi<T extends StatefulWidget> on State<T> {
   }
 
   void recordGameAnswer({required bool correct}) {
+    if (resultOpen) return;
     scoredAttempts++;
     if (correct) correctAttempts++;
     context.read<AppProvider>().recordDailyAnswer(correct: correct);
@@ -1257,6 +1320,8 @@ mixin GameSessionUi<T extends StatefulWidget> on State<T> {
         context: context,
         barrierDismissible: false,
         builder: (_) => GameResultDialog(
+            totalItems: totalGameItems,
+            correctItems: correctGameItems,
             correct: correctAttempts,
             attempts: scoredAttempts,
             earnedXp: earnedXp,

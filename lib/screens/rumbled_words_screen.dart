@@ -6,7 +6,8 @@ import '../data/rumbled_words_data.dart';
 import '../models/difficulty.dart';
 import '../providers/app_provider.dart';
 import '../widgets/learner_widgets.dart';
-import '../widgets/game_word_picture.dart';
+import '../widgets/word_game_layout.dart';
+import '../widgets/floating_choice.dart';
 
 class RumbledWordsScreen extends StatefulWidget {
   const RumbledWordsScreen({super.key, this.difficulty = Difficulty.easy});
@@ -75,16 +76,22 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
       p.recordActivityCompleted();
       awardGameXp((15 * widget.difficulty.xpMultiplier).round());
       p.audio.playWin();
-      showGameResult(() => setState(() {
-            _index = 0;
-            _words = _newSession();
-            _prepare();
-          }));
+      showGameResult(_restart);
     }
   }
 
+  void _restart() => setState(() {
+        _index = 0;
+        _words = _newSession();
+        _prepare();
+      });
+
+  @override
+  int get totalGameItems => _words.length;
+
   @override
   Widget build(BuildContext context) => GameScaffold(
+        fitViewport: true,
         answerResult: _correct,
         title: 'Rumbled Words',
         instructions: 'Look at the picture. Tap letters to spell the word.',
@@ -95,33 +102,18 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
         hasProgress:
             (_selected.isNotEmpty || scoredAttempts > 0 || _hintUsed) &&
                 !resultOpen,
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          Row(children: [
-            Expanded(
-                child: Center(
-                    child:
-                        GameWordPicture(word: _words[_index].word, size: 120))),
-            SizedBox(
-                width: 90,
-                child: Column(children: [
-                  FilledButton(
-                    key: const ValueKey('word-hint'),
-                    style: FilledButton.styleFrom(
-                        backgroundColor: const Color(0xFFB45731),
-                        padding: const EdgeInsets.symmetric(horizontal: 10)),
-                    onPressed: _hintUsed || _finished
-                        ? null
-                        : () => setState(() => _hintUsed = true),
-                    child:
-                        const Column(mainAxisSize: MainAxisSize.min, children: [
-                      Icon(Icons.lightbulb_outline),
-                      Text('Hint', style: TextStyle(fontSize: 14)),
-                    ]),
-                  ),
-                  Text(_hintUsed ? 'Hint used' : '1 per word',
-                      style: const TextStyle(fontSize: 12)),
-                ])),
+        child: WordGameLayout(word: _words[_index].word, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            FilledButton.icon(
+                key: const ValueKey('word-hint'),
+                onPressed: _hintUsed || _finished
+                    ? null
+                    : () => setState(() => _hintUsed = true),
+                icon: const Icon(Icons.lightbulb_outline, size: 18),
+                label: const Text('Hint')),
+            const SizedBox(width: 8),
+            Text(_hintUsed ? 'Hint used' : '1 per word',
+                style: const TextStyle(fontSize: 12)),
           ]),
           AudioButton(phrase: _words[_index].audioKey),
           if (_hintUsed)
@@ -132,59 +124,68 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.w800)),
             ),
-          const SizedBox(height: 12),
-          Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 6,
-              runSpacing: 6,
-              children: [
-                for (var slot = 0; slot < _tiles.length; slot++)
-                  _tile(
-                      key: ValueKey('word-slot-$slot'),
-                      label: slot < _selected.length
-                          ? _tiles[_selected[slot]]
-                          : '_',
-                      filled: true,
-                      onTap: _finished || slot >= _selected.length
-                          ? null
-                          : () => setState(() {
-                                _selected.removeAt(slot);
-                                _correct = null;
-                              })),
-              ]),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
+          WordChoiceGrid(children: [
+            for (var slot = 0; slot < _tiles.length; slot++)
+              _tile(
+                  key: ValueKey('word-slot-$slot'),
+                  label:
+                      slot < _selected.length ? _tiles[_selected[slot]] : '_',
+                  filled: true,
+                  onTap: _finished || slot >= _selected.length
+                      ? null
+                      : () => setState(() {
+                            _selected.removeAt(slot);
+                            _correct = null;
+                          })),
+          ]),
+          const SizedBox(height: 4),
+          Center(
+            child: OutlinedButton.icon(
+              key: const ValueKey('word-erase'),
+              onPressed: _finished || _selected.isEmpty
+                  ? null
+                  : () => setState(() {
+                        _selected.removeLast();
+                        _correct = null;
+                      }),
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size(120, 48),
+                foregroundColor: const Color(0xFFB45731),
+              ),
+              icon: const Icon(Icons.backspace_outlined),
+              label: const Text('Erase'),
+            ),
+          ),
+          const SizedBox(height: 4),
           const Text('Tap a chosen letter to put it back.',
               textAlign: TextAlign.center, style: TextStyle(fontSize: 12)),
-          const SizedBox(height: 12),
-          Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 6,
-              runSpacing: 6,
-              children: [
-                for (var i = 0; i < _tiles.length; i++)
-                  _tile(
-                      key: ValueKey('word-tile-$i'),
-                      label: _tiles[i],
-                      onTap: _finished || _selected.contains(i)
-                          ? null
-                          : () => setState(() {
-                                _selected.add(i);
-                                _correct = null;
-                              })),
-              ]),
-          const SizedBox(height: 12),
+          const SizedBox(height: 6),
+          WordChoiceGrid(children: [
+            for (var i = 0; i < _tiles.length; i++)
+              _tile(
+                  key: ValueKey('word-tile-$i'),
+                  label: _tiles[i],
+                  onTap: _finished || _selected.contains(i)
+                      ? null
+                      : () => setState(() {
+                            _selected.add(i);
+                            _correct = null;
+                          })),
+          ]),
+          const SizedBox(height: 6),
           if (_correct != null)
             Text(
                 _correct!
                     ? 'Correct!'
-                    : 'Try again! Tap a letter to change it.',
+                    : 'Try again! Tap Erase or a letter to change it.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 16,
                     color: _correct!
                         ? const Color(0xFF167769)
                         : const Color(0xFFB45731))),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
           FilledButton(
             onPressed: _correct == true
                 ? _next
@@ -206,25 +207,32 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
       SizedBox(
           width: 48,
           height: 48,
-          child: ElevatedButton(
-            key: key,
-            onPressed: onTap,
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.zero,
-              minimumSize: Size.zero,
-              backgroundColor:
-                  filled ? const Color(0xFF167769) : const Color(0xFF7052CA),
-              foregroundColor: Colors.white,
-              disabledBackgroundColor:
-                  filled ? const Color(0xFFD7EEE7) : const Color(0xFFE1DCEF),
-              disabledForegroundColor: const Color(0xFF52605C),
-              shape: filled
-                  ? RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12))
-                  : const CircleBorder(),
-            ),
-            child: Text(label,
-                style:
-                    const TextStyle(fontSize: 23, fontWeight: FontWeight.w800)),
-          ));
+          child: FloatingChoice(
+              enabled: !filled && onTap != null && !_finished,
+              seed: label.codeUnitAt(0),
+              child: ElevatedButton(
+                key: key,
+                onPressed: onTap,
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  backgroundColor:
+                      filled ? const Color(0xFF167769) : choiceBlue,
+                  foregroundColor: Colors.white,
+                  disabledBackgroundColor: filled
+                      ? const Color(0xFFD7EEE7)
+                      : const Color(0xFFDDECF3),
+                  disabledForegroundColor: const Color(0xFF52605C),
+                  shape: filled
+                      ? RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12))
+                      : RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: const BorderSide(
+                              color: Color(0x99FFFFFF), width: 1.5)),
+                ),
+                child: Text(label,
+                    style: const TextStyle(
+                        fontSize: 23, fontWeight: FontWeight.w800)),
+              )));
 }

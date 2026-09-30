@@ -50,6 +50,7 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
       _pause();
       return;
     }
+    final previousLives = _game.lives;
     setState(() {
       _successGlow = (_successGlow - dt).clamp(0, .7);
       for (final letter in _game.advance(dt)) {
@@ -60,6 +61,10 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
         }
       }
     });
+    if (_game.lives < previousLives) {
+      unawaited(_provider.phonicsAudio.stop());
+      unawaited(_provider.audio.playWrong());
+    }
     if (_game.state == FlightState.won) {
       // Flying is motor practice, not a scored letter-mastery assessment.
       _provider.recordActivityCompleted();
@@ -109,90 +114,100 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
       builder: (context, onHelp) => _page(context, onHelp));
 
   Widget _page(BuildContext context, VoidCallback onHelp) => Scaffold(
-        backgroundColor: const Color(0xFFEEE9FF),
-        body: SafeArea(
-          child: Column(children: [
-            LearnerHeader(
-                title: 'Flappy Letters',
-                onHelp: onHelp,
-                trailing: IconButton(
-                    tooltip: 'Pause',
-                    onPressed:
-                        _game.state == FlightState.flying ? _pause : null,
-                    icon: const Icon(Icons.pause_rounded))),
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Text(
-                  '${widget.difficulty.label}  •  ${_game.passed} / 26 letters'
-                  '${_letter == null ? '' : '  •  Great! $_letter'}',
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w800)),
-            ),
-            Expanded(
-              child: Focus(
-                focusNode: _focus,
-                autofocus: true,
-                onKeyEvent: (_, event) {
-                  if (event.logicalKey == LogicalKeyboardKey.space ||
-                      event.logicalKey == LogicalKeyboardKey.arrowUp) {
-                    if (event is KeyDownEvent) _flap();
-                    return KeyEventResult.handled;
-                  }
-                  return KeyEventResult.ignored;
-                },
-                child: FittedBox(
-                  fit: BoxFit.contain,
-                  child: SizedBox(
-                    width: FlappyLettersGame.width,
-                    height: FlappyLettersGame.height,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(24),
-                      child: Stack(children: [
-                        Positioned.fill(
-                          child: Semantics(
-                            button: true,
-                            label: 'Flap. Tap to fly through the letter pipes.',
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTapDown: (_) => _flap(),
-                              child: CustomPaint(
-                                  painter:
-                                      _CoursePainter(_game, _successGlow > 0)),
+        body: Focus(
+          focusNode: _focus,
+          autofocus: true,
+          onKeyEvent: (_, event) {
+            if (event.logicalKey == LogicalKeyboardKey.space ||
+                event.logicalKey == LogicalKeyboardKey.arrowUp) {
+              if (event is KeyDownEvent) _flap();
+              return KeyEventResult.handled;
+            }
+            return KeyEventResult.ignored;
+          },
+          child: Stack(fit: StackFit.expand, children: [
+            Semantics(
+              button: true,
+              label: 'Flap. Tap to fly through the letter pipes.',
+              child: GestureDetector(
+                key: const ValueKey('flight-play-area'),
+                behavior: HitTestBehavior.opaque,
+                onTapDown: (_) => _flap(),
+                child: LayoutBuilder(
+                    builder: (_, box) => Stack(children: [
+                          Positioned.fill(
+                            child: FittedBox(
+                              fit: BoxFit.fill,
+                              child: SizedBox(
+                                width: FlappyLettersGame.width,
+                                height: FlappyLettersGame.height,
+                                child: CustomPaint(
+                                    painter: _CoursePainter(
+                                        _game, _successGlow > 0)),
+                              ),
                             ),
                           ),
-                        ),
-                        Positioned(
-                          left: FlappyLettersGame.birdX - 28,
-                          top: _game.y - 28,
-                          child: IgnorePointer(
-                              child: Image.asset(
-                            'assets/images/app_mascot.png',
-                            width: 56,
-                            height: 56,
-                          )),
-                        ),
-                        if (_game.state != FlightState.flying)
-                          Positioned.fill(child: _overlay()),
-                      ]),
-                    ),
-                  ),
-                ),
+                          Positioned(
+                            left: (FlappyLettersGame.birdX - 28) *
+                                box.maxWidth /
+                                FlappyLettersGame.width,
+                            top: _game.y *
+                                    box.maxHeight /
+                                    FlappyLettersGame.height -
+                                28 * box.maxWidth / FlappyLettersGame.width,
+                            child: IgnorePointer(
+                                child: Image.asset(
+                              'assets/images/app_mascot.png',
+                              width:
+                                  56 * box.maxWidth / FlappyLettersGame.width,
+                              height:
+                                  56 * box.maxWidth / FlappyLettersGame.width,
+                            )),
+                          ),
+                        ])),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(12),
-              child: Text('Tap to flap • Space / ↑ on a keyboard'),
-            ),
+            if (_game.state != FlightState.flying) SafeArea(child: _overlay()),
+            SafeArea(
+                child: Column(children: [
+              LearnerHeader(
+                  title: 'Flappy Letters',
+                  onHelp: onHelp,
+                  trailing: IconButton(
+                      tooltip: 'Pause',
+                      color: const Color(0xFF2F245D),
+                      onPressed:
+                          _game.state == FlightState.flying ? _pause : null,
+                      icon: const Icon(Icons.pause_rounded))),
+              IgnorePointer(
+                  child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: .9),
+                    borderRadius: BorderRadius.circular(16)),
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  Text(
+                      '${widget.difficulty.label}  •  ${_game.passed} / 26 letters'
+                      '${_letter == null ? '' : '  •  Great! $_letter'}',
+                      style: const TextStyle(
+                          color: Color(0xFF2F245D),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800)),
+                  GameLives(lives: _game.lives),
+                ]),
+              )),
+            ])),
           ]),
         ),
       );
-
   Widget _overlay() {
     final state = _game.state;
     final title = switch (state) {
       FlightState.ready => 'Ready to fly?',
       FlightState.paused => 'Taking a little break',
       FlightState.won => 'A to Z! You did it!',
+      FlightState.hit => 'Oops! Keep going!',
       _ => 'Nice flying! Try again!',
     };
     return ColoredBox(
@@ -217,13 +232,20 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
             const SizedBox(height: 12),
             Text(
                 state == FlightState.ready
-                    ? 'Tap to stay in the air.\nPass 26 pipes and hear A to Z!'
+                    ? 'Tap to fly. Space / ↑ on a keyboard.\nYou have 3 lives. Pass 26 pipes!'
                     : '${_game.passed} of 26 letters cleared',
                 textAlign: TextAlign.center),
             const SizedBox(height: 20),
             FilledButton(
               onPressed: () {
                 if (state == FlightState.ready) {
+                  _flap();
+                } else if (state == FlightState.hit) {
+                  setState(() {
+                    _game.continueFlight();
+                    _letter = null;
+                    _successGlow = 0;
+                  });
                   _flap();
                 } else if (state == FlightState.paused) {
                   setState(_game.resume);
@@ -236,7 +258,9 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
                   ? 'Start flying'
                   : state == FlightState.paused
                       ? 'Resume'
-                      : 'Play again'),
+                      : state == FlightState.hit
+                          ? 'Continue'
+                          : 'Play again'),
             ),
           ]),
         ),

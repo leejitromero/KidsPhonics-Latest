@@ -41,6 +41,7 @@ flutter:
     - assets/images/
     - assets/images/game_words/
     - assets/images/game_logos/
+    - assets/images/lesson_logos/
     - assets/audio/game_words/
     - assets/images/lesson_frames/
     - assets/audio/phonics/lesson_audio/letters/

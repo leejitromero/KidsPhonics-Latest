@@ -450,6 +450,7 @@ void main() {
         find.byWidgetPredicate((w) => w is GameAnswerButton && w.label == 'A'));
     first.onPressed!();
     first.onPressed!();
+    await t.pump();
     await t.pump(const Duration(milliseconds: 800));
     await t.runAsync(() async {
       await Future<void>.delayed(Duration.zero);
@@ -508,7 +509,46 @@ void main() {
     expect(find.text('XP Earned: +${p.xp}'), findsOneWidget);
     expect(find.text('Stars Earned: +${p.stars}'), findsOneWidget);
 
-    expect(find.text('Score: $attempts / $attempts'), findsOneWidget);
+    expect(find.text('Score: $roundCount / $roundCount'), findsOneWidget);
+    expect(t.widget<GameResultDialog>(find.byType(GameResultDialog)).attempts,
+        attempts);
+    await close(t, p);
+  });
+  testWidgets(
+      'sound match wrong answers advance once and count against five questions',
+      (t) async {
+    final p =
+        await mount(t, const SoundMatchScreen(difficulty: Difficulty.easy));
+    final rounds = soundRoundsForDifficulty(Difficulty.easy);
+    for (var i = 0; i < 5; i++) {
+      final word = t.widget<AudioButton>(find.byType(AudioButton).first).phrase;
+      final round =
+          rounds.firstWhere((r) => r.word.toUpperCase() == word.toUpperCase());
+      if (i < 2) {
+        final wrong = round.options.firstWhere((v) => v != round.correctLetter);
+        await choose(t, letterChoiceLabel(wrong));
+        expect(find.text('Next question…'), findsOneWidget);
+        expect(find.textContaining('Try again'), findsNothing);
+      } else {
+        await choose(t, letterChoiceLabel(round.correctLetter));
+      }
+      await advance(t, automatic: true);
+    }
+    await flushWrites(t);
+    expect(find.text('Score: 3 / 5'), findsOneWidget);
+    expect(find.text('Score: 5 / 7'), findsNothing);
+    expect(find.text('Activity Accuracy: 60%'), findsOneWidget);
+    expect(
+        find.textContaining('Attempts: 5 • Wrong attempts: 2'), findsOneWidget);
+    expect(p.xp, 25);
+    expect(p.stars, 3);
+    await t.ensureVisible(find.text('Play Again'));
+    await t.tap(find.text('Play Again'));
+    await t.pumpAndSettle();
+    final session = t.state(find.byType(SoundMatchScreen)) as GameSessionUi;
+    expect(session.scoredAttempts, 0);
+    expect(session.correctGameItems, 0);
+    expect(session.totalGameItems, 5);
     await close(t, p);
   });
   testWidgets('blocked game access and real lesson counts survive UI changes',
@@ -639,23 +679,38 @@ void main() {
                 .data!
         ];
         expect(letters.join(), isNot(word));
-        // A wrong arrangement must be editable without spending another hint.
-        for (var i = 0; i < word.length; i++) {
-          await t.ensureVisible(find.byKey(ValueKey('word-tile-$i')));
-          await t.tap(find.byKey(ValueKey('word-tile-$i')));
+        if (roundIndex == 0) {
+          // A wrong arrangement must be editable without spending another hint.
+          for (var i = 0; i < word.length; i++) {
+            await t.ensureVisible(find.byKey(ValueKey('word-tile-$i')));
+            await t.tap(find.byKey(ValueKey('word-tile-$i')));
+            await t.pump();
+          }
+          await t.ensureVisible(find.text('Check'));
+          await t.tap(find.text('Check'));
           await t.pump();
-        }
-        await t.ensureVisible(find.text('Check'));
-        await t.tap(find.text('Check'));
-        await t.pump();
-        expect(
-            find.text('Try again! Tap a letter to change it.'), findsOneWidget);
-        expect(t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult,
-            isFalse);
-        for (var i = word.length - 1; i >= 0; i--) {
-          await t.ensureVisible(find.byKey(ValueKey('word-slot-$i')));
-          await t.tap(find.byKey(ValueKey('word-slot-$i')));
-          await t.pump();
+          expect(find.text('Try again! Tap Erase or a letter to change it.'),
+              findsOneWidget);
+          expect(t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult,
+              isFalse);
+          for (var i = word.length - 1; i >= 0; i--) {
+            final erase = find.byKey(const ValueKey('word-erase'));
+            await t.ensureVisible(erase);
+            await t.tap(erase);
+            await t.pump();
+            expect(
+                t
+                    .widget<ElevatedButton>(
+                        find.byKey(ValueKey('word-tile-$i')))
+                    .onPressed,
+                isNotNull);
+          }
+          expect(
+              t
+                  .widget<OutlinedButton>(
+                      find.byKey(const ValueKey('word-erase')))
+                  .onPressed,
+              isNull);
         }
         final used = <int>{};
         for (final letter in word.split('')) {
@@ -686,8 +741,7 @@ void main() {
           p.xp,
           roundCount * (8 * difficulty.xpMultiplier).round() +
               (15 * difficulty.xpMultiplier).round());
-      expect(
-          find.text('Score: $roundCount / ${roundCount * 2}'), findsOneWidget);
+      expect(find.text('Score: $roundCount / $roundCount'), findsOneWidget);
       await t.ensureVisible(find.text('Play Again'));
       await t.pumpAndSettle();
       await t.tap(find.text('Play Again'));
@@ -733,7 +787,7 @@ void main() {
   }
 
   testWidgets(
-      'memory revealed cards fit small phones and saved pairs match result',
+      'memory cards fit small phones and allow retries until every pair is matched',
       (t) async {
     await t.binding.setSurfaceSize(const Size(320, 568));
     addTearDown(() => t.binding.setSurfaceSize(null));
@@ -751,8 +805,9 @@ void main() {
     }
 
     var attempts = 0;
+    bool ended() => find.byType(GameResultDialog).evaluate().isNotEmpty;
     for (var i = 0; i < pairs * 2; i++) {
-      if (find.byType(GameResultDialog).evaluate().isNotEmpty) break;
+      if (ended()) break;
       if (!enabled(i)) continue;
       for (var j = i + 1; j < pairs * 2; j++) {
         if (!enabled(j)) continue;
@@ -761,18 +816,21 @@ void main() {
         attempts++;
         await t.pump(const Duration(milliseconds: 800));
         await t.pump(const Duration(milliseconds: 850));
+        await t.pump(const Duration(milliseconds: 1600));
         await flushWrites(t);
         expect(t.takeException(), isNull);
-        if (find.byType(GameResultDialog).evaluate().isNotEmpty ||
-            !enabled(i)) {
+        if (ended() || !enabled(i)) {
           break;
         }
       }
     }
+    expect(find.byType(GameLives), findsNothing);
     expect(p.xp, pairs * 5 + 10);
     expect(p.stars, pairs);
     expect(find.text('XP Earned: +${p.xp}'), findsOneWidget);
-    expect(find.text('Score: $pairs / $attempts'), findsOneWidget);
+    expect(find.text('Score: $pairs / $pairs'), findsOneWidget);
+    expect(t.widget<GameResultDialog>(find.byType(GameResultDialog)).attempts,
+        attempts);
     await close(t, p);
   });
 }

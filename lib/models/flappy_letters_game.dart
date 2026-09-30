@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'difficulty.dart';
 
-enum FlightState { ready, flying, paused, lost, won }
+enum FlightState { ready, flying, paused, hit, lost, won }
 
 /// Fixed logical coordinates keep the course identical on every screen.
 class FlappyLettersGame {
@@ -12,6 +12,7 @@ class FlappyLettersGame {
   static const gap = 210.0, spacing = 280.0;
   double y = 300, velocity = 0, distance = 0;
   int passed = 0;
+  int lives = 3;
   FlightState state = FlightState.ready;
   double get speed => switch (difficulty) {
         Difficulty.easy => 85,
@@ -33,6 +34,20 @@ class FlappyLettersGame {
     if (state == FlightState.paused) state = FlightState.flying;
   }
 
+  void _hit() {
+    lives--;
+    state = lives == 0 ? FlightState.lost : FlightState.hit;
+  }
+
+  void continueFlight() {
+    if (state != FlightState.hit) return;
+    // Retry the next uncleared pipe without repeating completed letters.
+    distance = passed * spacing;
+    y = gapCenter(passed);
+    velocity = 0;
+    state = FlightState.ready;
+  }
+
   /// Returns each newly cleared letter once, after the whole bird clears it.
   List<String> advance(double seconds) {
     final letters = <String>[];
@@ -45,7 +60,7 @@ class FlappyLettersGame {
       y += velocity * dt;
       distance += speed * dt;
       if (y - radius <= 0 || y + radius >= height) {
-        state = FlightState.lost;
+        _hit();
         break;
       }
       for (var i = passed; i < 26; i++) {
@@ -54,7 +69,7 @@ class FlappyLettersGame {
         if (x + pipeWidth >= birdX - radius &&
             (y - radius < gapCenter(i) - gap / 2 ||
                 y + radius > gapCenter(i) + gap / 2)) {
-          state = FlightState.lost;
+          _hit();
           break;
         }
         if (x + pipeWidth < birdX - radius) {

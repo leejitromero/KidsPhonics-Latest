@@ -262,6 +262,9 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
   }
 
   @override
+  int get totalGameItems => _words.length;
+
+  @override
   Widget build(BuildContext context) => GameScaffold(
       answerResult: _isCorrect,
       title: 'Speak & Recognize',

@@ -108,6 +108,9 @@ class SoundPositionitionScreenState extends State<SoundPositionScreen>
   }
 
   @override
+  int get totalGameItems => _rounds.length;
+
+  @override
   Widget build(BuildContext context) => GameScaffold(
         answerResult: _picked == null ? null : _picked == _round.correctPos,
         title: 'Sound Position',

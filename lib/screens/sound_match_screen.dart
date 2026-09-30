@@ -1,5 +1,5 @@
 import '../data/game_session_order.dart';
-import '../widgets/game_word_picture.dart';
+import '../widgets/word_game_layout.dart';
 // lib/screens/sound_match_screen.dart
 import 'package:flutter/material.dart';
 
@@ -10,7 +10,6 @@ import '../providers/app_provider.dart';
 import '../data/letter_data.dart';
 import '../models/difficulty.dart';
 import '../widgets/learner_widgets.dart';
-import '../theme/kids_ui.dart';
 
 class SoundMatchScreen extends StatefulWidget {
   final Difficulty difficulty;
@@ -84,15 +83,13 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
 
   void _pick(String letter) async {
     if (_roundDone || _picks.values.contains(false) || resultOpen) return;
-    // Block re-tap only if already marked correct (green) — wrong picks are retryable
+    // Each question accepts only one answer.
     if (_picks[letter] == true) return;
 
     final isCorrect = letter == _round.correctLetter;
     setState(() {
       _picks[letter] = isCorrect;
-      if (isCorrect) {
-        _roundDone = true;
-      }
+      _roundDone = true;
     });
     final provider = context.read<AppProvider>();
     recordGameAnswer(correct: isCorrect);
@@ -104,16 +101,19 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
       await Future.delayed(const Duration(milliseconds: 1000));
       if (mounted) _nextRound();
     } else {
-      // Wrong — play tone, show red flash briefly, then clear so child can retry
+      // Brief feedback, then advance without offering a retry.
       provider.audio.playWrong();
       await Future.delayed(const Duration(milliseconds: 800));
-      if (mounted) setState(() => _picks.remove(letter));
+      if (mounted) _nextRound();
     }
   }
 
   @override
+  int get totalGameItems => _rounds.length;
+
+  @override
   Widget build(BuildContext context) => GameScaffold(
-        answerResult: _picks.isEmpty ? null : _roundDone,
+        answerResult: _picks.isEmpty ? null : _picks.values.first,
         title: 'Sound Match',
         instructions:
             'Listen to the word. Choose the matching letter or letters.',
@@ -121,19 +121,19 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
         hasProgress: scoredAttempts > 0 && !resultOpen,
         current: _roundIndex + 1,
         total: _rounds.length,
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          Center(child: GameWordPicture(word: _round.word)),
-          const SizedBox(height: KidsUi.padding),
+        fitViewport: true,
+        child: WordGameLayout(word: _round.word, children: [
+          const SizedBox(height: 4),
           Text(_round.question,
               textAlign: TextAlign.center,
               style:
-                  const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+                  const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           AudioButton(phrase: _round.voiceHint),
-          const SizedBox(height: KidsUi.section),
-          GameChoiceGrid(
+          const SizedBox(height: 8),
+          WordChoiceGrid(
               children: _opts
                   .map((option) => GameAnswerButton(
+                      compact: true,
                       label: letterChoiceLabel(option),
                       selected: _picks[option] != null,
                       result: _picks[option],
@@ -143,7 +143,17 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
                           ? null
                           : () => _pick(option)))
                   .toList()),
-          if (_picks.isNotEmpty) GameFeedback(correct: _roundDone),
+          SizedBox(
+              height: 44,
+              child: Center(
+                  child: Text(
+                      _picks.isEmpty
+                          ? ''
+                          : _picks.values.first == true
+                              ? 'Correct!'
+                              : 'Next question…',
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w700)))),
         ]),
       );
 }

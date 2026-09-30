@@ -111,6 +111,9 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
   }
 
   @override
+  int get totalGameItems => _rounds.length;
+
+  @override
   Widget build(BuildContext context) => GameScaffold(
         answerResult: _picked == null ? null : _picked == _round.correctRhyme,
         compactGuide: true,
@@ -143,11 +146,6 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
           GameChoiceGrid(
               children: _shuffled
                   .map((option) => GameAnswerButton(
-                      accent: [
-                        const Color(0xFF7052CA),
-                        const Color(0xFF167769),
-                        const Color(0xFFB45731)
-                      ][_shuffled.indexOf(option) % 3],
                       label: option.word,
                       selected: _picked == option.word,
                       result: _picked == option.word

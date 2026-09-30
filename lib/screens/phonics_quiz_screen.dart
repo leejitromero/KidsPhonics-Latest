@@ -1,5 +1,5 @@
 import '../data/game_session_order.dart';
-import '../widgets/game_word_picture.dart';
+import '../widgets/word_game_layout.dart';
 // lib/screens/phonics_quiz_screen.dart
 import 'package:flutter/material.dart';
 
@@ -10,7 +10,6 @@ import '../providers/app_provider.dart';
 import '../data/letter_data.dart';
 import '../models/difficulty.dart';
 import '../widgets/learner_widgets.dart';
-import '../theme/kids_ui.dart';
 
 class PhonicsQuizScreen extends StatefulWidget {
   final Difficulty difficulty;
@@ -104,7 +103,11 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
   }
 
   @override
+  int get totalGameItems => _questions.length;
+
+  @override
   Widget build(BuildContext context) => GameScaffold(
+        fitViewport: true,
         answerResult: _selected == null ? null : _selected == _q.correctLetter,
         title: 'Phonics Quiz',
         instructions: 'Listen to the word. Tap the matching letter or letters.',
@@ -112,19 +115,18 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
         hasProgress: scoredAttempts > 0 && !resultOpen,
         current: _qIndex + 1,
         total: _questions.length,
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          Center(child: GameWordPicture(word: _q.word)),
-          const SizedBox(height: KidsUi.padding),
+        child: WordGameLayout(word: _q.word, children: [
+          const SizedBox(height: 4),
           Text(_q.question,
               textAlign: TextAlign.center,
               style:
-                  const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+                  const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           AudioButton(phrase: _q.voiceHint),
-          const SizedBox(height: KidsUi.section),
-          GameChoiceGrid(
+          const SizedBox(height: 8),
+          WordChoiceGrid(
               children: _shuffledOpts
                   .map((option) => GameAnswerButton(
+                      compact: true,
                       label: letterChoiceLabel(option),
                       selected: _selected == option,
                       result: _selected == option
