@@ -24,6 +24,13 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
 
   Map<String, bool?> _picks = {}; // letter -> correct?
   bool _roundDone = false;
+  AppProvider? _feedbackProvider;
+
+  @override
+  void dispose() {
+    _feedbackProvider?.phonicsAudio.stop();
+    super.dispose();
+  }
 
   late List<SoundRound> _rounds = _newSession();
   List<SoundRound> _newSession() => GameSessionOrder.next(
@@ -94,11 +101,16 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
     final provider = context.read<AppProvider>();
     recordGameAnswer(correct: isCorrect);
     if (isCorrect) {
-      provider.audio.playCorrect();
+      final word = _round.word;
+      await provider.audio.playCorrect();
+      if (!mounted) return;
       awardGameXp((5 * widget.difficulty.xpMultiplier).round());
       awardGameStar();
-      // No voice — correct.mp3 tone only, then move to next round
       await Future.delayed(const Duration(milliseconds: 1000));
+      if (!mounted) return;
+      _feedbackProvider = provider;
+      await provider.speak(word);
+      _feedbackProvider = null;
       if (mounted) _nextRound();
     } else {
       // Brief feedback, then advance without offering a retry.
@@ -115,8 +127,7 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
   Widget build(BuildContext context) => GameScaffold(
         answerResult: _picks.isEmpty ? null : _picks.values.first,
         title: 'Sound Match',
-        instructions:
-            'Listen to the word. Choose the matching letter or letters.',
+        instructions: 'Listen to the sound. Choose the matching letter.',
         difficulty: widget.difficulty,
         hasProgress: scoredAttempts > 0 && !resultOpen,
         current: _roundIndex + 1,
@@ -124,11 +135,14 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
         fitViewport: true,
         child: WordGameLayout(word: _round.word, children: [
           const SizedBox(height: 4),
-          Text(_round.question,
+          Text('Which letter makes this sound?',
               textAlign: TextAlign.center,
               style:
                   const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          AudioButton(phrase: _round.voiceHint),
+          AudioButton(
+              phrase: 'lesson-sound-${_round.correctLetter}',
+              label: 'Hear Sound',
+              enabled: !_roundDone && !resultOpen),
           const SizedBox(height: 8),
           WordChoiceGrid(
               children: _opts

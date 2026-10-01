@@ -10,6 +10,7 @@ import '../data/letter_data.dart';
 import '../providers/app_provider.dart';
 import '../theme/kids_ui.dart';
 import '../widgets/learner_widgets.dart';
+import '../widgets/floating_choice.dart';
 
 class LetterMasteryCheckScreen extends StatefulWidget {
   final LetterItem letter;
@@ -89,9 +90,8 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
       _saving = true;
       if (correct) _correct++;
     });
-    unawaited(correct
-        ? provider.audio.playCorrect()
-        : provider.audio.playWrong());
+    unawaited(
+        correct ? provider.audio.playCorrect() : provider.audio.playWrong());
     await provider.recordLetterPractice(widget.letter.letter, correct);
     if (_question == 4) {
       await provider.completeLetterAssessment(
@@ -134,27 +134,57 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
       onLeave: () => _audio.stop(),
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         if (_finished) ...[
-          const Icon(Icons.stars, size: 64, color: KidsUi.correct),
-          Text(_correct >= 4 ? 'Great work!' : 'Keep practicing!',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 28)),
-          Text('Score: $_correct / 5',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 32)),
-          Text(
-              mastered
-                  ? (_correct < 4 ? 'Still Mastered' : 'MASTERED')
-                  : 'PRACTICED',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 24)),
-          if (mastered && _correct < 4)
-            const Text('Your earlier passing check still counts.',
-                textAlign: TextAlign.center),
-          if (_milestone != null)
-            Text('Achievement: $_milestone letters mastered!',
-                textAlign: TextAlign.center),
+          Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                    colors: [Color(0xFFE1F3FC), Colors.white]),
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: const Color(0xFFB6DCEC)),
+              ),
+              child: Column(children: [
+                const MascotPortrait(mascot: LearningMascot.wigloo, size: 80),
+                Text(_correct >= 4 ? 'Great work!' : 'Keep practicing!',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w900,
+                        color: choiceBlue)),
+                Text('Score: $_correct / 5',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontSize: 32, fontWeight: FontWeight.w900)),
+                const SizedBox(height: 8),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                        5,
+                        (i) => Icon(
+                            i < _correct
+                                ? Icons.star_rounded
+                                : Icons.star_outline_rounded,
+                            size: 32,
+                            color: i < _correct
+                                ? const Color(0xFFD99413)
+                                : const Color(0xFF7796A7)))),
+                const SizedBox(height: 12),
+                Text(
+                    mastered
+                        ? (_correct < 4 ? 'Still Mastered' : 'MASTERED')
+                        : 'PRACTICED',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 24)),
+                if (mastered && _correct < 4)
+                  const Text('Your earlier passing check still counts.',
+                      textAlign: TextAlign.center),
+                if (_milestone != null)
+                  Text('Achievement: $_milestone letters mastered!',
+                      textAlign: TextAlign.center),
+              ])),
           const SizedBox(height: 24),
           ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: choiceBlue, foregroundColor: Colors.white),
               onPressed: () => setState(() {
                     _question = 0;
                     _correct = 0;
@@ -212,27 +242,15 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
                         width: MediaQuery.textScalerOf(context).scale(18) > 28
                             ? box.maxWidth
                             : (box.maxWidth - 10) / 2,
-                        child: GameAnswerButton(
-                            visual: practiceExamples
-                                    .any((e) => e.word == option)
-                                ? LessonPicture(
-                                    example: practiceExamples
-                                        .firstWhere((e) => e.word == option),
-                                    size: 56)
-                                : null,
-                            buttonKey: ValueKey(option),
-                            label: option,
-                            selected: _picked == option,
-                            result:
-                                _picked == option ? option == _answer : null,
-                            onPressed:
-                                _canAnswer ? () => _pick(option) : null))),
+                        child: _answerCard(option))),
                   ])),
           if (_picked != null) ...[
             GameFeedback(
                 correct: _picked == _answer,
                 detail: _picked == _answer ? null : 'The answer is $_answer.'),
             ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: choiceBlue, foregroundColor: Colors.white),
                 onPressed: _saving ? null : _next,
                 child: Text(_saving
                     ? 'Saving…'
@@ -245,6 +263,63 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
     );
   }
 
+  Widget _answerCard(String option) {
+    final selected = _picked == option;
+    final color = selected
+        ? (option == _answer ? KidsUi.correct : KidsUi.incorrect)
+        : choiceBlue;
+    final hasPicture = practiceExamples.any((e) => e.word == option);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: FloatingChoice(
+        enabled: _canAnswer,
+        seed: _current.options.indexOf(option),
+        child: ElevatedButton(
+          key: ValueKey(option),
+          onPressed: _canAnswer ? () => _pick(option) : null,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: color,
+            disabledBackgroundColor: color.withValues(
+                alpha: _picked == null && !_canAnswer ? .7 : 1),
+            foregroundColor: Colors.white,
+            disabledForegroundColor: Colors.white,
+            padding: const EdgeInsets.all(12),
+            elevation: 3,
+            shadowColor: color.withValues(alpha: .3),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                side: const BorderSide(color: Color(0x99FFFFFF), width: 2)),
+          ),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            if (hasPicture)
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                    color: const Color(0xFFF2FAFF),
+                    borderRadius: BorderRadius.circular(14)),
+                child: LessonPicture(
+                    example:
+                        practiceExamples.firstWhere((e) => e.word == option),
+                    size: 64),
+              ),
+            if (hasPicture) const SizedBox(height: 6),
+            Text(option,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: hasPicture ? 18 : 32,
+                    fontWeight: FontWeight.w900)),
+            if (selected)
+              Icon(
+                  option == _answer
+                      ? Icons.check_circle_rounded
+                      : Icons.cancel_rounded,
+                  size: 20),
+          ]),
+        ),
+      ),
+    );
+  }
+
   Widget _instructionPanel() => Container(
         width: double.infinity,
         margin: const EdgeInsets.only(top: 4, bottom: 8),
@@ -253,10 +328,10 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Colors.white, Color(0xFFF5F0FF)],
+            colors: [Color(0xFFE2F3FC), Colors.white],
           ),
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: const Color(0xFFD7C9F0), width: 1.5),
+          border: Border.all(color: const Color(0xFFB6DCEC), width: 1.5),
           boxShadow: [
             BoxShadow(
               color: const Color(0xFF7052CA).withValues(alpha: .15),
@@ -273,18 +348,45 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Row(
+            Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.lightbulb_outline_rounded,
-                    color: Color(0xFF7052CA), size: 22),
-                SizedBox(width: 10),
+                const MascotPortrait(mascot: LearningMascot.wigloo, size: 48),
+                const SizedBox(width: 10),
                 Expanded(
-                  child: Text(
-                    'Listen or read the question. Choose one answer.',
-                    style: TextStyle(
-                        fontSize: 14, height: 1.4, color: Color(0xFF625477)),
-                  ),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Letter ${widget.letter.letter} adventure',
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w900,
+                                color: choiceBlue)),
+                        const Text('One little step at a time!',
+                            style: TextStyle(
+                                fontSize: 12, color: Color(0xFF42677D))),
+                        const SizedBox(height: 8),
+                        Row(
+                            children: List.generate(
+                                5,
+                                (i) => Expanded(
+                                        child: Padding(
+                                      padding: const EdgeInsets.only(right: 4),
+                                      child: AnimatedContainer(
+                                        duration: MediaQuery
+                                                .disableAnimationsOf(context)
+                                            ? Duration.zero
+                                            : const Duration(milliseconds: 300),
+                                        height: 7,
+                                        decoration: BoxDecoration(
+                                            color: i <= _question
+                                                ? choiceBlue
+                                                : const Color(0xFFD4E5EF),
+                                            borderRadius:
+                                                BorderRadius.circular(6)),
+                                      ),
+                                    )))),
+                      ]),
                 ),
               ],
             ),
@@ -304,7 +406,7 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
                 child: LessonPicture(
                     example: practiceExamples
                         .firstWhere((e) => e.word == _current.picture),
-                    size: 88),
+                    size: 104),
               ),
             ],
           ],

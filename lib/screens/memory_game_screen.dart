@@ -64,7 +64,10 @@ class MemoryGameScreen extends StatefulWidget {
 }
 
 class _MemoryGameScreenState extends State<MemoryGameScreen>
-    with TickerProviderStateMixin, GameSessionUi<MemoryGameScreen> {
+    with
+        TickerProviderStateMixin,
+        GameSessionUi<MemoryGameScreen>,
+        WidgetsBindingObserver {
   late List<_MemCard> _cards;
   List<_MemCard> _flipped = [];
   Set<_MemCard> _wrongCardIds = {}; // tracks cards showing red flash
@@ -76,10 +79,116 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
   late final AnimationController _flight, _fireworks;
   OverlayEntry? _flightEntry;
   bool _celebrating = false;
+  late final AnimationController _clock;
+  late int _secondsLeft;
+  bool _started = false, _paused = false, _practice = false;
+  bool _timeUpOpen = false, _foreground = true, _routeCurrent = true;
+  int get _roundSeconds => switch (widget.difficulty) {
+        Difficulty.easy => 60,
+        Difficulty.medium => 90,
+        Difficulty.hard => 120,
+      };
+
+  void _syncClock() {
+    if (_started &&
+        !_paused &&
+        !_practice &&
+        _foreground &&
+        _routeCurrent &&
+        _secondsLeft > 0 &&
+        _matchCount < _totalPairs &&
+        !resultOpen) {
+      if (!_clock.isAnimating) _clock.reverse();
+    } else {
+      _clock.stop();
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _routeCurrent = ModalRoute.isCurrentOf(context) ?? true;
+    _syncClock();
+    if (_routeCurrent && _secondsLeft == 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _offerTimeUp();
+      });
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _foreground = state == AppLifecycleState.resumed;
+    _syncClock();
+    if (_foreground) _offerTimeUp();
+  }
+
+  Future<void> _offerTimeUp() async {
+    // Finish a pair already being checked before offering a restart.
+    if (!mounted ||
+        _secondsLeft != 0 ||
+        _practice ||
+        _locked ||
+        _timeUpOpen ||
+        resultOpen ||
+        _matchCount == _totalPairs ||
+        !_foreground ||
+        !_routeCurrent ||
+        _paused) {
+      return;
+    }
+    _timeUpOpen = true;
+    final retry = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => PopScope(
+        canPop: false,
+        child: AlertDialog(
+          title: const Text('Time is up!'),
+          content: Text(
+              'You found $_matchCount of $_totalPairs pairs. Keep practicing or try a fresh round!'),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: const Text('Continue Practice')),
+            FilledButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                child: const Text('Try Again')),
+          ],
+        ),
+      ),
+    );
+    if (!mounted) return;
+    _timeUpOpen = false;
+    if (retry == true) {
+      clearGameLedger();
+      _initCards();
+    } else {
+      setState(() => _practice = true);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _foreground = WidgetsBinding.instance.lifecycleState == null ||
+        WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed;
+    _secondsLeft = _roundSeconds;
+    _clock = AnimationController(
+        vsync: this,
+        duration: Duration(seconds: _roundSeconds),
+        value: 1,
+        animationBehavior: AnimationBehavior.preserve)
+      ..addListener(() {
+        // Ignore floating-point residue at exact second boundaries.
+        final seconds = (_clock.value * _roundSeconds - 1e-9)
+            .ceil()
+            .clamp(0, _roundSeconds);
+        if (seconds == _secondsLeft) return;
+        setState(() => _secondsLeft = seconds);
+        if (seconds == 0) _offerTimeUp();
+      });
     _flight = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 600));
     _fireworks = AnimationController(
@@ -89,6 +198,8 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _clock.dispose();
     _flightEntry?.remove();
     _flight.dispose();
     _fireworks.dispose();
@@ -158,6 +269,12 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
   }
 
   void _initCards() {
+    _clock.stop();
+    _secondsLeft = _roundSeconds;
+    _clock.value = 1;
+    _started = false;
+    _paused = false;
+    _practice = false;
     final pairs = GameSessionOrder.next('memory-${widget.difficulty.name}',
         gameWordsFor(widget.difficulty), (w) => w.word,
         count: memoryPairsForDifficulty(widget.difficulty).length);
@@ -182,7 +299,16 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
   int get _totalPairs => memoryPairsForDifficulty(widget.difficulty).length;
 
   void _tapCard(_MemCard card) async {
-    if (_locked || card.isFlipped || card.isMatched) return;
+    if (_locked ||
+        _paused ||
+        (!_practice && _secondsLeft == 0) ||
+        resultOpen ||
+        card.isFlipped ||
+        card.isMatched) {
+      return;
+    }
+    _started = true;
+    _syncClock();
     final provider = context.read<AppProvider>();
     setState(() => _answerResult = null);
     provider.audio.playFlip();
@@ -207,6 +333,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
           b.isMatched = true;
           _matchCount++;
         });
+        if (_matchCount == _totalPairs) _clock.stop();
         if (provider.voiceEnabled) provider.phonicsAudio.tryPlay(a.id);
         awardGameXp((5 * widget.difficulty.xpMultiplier).round());
         awardGameStar();
@@ -223,6 +350,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
           _flipped = [];
           _locked = false;
         });
+        _offerTimeUp();
       } else {
         // Show red flash on mismatched cards — wrong.mp3 only, no voice
         provider.audio.playWrong();
@@ -242,6 +370,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
             _flipped = [];
             _locked = false;
           });
+          _offerTimeUp();
         }
       }
     }
@@ -259,7 +388,8 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
   @override
   Widget build(BuildContext context) => GameScaffold(
         tutorial: GameTutorial.memoryFlip,
-        canOpenTutorial: () => !_locked && !resultOpen,
+        canOpenTutorial: () =>
+            !_locked && !resultOpen && !_paused && !_timeUpOpen,
         answerResult: _answerResult,
         title: 'Memory Flip',
         instructions: 'Tap two cards. Match the same pictures!',
@@ -271,6 +401,52 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
         hasProgress: (scoredAttempts > 0 || _flipped.isNotEmpty) && !resultOpen,
         child: Stack(children: [
           Column(children: [
+            Row(children: [
+              Expanded(
+                  child: TweenAnimationBuilder<double>(
+                tween: Tween(
+                    end: !_practice &&
+                            _secondsLeft <= 10 &&
+                            _secondsLeft > 0 &&
+                            !_paused &&
+                            !MediaQuery.disableAnimationsOf(context) &&
+                            _secondsLeft.isOdd
+                        ? 1.05
+                        : 1),
+                duration: const Duration(milliseconds: 450),
+                builder: (_, scale, child) =>
+                    Transform.scale(scale: scale, child: child),
+                child: Text(
+                    _practice
+                        ? 'Practice • No timer'
+                        : '${_paused ? 'Paused' : 'Time'} ${_secondsLeft ~/ 60}:${(_secondsLeft % 60).toString().padLeft(2, '0')}',
+                    key: const ValueKey('memory-timer'),
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                        color: !_practice && _secondsLeft <= 10
+                            ? const Color(0xFFB85D08)
+                            : choiceBlue)),
+              )),
+              IconButton(
+                tooltip: _paused ? 'Resume game' : 'Pause game',
+                onPressed: !_started ||
+                        _locked ||
+                        resultOpen ||
+                        _timeUpOpen ||
+                        (!_practice && _secondsLeft == 0)
+                    ? null
+                    : () {
+                        setState(() => _paused = !_paused);
+                        _syncClock();
+                      },
+                icon: Icon(
+                    _paused ? Icons.play_arrow_rounded : Icons.pause_rounded),
+              ),
+            ]),
+            if (!_started)
+              const Text('Timer starts on your first flip',
+                  style: TextStyle(fontSize: 12)),
             const Text('Your matches',
                 style: TextStyle(fontWeight: FontWeight.w800)),
             const SizedBox(height: 4),
@@ -340,6 +516,20 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
               );
             })),
           ]),
+          if (_paused)
+            Positioned.fill(
+                child: ColoredBox(
+              color: const Color(0xFFF0F7FC),
+              child: Center(
+                  child: FilledButton.icon(
+                onPressed: () {
+                  setState(() => _paused = false);
+                  _syncClock();
+                },
+                icon: const Icon(Icons.play_arrow_rounded),
+                label: const Text('Resume game'),
+              )),
+            )),
           if (_celebrating)
             Positioned.fill(
                 child: IgnorePointer(
@@ -378,7 +568,12 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
               : 'Hidden card ${index + 1}',
           child: ElevatedButton(
             key: ValueKey('memory-$index'),
-            onPressed: _locked || card.isMatched || card.isFlipped || resultOpen
+            onPressed: _locked ||
+                    _paused ||
+                    (!_practice && _secondsLeft == 0) ||
+                    card.isMatched ||
+                    card.isFlipped ||
+                    resultOpen
                 ? null
                 : () => _tapCard(card),
             style: ElevatedButton.styleFrom(

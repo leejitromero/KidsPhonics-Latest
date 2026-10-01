@@ -75,6 +75,7 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
     if (!mounted) return;
     setState(_game.pause);
     unawaited(_provider.phonicsAudio.stop());
+    unawaited(_provider.audio.stop());
   }
 
   @override
@@ -84,12 +85,17 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
 
   void _flap() {
     if (!_provider.gameAccess || _provider.timeLimitReached) return;
+    if (_game.state != FlightState.ready && _game.state != FlightState.flying) {
+      return;
+    }
     setState(_game.flap);
+    unawaited(_provider.audio.playFlap());
     _focus.requestFocus();
   }
 
   void _restart() {
     unawaited(_provider.phonicsAudio.stop());
+    unawaited(_provider.audio.stop());
     setState(() {
       _game = FlappyLettersGame(widget.difficulty);
       _letter = null;
@@ -104,6 +110,7 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
     _ticker.dispose();
     _focus.dispose();
     unawaited(_provider.phonicsAudio.stop());
+    unawaited(_provider.audio.stop());
     super.dispose();
   }
 
