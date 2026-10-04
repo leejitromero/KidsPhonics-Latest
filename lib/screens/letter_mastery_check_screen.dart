@@ -1,3 +1,4 @@
+import '../widgets/button_sound.dart';
 import '../widgets/mascot_guide.dart';
 import '../widgets/lesson_picture.dart';
 import '../data/lesson_example_data.dart';
@@ -68,7 +69,6 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
     if (widget.audio == null) {
       final p = context.read<AppProvider>();
       await p.phonicsAudio.stop();
-      await p.voiceFeedback.stop();
       await p.audio.stop();
       if (!mounted) return;
     }
@@ -122,11 +122,12 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
         .getLetterProgress(widget.letter.letter)
         .mastered;
     return GameScaffold(
+      showHeader: true,
       answerResult: _finished || _picked == null ? null : _picked == _answer,
       compactGuide: true,
       mascot: LearningMascot.wigloo,
       title: 'Quick Check',
-      instructions: 'Listen or read the question. Choose one answer.',
+      instructions: 'Choose one answer.',
       instructionPanel: _finished ? null : _instructionPanel(),
       current: _finished ? null : _question + 1,
       total: _finished ? null : 5,
@@ -185,7 +186,7 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
           ElevatedButton(
               style: ElevatedButton.styleFrom(
                   backgroundColor: choiceBlue, foregroundColor: Colors.white),
-              onPressed: () => setState(() {
+              onPressed: withButtonSound(() => setState(() {
                     _question = 0;
                     _correct = 0;
                     _picked = null;
@@ -195,10 +196,10 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
                         buildLessonPracticeQuestions(widget.letter.letter);
                     _heard = false;
                     _audioError = null;
-                  }),
+                  })),
               child: const Text('Try Again')),
           TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: withButtonSound(() => Navigator.pop(context)),
               child: const Text('Back to Lesson')),
         ] else ...[
           if (_current.requiresAudio) ...[
@@ -207,7 +208,8 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
                 alignment: Alignment.center,
                 child: ElevatedButton.icon(
                     key: const ValueKey('hear-sound'),
-                    onPressed: _playing || _picked != null ? null : _hear,
+                    onPressed: withButtonSound(
+                        _playing || _picked != null ? null : _hear),
                     icon: Icon(
                         _playing
                             ? Icons.graphic_eq_rounded
@@ -251,7 +253,7 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     backgroundColor: choiceBlue, foregroundColor: Colors.white),
-                onPressed: _saving ? null : _next,
+                onPressed: withButtonSound(_saving ? null : _next),
                 child: Text(_saving
                     ? 'Saving…'
                     : _question == 4
@@ -276,7 +278,7 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen> {
         seed: _current.options.indexOf(option),
         child: ElevatedButton(
           key: ValueKey(option),
-          onPressed: _canAnswer ? () => _pick(option) : null,
+          onPressed: withButtonSound(_canAnswer ? () => _pick(option) : null),
           style: ElevatedButton.styleFrom(
             backgroundColor: color,
             disabledBackgroundColor: color.withValues(

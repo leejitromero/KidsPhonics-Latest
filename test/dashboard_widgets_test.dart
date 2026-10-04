@@ -80,7 +80,9 @@ void main() {
           child: MaterialApp(
               theme: ThemeData.dark(),
               builder: (_, child) => MediaQuery(
-                  data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+                  data: MediaQueryData(
+                      textScaler: TextScaler.linear(scale),
+                      disableAnimations: true),
                   child: child!),
               home: child));
   Future<void> finish(WidgetTester tester, AppProvider p) async {
@@ -157,7 +159,10 @@ void main() {
     final p = await make(tester);
     await tester.pumpWidget(app(p, const ProgressScreen()));
     await tester.pumpAndSettle();
-    expect(find.text('1 of 26 letters mastered'), findsOneWidget);
+    expect(find.text('1 / 26'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('1 / 5'), 180,
+        scrollable: find.byType(Scrollable).first);
+    expect(find.text('1 / 5'), findsOneWidget);
     await tester.tap(find.byKey(const ValueKey('progress-tab-1')));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(ChoiceChip, 'Mastered (1)'));

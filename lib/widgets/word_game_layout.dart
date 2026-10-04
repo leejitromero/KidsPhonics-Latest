@@ -10,8 +10,16 @@ class WordGameLayout extends StatelessWidget {
   Widget build(BuildContext context) => LayoutBuilder(builder: (_, box) {
         final imageSize = (box.maxHeight * .38).clamp(130.0, 220.0);
         return Column(children: [
-          SizedBox(
+          Container(
               height: imageSize,
+              decoration: BoxDecoration(
+                gradient: const RadialGradient(colors: [
+                  Colors.white,
+                  Color(0xE6FFFFFF),
+                  Color(0x00FFFFFF),
+                ]),
+                borderRadius: BorderRadius.circular(28),
+              ),
               child:
                   Center(child: GameWordPicture(word: word, size: imageSize))),
           const SizedBox(height: 6),
@@ -38,8 +46,13 @@ class WordChoiceGrid extends StatelessWidget {
   final List<Widget> children;
   @override
   Widget build(BuildContext context) => LayoutBuilder(builder: (_, box) {
-        final side = ((box.maxWidth - 32) / 5).clamp(0.0, 60.0);
-        final columns = children.length.clamp(1, 5);
+        final scale = MediaQuery.textScalerOf(context).scale(20) / 20;
+        final minimum = 48.0 * scale;
+        final columns = ((box.maxWidth + 8) / (minimum + 8))
+            .floor()
+            .clamp(1, children.length.clamp(1, 5));
+        final side = ((box.maxWidth - 8 * (columns - 1)) / columns)
+            .clamp(0.0, 60.0 * scale);
         return Center(
             child: SizedBox(
           width: side * columns + 8 * (columns - 1),

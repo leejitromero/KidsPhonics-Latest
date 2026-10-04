@@ -1,3 +1,4 @@
+import 'button_sound.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/kids_ui.dart';
@@ -199,20 +200,20 @@ class _TutorialDialogState extends State<_TutorialDialog> {
           ])),
           actions: [
             TextButton(
-                onPressed: () => Navigator.pop(context, true),
+                onPressed: withButtonSound(() => Navigator.pop(context, true)),
                 child: const Text('Skip')),
             if (_step > 0)
               TextButton(
-                  onPressed: () => setState(() => _step--),
+                  onPressed: withButtonSound(() => setState(() => _step--)),
                   child: const Text('Back')),
             FilledButton(
-                onPressed: () {
+                onPressed: withButtonSound(() {
                   if (_step == _steps.length - 1) {
                     Navigator.pop(context, true);
                   } else {
                     setState(() => _step++);
                   }
-                },
+                }),
                 child:
                     Text(_step == _steps.length - 1 ? "Let's Play" : 'Next')),
           ],

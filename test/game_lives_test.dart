@@ -12,6 +12,10 @@ void main() {
   testWidgets(
       'non-flight games allow more than three mistakes and keep progress',
       (t) async {
+    t.binding.platformDispatcher.accessibilityFeaturesTestValue =
+        const FakeAccessibilityFeatures(disableAnimations: true);
+    addTearDown(
+        t.binding.platformDispatcher.clearAccessibilityFeaturesTestValue);
     SharedPreferences.setMockInitialValues({});
     mockProgressAudio();
     final p = await mount(t, const AlphabetOrderScreen());

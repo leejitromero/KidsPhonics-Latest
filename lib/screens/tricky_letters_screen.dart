@@ -1,4 +1,6 @@
-﻿import 'package:flutter/material.dart';
+import '../widgets/button_sound.dart';
+import '../theme/kids_ui.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../data/letter_data.dart';
 import '../providers/app_provider.dart';
@@ -22,14 +24,14 @@ class TrickyLettersScreen extends StatelessWidget {
         const MascotGuide(
           compact: true,
           mascot: LearningMascot.wigloo,
-          message: 'Little steps, big progress! Let us practice together.',
+          message: 'Let’s practice!',
         ),
         const SizedBox(height: 12),
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            gradient:
-                const LinearGradient(colors: [Color(0xFFE3F4FC), Colors.white]),
+            gradient: const LinearGradient(
+                colors: [Color(0xD6E3F4FC), KidsUi.cardSurface]),
             borderRadius: BorderRadius.circular(22),
             border: Border.all(color: const Color(0xFFC0E1F0)),
           ),
@@ -42,9 +44,7 @@ class TrickyLettersScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                    letters.isEmpty
-                        ? 'Every letter is a little adventure'
-                        : 'Your practice picks',
+                    letters.isEmpty ? 'Explore letters' : 'Your practice picks',
                     style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
@@ -65,7 +65,7 @@ class TrickyLettersScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: .9),
+                color: KidsUi.cardSurface,
                 borderRadius: BorderRadius.circular(22)),
             child: Column(children: [
               Icon(
@@ -85,16 +85,16 @@ class TrickyLettersScreen extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                   mastered
-                      ? 'Amazing work! Keep your sounds shining with a little practice.'
-                      : 'Try a Quick Check in Letter Sounds. Your practice picks will appear here.',
+                      ? 'Keep practicing your sounds!'
+                      : 'Try a Quick Check to find your practice letters.',
                   textAlign: TextAlign.center),
               const SizedBox(height: 14),
               FilledButton.icon(
                   style: FilledButton.styleFrom(
                       backgroundColor: choiceBlue,
                       minimumSize: const Size(0, 48)),
-                  onPressed: () => LearnerNavigation.open(
-                      context, const LetterSoundsScreen()),
+                  onPressed: withButtonSound(() => LearnerNavigation.open(
+                      context, const LetterSoundsScreen())),
                   icon: const Icon(Icons.menu_book_rounded),
                   label: const Text('Explore Letter Sounds')),
             ]),
@@ -106,17 +106,18 @@ class TrickyLettersScreen extends StatelessWidget {
               child: FloatingChoice(
                 seed: i,
                 child: Material(
-                  color: Colors.white,
+                  color: KidsUi.cardSurface,
+                  surfaceTintColor: Colors.transparent,
                   elevation: 2,
                   shadowColor: choiceBlue.withValues(alpha: .18),
                   borderRadius: BorderRadius.circular(20),
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
                     key: ValueKey('tricky-letter-${letters[i].letter}'),
-                    onTap: () => LearnerNavigation.open(
+                    onTap: withButtonSound(() => LearnerNavigation.open(
                         context,
                         LetterMasteryCheckScreen(
-                            letter: letterContent(letters[i].letter))),
+                            letter: letterContent(letters[i].letter)))),
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Row(children: [
@@ -169,4 +170,3 @@ class TrickyLettersScreen extends StatelessWidget {
     );
   }
 }
-

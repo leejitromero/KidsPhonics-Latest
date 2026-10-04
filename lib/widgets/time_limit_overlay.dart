@@ -1,3 +1,4 @@
+import 'button_sound.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -165,21 +166,25 @@ class _TimeLimitOverlayState extends State<TimeLimitOverlay>
                                                 30
                                               ])
                                                 ElevatedButton(
-                                                    onPressed: _granting
-                                                        ? null
-                                                        : () => _grant(minutes),
+                                                    onPressed: withButtonSound(
+                                                        _granting
+                                                            ? null
+                                                            : () => _grant(
+                                                                minutes)),
                                                     child: Text(
                                                         'Add $minutes Minutes')),
                                               TextButton(
-                                                  onPressed: _granting
-                                                      ? null
-                                                      : () => _grant(null),
+                                                  onPressed: withButtonSound(
+                                                      _granting
+                                                          ? null
+                                                          : () => _grant(null)),
                                                   child: const Text(
                                                       'Disable Limit for Today')),
                                               TextButton(
-                                                  onPressed: _granting
-                                                      ? null
-                                                      : _cancelUnlock,
+                                                  onPressed: withButtonSound(
+                                                      _granting
+                                                          ? null
+                                                          : _cancelUnlock),
                                                   child: const Text('Cancel')),
                                             ])))
                                 : ParentPinForm(
@@ -206,13 +211,15 @@ class _TimeLimitOverlayState extends State<TimeLimitOverlay>
                                               textAlign: TextAlign.center),
                                           const SizedBox(height: 24),
                                           ElevatedButton(
-                                              onPressed: () => setState(
-                                                  () => _unlocking = true),
+                                              onPressed: withButtonSound(() =>
+                                                  setState(
+                                                      () => _unlocking = true)),
                                               child:
                                                   const Text('Parent Unlock')),
-                                          const TextButton(
-                                              onPressed: SystemNavigator.pop,
-                                              child: Text('Exit')),
+                                          TextButton(
+                                              onPressed: withButtonSound(
+                                                  SystemNavigator.pop),
+                                              child: const Text('Exit')),
                                         ])))),
                   ))),
         ))),

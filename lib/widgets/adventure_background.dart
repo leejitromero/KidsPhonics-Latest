@@ -1,3 +1,4 @@
+import 'animated_screen_art.dart';
 import 'package:flutter/material.dart';
 
 /// Lightweight, offline artwork that scales to phones and tablets.
@@ -20,7 +21,12 @@ class AdventureBackground extends StatelessWidget {
             ],
           ),
         ),
-        child: Stack(children: [
+        child: Stack(fit: StackFit.expand, children: [
+          const Positioned.fill(
+              child: AnimatedScreenArt(
+                  frames: skyFrames,
+                  blend: true,
+                  frameDuration: Duration(milliseconds: 450))),
           Positioned.fill(
             child: IgnorePointer(
               child: AnimatedOpacity(
@@ -43,62 +49,9 @@ class AdventureBackground extends StatelessWidget {
               ),
             ),
           ),
-          const Positioned.fill(
-            child: IgnorePointer(child: CustomPaint(painter: _SkyPainter())),
-          ),
           child,
         ]),
       );
-}
-
-class _SkyPainter extends CustomPainter {
-  const _SkyPainter();
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.white.withValues(alpha: .65);
-    for (final point in [
-      const Offset(.06, .12),
-      const Offset(.94, .48),
-      const Offset(.12, .88)
-    ]) {
-      final center = Offset(size.width * point.dx, size.height * point.dy);
-      canvas.drawCircle(center, 35, paint);
-      canvas.drawCircle(center.translate(32, 10), 25, paint);
-      canvas.drawCircle(center.translate(-28, 12), 22, paint);
-    }
-    paint.color = const Color(0xFF9A71DD).withValues(alpha: .35);
-    for (final point in [
-      const Offset(.88, .09),
-      const Offset(.08, .43),
-      const Offset(.9, .8)
-    ]) {
-      final x = size.width * point.dx;
-      final y = size.height * point.dy;
-      canvas.drawPath(
-          Path()
-            ..moveTo(x, y - 10)
-            ..lineTo(x + 3, y - 3)
-            ..lineTo(x + 10, y)
-            ..lineTo(x + 3, y + 3)
-            ..lineTo(x, y + 10)
-            ..lineTo(x - 3, y + 3)
-            ..lineTo(x - 10, y)
-            ..lineTo(x - 3, y - 3)
-            ..close(),
-          paint);
-    }
-    const confetti = [Color(0xFFFFB84D), Color(0xFFF582AD), Color(0xFF51BDB0)];
-    for (var i = 0; i < 12; i++) {
-      paint.color = confetti[i % confetti.length].withValues(alpha: .35);
-      final center = Offset(
-          size.width * (i.isEven ? .025 : .975), size.height * ((i + .5) / 12));
-      canvas.drawCircle(center, i % 3 == 0 ? 6 : 4, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_SkyPainter oldDelegate) => false;
 }
 
 class AdventureMascot extends StatelessWidget {

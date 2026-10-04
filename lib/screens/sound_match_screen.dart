@@ -127,7 +127,7 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
   Widget build(BuildContext context) => GameScaffold(
         answerResult: _picks.isEmpty ? null : _picks.values.first,
         title: 'Sound Match',
-        instructions: 'Listen to the sound. Choose the matching letter.',
+        instructions: 'Hear the sound. Pick a letter.',
         difficulty: widget.difficulty,
         hasProgress: scoredAttempts > 0 && !resultOpen,
         current: _roundIndex + 1,
@@ -135,10 +135,9 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
         fitViewport: true,
         child: WordGameLayout(word: _round.word, children: [
           const SizedBox(height: 4),
-          Text('Which letter makes this sound?',
+          const Text('Which letter makes this sound?',
               textAlign: TextAlign.center,
-              style:
-                  const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           AudioButton(
               phrase: 'lesson-sound-${_round.correctLetter}',
               label: 'Hear Sound',

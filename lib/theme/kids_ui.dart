@@ -7,6 +7,9 @@ abstract final class KidsUi {
   static const radius = 20.0, buttonHeight = 56.0;
   static const titleSize = 24.0, bodySize = 18.0, answerSize = 22.0;
   static const background = Color(0xFFF7F5FF);
+  // Tint only card surfaces so text and illustrations stay fully opaque.
+  static const cardOpacity = .84;
+  static const cardSurface = Color(0xD6FFFFFF);
   static const ink = Color(0xFF30214F);
   static const muted = Color(0xFF655677);
   static const correct = AppColors.tealDark;
@@ -25,18 +28,21 @@ abstract final class KidsUi {
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
                 minimumSize: const Size(0, buttonHeight),
-                textStyle: const TextStyle(fontSize: bodySize),
+                textStyle:
+                    const TextStyle(fontFamily: 'Nunito', fontSize: bodySize),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16)))),
         outlinedButtonTheme: OutlinedButtonThemeData(
             style: OutlinedButton.styleFrom(
                 minimumSize: const Size(0, buttonHeight),
-                textStyle: const TextStyle(fontSize: bodySize),
+                textStyle:
+                    const TextStyle(fontFamily: 'Nunito', fontSize: bodySize),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16)))),
         textButtonTheme: TextButtonThemeData(
             style: TextButton.styleFrom(
                 minimumSize: const Size(48, 48),
-                textStyle: const TextStyle(fontSize: bodySize))),
+                textStyle:
+                    const TextStyle(fontFamily: 'Nunito', fontSize: bodySize))),
       );
 }

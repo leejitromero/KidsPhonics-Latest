@@ -3,13 +3,17 @@ import 'local_audio_focus.dart';
 import 'background_music_service.dart';
 import 'phonics_audio_service.dart';
 
-/// Existing local effects share a single playback channel.
+/// Answer effects share a channel; button clicks and flaps mix independently.
 class AudioService {
   static AudioService _instance = AudioService._internal();
   factory AudioService() =>
       _instance._disposed ? _instance = AudioService._internal() : _instance;
   AudioService._internal();
   final AudioPlayer _player = AudioPlayer();
+  final AudioPlayer _tapPlayer = AudioPlayer();
+  Future<void>? _tapSetup;
+  Future<void> _tapPending = Future.value();
+  int _tapRequest = 0;
   // Flaps mix with speech: frequent taps must never cancel a letter recording.
   final AudioPlayer _flapPlayer = AudioPlayer();
   Future<void>? _flapSetup;
@@ -20,9 +24,14 @@ class AudioService {
   bool get enabled => _enabled;
   set enabled(bool value) {
     _enabled = value;
-    if (!value) stop();
+    if (!value) {
+      stop();
+      _stopTap();
+    }
   }
 
+  // Speech and screen transitions stop answer effects, while a button's short
+  // click can finish. Muting or disposing stops the click channel as well.
   Future<void> stop() async {
     _request++;
     if (_disposed) return;
@@ -55,7 +64,40 @@ class AudioService {
     } catch (_) {}
   }
 
-  Future<void> playTap() => _play('tap.mp3');
+  Future<void> playTap() {
+    if (!_enabled || _disposed) return Future.value();
+    final request = ++_tapRequest;
+    _tapPending = _tapPending.then((_) async {
+      bool isCurrent() => _enabled && !_disposed && request == _tapRequest;
+      if (!isCurrent()) return;
+      await (_tapSetup ??= _configureTap());
+      if (!isCurrent()) return;
+      await _tapPlayer.stop();
+      if (!isCurrent()) return;
+      await _tapPlayer.play(AssetSource('audio/button_click.wav'));
+      if (!isCurrent()) await _tapPlayer.stop();
+    }).catchError((Object _) {
+      // An unavailable audio device must never prevent a button action.
+      _tapSetup = null;
+    });
+    return _tapPending;
+  }
+
+  Future<void> _configureTap() async {
+    await _tapPlayer.setAudioContext(AudioContext(
+      android: const AudioContextAndroid(audioFocus: AndroidAudioFocus.none),
+      iOS: AudioContextIOS(category: AVAudioSessionCategory.ambient),
+    ));
+    await _tapPlayer.setReleaseMode(ReleaseMode.stop);
+  }
+
+  Future<void> _stopTap() async {
+    _tapRequest++;
+    try {
+      await _tapPlayer.stop();
+    } catch (_) {}
+  }
+
   Future<void> playFlap() {
     if (!_enabled || _disposed) return Future.value();
     final request = _request;
@@ -84,9 +126,11 @@ class AudioService {
   void dispose() {
     if (_disposed) return;
     stop();
+    _stopTap();
     _disposed = true;
     BackgroundMusicService.instance.forget(_player);
     _player.dispose();
+    _tapPlayer.dispose();
     _flapPlayer.dispose();
   }
 }

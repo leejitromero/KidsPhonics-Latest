@@ -1,10 +1,14 @@
+import '../widgets/button_sound.dart';
+import '../widgets/game_design.dart';
+import '../widgets/game_word_picture.dart';
+import '../data/game_word_data.dart';
 import '../data/game_session_order.dart';
 import '../widgets/mascot_guide.dart';
 import '../widgets/lesson_picture.dart';
 import '../data/lesson_example_data.dart';
 // lib/screens/rhyming_words_screen.dart
 //
-// Rhyming Words lesson with Easy / Medium / Hard difficulty.
+// Rhyming Words game with Easy / Medium / Hard difficulty.
 //
 // Easy  : 3 choices, very simple CVC rhymes (cat/bat, dog/log…)
 // Medium: 4 choices, slightly longer words
@@ -107,7 +111,7 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
     awardGameXp((20 * widget.difficulty.xpMultiplier).round());
     provider.audio.playWin();
     provider.markRhymingWordsDone();
-    showGameResult(_restart, backLabel: 'Back to Lessons');
+    showGameResult(_restart, backLabel: 'Back to Games');
   }
 
   @override
@@ -119,24 +123,28 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
         compactGuide: true,
         mascot: LearningMascot.wigloo,
         title: 'Rhyming Words',
-        instructions: 'Hear the word. Tap the word that rhymes.',
+        instructions: 'Tap the rhyming word.',
         difficulty: widget.difficulty,
         hasProgress: scoredAttempts > 0 && !resultOpen,
         current: _roundIndex + 1,
         total: _rounds.length,
         child:
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          ForestPanel(
+              child: Text('What rhymes with ${_round.word}?',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontSize: 24,
+                      color: GameDesign.ink,
+                      fontWeight: FontWeight.w900))),
+          const SizedBox(height: 10),
           Center(
               child: LessonPicture(
                   key: ValueKey(_round.word),
                   example: lessonExamples
                       .firstWhere((e) => e.word.toUpperCase() == _round.word),
-                  size: 140)),
-          const SizedBox(height: KidsUi.padding),
-          Text('What rhymes with ${_round.word}?',
-              textAlign: TextAlign.center,
-              style:
-                  const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+                  size: 190)),
+          const SizedBox(height: KidsUi.gap),
           AudioButton(
               color: const Color(0xFF087F86),
               phrase: lessonExamples
@@ -147,6 +155,7 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
               children: _shuffled
                   .map((option) => GameAnswerButton(
                       label: option.word,
+                      visual: _choicePicture(option),
                       selected: _picked == option.word,
                       result: _picked == option.word
                           ? option.word == _round.correctRhyme
@@ -159,8 +168,21 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
             GameFeedback(correct: _picked == _round.correctRhyme),
           if (_answered)
             ElevatedButton(
-                onPressed: resultOpen ? null : _next,
+                onPressed: withButtonSound(resultOpen ? null : _next),
                 child: const Text('Next')),
         ]),
       );
+
+  Widget? _choicePicture(RhymeOption option) {
+    for (final example in lessonExamples) {
+      if (example.word.toUpperCase() == option.word.toUpperCase()) {
+        return LessonPicture(example: example, size: 80);
+      }
+    }
+    if (gameWordFor(option.word) != null) {
+      return GameWordPicture(word: option.word, size: 80);
+    }
+    // Abstract rhyme words (e.g. "fun") keep their real text answer.
+    return null;
+  }
 }

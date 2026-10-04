@@ -1,7 +1,7 @@
 name: kidsphonics
 description: KidsPhonics - Mobile App for Grade 1 Learners
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.5+6
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -21,12 +21,14 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
-  http: ^1.2.2                    # used by tools/generate_audio.dart only
   flutter_launcher_icons: ^0.14.3 # generates the Android app icon
 
 flutter:
   uses-material-design: true
   fonts:
+    - family: Fredoka
+      fonts:
+        - asset: assets/fonts/Fredoka-Regular.ttf
     - family: Nunito
       fonts:
         - asset: assets/fonts/Nunito-Regular.ttf
@@ -42,8 +44,19 @@ flutter:
     - assets/images/game_words/
     - assets/images/game_logos/
     - assets/images/lesson_logos/
+    - assets/images/letters/
+    - assets/images/button_designs/
+    - assets/images/answer_choices/
+    - assets/images/new_ui/
     - assets/audio/game_words/
+    - assets/audio/cvc_lesson/
+    - assets/audio/blending_lesson/
     - assets/images/lesson_frames/
+    - assets/images/screen_frames/background/
+    - assets/images/screen_frames/home/
+    - assets/images/screen_frames/lessons/
+    - assets/images/screen_frames/games/
+    - assets/images/screen_frames/parents/
     - assets/audio/phonics/lesson_audio/letters/
     - assets/audio/phonics/lesson_audio/sounds/
     - assets/audio/phonics/lesson_audio/words/

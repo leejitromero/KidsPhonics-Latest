@@ -1,5 +1,20 @@
 ﻿# Current letter lesson assets
 
+Updated October 3, 2026: Letter Recognition and Letter Sounds share the plain
+A–Z image layout, one Sound button, and Previous / A–Z Grid / Next controls.
+Images are in `assets/images/letters/` and match all 26 entries in the supplied
+`letter images.zip` by SHA-256.
+
+- Letter Recognition uses `letters/letter-a.mp3` through `letter-z.mp3`.
+- Letter Sounds uses `sounds/sound-a.mp3` through `sound-z.mp3`.
+
+These paths are under `assets/audio/phonics/lesson_audio/`. Switching letters,
+opening the grid, or leaving the lesson stops the current recording. Navigation
+does not autoplay audio. Short Vowel Sounds retains its existing presentation
+pending its separate lesson instructions.
+
+## Earlier lesson design
+
 Updated September 26, 2026 from the user's voice feedback.zip.
 
 Both Letter Sounds A-Z and Short Vowel Sounds use the supplied MP3s:

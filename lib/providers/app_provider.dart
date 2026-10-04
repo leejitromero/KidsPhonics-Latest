@@ -9,12 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/audio_service.dart';
 import '../services/phonics_audio_service.dart';
-import '../services/voice_feedback_service.dart';
 
 class AppProvider extends ChangeNotifier {
   final AudioService audio = AudioService();
   final PhonicsAudioService phonicsAudio = PhonicsAudioService();
-  final VoiceFeedbackService voiceFeedback = VoiceFeedbackService();
 
   bool _voiceEnabled = true;
   bool _sfxEnabled = true;
@@ -41,6 +39,22 @@ class AppProvider extends ChangeNotifier {
   bool _gameAccess = true;
 
   bool _rhymingWordsDone = false;
+  final Map<String, int> _journeyScores = {};
+  int? journeyScore(String id) => _journeyScores[id];
+
+  Future<void> completeJourneyLesson(String id, int correct, int total) async {
+    if (total <= 0 || correct < 0 || correct > total) {
+      throw ArgumentError('Invalid lesson result');
+    }
+    await ready;
+    final percent = (correct * 100 / total).round();
+    final previous = _journeyScores[id];
+    if (previous == null || percent > previous) _journeyScores[id] = percent;
+    _recordCompletion();
+    _changed();
+    await _savePrefs();
+  }
+
   int _xp = 0;
   int _streak = 0;
   int _stars = 0;
@@ -204,7 +218,6 @@ class AppProvider extends ChangeNotifier {
   /// Play pre-recorded audio for [text] — main speech player.
   Future<void> speak(String text) async {
     if (!_voiceEnabled) return;
-    await voiceFeedback.stop();
     await audio.stop();
     await phonicsAudio.tryPlay(text);
   }
@@ -212,7 +225,6 @@ class AppProvider extends ChangeNotifier {
   /// Play a hint on the same replaceable instructional channel.
   Future<void> speakHint(String text) async {
     if (!_voiceEnabled) return;
-    await voiceFeedback.stop();
     await audio.stop();
     await phonicsAudio.tryPlayHint(text);
   }
@@ -222,7 +234,6 @@ class AppProvider extends ChangeNotifier {
     _voiceEnabled = !_voiceEnabled;
     if (!_voiceEnabled) {
       await phonicsAudio.stop();
-      await voiceFeedback.stop();
     }
     _changed();
     await _savePrefs();
@@ -248,24 +259,11 @@ class AppProvider extends ChangeNotifier {
       screenTime.setLimitEnabled(!timeLimitEnabled);
 
   // Rewards: formulas belong to activities; these methods persist exact awards.
-  Future<void> addXP(int amount, {bool announce = true}) async {
+  Future<void> addXP(int amount) async {
     await ready;
-    final prevXp = _xp;
-    final prevLevel = level;
     _xp += amount;
     _changed();
     await _savePrefs();
-    // Check milestones after XP change
-    if (announce && _voiceEnabled) {
-      voiceFeedback.checkRewardMilestones(
-        xp: _xp,
-        streak: _streak,
-        prevXp: prevXp,
-        prevStreak: _streak,
-        level: level,
-        prevLevel: prevLevel,
-      );
-    }
   }
 
   Future<void> addStar() async {
@@ -390,6 +388,7 @@ class AppProvider extends ChangeNotifier {
     _streak = 0;
     _stars = 0;
     _letterProgress.clear();
+    _journeyScores.clear();
     _dailyActivity.clear();
     _lastPracticeDate = null;
     _rhymingWordsDone = false;
@@ -415,6 +414,11 @@ class AppProvider extends ChangeNotifier {
     _gameAccess = _read(prefs, 'gameAccess', true);
 
     _rhymingWordsDone = _read(prefs, 'rhymingDone', false);
+    for (final entry in _decodeMap(prefs.get('journeyScoresV1')).entries) {
+      if (entry.value is int && entry.value >= 0 && entry.value <= 100) {
+        _journeyScores[entry.key] = entry.value as int;
+      }
+    }
     _xp = safeCount(prefs.get('xp'));
     _streak = safeCount(prefs.get('streakV2'));
     _stars = safeCount(prefs.get('stars'));
@@ -481,6 +485,7 @@ class AppProvider extends ChangeNotifier {
       'musicVolume': _musicVolume,
       'gameAccess': _gameAccess,
       'rhymingDone': _rhymingWordsDone,
+      'journeyScoresV1': jsonEncode(_journeyScores),
       'xp': _xp,
       'stars': _stars,
       'streakV2': streak,

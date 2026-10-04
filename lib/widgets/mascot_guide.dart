@@ -55,7 +55,8 @@ class MascotGuide extends StatelessWidget {
           return Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: mascot.color.withValues(alpha: .08),
+              color: Color.lerp(Colors.white, mascot.color, .08)!
+                  .withValues(alpha: KidsUi.cardOpacity),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: mascot.color.withValues(alpha: .2)),
             ),
@@ -66,11 +67,6 @@ class MascotGuide extends StatelessWidget {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                    Text('${mascot.name} says',
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: mascot.color,
-                            fontWeight: FontWeight.w800)),
                     Text(message,
                         style: const TextStyle(
                             fontSize: 15, color: KidsUi.ink, height: 1.25)),
@@ -85,8 +81,9 @@ class MascotGuide extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             gradient: LinearGradient(colors: [
-              Colors.white,
-              Color.lerp(Colors.white, mascot.color, .12)!,
+              KidsUi.cardSurface,
+              Color.lerp(Colors.white, mascot.color, .12)!
+                  .withValues(alpha: KidsUi.cardOpacity),
             ]),
             border:
                 Border.all(color: mascot.color.withValues(alpha: .3), width: 2),
@@ -104,12 +101,6 @@ class MascotGuide extends StatelessWidget {
           ),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('${mascot.name} says',
-                style: TextStyle(
-                    color: mascot.color,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w800)),
-            const SizedBox(height: 6),
             Text(message,
                 style: const TextStyle(
                     color: KidsUi.ink,

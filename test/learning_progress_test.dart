@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,6 +24,10 @@ void mockProgressAudio() {
     }
     return null;
   });
+  // Button-only widget tests can create a player before mounting AppProvider.
+  // Initialize the global plugin in setUp's real async zone so a completed
+  // widget test cannot leave later players waiting on its fake async queue.
+  AudioPlayer.global.ensureInitialized();
 }
 
 Future<void> assessment(AppProvider p, String letter, int correct) async {

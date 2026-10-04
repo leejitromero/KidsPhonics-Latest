@@ -4,6 +4,10 @@ KidsPhonics is a Flutter Android application for Grade 1 supplemental phonics pr
 
 ## Current features
 
+- Animated sky backgrounds and the supplied flying Home menu, with tappable
+  Lessons/Games/Progress artwork, plus the restored original loading screen.
+  See [animated screen delivery](ANIMATED_SCREEN_DELIVERY.md).
+
 - A–Z letter lessons and Short Vowel Sounds, with separate LETTER, SOUND, and WORD buttons using the user's latest 78 supplied recordings. See [LESSON_ASSETS.md](LESSON_ASSETS.md) for current mappings and cleanup.
 - Five-question Quick Checks: **4/5 masters a letter**. Browsing only marks it Viewed. Statuses are Not Started, Viewed, Practiced, and Mastered; later practice does not remove previously earned mastery.
 - Game Zone: Sound Match, Memory Flip, Phonics Quiz, Word Builder, Speak & Recognize, Alphabet Order, Missing Vowel, Picture Match, and Sound Position. Rhyming Words is a playable activity under Lessons: **ten activities in total**.
@@ -37,7 +41,7 @@ Fonts are the existing Nunito and Fredoka families, now bundled locally with the
 - `lib/screens/`, `lib/widgets/`, `lib/theme/`: screens and shared learner/dashboard components.
 - `assets/`: current audio/images and bundled fonts. Letter lessons use the latest supplied letters/sounds/words ZIP; see [LESSON_ASSETS.md](LESSON_ASSETS.md).
 - `test/`: progress, content, mastery, parent/time controls, dashboard, learner UI, and stabilization coverage.
-- `tools/`: intentionally retained historical asset utilities; see [tools/README.md](tools/README.md). Do not run the old AI audio generators as part of setup or verification.
+- `tools/`: APK asset verification and original mascot artwork; see [tools/README.md](tools/README.md).
 
 ## Android identity and signing
 
@@ -45,11 +49,11 @@ The launcher label is **KidsPhonics**. Application ID and namespace remain `com.
 
 The main manifest requests microphone access and declares recognition-service discovery. The unused TTS query, legacy external-storage flag, and main-manifest internet permission were removed. Flutter's debug/profile internet permission remains for development tooling.
 
-Release currently uses the **development debug signing configuration**. No production signing keys or passwords were generated. Configure proper signing separately before deployment. APK delivery is pending the user's separate command.
+Release currently uses the **development debug signing configuration**. No production signing keys or passwords were generated. Configure proper signing separately before store distribution. The retained local APK is `KidsPhonics-1.0.5.apk`, with its SHA-256 checksum. Earlier deliveries are historical snapshots in [ANIMATED_SCREEN_DELIVERY.md](ANIMATED_SCREEN_DELIVERY.md) and [SCREEN_REFRESH_DELIVERY.md](SCREEN_REFRESH_DELIVERY.md).
 
 ## Verification and manual testing
 
-Use [FINAL_VERIFICATION.md](FINAL_VERIFICATION.md) for the current verified results and cleanup record. Earlier implementation reports are historical snapshots, not the final verification authority.
+See [SOURCE_CLEANUP.md](SOURCE_CLEANUP.md) for the October 4 source cleanup, exact removed paths, and validation. [FINAL_VERIFICATION.md](FINAL_VERIFICATION.md) and earlier implementation reports retain historical verification results.
 
 Use [MANUAL_TEST_CHECKLIST.md](MANUAL_TEST_CHECKLIST.md) for the upcoming device test. Automated tests do not replace microphone, speaker, lifecycle, and installation testing on Android.
 
@@ -62,5 +66,7 @@ The phonics text and proposed recording workflow are documented in:
 Teacher approval and listening review remain validation tasks. Current supplied lesson artwork and recordings are documented in [LESSON_ASSETS.md](LESSON_ASSETS.md); the older audit records the previous asset set.
 
 ## Sharing the source
+
+Cleanup on 2026-10-04 removed an unreferenced Home illustration widget, the retired empty voice-feedback service and its calls, four superseded APKs with checksums, temporary previews/logs/edit scripts, and generated build directories. `KidsPhonics-1.0.5.apk` and its checksum remain available locally; APK artifacts are now ignored by Git. Original artwork, runtime assets, tests, platform configuration, and historical reports remain available. Older APK/preview links in historical reports describe past deliveries. See [SOURCE_CLEANUP.md](SOURCE_CLEANUP.md) for the full inventory.
 
 Include `android/`, `assets/`, `lib/`, `test/`, `tools/`, `pubspec.yaml`, `pubspec.lock`, `analysis_options.yaml`, `.metadata`, `.gitignore`, this README, and useful Markdown documentation. Keep Android Gradle wrapper/configuration files. Exclude regenerated `build/`, `.dart_tool/`, Android `.gradle`/`.cxx` caches, local SDK paths, generated plugin registration/metadata, logs, and temporary files. Never include signing secrets. `.gitignore` lists these exclusions; it does not automatically filter a manually created ZIP.

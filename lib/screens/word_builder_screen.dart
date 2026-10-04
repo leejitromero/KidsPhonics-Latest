@@ -1,5 +1,6 @@
 import '../data/game_session_order.dart';
 import '../widgets/word_game_layout.dart';
+import '../widgets/game_design.dart';
 // lib/screens/word_builder_screen.dart
 import 'package:flutter/material.dart';
 
@@ -65,7 +66,6 @@ class _WordBuilderScreenState extends State<WordBuilderScreen>
     if (_activeBlankIndex >= _blankCount) return;
 
     final provider = context.read<AppProvider>();
-    provider.audio.playTap();
 
     final isCorrect = letter == _puzzle.correctLetters[_activeBlankIndex];
     recordGameAnswer(correct: isCorrect);
@@ -147,15 +147,17 @@ class _WordBuilderScreenState extends State<WordBuilderScreen>
       canOpenTutorial: () => !_busy && !resultOpen,
       answerResult: _feedback,
       title: 'Word Builder',
-      instructions:
-          'Hear the word. Choose letters to fill the blanks from left to right.',
+      instructions: 'Fill the blanks, left to right.',
       difficulty: widget.difficulty,
       current: _puzzleIndex + 1,
       total: _activePuzzles.length,
       hasProgress: scoredAttempts > 0 && !resultOpen,
       fitViewport: true,
       child: WordGameLayout(word: _puzzle.word, children: [
-        FittedBox(fit: BoxFit.scaleDown, child: _buildWordRow()),
+        ForestPanel(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            child: FittedBox(fit: BoxFit.scaleDown, child: _buildWordRow())),
+        const SizedBox(height: 8),
         AudioButton(
             phrase: _puzzle.word[0] + _puzzle.word.substring(1).toLowerCase()),
         const SizedBox(height: 8),

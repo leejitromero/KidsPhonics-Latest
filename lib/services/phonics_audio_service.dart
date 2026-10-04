@@ -1,4 +1,6 @@
 import '../data/game_word_data.dart';
+import '../data/cvc_lesson_data.dart';
+import '../data/blending_lesson_data.dart';
 import 'local_audio_focus.dart';
 import '../data/lesson_example_data.dart';
 import 'background_music_service.dart';
@@ -66,6 +68,10 @@ class PhonicsAudioService {
   };
 
   static String? assetForPhrase(String phrase) {
+    final cvcAsset = cvcAudioAsset(phrase);
+    final blendingAsset = blendingAudioAsset(phrase);
+    if (blendingAsset != null) return blendingAsset;
+    if (cvcAsset != null) return cvcAsset;
     if (RegExp(r'^[A-Z]$').hasMatch(phrase)) {
       return 'audio/phonics/lesson_audio/letters/letter-${phrase.toLowerCase()}.mp3';
     }

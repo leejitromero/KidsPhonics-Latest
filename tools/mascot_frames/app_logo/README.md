@@ -14,5 +14,4 @@ Runtime assets:
 Launcher icons are static. Regenerate Android densities using
 `dart run flutter_launcher_icons`; configuration lives in `pubspec.yaml`.
 The adaptive foreground has a 22 percent inset to protect artwork from masks.
-The older `app_icon.svg` and historical icon generators are not the current
-branding source.
+The obsolete SVG icon and historical network icon generators were removed.

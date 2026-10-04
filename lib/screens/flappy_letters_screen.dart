@@ -1,3 +1,6 @@
+import '../widgets/game_theme_background.dart';
+import '../widgets/button_sound.dart';
+import '../widgets/game_design.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -121,7 +124,8 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
       builder: (context, onHelp) => _page(context, onHelp));
 
   Widget _page(BuildContext context, VoidCallback onHelp) => Scaffold(
-        body: Focus(
+          body: GameThemeBackground(
+        child: Focus(
           focusNode: _focus,
           autofocus: true,
           onKeyEvent: (_, event) {
@@ -164,7 +168,7 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
                                 28 * box.maxWidth / FlappyLettersGame.width,
                             child: IgnorePointer(
                                 child: Image.asset(
-                              'assets/images/app_mascot.png',
+                              'assets/images/new_ui/flappy_bird.png',
                               width:
                                   56 * box.maxWidth / FlappyLettersGame.width,
                               height:
@@ -176,38 +180,51 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
             ),
             if (_game.state != FlightState.flying) SafeArea(child: _overlay()),
             SafeArea(
-                child: Column(children: [
-              LearnerHeader(
-                  title: 'Flappy Letters',
-                  onHelp: onHelp,
-                  trailing: IconButton(
-                      tooltip: 'Pause',
-                      color: const Color(0xFF2F245D),
-                      onPressed:
-                          _game.state == FlightState.flying ? _pause : null,
-                      icon: const Icon(Icons.pause_rounded))),
-              IgnorePointer(
-                  child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: .9),
-                    borderRadius: BorderRadius.circular(16)),
-                child: Column(mainAxisSize: MainAxisSize.min, children: [
-                  Text(
-                      '${widget.difficulty.label}  •  ${_game.passed} / 26 letters'
-                      '${_letter == null ? '' : '  •  Great! $_letter'}',
-                      style: const TextStyle(
-                          color: Color(0xFF2F245D),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w800)),
-                  GameLives(lives: _game.lives),
-                ]),
-              )),
-            ])),
+                child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ForestIconButton(
+                              tooltip: 'Back',
+                              onPressed: () => Navigator.maybePop(context),
+                              icon: Icons.arrow_back_rounded),
+                          const SizedBox(width: 6),
+                          Expanded(
+                              child: IgnorePointer(
+                                  child: ForestPanel(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 6),
+                            child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                      '${widget.difficulty.label}  •  ${_game.passed} / 26 letters'
+                                      '${_letter == null ? '' : '  •  Great! $_letter'}',
+                                      style: const TextStyle(
+                                          color: Color(0xFF2F245D),
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w800)),
+                                  GameLives(lives: _game.lives),
+                                ]),
+                          ))),
+                          const SizedBox(width: 6),
+                          ForestIconButton(
+                              tooltip: 'How to Play',
+                              onPressed: onHelp,
+                              purple: true,
+                              icon: Icons.help_outline_rounded),
+                          const SizedBox(width: 4),
+                          ForestIconButton(
+                              tooltip: 'Pause',
+                              onPressed: _game.state == FlightState.flying
+                                  ? _pause
+                                  : null,
+                              icon: Icons.pause_rounded),
+                        ]))),
           ]),
         ),
-      );
+      ));
   Widget _overlay() {
     final state = _game.state;
     final title = switch (state) {
@@ -244,7 +261,7 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
                 textAlign: TextAlign.center),
             const SizedBox(height: 20),
             FilledButton(
-              onPressed: () {
+              onPressed: withButtonSound(() {
                 if (state == FlightState.ready) {
                   _flap();
                 } else if (state == FlightState.hit) {
@@ -260,7 +277,7 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
                 } else {
                   _restart();
                 }
-              },
+              }),
               child: Text(state == FlightState.ready
                   ? 'Start flying'
                   : state == FlightState.paused
@@ -285,40 +302,65 @@ class _CoursePainter extends CustomPainter {
     canvas.drawRect(
         Offset.zero & size,
         Paint()
-          ..shader = LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: game.state == FlightState.lost
-                ? const [Color(0xFFF6B5B5), Color(0xFFFFF0EC)]
-                : game.state == FlightState.won || successGlow
-                    ? const [Color(0xFF92DEB7), Color(0xFFEFFFF1)]
-                    : const [Color(0xFF9DDEFA), Color(0xFFF0FBFF)],
-          ).createShader(Offset.zero & size));
-    final cloud = Paint()..color = Colors.white.withValues(alpha: .75);
-    for (final origin in [
-      const Offset(65, 95),
-      const Offset(290, 190),
-      const Offset(190, 480)
-    ]) {
-      canvas.drawOval(
-          Rect.fromCenter(center: origin, width: 110, height: 35), cloud);
-      canvas.drawCircle(origin - const Offset(10, 14), 25, cloud);
-    }
+          ..color = game.state == FlightState.lost
+              ? const Color(0x55F6B5B5)
+              : game.state == FlightState.won || successGlow
+                  ? const Color(0x5592DEB7)
+                  : const Color(0x22FFFFFF));
     for (var i = 0; i < 26; i++) {
       final x = game.pipeX(i);
       if (x > size.width || x + FlappyLettersGame.pipeWidth < 0) continue;
       final top = game.gapCenter(i) - FlappyLettersGame.gap / 2;
       final bottom = game.gapCenter(i) + FlappyLettersGame.gap / 2;
-      final paint = Paint()..color = const Color(0xFF239B78);
-      canvas.drawRect(Rect.fromLTWH(x + 5, 0, 56, top), paint);
-      canvas.drawRect(
-          Rect.fromLTWH(x + 5, bottom, 56, size.height - bottom), paint);
-      paint.color = const Color(0xFF116951);
+      final pipeRect = Rect.fromLTWH(x + 5, 0, 56, size.height);
+      final paint = Paint()
+        ..shader = const LinearGradient(colors: [
+          Color(0xFF337C19),
+          Color(0xFFB6E93D),
+          Color(0xFF68BC25),
+          Color(0xFF1A721D),
+        ], stops: [
+          0,
+          .2,
+          .5,
+          1
+        ]).createShader(pipeRect);
+      final outline = Paint()
+        ..color = const Color(0xFF22652A)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2;
+      for (final rect in [
+        Rect.fromLTWH(x + 5, 0, 56, top),
+        Rect.fromLTWH(x + 5, bottom, 56, size.height - bottom)
+      ]) {
+        canvas.drawRect(rect, paint);
+        canvas.drawRect(rect, outline);
+        canvas.drawLine(
+            Offset(rect.left + 9, rect.top),
+            Offset(rect.left + 9, rect.bottom),
+            Paint()
+              ..color = const Color(0x88E7FFB3)
+              ..strokeWidth = 3);
+      }
       for (final y in [top - 22, bottom]) {
         canvas.drawRRect(
             RRect.fromRectAndRadius(
                 Rect.fromLTWH(x, y, 66, 22), const Radius.circular(5)),
             paint);
+        canvas.drawRRect(
+            RRect.fromRectAndRadius(
+                Rect.fromLTWH(x, y, 66, 22), const Radius.circular(5)),
+            outline);
+        canvas.drawLine(
+            Offset(x + 5, y + 3),
+            Offset(x + 61, y + 3),
+            Paint()
+              ..color = const Color(0xFFE8FFB4)
+              ..strokeWidth = 2);
+        canvas.save();
+        canvas.translate(x + 38, y - 26);
+        const ForestLeaves().paint(canvas, const Size(30, 36));
+        canvas.restore();
       }
       final text = TextPainter(
         text: TextSpan(

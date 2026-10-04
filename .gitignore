@@ -46,6 +46,8 @@ app.*.map.json
 /android/app/release
 
 # Cleanup and shareable source
+*.apk
+*.apk.sha256
 *.tmp
 *.bak
 *.cache

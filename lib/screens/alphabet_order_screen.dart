@@ -187,7 +187,7 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
   Widget build(BuildContext context) => GameScaffold(
       answerResult: _busy ? _wrongLetter == null : null,
       title: 'Alphabet Order',
-      instructions: 'Tap the letters in alphabetical order. Start with A.',
+      instructions: 'Tap letters in order. Start with A.',
       difficulty: widget.difficulty,
       current: _correct.length,
       total: _totalLetters,
@@ -204,12 +204,12 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
         const gap = 5.0;
         final side = math
             .min(
-                64.0,
+                90.0,
                 math.min(
                   (box.maxWidth - gap * (columns - 1)) / columns,
                   (box.maxHeight - 58 - gap * (rows - 1) * 2) / (rows * 2),
                 ))
-            .clamp(1.0, 64.0);
+            .clamp(1.0, 90.0);
         Widget grid(bool slots) => SizedBox(
               width: side * columns + gap * (columns - 1),
               child: Wrap(
@@ -235,13 +235,17 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
                                         color: placed
                                             ? const Color(0xFF167769)
                                             : const Color(0xFFBCAAD5))),
-                                child: Text(placed ? letter : '_',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w800,
-                                        color: placed
-                                            ? Colors.white
-                                            : const Color(0xFF73618B))),
+                                child: placed
+                                    ? Text(letter,
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w800,
+                                            color: placed
+                                                ? Colors.white
+                                                : const Color(0xFF73618B)))
+                                    : Icon(Icons.star_rounded,
+                                        size: side * .5,
+                                        color: const Color(0xFFB5A0EC)),
                               )
                             : SizedBox(
                                 key: _choices.putIfAbsent(

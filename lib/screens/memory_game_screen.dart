@@ -1,3 +1,6 @@
+import '../widgets/answer_choice_button.dart';
+import '../widgets/button_sound.dart';
+import '../widgets/game_design.dart';
 // lib/screens/memory_game_screen.dart
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -149,10 +152,10 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
               'You found $_matchCount of $_totalPairs pairs. Keep practicing or try a fresh round!'),
           actions: [
             TextButton(
-                onPressed: () => Navigator.pop(ctx, false),
+                onPressed: withButtonSound(() => Navigator.pop(ctx, false)),
                 child: const Text('Continue Practice')),
             FilledButton(
-                onPressed: () => Navigator.pop(ctx, true),
+                onPressed: withButtonSound(() => Navigator.pop(ctx, true)),
                 child: const Text('Try Again')),
           ],
         ),
@@ -392,7 +395,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
             !_locked && !resultOpen && !_paused && !_timeUpOpen,
         answerResult: _answerResult,
         title: 'Memory Flip',
-        instructions: 'Tap two cards. Match the same pictures!',
+        instructions: 'Tap two cards. Find a pair!',
         fitViewport: true,
         difficulty: widget.difficulty,
         current: _matchCount,
@@ -430,7 +433,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
               )),
               IconButton(
                 tooltip: _paused ? 'Resume game' : 'Pause game',
-                onPressed: !_started ||
+                onPressed: withButtonSound(!_started ||
                         _locked ||
                         resultOpen ||
                         _timeUpOpen ||
@@ -439,7 +442,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
                     : () {
                         setState(() => _paused = !_paused);
                         _syncClock();
-                      },
+                      }),
                 icon: Icon(
                     _paused ? Icons.play_arrow_rounded : Icons.pause_rounded),
               ),
@@ -447,39 +450,46 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
             if (!_started)
               const Text('Timer starts on your first flip',
                   style: TextStyle(fontSize: 12)),
-            const Text('Your matches',
-                style: TextStyle(fontWeight: FontWeight.w800)),
-            const SizedBox(height: 4),
-            SizedBox(
-                height: 88,
-                child: Center(
-                    child: Wrap(
-                  spacing: 5,
-                  runSpacing: 5,
-                  alignment: WrapAlignment.center,
-                  children: List.generate(
-                      _totalPairs,
-                      (i) => Container(
-                            key: _collectionKeys.putIfAbsent(
-                                i, () => GlobalKey()),
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                color: i < _collected.length
-                                    ? const Color(0xFFD7EEE7)
-                                    : const Color(0xFFE9E2F4),
-                                borderRadius: BorderRadius.circular(10),
-                                border:
-                                    Border.all(color: const Color(0xFFBCAAD5))),
-                            child: i < _collected.length
-                                ? GameWordPicture(
-                                    key: ValueKey('memory-collected-$i'),
-                                    word: _collected[i],
-                                    size: 36)
-                                : const Icon(Icons.help_outline,
-                                    color: Color(0xFF8A72B6), size: 20),
-                          )),
-                ))),
+            ForestPanel(
+                glass: true,
+                leaves: false,
+                accent: const Color(0xFFBDACED),
+                padding: const EdgeInsets.all(6),
+                child: Column(children: [
+                  const Text('Your matches',
+                      style: TextStyle(fontWeight: FontWeight.w800)),
+                  const SizedBox(height: 4),
+                  SizedBox(
+                      height: _totalPairs <= 6 ? 44 : 88,
+                      child: Center(
+                          child: Wrap(
+                        spacing: 5,
+                        runSpacing: 5,
+                        alignment: WrapAlignment.center,
+                        children: List.generate(
+                            _totalPairs,
+                            (i) => Container(
+                                  key: _collectionKeys.putIfAbsent(
+                                      i, () => GlobalKey()),
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                      color: i < _collected.length
+                                          ? const Color(0xFFD7EEE7)
+                                          : const Color(0xFFE9E2F4),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                          color: const Color(0xFFBCAAD5))),
+                                  child: i < _collected.length
+                                      ? GameWordPicture(
+                                          key: ValueKey('memory-collected-$i'),
+                                          word: _collected[i],
+                                          size: 36)
+                                      : const Icon(Icons.star_rounded,
+                                          color: Color(0xFFB5A0EC), size: 26),
+                                )),
+                      ))),
+                ])),
             const SizedBox(height: 6),
             Expanded(child: LayoutBuilder(builder: (_, box) {
               const columns = 4;
@@ -522,10 +532,10 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
               color: const Color(0xFFF0F7FC),
               child: Center(
                   child: FilledButton.icon(
-                onPressed: () {
+                onPressed: withButtonSound(() {
                   setState(() => _paused = false);
                   _syncClock();
-                },
+                }),
                 icon: const Icon(Icons.play_arrow_rounded),
                 label: const Text('Resume game'),
               )),
@@ -553,11 +563,6 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
     final card = _cards[index];
     final shown = card.isFlipped || card.isMatched;
     final wrong = _wrongCardIds.contains(card);
-    final color = card.isMatched
-        ? const Color(0xFF167769)
-        : wrong
-            ? const Color(0xFFB63D50)
-            : choiceBlue;
     return FloatingChoice(
         enabled: !_locked && !shown && !resultOpen,
         seed: index,
@@ -566,8 +571,8 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
           label: shown
               ? '${card.id}${card.isMatched ? ', matched' : ''}'
               : 'Hidden card ${index + 1}',
-          child: ElevatedButton(
-            key: ValueKey('memory-$index'),
+          child: AnswerChoiceButton(
+            buttonKey: ValueKey('memory-$index'),
             onPressed: _locked ||
                     _paused ||
                     (!_practice && _secondsLeft == 0) ||
@@ -576,21 +581,12 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
                     resultOpen
                 ? null
                 : () => _tapCard(card),
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.all(6),
-              minimumSize: Size.zero,
-              backgroundColor: color,
-              disabledBackgroundColor: color,
-              foregroundColor: Colors.white,
-              disabledForegroundColor: Colors.white,
-              elevation: 3,
-              shadowColor: color.withValues(alpha: .35),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
-                side: BorderSide(
-                    color: Colors.white.withValues(alpha: .5), width: 2),
-              ),
-            ),
+            variant: index,
+            result: card.isMatched
+                ? true
+                : wrong
+                    ? false
+                    : null,
             child: ExcludeSemantics(
               child: shown
                   ? FittedBox(child: GameWordPicture(word: card.id, size: 100))
@@ -610,7 +606,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
                         ),
                       ),
                       child: const Icon(Icons.auto_awesome_rounded,
-                          color: Colors.white70, size: 24),
+                          color: Color(0xFF7B55B5), size: 24),
                     ),
             ),
           ),

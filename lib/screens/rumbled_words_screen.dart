@@ -1,3 +1,6 @@
+import '../widgets/answer_choice_button.dart';
+import '../widgets/button_sound.dart';
+import '../widgets/game_design.dart';
 import '../data/game_word_data.dart';
 import '../data/game_session_order.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +97,7 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
         fitViewport: true,
         answerResult: _correct,
         title: 'Rumbled Words',
-        instructions: 'Look at the picture. Tap letters to spell the word.',
+        instructions: 'Tap letters to spell the word.',
         difficulty: widget.difficulty,
         current: _index + 1,
         total: _words.length,
@@ -103,12 +106,29 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
             (_selected.isNotEmpty || scoredAttempts > 0 || _hintUsed) &&
                 !resultOpen,
         child: WordGameLayout(word: _words[_index].word, children: [
+          ForestPanel(
+              padding: const EdgeInsets.all(8),
+              child: WordChoiceGrid(children: [
+                for (var slot = 0; slot < _tiles.length; slot++)
+                  _tile(
+                      key: ValueKey('word-slot-$slot'),
+                      label: slot < _selected.length
+                          ? _tiles[_selected[slot]]
+                          : '_',
+                      filled: true,
+                      onTap: _finished || slot >= _selected.length
+                          ? null
+                          : () => setState(() {
+                                _selected.removeAt(slot);
+                                _correct = null;
+                              })),
+              ])),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             FilledButton.icon(
                 key: const ValueKey('word-hint'),
-                onPressed: _hintUsed || _finished
+                onPressed: withButtonSound(_hintUsed || _finished
                     ? null
-                    : () => setState(() => _hintUsed = true),
+                    : () => setState(() => _hintUsed = true)),
                 icon: const Icon(Icons.lightbulb_outline, size: 18),
                 label: const Text('Hint')),
             const SizedBox(width: 8),
@@ -125,30 +145,16 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
                       fontSize: 16, fontWeight: FontWeight.w800)),
             ),
           const SizedBox(height: 6),
-          WordChoiceGrid(children: [
-            for (var slot = 0; slot < _tiles.length; slot++)
-              _tile(
-                  key: ValueKey('word-slot-$slot'),
-                  label:
-                      slot < _selected.length ? _tiles[_selected[slot]] : '_',
-                  filled: true,
-                  onTap: _finished || slot >= _selected.length
-                      ? null
-                      : () => setState(() {
-                            _selected.removeAt(slot);
-                            _correct = null;
-                          })),
-          ]),
           const SizedBox(height: 4),
           Center(
             child: OutlinedButton.icon(
               key: const ValueKey('word-erase'),
-              onPressed: _finished || _selected.isEmpty
+              onPressed: withButtonSound(_finished || _selected.isEmpty
                   ? null
                   : () => setState(() {
                         _selected.removeLast();
                         _correct = null;
-                      }),
+                      })),
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(120, 48),
                 foregroundColor: const Color(0xFFB45731),
@@ -161,18 +167,20 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
           const Text('Tap a chosen letter to put it back.',
               textAlign: TextAlign.center, style: TextStyle(fontSize: 12)),
           const SizedBox(height: 6),
-          WordChoiceGrid(children: [
-            for (var i = 0; i < _tiles.length; i++)
-              _tile(
-                  key: ValueKey('word-tile-$i'),
-                  label: _tiles[i],
-                  onTap: _finished || _selected.contains(i)
-                      ? null
-                      : () => setState(() {
-                            _selected.add(i);
-                            _correct = null;
-                          })),
-          ]),
+          ForestPanel(
+              padding: const EdgeInsets.all(10),
+              child: WordChoiceGrid(children: [
+                for (var i = 0; i < _tiles.length; i++)
+                  _tile(
+                      key: ValueKey('word-tile-$i'),
+                      label: _tiles[i],
+                      onTap: _finished || _selected.contains(i)
+                          ? null
+                          : () => setState(() {
+                                _selected.add(i);
+                                _correct = null;
+                              })),
+              ])),
           const SizedBox(height: 6),
           if (_correct != null)
             Text(
@@ -187,13 +195,13 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
                         : const Color(0xFFB45731))),
           const SizedBox(height: 4),
           FilledButton(
-            onPressed: _correct == true
+            onPressed: withButtonSound(_correct == true
                 ? _next
                 : _selected.length == _tiles.length &&
                         _correct == null &&
                         !resultOpen
                     ? _check
-                    : null,
+                    : null),
             child: Text(_correct == true ? 'Next' : 'Check'),
           ),
         ]),
@@ -210,27 +218,11 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
           child: FloatingChoice(
               enabled: !filled && onTap != null && !_finished,
               seed: label.codeUnitAt(0),
-              child: ElevatedButton(
-                key: key,
+              child: AnswerChoiceButton(
+                buttonKey: key,
                 onPressed: onTap,
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  minimumSize: Size.zero,
-                  backgroundColor:
-                      filled ? const Color(0xFF167769) : choiceBlue,
-                  foregroundColor: Colors.white,
-                  disabledBackgroundColor: filled
-                      ? const Color(0xFFD7EEE7)
-                      : const Color(0xFFDDECF3),
-                  disabledForegroundColor: const Color(0xFF52605C),
-                  shape: filled
-                      ? RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12))
-                      : RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          side: const BorderSide(
-                              color: Color(0x99FFFFFF), width: 1.5)),
-                ),
+                variant: label.codeUnitAt(0),
+                selected: filled,
                 child: Text(label,
                     style: const TextStyle(
                         fontSize: 23, fontWeight: FontWeight.w800)),

@@ -1,3 +1,5 @@
+import '../widgets/button_sound.dart';
+import '../widgets/game_design.dart';
 import '../data/game_session_order.dart';
 import '../widgets/game_word_picture.dart';
 // lib/screens/picture_word_match_screen.dart
@@ -189,7 +191,7 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
         answerResult: _picked == null ? null : _picked == _round.correctEmoji,
         title: 'Picture Match',
         fitViewport: true,
-        instructions: 'Read or hear the word. Tap its picture.',
+        instructions: 'Tap the matching picture.',
         difficulty: widget.difficulty,
         hasProgress: scoredAttempts > 0 && !resultOpen,
         current: _index + 1,
@@ -205,26 +207,22 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Center(
-                                  child: Container(
+                                  child: ForestPanel(
                                 padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: _landed
-                                      ? const Color(0xFFE4F8ED)
-                                      : const Color(0xFFF2ECFC),
-                                  borderRadius: BorderRadius.circular(26),
-                                  border: Border.all(
-                                      color: _landed
-                                          ? KidsUi.correct
-                                          : const Color(0xFFCDBCEB),
-                                      width: 3),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                        color: Color(0x227052CA),
-                                        blurRadius: 16,
-                                        offset: Offset(0, 6))
-                                  ],
-                                ),
+                                accent: const Color(0xFF9B41EF),
                                 child: Column(children: [
+                                  Text(_round.word,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                          fontSize: 28,
+                                          color: GameDesign.ink,
+                                          fontWeight: FontWeight.w900)),
+                                  AudioButton(
+                                      phrase: _round.word[0] +
+                                          _round.word
+                                              .substring(1)
+                                              .toLowerCase()),
+                                  const SizedBox(height: 8),
                                   SizedBox(
                                       key: _targetKey,
                                       width: (box.maxHeight * .32)
@@ -255,20 +253,12 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
                                 ]),
                               )),
                               const SizedBox(height: 6),
-                              Text(_round.word,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold)),
-                              AudioButton(
-                                  phrase: _round.word[0] +
-                                      _round.word.substring(1).toLowerCase()),
-                              const SizedBox(height: 6),
                               GameChoiceGrid(
-                                  compact: true,
+                                  columns: 2,
                                   children: _shuffledIdx
                                       .map((option) => GameAnswerButton(
                                           label: 'Picture ${option + 1}',
+                                          showLabel: false,
                                           visual: SizedBox(
                                               key: _pictureKeys.putIfAbsent(
                                                   option, () => GlobalKey()),
@@ -299,8 +289,8 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
                                     correct: _picked == _round.correctEmoji),
                               if (_answered)
                                 ElevatedButton(
-                                    onPressed:
-                                        resultOpen || _flying ? null : _next,
+                                    onPressed: withButtonSound(
+                                        resultOpen || _flying ? null : _next),
                                     child: const Text('Next')),
                             ]))))),
       );

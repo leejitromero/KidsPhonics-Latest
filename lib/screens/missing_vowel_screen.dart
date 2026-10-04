@@ -1,3 +1,5 @@
+import '../widgets/button_sound.dart';
+import '../widgets/game_design.dart';
 import '../data/game_session_order.dart';
 import '../widgets/word_game_layout.dart';
 // lib/screens/missing_vowel_screen.dart
@@ -113,17 +115,20 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
         fitViewport: true,
         answerResult: _picked == null ? null : _picked == _puzzle.vowel,
         title: 'Missing Vowel',
-        instructions: 'Hear the word. Choose the missing vowel.',
+        instructions: 'Pick the missing vowel.',
         difficulty: widget.difficulty,
         hasProgress: scoredAttempts > 0 && !resultOpen,
         current: _index + 1,
         total: _puzzles.length,
         child: WordGameLayout(word: _puzzle.word, children: [
           const SizedBox(height: 4),
-          Text(_puzzle.display,
-              textAlign: TextAlign.center,
-              style:
-                  const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          ForestPanel(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Text(_puzzle.display,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontSize: 30, fontWeight: FontWeight.w900))),
+          const SizedBox(height: 8),
           AudioButton(
               phrase:
                   _puzzle.word[0] + _puzzle.word.substring(1).toLowerCase()),
@@ -143,7 +148,7 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
           if (_picked != null) GameFeedback(correct: _picked == _puzzle.vowel),
           if (_answered)
             ElevatedButton(
-                onPressed: resultOpen ? null : _next,
+                onPressed: withButtonSound(resultOpen ? null : _next),
                 child: const Text('Next')),
         ]),
       );

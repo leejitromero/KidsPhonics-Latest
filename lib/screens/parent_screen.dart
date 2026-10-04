@@ -1,3 +1,4 @@
+import '../widgets/button_sound.dart';
 // lib/screens/parent_screen.dart
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,10 +7,9 @@ import '../theme/app_theme.dart';
 import '../providers/app_provider.dart';
 import '../widgets/learning_progress_widgets.dart';
 import '../widgets/dashboard_widgets.dart';
-import '../widgets/shared_widgets.dart';
 import '../widgets/parent_pin_form.dart';
 import '../widgets/mascot_guide.dart';
-import '../widgets/parent_weekly_summary.dart';
+import '../widgets/parent_garden_overview.dart';
 
 class ParentScreen extends StatefulWidget {
   const ParentScreen({super.key});
@@ -62,12 +62,12 @@ class _ParentScreenState extends State<ParentScreen> {
                             color: Colors.white70, fontSize: 13)),
                     actions: [
                       TextButton(
-                          onPressed: resetting
+                          onPressed: withButtonSound(resetting
                               ? null
-                              : () => Navigator.pop(dialogContext),
+                              : () => Navigator.pop(dialogContext)),
                           child: const Text('Cancel')),
                       ElevatedButton(
-                          onPressed: resetting
+                          onPressed: withButtonSound(resetting
                               ? null
                               : () async {
                                   if (resetting) return;
@@ -85,7 +85,7 @@ class _ParentScreenState extends State<ParentScreen> {
                                           content: Text('Progress reset!'),
                                           backgroundColor: AppColors.wrong,
                                           duration: Duration(seconds: 2)));
-                                },
+                                }),
                           child: Text(
                               resetting ? 'Resetting…' : 'Reset Progress')),
                     ],
@@ -114,12 +114,35 @@ class _ParentScreenState extends State<ParentScreen> {
     return Scaffold(
         body: _ParentGarden(
             child: Column(children: [
-      KidsHeader(
-          title: 'Parent Panel',
-          gradient: const LinearGradient(
-              colors: [Color(0xFF426722), Color(0xFF244F39)]),
-          textColor: const Color(0xFFF4FFD9),
-          onBack: () => Navigator.pop(context)),
+      SafeArea(
+          bottom: false,
+          child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+              child: Row(children: [
+                IconButton.filled(
+                    tooltip: 'Back',
+                    onPressed: withButtonSound(() => Navigator.pop(context)),
+                    style: IconButton.styleFrom(
+                        backgroundColor: const Color(0xFF245D43),
+                        foregroundColor: Colors.white),
+                    icon: const Icon(Icons.arrow_back_rounded)),
+                const SizedBox(width: 10),
+                const Expanded(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                      Text('Parent Panel',
+                          style: TextStyle(
+                              fontFamily: 'Nunito',
+                              fontSize: 26,
+                              fontWeight: FontWeight.w900,
+                              color: Color(0xFF143D2F))),
+                      Text('Support your child’s learning journey.',
+                          style: TextStyle(
+                              fontSize: 13, color: Color(0xFF143D2F))),
+                    ])),
+                const MascotPortrait(mascot: LearningMascot.jitjit, size: 62),
+              ]))),
       SafeArea(
         top: false,
         bottom: false,
@@ -141,10 +164,10 @@ class _ParentScreenState extends State<ParentScreen> {
                     selected: _tab == index,
                     child: TextButton(
                       key: ValueKey('parent-tab-$index'),
-                      onPressed: () {
+                      onPressed: withButtonSound(() {
                         setState(() => _tab = index);
                         if (_scroll.hasClients) _scroll.jumpTo(0);
-                      },
+                      }),
                       style: TextButton.styleFrom(
                         foregroundColor: _tab == index
                             ? const Color(0xFF203D32)
@@ -182,85 +205,11 @@ class _ParentScreenState extends State<ParentScreen> {
             controller: _scroll,
             padding: const EdgeInsets.fromLTRB(14, 14, 14, 32),
             children: [
-              if (_tab == 0) ...[
-                Container(
-                  margin: const EdgeInsets.only(bottom: 20),
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Color(0xFFF6FFD5), Color(0xFFD9EFA2)],
-                    ),
-                    borderRadius: BorderRadius.circular(26),
-                    border:
-                        Border.all(color: const Color(0xFFE6F9AB), width: 2),
-                  ),
-                  child: const Column(children: [
-                    Text('Growing together',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Color(0xFF294A23),
-                            fontSize: 26,
-                            fontWeight: FontWeight.w900)),
-                    SizedBox(height: 12),
-                    MascotPortrait(mascot: LearningMascot.jitjit, size: 72),
-                    SizedBox(height: 8),
-                    Text('Jitjit welcomes you!',
-                        style: TextStyle(
-                            color: Color(0xFF294A23),
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800)),
-                    SizedBox(height: 8),
-                    Text(
-                        'Support little steps, celebrate growth, and make time for learning.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Color(0xFF294A23),
-                            fontSize: 17,
-                            height: 1.4)),
-                  ]),
-                ),
-                const _ParentSection(
-                    icon: Icons.school_rounded,
-                    description:
-                        'A clear picture of your child’s letter learning.',
-                    title: 'This Week at a Glance',
-                    child: ParentWeeklySummary()),
-                const _ParentSection(
-                    icon: Icons.school_rounded,
-                    description: 'Progress across all learning sessions.',
-                    title: 'Child Learning Summary',
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          LearningProgressSummary(),
-                          SizedBox(height: 12),
-                          ExpansionTile(
-                              tilePadding: EdgeInsets.zero,
-                              title: Text('Letter Status A–Z'),
-                              children: [LetterProgressGrid()]),
-                        ])),
-                const _ParentSection(
-                    icon: Icons.auto_awesome_rounded,
-                    description: 'Small steps to try together next.',
-                    title: 'Needs Practice',
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          NeedsPractice(),
-                          SizedBox(height: 12),
-                          Text('Recommended Next',
-                              style: TextStyle(
-                                  fontSize: 17, fontWeight: FontWeight.bold)),
-                          RecommendedPractice(),
-                        ])),
-              ],
+              if (_tab == 0) const ParentGardenOverview(),
               if (_tab == 1) ...[
                 const _ParentSection(
                     icon: Icons.bar_chart_rounded,
-                    description:
-                        'See the learning moments from the last seven days.',
+                    description: 'The last 7 days.',
                     title: 'Weekly Activity',
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -272,22 +221,20 @@ class _ParentScreenState extends State<ParentScreen> {
                         ])),
                 const _ParentSection(
                     icon: Icons.emoji_events_rounded,
-                    description:
-                        'Celebrate effort, milestones, and regular practice.',
+                    description: 'Milestones and badges.',
                     title: 'Rewards',
                     child: RewardsSummary()),
               ],
               if (_tab == 2) ...[
                 const _ParentSection(
                     icon: Icons.timer_rounded,
-                    description: 'Keep learning time comfortable and balanced.',
+                    description: 'Time spent learning.',
                     title: "Today's Screen Time",
                     child: ParentScreenTimeSummary()),
                 _ParentSection(
                     icon: Icons.sports_esports_rounded,
                     title: 'Learning & Play',
-                    description:
-                        'Choose game access and a daily learning limit.',
+                    description: 'Games and daily limits.',
                     child: Column(children: [
                       SwitchListTile(
                           contentPadding: EdgeInsets.zero,
@@ -295,40 +242,43 @@ class _ParentScreenState extends State<ParentScreen> {
                           subtitle: Text(
                               provider.gameAccess ? 'Enabled' : 'Disabled'),
                           value: provider.gameAccess,
-                          onChanged: (_) => provider.toggleGameAccess()),
+                          onChanged: withSelectionSound(
+                              (_) => provider.toggleGameAccess())),
                       SwitchListTile(
                           contentPadding: EdgeInsets.zero,
                           title: const Text('Daily Time Limit'),
                           value: time.isLimitEnabled,
-                          onChanged: time.setLimitEnabled),
+                          onChanged: withSelectionSound(time.setLimitEnabled)),
                       DropdownButtonFormField<int>(
+                          onTap: withButtonSound(() {}),
                           initialValue: time.dailyLimitMinutes,
-                          decoration: const InputDecoration(
-                              labelText: 'Configured Daily Limit'),
+                          decoration:
+                              const InputDecoration(labelText: 'Daily Limit'),
                           items: [15, 30, 45, 60, 90]
                               .map((m) => DropdownMenuItem(
                                   value: m, child: Text('$m minutes')))
                               .toList(),
-                          onChanged: (m) {
+                          onChanged: withSelectionSound((m) {
                             if (m != null) time.setDailyLimit(m);
-                          }),
+                          })),
                     ])),
                 _ParentSection(
                     icon: Icons.volume_up_rounded,
                     title: 'Sound & Voice',
-                    description:
-                        'Adjust voices, effects, and gentle background music.',
+                    description: 'Audio settings.',
                     child: Column(children: [
                       SwitchListTile(
                           contentPadding: EdgeInsets.zero,
                           title: const Text('Voice Assistance'),
                           value: provider.voiceEnabled,
-                          onChanged: (_) => provider.toggleVoice()),
+                          onChanged: withSelectionSound(
+                              (_) => provider.toggleVoice())),
                       SwitchListTile(
                           contentPadding: EdgeInsets.zero,
                           title: const Text('Sound Effects'),
                           value: provider.sfxEnabled,
-                          onChanged: (_) => provider.toggleSfx()),
+                          onChanged:
+                              withSelectionSound((_) => provider.toggleSfx())),
                       SwitchListTile(
                           contentPadding: EdgeInsets.zero,
                           secondary: const Icon(Icons.music_note_rounded),
@@ -336,7 +286,8 @@ class _ParentScreenState extends State<ParentScreen> {
                           subtitle: const Text(
                               'Pauses for voices and speech practice'),
                           value: provider.musicEnabled,
-                          onChanged: (_) => provider.toggleMusic()),
+                          onChanged: withSelectionSound(
+                              (_) => provider.toggleMusic())),
                       Text(
                           'Music volume: ${(provider.musicVolume * 100).round()}%'),
                       Slider(
@@ -352,7 +303,7 @@ class _ParentScreenState extends State<ParentScreen> {
                       TextButton.icon(
                           icon: const Icon(Icons.info_outline),
                           label: const Text('Background Theme'),
-                          onPressed: () => showDialog<void>(
+                          onPressed: withButtonSound(() => showDialog<void>(
                               context: context,
                               builder: (ctx) => AlertDialog(
                                     title: const Text('Background Theme'),
@@ -362,32 +313,33 @@ class _ParentScreenState extends State<ParentScreen> {
                                             'Music pauses while words, letters, and sound effects play.')),
                                     actions: [
                                       TextButton(
-                                          onPressed: () => Navigator.pop(ctx),
+                                          onPressed: withButtonSound(
+                                              () => Navigator.pop(ctx)),
                                           child: const Text('Close'))
                                     ],
-                                  ))),
+                                  )))),
                     ])),
                 _ParentSection(
                     icon: Icons.lock_rounded,
                     title: 'Parent Access',
-                    description: 'Manage the PIN that protects these settings.',
+                    description: 'Protect parent settings.',
                     child: Column(children: [
                       TextButton.icon(
                           icon: const Icon(Icons.lock_outline),
                           label: const Text('Change Parent PIN'),
-                          onPressed: () => showDialog<void>(
+                          onPressed: withButtonSound(() => showDialog<void>(
                               context: context,
                               builder: (ctx) => Dialog(
                                   child: ParentPinForm(
                                       auth: provider.parentAuth,
                                       changePin: true,
                                       onBack: () => Navigator.pop(ctx),
-                                      onSuccess: () => Navigator.pop(ctx))))),
+                                      onSuccess: () => Navigator.pop(ctx)))))),
                     ])),
                 _ParentSection(
                     icon: Icons.restart_alt_rounded,
                     accent: const Color(0xFFFFB8AD),
-                    description: 'Start over only when you are ready.',
+                    description: 'Reset learning progress.',
                     title: 'Data / Reset',
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -396,7 +348,8 @@ class _ParentScreenState extends State<ParentScreen> {
                               'Reset learning progress only. Parent settings and screen-time usage are kept.'),
                           const SizedBox(height: 8),
                           OutlinedButton.icon(
-                              onPressed: () => _confirmReset(provider),
+                              onPressed: withButtonSound(
+                                  () => _confirmReset(provider)),
                               icon: const Icon(Icons.delete_outline,
                                   color: AppColors.wrong),
                               label: const Text('Reset Progress',
@@ -426,7 +379,7 @@ class _ParentSection extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 18),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: const Color(0xFF254A40),
+          color: const Color(0xE6254A40),
           borderRadius: BorderRadius.circular(24),
           border: Border.all(color: accent.withValues(alpha: .22)),
           boxShadow: const [
@@ -472,14 +425,20 @@ class _ParentGarden extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) => DecoratedBox(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF183E33), Color(0xFF293D24), Color(0xFF182C32)],
-          ),
-        ),
-        child: child,
-      );
+  Widget build(BuildContext context) => Stack(fit: StackFit.expand, children: [
+        Positioned.fill(
+            child: Image.asset('assets/images/new_ui/parent_garden.png',
+                fit: BoxFit.cover,
+                excludeFromSemantics: true,
+                cacheWidth: 1000)),
+        const Positioned.fill(
+            child: IgnorePointer(
+                child: DecoratedBox(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Color(0xCCE9F5CE), Color(0x223C733F)]))))),
+        child,
+      ]);
 }

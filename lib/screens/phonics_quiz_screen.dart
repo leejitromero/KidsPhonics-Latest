@@ -1,3 +1,4 @@
+import '../widgets/button_sound.dart';
 import '../data/game_session_order.dart';
 import '../widgets/word_game_layout.dart';
 // lib/screens/phonics_quiz_screen.dart
@@ -110,7 +111,7 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
         fitViewport: true,
         answerResult: _selected == null ? null : _selected == _q.correctLetter,
         title: 'Phonics Quiz',
-        instructions: 'Listen to the word. Tap the matching letter or letters.',
+        instructions: 'Listen and pick the letters.',
         difficulty: widget.difficulty,
         hasProgress: scoredAttempts > 0 && !resultOpen,
         current: _qIndex + 1,
@@ -139,7 +140,7 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
             GameFeedback(correct: _selected == _q.correctLetter),
           if (_answered)
             ElevatedButton(
-                onPressed: resultOpen ? null : _nextQuestion,
+                onPressed: withButtonSound(resultOpen ? null : _nextQuestion),
                 child: const Text('Next')),
         ]),
       );

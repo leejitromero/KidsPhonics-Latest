@@ -1,3 +1,4 @@
+import 'button_sound.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/learning_progress.dart';
@@ -100,7 +101,7 @@ void showLetterDetail(BuildContext context, LetterProgress p) {
             )),
             actions: [
               TextButton(
-                  onPressed: () => Navigator.pop(ctx),
+                  onPressed: withButtonSound(() => Navigator.pop(ctx)),
                   child: const Text('Close'))
             ],
           ));
@@ -147,7 +148,8 @@ class LetterProgressGrid extends StatelessWidget {
                           message: '${p.letter}: ${s.label}',
                           child: InkWell(
                             key: ValueKey('letter-status-${p.letter}'),
-                            onTap: () => showLetterDetail(context, p),
+                            onTap: withButtonSound(
+                                () => showLetterDetail(context, p)),
                             child: Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
@@ -264,7 +266,7 @@ class NeedsPractice extends StatelessWidget {
       ...letters.take(5).map(_row),
       if (letters.length > 5)
         TextButton(
-            onPressed: () => showDialog<void>(
+            onPressed: withButtonSound(() => showDialog<void>(
                 context: context,
                 builder: (ctx) => AlertDialog(
                       title: const Text('Needs Practice'),
@@ -276,10 +278,11 @@ class NeedsPractice extends StatelessWidget {
                                   children: letters.map(_row).toList()))),
                       actions: [
                         TextButton(
-                            onPressed: () => Navigator.pop(ctx),
+                            onPressed:
+                                withButtonSound(() => Navigator.pop(ctx)),
                             child: const Text('Close'))
                       ],
-                    )),
+                    ))),
             child: Text('View All (${letters.length})')),
     ]);
   }

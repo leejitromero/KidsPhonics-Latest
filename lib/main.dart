@@ -10,6 +10,7 @@ import 'providers/app_provider.dart';
 import 'screens/home_screen.dart';
 import 'widgets/time_limit_overlay.dart';
 import 'widgets/background_music_host.dart';
+import 'widgets/adventure_background.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,6 +72,8 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _scaleAnim;
   late Animation<double> _fadeAnim;
   Timer? _navigationTimer;
+  Timer? _progressTimer;
+  int _progress = 0;
 
   @override
   void initState() {
@@ -88,23 +91,34 @@ class _SplashScreenState extends State<SplashScreen>
 
     _ctrl.forward();
 
-    _navigationTimer = Timer(const Duration(seconds: 3), () {
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (_, __, ___) => const HomeScreen(),
-            transitionsBuilder: (_, anim, __, child) =>
-                FadeTransition(opacity: anim, child: child),
-            transitionDuration: const Duration(milliseconds: 600),
-          ),
-        );
+    final started = Stopwatch()..start();
+    _progressTimer = Timer.periodic(const Duration(milliseconds: 30), (timer) {
+      if (!mounted) return;
+      final progress = (started.elapsedMilliseconds / 30).floor().clamp(0, 100);
+      if (progress != _progress) setState(() => _progress = progress);
+      if (progress == 100) {
+        timer.cancel();
+        started.stop();
+        _navigationTimer = Timer(const Duration(milliseconds: 250), () {
+          if (mounted) {
+            Navigator.pushReplacement(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) => const HomeScreen(),
+                transitionsBuilder: (_, anim, __, child) =>
+                    FadeTransition(opacity: anim, child: child),
+                transitionDuration: const Duration(milliseconds: 600),
+              ),
+            );
+          }
+        });
       }
     });
   }
 
   @override
   void dispose() {
+    _progressTimer?.cancel();
     _navigationTimer?.cancel();
     _ctrl.dispose();
     super.dispose();
@@ -113,166 +127,122 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF1B0A4F),
-              Color(0xFF0F0A2E),
-              Color(0xFF071530),
-            ],
-          ),
-        ),
-        child: Center(
-          child: AnimatedBuilder(
-            animation: _ctrl,
-            builder: (_, __) => Opacity(
-              opacity: _fadeAnim.value,
-              child: Transform.scale(
-                scale: _scaleAnim.value,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Stars around mascot
-                    const Text('✨', style: TextStyle(fontSize: 30)),
-                    const SizedBox(height: 8),
+      body: AdventureBackground(
+        child: SafeArea(
+            child: Column(children: [
+          Expanded(
+              child: Center(
+            child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: AnimatedBuilder(
+                  animation: _ctrl,
+                  builder: (_, __) => Opacity(
+                    opacity: MediaQuery.disableAnimationsOf(context)
+                        ? 1
+                        : _fadeAnim.value,
+                    child: Transform.scale(
+                      scale: MediaQuery.disableAnimationsOf(context)
+                          ? 1
+                          : _scaleAnim.value,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Stars around mascot
+                          const Text('✨', style: TextStyle(fontSize: 30)),
+                          const SizedBox(height: 8),
 
-                    // Mascot
-                    ExcludeSemantics(
-                      child: RepaintBoundary(
-                        child: Image.asset(
-                          MediaQuery.disableAnimationsOf(context)
-                              ? 'assets/images/app_mascot.png'
-                              : 'assets/images/app_mascot.gif',
-                          width: 180,
-                          height: 180,
-                          fit: BoxFit.contain,
-                          cacheWidth:
-                              (180 * MediaQuery.devicePixelRatioOf(context))
-                                  .ceil(),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
+                          // Mascot
+                          ExcludeSemantics(
+                            child: RepaintBoundary(
+                              child: Image.asset(
+                                MediaQuery.disableAnimationsOf(context)
+                                    ? 'assets/images/app_mascot.png'
+                                    : 'assets/images/app_mascot.gif',
+                                width: 180,
+                                height: 180,
+                                fit: BoxFit.contain,
+                                cacheWidth: (180 *
+                                        MediaQuery.devicePixelRatioOf(context))
+                                    .ceil(),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
 
-                    // App name
-                    Text(
-                      'KidsPhonics',
-                      style: TextStyle(
-                        fontFamily: 'FredokaOne',
-                        fontSize: 36,
-                        color: const Color(0xFFFFD700),
-                        shadows: [
-                          Shadow(
-                            color:
-                                const Color(0xFFFFD700).withValues(alpha: 0.5),
-                            blurRadius: 20,
-                          )
+                          // App name
+                          Text(
+                            'KidsPhonics',
+                            style: TextStyle(
+                              fontFamily: 'Fredoka',
+                              fontSize: 36,
+                              color: const Color(0xFF582AA5),
+                              shadows: [
+                                Shadow(
+                                  color: Colors.white.withValues(alpha: 0.5),
+                                  blurRadius: 20,
+                                )
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+
+                          const Text(
+                            'GRADE 1 · LEARN · PLAY · LEVEL UP',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w900,
+                              color: Color(0xFF155B85),
+                              letterSpacing: 2.5,
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 8),
-
-                    const Text(
-                      'GRADE 1 · LEARN · PLAY · LEVEL UP',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w900,
-                        color: Color(0xFF9B6FC4),
-                        letterSpacing: 2.5,
-                      ),
-                    ),
-                    const SizedBox(height: 40),
-
-                    // Loading dots
-                    _LoadingDots(),
-
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Loading your adventure...',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF6A3FA0),
-                      ),
-                    ),
-                  ],
+                  ),
+                )),
+          )),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(28, 16, 28, 32),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 380),
+              child: Container(
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: .88),
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: Colors.white, width: 2),
                 ),
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  Row(children: [
+                    const Expanded(
+                        child: Text('Loading your adventure...',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                color: Color(0xFF582AA5)))),
+                    const SizedBox(width: 12),
+                    Text('$_progress%',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w900,
+                            color: Color(0xFF582AA5))),
+                  ]),
+                  const SizedBox(height: 12),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: LinearProgressIndicator(
+                      value: _progress / 100,
+                      minHeight: 14,
+                      backgroundColor: const Color(0xFFE6DCFF),
+                      color: const Color(0xFF00BFA5),
+                      semanticsLabel: 'Loading your adventure',
+                      semanticsValue: '$_progress',
+                    ),
+                  ),
+                ]),
               ),
             ),
           ),
-        ),
+        ])),
       ),
-    );
-  }
-}
-
-class _LoadingDots extends StatefulWidget {
-  @override
-  State<_LoadingDots> createState() => _LoadingDotsState();
-}
-
-class _LoadingDotsState extends State<_LoadingDots>
-    with TickerProviderStateMixin {
-  late List<AnimationController> _controllers;
-  final _colors = [
-    const Color(0xFFFF6B9D),
-    const Color(0xFFFFD700),
-    const Color(0xFF00BFA5),
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    _controllers = List.generate(
-      3,
-      (i) => AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 600),
-      )..repeat(
-          reverse: true,
-          period: Duration(milliseconds: 600 + i * 200),
-        ),
-    );
-  }
-
-  @override
-  void dispose() {
-    for (final c in _controllers) {
-      c.dispose();
-    }
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(3, (i) {
-        return AnimatedBuilder(
-          animation: _controllers[i],
-          builder: (_, __) => Transform.translate(
-            offset: Offset(0, -8 * _controllers[i].value),
-            child: Container(
-              width: 12,
-              height: 12,
-              margin: const EdgeInsets.symmetric(horizontal: 5),
-              decoration: BoxDecoration(
-                color: _colors[i],
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: _colors[i].withValues(alpha: 0.5),
-                    blurRadius: 8,
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
-      }),
     );
   }
 }

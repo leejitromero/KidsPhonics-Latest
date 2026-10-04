@@ -1,16 +1,27 @@
-﻿# Historical asset utilities
+﻿# Asset maintenance tools
 
-These files are retained for project provenance. They are not imported by the Android app and are not run by `flutter pub get`, tests, or builds.
+These tools are separate from the Android app.
 
-| Files | Historical purpose | Current status |
-|---|---|---|
-| `generate_audio.dart`, `generate_voice_feedback.dart`, `generate_phonics_audio.py` | Generated old phonics/feedback recordings using external TTS | Retained only; **do not run**. Their old wording must not overwrite validated content. |
-| `generate_missing_sound_match.py`, `generate_missing_sound_match.js`, `generate_missing_rhyming.js` | Filled gaps in the old recording set | Historical only; not a current asset-replacement workflow. |
-| `generate_icon.dart`, `generate_icon_png.dart` | Online SVG-to-PNG experiments | Historical only. The current icon already exists; these network utilities are unnecessary for setup. |
+- `verify_game_apk.ps1` checks supplied game assets and retired asset exclusions in a built APK. It uses `game_assets_manifest.json` and `removed_legacy_assets.json`; keep both manifests.
+- `mascot_frames/` retains original supplied artwork for future mascot animation and launcher edits. Runtime PNG/GIF assets remain in `assets/images/`.
 
-Dart CLI output uses `stdout.writeln`; it is not production-app logging. `http` remains a development dependency for these retained tools. The obsolete `dart:math` import and unused endpoint list in `generate_icon_png.dart` were removed after checking references. None of these generators was executed during stabilization.
+Run APK verification from the project root:
 
-When icon regeneration is deliberately needed, the configured existing tool is `dart run flutter_launcher_icons`. This cleanup did not regenerate icons.
+```powershell
+./tools/verify_game_apk.ps1 -ApkPath KidsPhonics-animated-1.0.2.apk
+```
 
-For future human recordings, use `../PHONICS_RECORDING_SCRIPT.md`, `../AUDIO_REPLACEMENT_AUDIT.md`, and `../PHONICS_TEACHER_VALIDATION.md` after manual app testing and teacher review.
+Regenerate launcher icons with `dart run flutter_launcher_icons`, using the existing configuration in `pubspec.yaml`.
 
+Eight obsolete network audio/icon generators and the old SVG icon were removed after checking app, test, and build references. Current recordings are supplied local assets; setup does not generate or download replacements. The direct `http` development dependency used only by those generators was removed; Flutter packages may still require it transitively.
+
+For future human recordings, keep using `../PHONICS_RECORDING_SCRIPT.md`, `../AUDIO_REPLACEMENT_AUDIT.md`, and `../PHONICS_TEACHER_VALIDATION.md` with teacher review.
+
+The CVC and Blending lesson generators use the installed Microsoft Zira voice for offline narration. `positive_praise.ps1` shares a brighter praise style: +12% pitch and +8% rate on the congratulation, with a short pause and medium-rate spelling. This adjusts synthetic prosody; it does not clone the supplied voice examples. The 25 CVC and 40 Blending praise WAVs are bundled with the app.
+
+Regenerate only positive praise, preserving all other recordings:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/generate_cvc_narration.ps1 -PraiseOnly
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/generate_blending_narration.ps1 -PraiseOnly
+```

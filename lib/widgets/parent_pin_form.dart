@@ -1,3 +1,4 @@
+import 'button_sound.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -128,14 +129,14 @@ class _ParentPinFormState extends State<ParentPinForm> {
             Text(_error!, style: const TextStyle(color: Colors.redAccent)),
           const SizedBox(height: 16),
           ElevatedButton(
-              onPressed: locked || _busy ? null : _submit,
+              onPressed: withButtonSound(locked || _busy ? null : _submit),
               child: Text(widget.changePin
                   ? 'Save PIN'
                   : setup
                       ? 'Set PIN'
                       : 'Unlock')),
           TextButton(
-              onPressed: _busy ? null : widget.onBack,
+              onPressed: withButtonSound(_busy ? null : widget.onBack),
               child: const Text('Back')),
         ]),
       ),

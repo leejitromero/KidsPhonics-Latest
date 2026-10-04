@@ -32,8 +32,11 @@ void main() {
     await tester.tap(find.text('Skip'));
     await tester.runAsync(() => Future<void>.delayed(Duration.zero));
     await tester.pump(const Duration(milliseconds: 500));
-    expect(tester.getSize(find.byKey(const ValueKey('flight-play-area'))),
-        const Size(390, 844));
+    final playArea =
+        tester.getRect(find.byKey(const ValueKey('flight-play-area')));
+    expect(playArea.width, 390);
+    expect(playArea.top, 0);
+    expect(playArea.bottom, 844);
     expect(tester.widget<GameLives>(find.byType(GameLives)).lives, 3);
     await tester.tap(find.text('Start flying'));
     await tester.pump();

@@ -1,3 +1,4 @@
+import 'button_sound.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_theme.dart';
@@ -30,7 +31,7 @@ class KidsBottomNav extends StatelessWidget {
           final isActive = i == currentIndex;
           return Expanded(
             child: GestureDetector(
-              onTap: () => onTap(i),
+              onTap: withButtonSound(() => onTap(i)),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -97,7 +98,7 @@ class KidsHeader extends StatelessWidget {
       child: Row(
         children: [
           GestureDetector(
-            onTap: onBack,
+            onTap: withButtonSound(onBack),
             child: Container(
               width: 38,
               height: 38,

@@ -1,3 +1,6 @@
+import '../widgets/button_sound.dart';
+import '../widgets/game_design.dart';
+import '../widgets/activity_prompt.dart';
 import '../data/game_session_order.dart';
 import '../widgets/game_word_picture.dart';
 // lib/screens/voice_recognition_screen.dart
@@ -121,7 +124,6 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
     final generation = ++_listenGeneration;
     final p = context.read<AppProvider>();
     await p.phonicsAudio.stop();
-    await p.voiceFeedback.stop();
     await p.audio.stop();
     if (!mounted || generation != _listenGeneration || !_isListening) return;
     try {
@@ -268,26 +270,37 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
   Widget build(BuildContext context) => GameScaffold(
       answerResult: _isCorrect,
       title: 'Speak & Recognize',
-      instructions: 'Hear the word. Say the word clearly.',
+      instructions: 'Listen, then say the word.',
       difficulty: widget.difficulty,
       current: _wordIndex + 1,
       total: _words.length,
       hasProgress: scoredAttempts > 0 && !resultOpen,
       onLeave: () => _speech.stop(),
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Center(child: GameWordPicture(word: _current['word']!)),
-        Text(_current['word'] ?? 'Content unavailable.',
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
+        ActivityPrompt(
+          accent: const Color(0xFF7052CA),
+          picture: GameWordPicture(word: _current['word']!, size: 180),
+          title: _current['word'] ?? 'Content unavailable.',
+        ),
+        const SizedBox(height: 12),
         AudioButton(phrase: _current['word'] ?? '', enabled: !_isListening),
         const SizedBox(height: 16),
         if (!_isInitialized) ...[
-          const Text(
-              'KidsPhonics uses the microphone only for Speak & Recognize.'),
-          const Text('Your voice is used to recognize the word you say.'),
+          const ForestPanel(
+              child: Row(children: [
+            Icon(Icons.mic_rounded, color: Color(0xFF8847DB), size: 32),
+            SizedBox(width: 10),
+            Expanded(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                  Text(
+                      'KidsPhonics uses the microphone only for Speak & Recognize.'),
+                  Text('Your voice is used to recognize the word you say.'),
+                ])),
+          ])),
           const SizedBox(height: 12),
         ],
-        const Text('Say the word clearly.', textAlign: TextAlign.center),
         ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
                 backgroundColor: _isListening
@@ -300,9 +313,10 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
                 elevation: 3),
-            onPressed: _requestingPermission || _isCorrect == true || resultOpen
-                ? null
-                : _listen,
+            onPressed: withButtonSound(
+                _requestingPermission || _isCorrect == true || resultOpen
+                    ? null
+                    : _listen),
             icon: Icon(_isListening ? Icons.stop_circle_outlined : Icons.mic),
             label: Text(_requestingPermission
                 ? 'Getting Ready…'
@@ -322,7 +336,8 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
         if (_isCorrect != null) GameFeedback(correct: _isCorrect!),
         if (_isCorrect != null)
           ElevatedButton(
-              onPressed: _isListening || resultOpen ? null : _nextWord,
+              onPressed: withButtonSound(
+                  _isListening || resultOpen ? null : _nextWord),
               child: const Text('Next Word')),
       ]));
 }

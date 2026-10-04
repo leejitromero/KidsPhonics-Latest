@@ -1,12 +1,12 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kidsphonics/data/letter_data.dart';
-import 'package:kidsphonics/data/lesson_example_data.dart';
 import 'package:kidsphonics/widgets/learner_widgets.dart';
-import 'package:kidsphonics/widgets/lesson_picture.dart';
+import 'package:kidsphonics/services/phonics_audio_service.dart';
 import 'package:kidsphonics/providers/app_provider.dart';
 import 'package:kidsphonics/screens/letter_sounds_screen.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
@@ -14,7 +14,7 @@ import 'learning_progress_test.dart' show mockProgressAudio;
 void main() {
   for (final width in [320.0, 390.0]) {
     for (final scale in [1.0, 2.0]) {
-      testWidgets('lesson audio shares one row at width $width, text $scale',
+      testWidgets('letter sounds layout fits width $width, text $scale',
           (tester) async {
         tester.view.physicalSize = Size(width, 800);
         tester.view.devicePixelRatio = 1;
@@ -37,24 +37,22 @@ void main() {
           ),
         ));
         await tester.pump();
-        final bounds = ['letter-A', 'sound-A', 'word-A']
-            .map((key) => tester.getRect(find.byKey(ValueKey(key))))
-            .toList();
-        expect(bounds[0].top, bounds[1].top);
-        expect(bounds[1].top, bounds[2].top);
-        expect(bounds[0].right, lessThan(bounds[1].left));
-        expect(bounds[1].right, lessThan(bounds[2].left));
-        expect(bounds[2].right, lessThanOrEqualTo(width));
-        final navigation = ['Previous', 'A–Z Grid', 'Next →']
+        expect(find.byType(AudioButton), findsOneWidget);
+        expect(tester.widget<AudioButton>(find.byType(AudioButton)).phrase,
+            'lesson-sound-A');
+        final sound = tester.getRect(find.byType(AudioButton));
+        final image =
+            tester.getRect(find.byKey(const ValueKey('recognition-letter')));
+        expect(image.bottom, lessThan(sound.top));
+        final navigation = ['Previous', 'A–Z Grid', 'Next']
             .map((label) =>
                 tester.getRect(find.widgetWithText(OutlinedButton, label)))
             .toList();
         expect(navigation[0].top, navigation[1].top);
         expect(navigation[1].top, navigation[2].top);
         expect(navigation[2].right, lessThanOrEqualTo(width));
-        expect(tester.getSize(find.byType(LessonPicture)).height,
-            lessThanOrEqualTo(170));
-        if (scale == 1) expect(bounds.last.bottom, lessThan(800));
+        expect(sound.bottom, lessThan(navigation.first.top));
+        expect(navigation.last.bottom, lessThan(800));
         expect(tester.takeException(), isNull);
         await tester.pumpWidget(const SizedBox());
         p.dispose();
@@ -69,7 +67,7 @@ void main() {
   });
 
   testWidgets(
-      'open every A-Z lesson: consistent text and correctly named audio buttons',
+      'every A-Z letter uses its plain image and isolated sound recording',
       (tester) async {
     tester.view.physicalSize = const Size(420, 1000);
     tester.view.devicePixelRatio = 1;
@@ -84,27 +82,30 @@ void main() {
         value: p, child: const MaterialApp(home: LetterSoundsScreen())));
     for (final letter in allLetters) {
       await tester.pump();
-      expect(find.text('${letter.letter} ${letter.lowercase}'), findsOneWidget);
-      expect(find.text(letter.sound), findsOneWidget);
-      final example =
-          lessonExamples.firstWhere((e) => e.letter == letter.letter);
-      expect(find.text(example.example), findsOneWidget);
-      expect(find.text('LETTER'), findsOneWidget);
-      expect(find.text('WORD'), findsOneWidget);
-      expect(find.text('SOUND'), findsOneWidget);
+      final image = tester
+          .widget<Image>(find.byKey(const ValueKey('recognition-letter')));
+      expect(image.semanticLabel, 'Letter ${letter.letter}');
+      final asset = (image.image as ResizeImage).imageProvider as AssetImage;
+      expect(asset.assetName, 'assets/images/letters/${letter.lowercase}.png');
+      expect(find.text('Sound'), findsOneWidget);
+      expect(find.text('LETTER'), findsNothing);
+      expect(find.text('WORD'), findsNothing);
+      expect(find.text('Practice This Letter'), findsNothing);
       final buttons =
           tester.widgetList<AudioButton>(find.byType(AudioButton)).toList();
-      expect(buttons.map((b) => b.phrase), [
-        example.letterAudioKey,
-        example.soundAudioKey,
-        example.wordAudioKey
-      ]);
+      expect(buttons.map((b) => b.phrase), ['lesson-sound-${letter.letter}']);
+      final recording =
+          PhonicsAudioService.assetForPhrase(buttons.single.phrase);
+      expect(recording,
+          'audio/phonics/lesson_audio/sounds/sound-${letter.lowercase}.mp3');
+      expect(File('assets/$recording').existsSync(), isTrue);
       expect(p.getLetterProgress(letter.letter).mastered, isFalse);
       expect(p.getLetterProgress(letter.letter).attempts, 0);
       expect(tester.takeException(), isNull);
-      await tester.ensureVisible(find.text('Next →'));
-      await tester.tap(find.text('Next →'));
-      await tester.pump(const Duration(milliseconds: 200));
+      if (letter.letter != 'Z') {
+        await tester.tap(find.text('Next'));
+        await tester.pump();
+      }
     }
     await tester.pumpWidget(const SizedBox());
     p.dispose();
@@ -122,15 +123,17 @@ void main() {
         child: const MaterialApp(home: LetterSoundsScreen(vowelsOnly: true))));
     expect(find.text('Short Vowel Sounds'), findsOneWidget);
     expect(find.text('Practice This Letter'), findsNothing);
-    final navigation = ['Previous', 'Vowel Grid', 'Next →']
+    final navigation = ['Previous', 'Next']
         .map((label) =>
             tester.getRect(find.widgetWithText(OutlinedButton, label)))
         .toList();
     expect(navigation[0].top, navigation[1].top);
-    expect(navigation[1].top, navigation[2].top);
     expect(find.textContaining('Ice Cream'), findsNothing);
-    expect(find.text('A is for Ant.'), findsOneWidget);
-    expect(find.text('SOUND'), findsOneWidget);
+    expect(find.text('A is for Ant.'), findsNothing);
+    expect(find.text('Meet the Vowels!'), findsOneWidget);
+    expect(find.byKey(const ValueKey('vowel-tab-A')), findsOneWidget);
+    expect(tester.widget<AudioButton>(find.byType(AudioButton)).phrase,
+        'lesson-sound-A');
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
     p.dispose();

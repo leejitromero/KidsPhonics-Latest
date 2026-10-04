@@ -1,15 +1,19 @@
-import '../data/game_session_order.dart';
+import '../widgets/button_sound.dart';
+import '../theme/kids_ui.dart';
+
 import 'dart:math' as math;
 import '../widgets/mascot_guide.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
 import '../models/learning_progress.dart';
-import '../data/phonics_activity_data.dart';
+
 import '../widgets/learner_widgets.dart';
+import '../widgets/lessons_menu_page.dart';
 import 'letter_sounds_screen.dart';
-import 'rhyming_words_screen.dart';
-import 'tricky_letters_screen.dart';
+import 'letter_recognition_screen.dart';
+import 'cvc_words_screen.dart';
+import 'blending_sounds_screen.dart';
 
 class LessonsScreen extends StatefulWidget {
   const LessonsScreen({super.key});
@@ -18,26 +22,6 @@ class LessonsScreen extends StatefulWidget {
 }
 
 class _LessonsScreenState extends State<LessonsScreen> {
-  bool _opening = false;
-  Future<void> _rhyme() async {
-    if (_opening) return;
-    setState(() => _opening = true);
-    try {
-      final difficulty = await chooseGameDifficulty(
-          context,
-          'Rhyming Words',
-          (d) =>
-              '${rhymeRoundsForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} words · ${rhymeRoundsForDifficulty(d).first.options.length} choices',
-          mascot: LearningMascot.wigloo,
-          lessonStyle: true);
-      if (!mounted || difficulty == null) return;
-      await LearnerNavigation.open(
-          context, RhymingWordsScreen(difficulty: difficulty));
-    } finally {
-      if (mounted) setState(() => _opening = false);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final p = context.watch<AppProvider>();
@@ -65,41 +49,49 @@ class _LessonsScreenState extends State<LessonsScreen> {
 
     final lessons = <Widget>[
       _LessonTile(
-        title: 'Practice My Tricky Letters',
-        description: 'A short practice picked from your letter progress.',
-        imageAsset: 'assets/images/lesson_logos/tricky_letters.png',
-        accent: const Color(0xFF167769),
-        status: 'Practice',
+        title: 'Letter Recognition',
+        description: 'See and hear A–Z.',
+        imageAsset: 'assets/images/lesson_logos/letter_recognition.png',
+        accent: const Color(0xFF087F86),
         onPressed: () =>
-            LearnerNavigation.open(context, const TrickyLettersScreen()),
+            LearnerNavigation.open(context, const LetterRecognitionScreen()),
       ),
-      lesson('Letter Sounds A–Z', 'Learn letters and their sounds.',
+      lesson('Letter Sounds A–Z', 'Hear each letter sound.',
           List.generate(26, (i) => String.fromCharCode(65 + i)), false),
       lesson('Short Vowel Sounds', 'Practice A, E, I, O, U.',
           const ['A', 'E', 'I', 'O', 'U'], true),
       _LessonTile(
-        title: 'Rhyming Words',
-        description: 'Find words that rhyme.',
-        imageAsset: 'assets/images/lesson_logos/rhyming_words.png',
+        title: 'CVC Words',
+        description: 'Blend three sounds into a word.',
+        imageAsset: 'assets/images/lesson_logos/cvc_words.png',
         accent: const Color(0xFFB45731),
-        status: p.rhymingWordsDone ? 'Completed' : 'Ready to Play',
-        onPressed: _opening ? null : _rhyme,
+        onPressed: () =>
+            LearnerNavigation.open(context, const CvcWordsScreen()),
+      ),
+      _LessonTile(
+        title: 'Blending Sounds',
+        description: 'Build a word. Blend the sounds.',
+        imageAsset: 'assets/images/lesson_logos/blending_sounds.png',
+        accent: const Color(0xFF087F86),
+        onPressed: () =>
+            LearnerNavigation.open(context, const BlendingSoundsScreen()),
       ),
     ];
-    return LearnerPage(
-      title: 'Lessons',
-      fitViewport: true,
+    return LessonsMenuPage(
       child: Column(children: [
         const MascotGuide(
           compact: true,
           mascot: LearningMascot.wigloo,
-          message: 'Choose a lesson. Let’s learn together!',
+          message: 'Pick a lesson!',
         ),
         const SizedBox(height: 8),
         Expanded(child: LayoutBuilder(builder: (context, box) {
           final scale = MediaQuery.textScalerOf(context).scale(14) / 14;
+          final rows = (lessons.length / 2).ceil();
           final height = math.max(
-              150.0 * scale, math.min(220.0 * scale, (box.maxHeight - 10) / 2));
+              190.0 * scale,
+              math.min(
+                  220.0 * scale, (box.maxHeight - 10 * (rows - 1)) / rows));
           return GridView.count(
               padding: EdgeInsets.zero,
               crossAxisCount: 2,
@@ -133,13 +125,15 @@ class _LessonTile extends StatelessWidget {
   Widget build(BuildContext context) => Semantics(
         hint: description,
         child: Material(
-          color: Color.lerp(Colors.white, accent, .07),
+          color: Color.lerp(Colors.white, accent, .07)!
+              .withValues(alpha: KidsUi.cardOpacity),
+          surfaceTintColor: Colors.transparent,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
               side: BorderSide(color: accent.withValues(alpha: .25))),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
-            onTap: onPressed,
+            onTap: withButtonSound(onPressed),
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: Column(children: [

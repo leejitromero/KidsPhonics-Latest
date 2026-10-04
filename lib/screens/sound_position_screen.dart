@@ -1,3 +1,5 @@
+import '../widgets/button_sound.dart';
+import '../widgets/activity_prompt.dart';
 import '../data/game_session_order.dart';
 import '../data/game_word_data.dart';
 import '../widgets/game_word_picture.dart';
@@ -112,39 +114,44 @@ class SoundPositionitionScreenState extends State<SoundPositionScreen>
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+        showHeader: true,
         answerResult: _picked == null ? null : _picked == _round.correctPos,
         title: 'Sound Position',
-        instructions: 'Listen to the word. Choose where you hear the sound.',
+        instructions: 'Where is the sound?',
         difficulty: widget.difficulty,
         hasProgress: scoredAttempts > 0 && !resultOpen,
         current: _index + 1,
         total: _rounds.length,
         child:
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          Center(
-              child: gameWordFor(_round.word) == null
-                  ? GameImageCard(emoji: _round.emoji)
-                  : GameWordPicture(word: _round.word)),
-          const SizedBox(height: KidsUi.padding),
-          Text('Where is ${_round.soundDisplay} in ${_round.word}?',
-              textAlign: TextAlign.center,
-              style:
-                  const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+          ActivityPrompt(
+            picture: gameWordFor(_round.word) == null
+                ? GameImageCard(emoji: _round.emoji)
+                : GameWordPicture(word: _round.word, size: 170),
+            title: 'Where is ${_round.soundDisplay} in ${_round.word}?',
+            caption: 'Beginning, middle, or end?',
+          ),
+          const SizedBox(height: KidsUi.gap),
           AudioButton(
               phrase: _round.word[0] + _round.word.substring(1).toLowerCase()),
           const SizedBox(height: KidsUi.section),
-          ..._round.options.map((option) => GameAnswerButton(
-              label: option.label,
-              selected: _picked == option,
-              result: _picked == option ? option == _round.correctPos : null,
-              onPressed: _answered || _picked != null || resultOpen
-                  ? null
-                  : () => _pick(option))),
+          GameChoiceGrid(
+              children: _round.options
+                  .map((option) => GameAnswerButton(
+                      label: option.label,
+                      selected: _picked == option,
+                      result: _picked == option
+                          ? option == _round.correctPos
+                          : null,
+                      onPressed: _answered || _picked != null || resultOpen
+                          ? null
+                          : () => _pick(option)))
+                  .toList()),
           if (_picked != null)
             GameFeedback(correct: _picked == _round.correctPos),
           if (_answered)
             ElevatedButton(
-                onPressed: resultOpen ? null : _next,
+                onPressed: withButtonSound(resultOpen ? null : _next),
                 child: const Text('Next')),
         ]),
       );
