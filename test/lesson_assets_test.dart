@@ -5,7 +5,7 @@ import 'package:kidsphonics/data/game_word_data.dart';
 import 'package:kidsphonics/services/phonics_audio_service.dart';
 
 void main() {
-  test('every lesson has supplied PNG frames and distinct local audio tracks',
+  test('every lesson has lossless WebP frames and distinct local audio tracks',
       () {
     expect(lessonExamples.map((e) => e.letter).join(),
         'ABCDEFGHIJKLMNOPQRSTUVWXYZ');
@@ -13,7 +13,8 @@ void main() {
       expect(example.frames.length, inInclusiveRange(2, 3));
       for (final frame in example.frames) {
         final bytes = File(frame).readAsBytesSync();
-        expect(bytes.take(8), [137, 80, 78, 71, 13, 10, 26, 10]);
+        expect(String.fromCharCodes(bytes.take(4)), 'RIFF');
+        expect(String.fromCharCodes(bytes.sublist(8, 12)), 'WEBP');
       }
       final paths = [
         example.letterAudioKey,

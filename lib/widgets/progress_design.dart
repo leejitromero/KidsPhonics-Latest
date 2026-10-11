@@ -33,8 +33,8 @@ class ProgressCard extends StatelessWidget {
   final Color tint;
   @override
   Widget build(BuildContext context) => Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(14),
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           gradient: LinearGradient(
               begin: Alignment.topLeft,
@@ -43,7 +43,7 @@ class ProgressCard extends StatelessWidget {
                 Colors.white.withValues(alpha: .96),
                 tint.withValues(alpha: .92)
               ]),
-          borderRadius: BorderRadius.circular(28),
+          borderRadius: BorderRadius.circular(22),
           border:
               Border.all(color: Colors.white.withValues(alpha: .9), width: 2),
           boxShadow: const [
@@ -63,18 +63,18 @@ class ProgressHeading extends StatelessWidget {
   final Color color;
   @override
   Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             gradient: LinearGradient(
                 colors: [color, Color.lerp(color, Colors.white, .25)!])),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
-          Icon(icon, color: const Color(0xFFFFDD58), size: 26),
-          const SizedBox(width: 7),
+          Icon(icon, color: const Color(0xFFFFDD58), size: 20),
+          const SizedBox(width: 6),
           Flexible(
               child: Text(title,
                   style: const TextStyle(
-                      fontSize: 17,
+                      fontSize: 16,
                       fontWeight: FontWeight.w900,
                       color: Colors.white))),
         ]),
@@ -85,7 +85,7 @@ class ProgressHeader extends StatelessWidget {
   const ProgressHeader({super.key});
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+        padding: const EdgeInsets.fromLTRB(14, 6, 14, 6),
         child: Row(children: [
           DecoratedBox(
               decoration: progressGloss(progressPurple, radius: 50),
@@ -93,12 +93,12 @@ class ProgressHeader extends StatelessWidget {
                   tooltip: 'Back',
                   onPressed: withButtonSound(() => Navigator.maybePop(context)),
                   icon: const Icon(Icons.arrow_back_rounded,
-                      color: Colors.white, size: 28))),
+                      color: Colors.white, size: 24))),
           const SizedBox(width: 12),
           Expanded(
               child: Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 9),
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                   decoration: progressGloss(progressPurple, radius: 40),
                   child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -110,9 +110,9 @@ class ProgressHeader extends StatelessWidget {
                             child: Text('My Progress',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    fontSize: 26,
+                                    fontSize: 22,
                                     fontWeight: FontWeight.w900,
-                                    color: Colors.white,
+                                    color: Color(0xFFFFF3B6),
                                     shadows: [
                                       Shadow(
                                           color: Color(0xFF673414),
@@ -159,23 +159,23 @@ class ProgressMasteryCard extends StatelessWidget {
                       child: Align(
                           alignment: Alignment.centerLeft,
                           child: ProgressHeading(title, icon, color: color))))),
-          const SizedBox(height: 10),
+          const SizedBox(height: 6),
           LayoutBuilder(builder: (_, box) {
-            final stacked = box.maxWidth < 290 || scale > 1.35;
+            final stacked = box.maxWidth < 240 || scale > 1.35;
             final ring = _MasteryRing(
                 count: count,
                 total: letters.length,
                 color: color,
                 noun: vowels ? 'vowels' : 'letters',
-                side: stacked ? 122 * scale.clamp(1, 1.5) : 108);
+                side: stacked ? 86 * scale.clamp(1, 1.5) : 78);
             Widget tiles(double width) {
               final columns = vowels ? 5 : 7;
-              final side = ((width - (columns - 1) * 5) / columns)
-                  .clamp(0.0, vowels ? 52.0 : 42.0);
+              final side = ((width - (columns - 1) * 4) / columns)
+                  .clamp(0.0, vowels ? 36.0 : 26.0);
               return Wrap(
                 alignment: WrapAlignment.center,
-                spacing: 5,
-                runSpacing: 5,
+                spacing: 4,
+                runSpacing: 4,
                 children: [
                   for (final letter in letters)
                     Semantics(
@@ -201,7 +201,7 @@ class ProgressMasteryCard extends StatelessWidget {
                                         padding: const EdgeInsets.all(3),
                                         child: Text(letter.letter,
                                             style: TextStyle(
-                                                fontSize: vowels ? 23 : 16,
+                                                fontSize: vowels ? 19 : 15,
                                                 fontWeight: FontWeight.w900,
                                                 color: letter.mastered
                                                     ? Colors.white
@@ -213,13 +213,13 @@ class ProgressMasteryCard extends StatelessWidget {
             return stacked
                 ? Column(children: [
                     Center(child: ring),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 8),
                     SizedBox(width: double.infinity, child: tiles(box.maxWidth))
                   ])
                 : Row(children: [
                     ring,
-                    const SizedBox(width: 14),
-                    Expanded(child: tiles(box.maxWidth - 122))
+                    const SizedBox(width: 10),
+                    Expanded(child: tiles(box.maxWidth - 88))
                   ]);
           }),
         ]));
@@ -250,7 +250,7 @@ class _MasteryRing extends StatelessWidget {
                         padding: const EdgeInsets.all(5),
                         child: CircularProgressIndicator(
                             value: count / total,
-                            strokeWidth: 10,
+                            strokeWidth: 7,
                             strokeCap: StrokeCap.round,
                             color: color,
                             backgroundColor: color.withValues(alpha: .12)))),
@@ -260,8 +260,8 @@ class _MasteryRing extends StatelessWidget {
                         -math.cos(count / total * math.pi * 2) *
                             (side / 2 - 5)),
                     child: Container(
-                        width: 13,
-                        height: 13,
+                        width: 10,
+                        height: 10,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: color,
@@ -272,20 +272,20 @@ class _MasteryRing extends StatelessWidget {
                                   offset: const Offset(0, 2))
                             ]))),
                 Padding(
-                    padding: const EdgeInsets.all(18),
+                    padding: const EdgeInsets.all(12),
                     child: FittedBox(
                         fit: BoxFit.scaleDown,
                         child:
                             Column(mainAxisSize: MainAxisSize.min, children: [
                           Text('$count / $total',
                               style: TextStyle(
-                                  fontSize: 25,
+                                  fontSize: 21,
                                   fontWeight: FontWeight.w900,
                                   color: color)),
                           Text('$noun\nmastered',
                               textAlign: TextAlign.center,
                               style: const TextStyle(
-                                  fontSize: 13, color: progressInk)),
+                                  fontSize: 11, color: progressInk)),
                         ]))),
               ]))));
 }

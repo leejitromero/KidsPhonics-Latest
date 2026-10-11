@@ -42,6 +42,7 @@ void main() {
       () {
     for (final d in Difficulty.values) {
       final words = gameWordsFor(d).map((w) => w.word.toUpperCase()).toSet();
+      expect(words, isNot(contains('UMBRELLA')));
       for (final round in [
         ...soundRoundsForDifficulty(d),
         ...quizQuestionsForDifficulty(d)

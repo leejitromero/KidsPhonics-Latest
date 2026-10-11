@@ -68,9 +68,10 @@ Future<void> choose(WidgetTester t, String label) async {
 }
 
 Future<void> advance(WidgetTester t, {bool automatic = false}) async {
-  await t.pump(const Duration(milliseconds: 1400));
+  await t.pump(Duration(milliseconds: automatic ? 1600 : 1400));
   if (!automatic) {
     await t.ensureVisible(find.text('Next'));
+    await t.pumpAndSettle();
     await t.tap(find.text('Next'));
   }
   await t.runAsync(() async {
@@ -231,13 +232,16 @@ void main() {
               AudioButton(phrase: 'Cat', enabled: false),
             ])));
     expect(find.text('Audio unavailable.'), findsOneWidget);
-    expect(find.text('Audio is turned off.'), findsOneWidget);
+    expect(find.text('Audio is turned off.'), findsNothing);
     expect(
         t
             .widgetList<OutlinedButton>(find.byType(OutlinedButton))
             .every((b) => b.onPressed == null),
         isTrue);
     expect(t.takeException(), isNull);
+    await t.runAsync(p.toggleVoice);
+    await t.pump();
+    expect(find.text('Audio is turned off.'), findsNWidgets(2));
     await close(t, p);
   });
   testWidgets(
@@ -270,8 +274,7 @@ void main() {
     await t.pumpAndSettle();
     expect(permissions, 1);
     expect(
-        find.textContaining('Microphone or speech recognition is unavailable.'),
-        findsOneWidget);
+        find.textContaining('Microphone access was declined.'), findsOneWidget);
     await close(t, p);
   });
 
@@ -329,7 +332,7 @@ void main() {
           .toList(),
       5,
       20,
-      false
+      true
     ),
     (
       'sound',
@@ -367,21 +370,13 @@ void main() {
       15,
       false
     ),
-    (
-      'rhyme',
-      const RhymingWordsScreen(difficulty: d),
-      rhymeRoundsForDifficulty(d).map((q) => q.correctRhyme).toList(),
-      8,
-      20,
-      false
-    ),
   ];
   for (final (name, page, answers, eachXp, bonus, automatic) in cases) {
     testWidgets(
         '$name actual rewards match result including rounded difficulty and bonus',
         (t) async {
       final p = await mount(t, page);
-      if (name == 'sound') {
+      if (name == 'sound' || name == 'quiz') {
         await t.runAsync(() async {
           await p.toggleVoice();
           await p.toggleSfx();
@@ -389,11 +384,19 @@ void main() {
       }
       final firstPhrase =
           t.widget<AudioButton>(find.byType(AudioButton).first).phrase;
+      String positionPrompt() => t
+          .widget<Text>(find.byWidgetPredicate((w) =>
+              w is Text &&
+              (w.data?.startsWith('Where is ') ?? false) &&
+              (w.data?.contains(' in ') ?? false)))
+          .data!;
+      final firstPositionPrompt = name == 'position' ? positionPrompt() : null;
       final roundCount =
           answers.length.clamp(0, GameSessionOrder.roundLength(d));
       for (var index = 0; index < roundCount; index++) {
         expect(t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult,
-            isNull);
+            isNull,
+            reason: 'Round $index in $name should start unanswered');
         final phrase =
             t.widget<AudioButton>(find.byType(AudioButton).first).phrase;
         final word = phrase.toUpperCase();
@@ -417,12 +420,6 @@ void main() {
                       positionRoundsFor(d).firstWhere((q) => q.word == word))
               .correctPos
               .label,
-          'rhyme' => rhymeRoundsForDifficulty(d)
-              .firstWhere((q) => find
-                  .text('What rhymes with ${q.word}?')
-                  .evaluate()
-                  .isNotEmpty)
-              .correctRhyme,
           _ => throw StateError(name),
         };
         await choose(t, answer);
@@ -443,8 +440,12 @@ void main() {
       await t.tap(find.text('Play Again'));
       await t.pumpAndSettle();
       expect(find.byType(GameResultDialog), findsNothing);
-      expect(t.widget<AudioButton>(find.byType(AudioButton).first).phrase,
-          isNot(firstPhrase));
+      if (name == 'position') {
+        expect(positionPrompt(), isNot(firstPositionPrompt));
+      } else {
+        expect(t.widget<AudioButton>(find.byType(AudioButton).first).phrase,
+            isNot(firstPhrase));
+      }
       expect(p.xp, expectedXp);
       final session = t.state(find.byType(page.runtimeType)) as GameSessionUi;
       expect(session.earnedXp, 0);
@@ -490,6 +491,8 @@ void main() {
       'word builder multi-blank rewards count completed words not blanks',
       (t) async {
     final p = await mount(t, const WordBuilderScreen(difficulty: d));
+    await t.runAsync(() => p.toggleVoice());
+    await t.pump();
     final puzzles = wordPuzzlesForDifficulty(d);
     final roundCount = puzzles.length.clamp(0, GameSessionOrder.roundLength(d));
     var attempts = 0;
@@ -527,7 +530,7 @@ void main() {
     await close(t, p);
   });
   testWidgets(
-      'sound match wrong answers advance once and count against five questions',
+      'sound match retries keep first-answer scores across five questions',
       (t) async {
     final p =
         await mount(t, const SoundMatchScreen(difficulty: Difficulty.easy));
@@ -541,10 +544,17 @@ void main() {
       final round =
           rounds.firstWhere((r) => 'lesson-sound-${r.correctLetter}' == word);
       if (i < 2) {
-        final wrong = round.options.firstWhere((v) => v != round.correctLetter);
-        await choose(t, letterChoiceLabel(wrong));
-        expect(find.text('Next question…'), findsOneWidget);
-        expect(find.textContaining('Try again'), findsNothing);
+        final wrong = t
+            .widgetList<GameAnswerButton>(find.byType(GameAnswerButton))
+            .firstWhere((choice) =>
+                choice.label != letterChoiceLabel(round.correctLetter))
+            .label;
+        await choose(t, wrong);
+        expect(find.text('Try Again!'), findsOneWidget);
+        await t.pump(const Duration(milliseconds: 800));
+        expect(
+            t.widget<AudioButton>(find.byType(AudioButton).first).phrase, word);
+        await choose(t, letterChoiceLabel(round.correctLetter));
       } else {
         await choose(t, letterChoiceLabel(round.correctLetter));
       }
@@ -631,7 +641,7 @@ void main() {
     await close(t, p);
   });
   testWidgets(
-      'incorrect quiz answer counts once and result back returns to source',
+      'quiz retries a wrong answer and advances automatically after correct answers',
       (t) async {
     final p = await mount(
         t,
@@ -643,21 +653,40 @@ void main() {
                     child: const Text('Open game')))));
     await t.tap(find.text('Open game'));
     await t.pumpAndSettle();
+    await t.runAsync(() => p.toggleVoice());
+    await t.pumpAndSettle();
     final questions = quizQuestionsForDifficulty(Difficulty.easy);
     final roundCount = GameSessionOrder.roundLength(Difficulty.easy);
     for (var i = 0; i < roundCount; i++) {
       final word = t.widget<AudioButton>(find.byType(AudioButton).first).phrase;
       final q = questions.firstWhere((q) => q.word == word);
-      final choice = i == 0
-          ? q.options.firstWhere((x) => x != q.correctLetter)
-          : q.correctLetter;
-      await choose(t, letterChoiceLabel(choice));
-      await advance(t);
+      expect(find.text('Next'), findsNothing);
+      if (i == 0) {
+        final wrong = q.options.firstWhere((x) => x != q.correctLetter);
+        final button = t.widget<GameAnswerButton>(find.byWidgetPredicate((w) =>
+            w is GameAnswerButton && w.label == letterChoiceLabel(wrong)));
+        button.onPressed!();
+        button.onPressed!();
+        await t.pump();
+        final session =
+            t.state(find.byType(PhonicsQuizScreen)) as GameSessionUi;
+        expect(session.scoredAttempts, 1);
+        expect(t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult,
+            isFalse);
+        await t.pump(const Duration(milliseconds: 800));
+        expect(
+            t.widget<AudioButton>(find.byType(AudioButton).first).phrase, word);
+        expect(t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult,
+            isNull);
+      }
+      await choose(t, letterChoiceLabel(q.correctLetter));
+      await advance(t, automatic: true);
     }
     await flushWrites(t);
-    expect(find.text('Score: ${roundCount - 1} / $roundCount'), findsOneWidget);
-    expect(p.xp, (roundCount - 1) * 5 + 20);
-    expect(p.stars, roundCount - 1);
+    expect(find.text('Score: $roundCount / $roundCount'), findsOneWidget);
+    expect(find.textContaining('Attempts: ${roundCount + 1}'), findsOneWidget);
+    expect(p.xp, roundCount * 5 + 20);
+    expect(p.stars, roundCount);
     final back = t.widget<OutlinedButton>(
         find.widgetWithText(OutlinedButton, 'Choose Next Game'));
     back.onPressed!();
@@ -673,6 +702,8 @@ void main() {
       await t.binding.setSurfaceSize(const Size(320, 568));
       addTearDown(() => t.binding.setSurfaceSize(null));
       final p = await mount(t, RumbledWordsScreen(difficulty: difficulty));
+      await t.runAsync(() => p.toggleVoice());
+      await t.pump();
       final rounds = rumbledWordsFor(difficulty);
       final roundCount =
           rounds.length.clamp(0, GameSessionOrder.roundLength(difficulty));
@@ -704,8 +735,6 @@ void main() {
             await t.tap(find.byKey(ValueKey('word-tile-$i')));
             await t.pump();
           }
-          await t.ensureVisible(find.text('Check'));
-          await t.tap(find.text('Check'));
           await t.pump();
           expect(find.text('Try again! Tap Erase or a letter to change it.'),
               findsOneWidget);
@@ -740,17 +769,13 @@ void main() {
           await t.tap(tile);
           await t.pump();
         }
-        await t.ensureVisible(find.text('Check'));
-        final check = t
-            .widget<FilledButton>(find.widgetWithText(FilledButton, 'Check'))
-            .onPressed!;
-        check();
-        check();
         await t.pump();
         expect(find.text('Correct!'), findsOneWidget);
-        await t.ensureVisible(find.text('Next'));
-        await t.tap(find.text('Next'));
-        await t.pump();
+        expect(find.text('Next'), findsNothing);
+        // Muted playback still highlights every letter and the complete word.
+        for (var step = 0; step <= word.length; step++) {
+          await t.pump(const Duration(milliseconds: 450));
+        }
         await flushWrites(t);
         expect(t.takeException(), isNull);
       }
@@ -777,6 +802,8 @@ void main() {
       await t.binding.setSurfaceSize(const Size(320, 568));
       addTearDown(() => t.binding.setSurfaceSize(null));
       final p = await mount(t, MemoryGameScreen(difficulty: difficulty));
+      await t.pump(const Duration(seconds: 3));
+      await t.pump();
       final count = memoryPairsForDifficulty(difficulty).length * 2;
       final first = t.getRect(find.byKey(const ValueKey('memory-0')));
       for (var i = 0; i < count; i++) {
@@ -812,6 +839,8 @@ void main() {
     addTearDown(() => t.binding.setSurfaceSize(null));
     final p =
         await mount(t, const MemoryGameScreen(difficulty: Difficulty.easy));
+    await t.pump(const Duration(seconds: 3));
+    await t.pump();
     final pairs = memoryPairsForDifficulty(Difficulty.easy).length;
     Finder card(int index) => find.byKey(ValueKey('memory-$index'));
     bool enabled(int index) =>

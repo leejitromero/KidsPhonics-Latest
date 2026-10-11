@@ -54,21 +54,21 @@ void main() {
     lesson.introduce();
     await t.pump();
     expect(lesson.phase, BlendingPhase.puzzle);
-    expect(lesson.order.map((i) => lesson.word.word[i]).join(), isNot('DOG'));
+    expect(lesson.order.map((i) => lesson.word.word[i]).join(), isNot('SUN'));
     expect(lesson.place(2, 2), isTrue);
     expect(lesson.place(0, 0), isTrue);
     expect(lesson.place(1, 1), isTrue);
     await finish(t);
     expect(heard, [
       'blend-intro',
-      'lesson-sound-G',
-      'lesson-sound-D',
-      'lesson-sound-O',
-      'lesson-sound-D',
-      'lesson-sound-O',
-      'lesson-sound-G',
-      'blend-word-dog',
-      'blend-praise-dog'
+      'lesson-sound-N',
+      'lesson-sound-S',
+      'lesson-sound-U',
+      'lesson-sound-S',
+      'lesson-sound-U',
+      'lesson-sound-N',
+      'blend-word-sun',
+      'blend-praise-sun'
     ]);
     expect(lesson.phase, BlendingPhase.complete);
     expect(lesson.joined, isTrue);
@@ -92,21 +92,21 @@ void main() {
     expect(lesson.slots, [0, null, null]);
     lesson.dispose();
   });
-  testWidgets('matching duplicate letters use distinct draggable pieces',
+  testWidgets('last word rejects reused pieces and stays at the end',
       (t) async {
     final lesson = controller();
     for (var i = 1; i < blendingLessonWords.length; i++) {
       lesson.next();
     }
-    expect(lesson.word.word, 'PUP');
-    expect(lesson.place(2, 0), isTrue);
-    expect(lesson.place(2, 2), isFalse);
-    expect(lesson.place(0, 2), isTrue);
+    expect(lesson.word.word, 'WIG');
+    expect(lesson.place(0, 0), isTrue);
+    expect(lesson.place(0, 2), isFalse);
+    expect(lesson.place(2, 2), isTrue);
     expect(lesson.place(1, 1), isTrue);
     await finish(t);
     expect(lesson.phase, BlendingPhase.complete);
     lesson.next();
-    expect(lesson.word.word, 'PUP');
+    expect(lesson.word.word, 'WIG');
     lesson.dispose();
   });
   testWidgets(
@@ -120,10 +120,10 @@ void main() {
     lesson.hearAgain();
     await finish(t);
     expect(heard, [
-      'lesson-sound-D',
-      'lesson-sound-O',
-      'lesson-sound-G',
-      'blend-word-dog'
+      'lesson-sound-S',
+      'lesson-sound-U',
+      'lesson-sound-N',
+      'blend-word-sun'
     ]);
     expect(lesson.slots, [0, null, null]);
     expect(lesson.complete, isFalse);
@@ -152,15 +152,15 @@ void main() {
     lesson.reset();
     pending[0].complete(true);
     await finish(t);
-    expect(heard, ['lesson-sound-D']);
+    expect(heard, ['lesson-sound-S']);
     expect(lesson.slots, [null, null, null]);
     lesson.place(0, 0);
     await t.pump();
     lesson.next();
     pending[1].complete(true);
     await finish(t);
-    expect(heard, ['lesson-sound-D', 'lesson-sound-D']);
-    expect(lesson.word.word, 'CAT');
+    expect(heard, ['lesson-sound-S', 'lesson-sound-S']);
+    expect(lesson.word.word, 'CUP');
     expect(lesson.slots, [null, null, null]);
     lesson.dispose();
   });
@@ -171,7 +171,7 @@ void main() {
     await t.pump();
     lesson.setVoiceEnabled(false);
     await finish(t);
-    expect(heard, ['lesson-sound-D']);
+    expect(heard, ['lesson-sound-S']);
     lesson.hearAgain();
     await t.pump();
     lesson.pause();
@@ -182,7 +182,7 @@ void main() {
     await t.pump();
     lesson.dispose();
     await finish(t);
-    expect(heard, ['lesson-sound-D', 'lesson-sound-D']);
+    expect(heard, ['lesson-sound-S', 'lesson-sound-S']);
   });
   testWidgets('missing audio still allows the puzzle and celebration',
       (t) async {
@@ -197,10 +197,11 @@ void main() {
     expect(lesson.running, isFalse);
     lesson.dispose();
   });
-  test('all 40 words have bundled word, praise, phonemes and picture support',
+  test(
+      'all 22 supplied words have bundled word, praise, phonemes and picture support',
       () async {
-    expect(blendingLessonWords, hasLength(40));
-    expect(blendingLessonWords.map((w) => w.word).toSet(), hasLength(40));
+    expect(blendingLessonWords, hasLength(22));
+    expect(blendingLessonWords.map((w) => w.word).toSet(), hasLength(22));
     for (final word in blendingLessonWords) {
       expect(
           word.imageAsset != null ||
@@ -223,14 +224,12 @@ void main() {
         expect(asset, isNotNull);
         final data = await rootBundle.load('assets/$asset');
         expect(data.lengthInBytes, greaterThan(44));
-        if (asset!.endsWith('.wav')) {
-          expect(String.fromCharCodes(data.buffer.asUint8List(0, 4)), 'RIFF');
-        }
+        expect(asset, endsWith('.mp3'));
       }
     }
     expect(
         Directory('assets/audio/blending_lesson').listSync().whereType<File>(),
-        hasLength(68));
+        hasLength(46));
   });
 
   testWidgets(
@@ -253,7 +252,7 @@ void main() {
     }
     await finish(t);
     expect(lesson.phase, BlendingPhase.complete);
-    expect(find.text('DOG'), findsOneWidget);
+    expect(find.text('SUN'), findsOneWidget);
     await t.tap(control('Hear Again'));
     await finish(t);
     expect(lesson.phase, BlendingPhase.complete);
@@ -262,7 +261,7 @@ void main() {
     expect(lesson.slots, [null, null, null]);
     await t.tap(control('Next'));
     await t.pump();
-    expect(lesson.word.word, 'CAT');
+    expect(lesson.word.word, 'CUP');
     expect(p.xp, 0);
     expect(p.stars, 0);
     expect(p.dailyActivity, isEmpty);

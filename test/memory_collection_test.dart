@@ -23,6 +23,8 @@ void main() {
       mockProgressAudio();
       final p =
           await mount(t, const MemoryGameScreen(difficulty: Difficulty.easy));
+      await t.pump(const Duration(seconds: 3));
+      await t.pump();
       final total = t.widget<GameScaffold>(find.byType(GameScaffold)).total!;
       Finder card(int i) => find.byKey(ValueKey('memory-$i'));
       bool enabled(int i) =>

@@ -83,6 +83,9 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
   OverlayEntry? _flightEntry;
   bool _celebrating = false;
   late final AnimationController _clock;
+  late final AnimationController _previewClock;
+  bool _previewing = true;
+  int _previewSeconds = 3;
   late int _secondsLeft;
   bool _started = false, _paused = false, _practice = false;
   bool _timeUpOpen = false, _foreground = true, _routeCurrent = true;
@@ -93,7 +96,13 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
       };
 
   void _syncClock() {
+    if (_previewing && _foreground && _routeCurrent) {
+      if (!_previewClock.isAnimating) _previewClock.forward();
+    } else {
+      _previewClock.stop();
+    }
     if (_started &&
+        !_previewing &&
         !_paused &&
         !_practice &&
         _foreground &&
@@ -178,6 +187,21 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
     _foreground = WidgetsBinding.instance.lifecycleState == null ||
         WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed;
     _secondsLeft = _roundSeconds;
+    _previewClock = AnimationController(
+        vsync: this,
+        duration: const Duration(seconds: 3),
+        animationBehavior: AnimationBehavior.preserve)
+      ..addListener(() {
+        final seconds =
+            (3 * (1 - _previewClock.value) - 1e-9).ceil().clamp(0, 3);
+        if (seconds != _previewSeconds) {
+          setState(() {
+            _previewSeconds = seconds;
+            if (seconds == 0) _previewing = false;
+          });
+          if (seconds == 0) _syncClock();
+        }
+      });
     _clock = AnimationController(
         vsync: this,
         duration: Duration(seconds: _roundSeconds),
@@ -203,6 +227,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _clock.dispose();
+    _previewClock.dispose();
     _flightEntry?.remove();
     _flight.dispose();
     _fireworks.dispose();
@@ -272,6 +297,10 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
   }
 
   void _initCards() {
+    _previewClock.stop();
+    _previewClock.value = 0;
+    _previewing = true;
+    _previewSeconds = 3;
     _clock.stop();
     _secondsLeft = _roundSeconds;
     _clock.value = 1;
@@ -297,12 +326,14 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
       _collected.clear();
       _celebrating = false;
     });
+    _syncClock();
   }
 
   int get _totalPairs => memoryPairsForDifficulty(widget.difficulty).length;
 
   void _tapCard(_MemCard card) async {
-    if (_locked ||
+    if (_previewing ||
+        _locked ||
         _paused ||
         (!_practice && _secondsLeft == 0) ||
         resultOpen ||
@@ -337,7 +368,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
           _matchCount++;
         });
         if (_matchCount == _totalPairs) _clock.stop();
-        if (provider.voiceEnabled) provider.phonicsAudio.tryPlay(a.id);
+        playGameCorrect();
         awardGameXp((5 * widget.difficulty.xpMultiplier).round());
         awardGameStar();
         await _collect(a);
@@ -356,7 +387,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
         _offerTimeUp();
       } else {
         // Show red flash on mismatched cards — wrong.mp3 only, no voice
-        provider.audio.playWrong();
+        playGameWrong();
         if (!mounted) return;
         setState(() {
           _wrongCardIds = {a, b};
@@ -390,12 +421,16 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+        narration: gameNarration,
+        narrationEnabled: !_paused && !_timeUpOpen && !resultOpen,
         tutorial: GameTutorial.memoryFlip,
         canOpenTutorial: () =>
             !_locked && !resultOpen && !_paused && !_timeUpOpen,
         answerResult: _answerResult,
         title: 'Memory Flip',
-        instructions: 'Tap two cards. Find a pair!',
+        instructions: _previewing
+            ? 'Look at the pictures. Remember their places!'
+            : 'Tap two cards. Find a pair!',
         fitViewport: true,
         difficulty: widget.difficulty,
         current: _matchCount,
@@ -447,7 +482,11 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
                     _paused ? Icons.play_arrow_rounded : Icons.pause_rounded),
               ),
             ]),
-            if (!_started)
+            if (_previewing)
+              Text('Remember the pictures! $_previewSeconds',
+                  key: const ValueKey('memory-preview'),
+                  style: const TextStyle(fontSize: 12))
+            else if (!_started)
               const Text('Timer starts on your first flip',
                   style: TextStyle(fontSize: 12)),
             ForestPanel(
@@ -561,7 +600,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
 
   Widget _buildCard(int index) {
     final card = _cards[index];
-    final shown = card.isFlipped || card.isMatched;
+    final shown = _previewing || card.isFlipped || card.isMatched;
     final wrong = _wrongCardIds.contains(card);
     return FloatingChoice(
         enabled: !_locked && !shown && !resultOpen,
@@ -573,7 +612,8 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
               : 'Hidden card ${index + 1}',
           child: AnswerChoiceButton(
             buttonKey: ValueKey('memory-$index'),
-            onPressed: _locked ||
+            onPressed: _previewing ||
+                    _locked ||
                     _paused ||
                     (!_practice && _secondsLeft == 0) ||
                     card.isMatched ||

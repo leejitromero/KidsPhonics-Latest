@@ -34,8 +34,8 @@ void main() {
       expect(find.byType(Scrollable), findsNothing);
       for (final choice in tester
           .widgetList<GameAnswerButton>(find.byType(GameAnswerButton))) {
-        final rect =
-            tester.getRect(find.widgetWithText(GameAnswerButton, choice.label));
+        final rect = tester.getRect(find.byWidgetPredicate(
+            (w) => w is GameAnswerButton && w.label == choice.label));
         expect(rect.bottom, lessThanOrEqualTo(568));
         expect(rect.width, lessThanOrEqualTo(100));
       }

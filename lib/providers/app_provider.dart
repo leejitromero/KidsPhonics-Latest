@@ -3,7 +3,9 @@ import 'dart:async';
 import 'dart:convert';
 import '../services/parent_auth_service.dart';
 import '../services/screen_time_service.dart';
+import '../services/preference_write_queue.dart';
 import '../models/learning_progress.dart';
+import '../models/letter_adventure.dart';
 import '../models/weekly_learning_summary.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -59,11 +61,135 @@ class AppProvider extends ChangeNotifier {
   int _streak = 0;
   int _stars = 0;
   final Map<String, LetterProgress> _letterProgress = {};
+  final Map<String, AdventureProgress> _adventures = {};
+  AdventureProgress adventureProgress(String letter) =>
+      _adventures[letter] ?? const AdventureProgress();
+  int get overallMasteredCount =>
+      _adventures.values.where((p) => p.mastered).length;
+  int get adventureAssessments =>
+      _adventures.values.fold(0, (sum, p) => sum + p.completed);
+
+  /// Current Quick Check presentation, keeping lesson exposure independently.
+  /// Legacy assessment mastery never substitutes for a new Letter Adventure.
+  LetterProgress quickCheckLetter(String letter) {
+    final exposure = getLetterProgress(letter);
+    final check = adventureProgress(exposure.letter);
+    final practiceAttempts =
+        (exposure.attempts - exposure.completedAssessments * 5)
+            .clamp(0, exposure.attempts);
+    return LetterProgress(
+        letter: exposure.letter,
+        viewCount: exposure.viewCount,
+        attempts: check.completed > 0 ? 5 : practiceAttempts,
+        correctAnswers: check.completed > 0 ? check.lastScore : 0,
+        completedAssessments: check.completed,
+        bestAssessmentScore: check.best,
+        mastered: check.mastered,
+        masteredAt: check.masteredAt,
+        nameListens: exposure.nameListens,
+        soundListens: exposure.soundListens,
+        wordListens: exposure.wordListens);
+  }
+
+  List<LetterProgress> get quickCheckLetters => [
+        for (var code = 65; code <= 90; code++)
+          quickCheckLetter(String.fromCharCode(code))
+      ];
+  int quickCheckStatusCount(LearningStatus status) =>
+      quickCheckLetters.where((p) => p.status == status).length;
+  int get quickCheckVowelsMastered => quickCheckLetters
+      .where((p) => 'AEIOU'.contains(p.letter) && p.mastered)
+      .length;
+  static const adventureMilestones = [1, 5, 10, 15, 20, 26];
+  String? get recommendedAdventureLetter {
+    final pending = adventureContents
+        .map((c) => c.letter)
+        .where((letter) => !adventureProgress(letter).mastered)
+        .toList();
+    pending.sort((a, b) {
+      final pa = adventureProgress(a), pb = adventureProgress(b);
+      final attempted =
+          (pa.completed == 0 ? 1 : 0).compareTo(pb.completed == 0 ? 1 : 0);
+      if (attempted != 0) return attempted;
+      final score = pa.lastScore.compareTo(pb.lastScore);
+      return score != 0 ? score : a.compareTo(b);
+    });
+    return pending.isEmpty ? null : pending.first;
+  }
+
+  Future<({int xp, int stars})> completeAdventure(
+      String letter, List<bool> answers, String sessionId) async {
+    if (!RegExp(r'^[A-Z]$').hasMatch(letter) ||
+        answers.length != 5 ||
+        sessionId.isEmpty) {
+      throw ArgumentError(
+          'A letter adventure requires five first responses and a session identity.');
+    }
+    await ready;
+    final previous = adventureProgress(letter);
+    if (previous.sessionId == sessionId) return (xp: 0, stars: 0);
+    final score = answers.where((v) => v).length;
+    final newMastery = !previous.mastered && AdventurePolicy.passes(answers);
+    final xp = (previous.completed == 0 ? 5 : 0) + (newMastery ? 25 : 0);
+    final stars = newMastery ? 1 : 0;
+    _adventures[letter] = AdventureProgress(
+        completed: previous.completed + 1,
+        best: score > previous.best ? score : previous.best,
+        mastered: previous.mastered || newMastery,
+        masteredAt: previous.masteredAt ??
+            (newMastery ? _now().toIso8601String() : null),
+        lastAnswers: List.unmodifiable(answers),
+        sessionId: sessionId);
+    for (final correct in answers) {
+      _recordAnswer(correct);
+    }
+    _recordCompletion();
+    _xp += xp;
+    _stars += stars;
+    _changed();
+    await _savePrefs();
+    return (xp: xp, stars: stars);
+  }
+
   final Map<String, DailyActivity> _dailyActivity = {};
   final DateTime Function() _now;
   String? _lastPracticeDate;
-  late final Future<void> ready;
-  Future<void> _pendingSave = Future.value();
+  late Future<void> ready;
+  Object? _loadError;
+  bool get hasLoadError => _loadError != null;
+  Future<void> retryLoading() {
+    if (isReady || !hasLoadError) return ready;
+    _loadError = null;
+    ready = _loadPrefs();
+    _changed();
+    return ready;
+  }
+
+  final _saveQueue = PreferenceWriteQueue();
+  bool get hasUnsavedChanges => _saveQueue.lastError != null;
+  Future<void> retrySaving() async {
+    await ready;
+    await _savePrefs();
+    await screenTime.save();
+  }
+
+  Object? _timeDisplay;
+  void _screenTimeChanged() {
+    final display = (
+      screenTime.usedSecondsToday ~/ 60,
+      screenTime.dateKey,
+      screenTime.isLimitReached,
+      screenTime.isLimitEnabled,
+      screenTime.dailyLimitMinutes,
+      screenTime.extraSecondsToday,
+      screenTime.isBypassedToday,
+      screenTime.hasUnsavedChanges
+    );
+    if (_timeDisplay == display) return;
+    _timeDisplay = display;
+    _changed();
+  }
+
   bool _disposed = false;
 
   late final ParentAuthService parentAuth;
@@ -137,7 +263,8 @@ class AppProvider extends ChangeNotifier {
   // adding a duplicate persisted flag or re-awarding anything on rebuild.
   bool get hasThreeDayLearningStreak {
     final dates = _dailyActivity.entries
-        .where((e) => e.value.questionsAnswered > 0)
+        .where(
+            (e) => e.value.questionsAnswered > 0 || e.value.speechAttempts > 0)
         .map((e) => DateTime.tryParse(e.key))
         .whereType<DateTime>()
         .map(calendarDay)
@@ -171,6 +298,20 @@ class AppProvider extends ChangeNotifier {
       ];
   int get unlockedAchievementCount =>
       learningAchievements.where((a) => a.unlocked).length;
+  List<LearningAchievement> get quickCheckAchievements => [
+        LearningAchievement('First Mastery', 'Mastered your first letter',
+            overallMasteredCount >= 1),
+        LearningAchievement('5 Letters Mastered', 'Mastered 5 letters',
+            overallMasteredCount >= 5),
+        LearningAchievement(
+            'Halfway There', 'Mastered 13 letters', overallMasteredCount >= 13),
+        LearningAchievement('Alphabet Master', 'Mastered all 26 letters',
+            overallMasteredCount >= 26),
+        LearningAchievement(
+            '3-Day Streak',
+            'Answered questions on 3 consecutive days',
+            hasThreeDayLearningStreak),
+      ];
   double? get overallActivityAccuracy {
     final attempts =
         _dailyActivity.values.fold(0, (n, d) => n + d.questionsAnswered);
@@ -282,6 +423,21 @@ class AppProvider extends ChangeNotifier {
     await _savePrefs();
   }
 
+  Future<void> recordLetterListening(
+      String letter, LetterListeningKind kind) async {
+    await ready;
+    final p = getLetterProgress(letter);
+    _letterProgress[p.letter] = p.copyWith(
+        viewCount: p.viewCount == 0 ? 1 : p.viewCount,
+        nameListens: p.nameListens + (kind == LetterListeningKind.name ? 1 : 0),
+        soundListens:
+            p.soundListens + (kind == LetterListeningKind.sound ? 1 : 0),
+        wordListens:
+            p.wordListens + (kind == LetterListeningKind.word ? 1 : 0));
+    _changed();
+    await _savePrefs();
+  }
+
   Future<void> recordLetterPractice(String letter, bool correct) async {
     await ready;
     final p = getLetterProgress(letter);
@@ -331,10 +487,14 @@ class AppProvider extends ChangeNotifier {
   void _recordAnswer(bool correct) {
     final key = localDateKey(_now());
     final d = _dailyActivity[key] ?? const DailyActivity();
-    _dailyActivity[key] = DailyActivity(
+    _dailyActivity[key] = d.copyWith(
         questionsAnswered: d.questionsAnswered + 1,
         correctAnswers: d.correctAnswers + (correct ? 1 : 0),
         activitiesCompleted: d.activitiesCompleted);
+    _recordPracticeDay(key);
+  }
+
+  void _recordPracticeDay(String key) {
     if (_lastPracticeDate != key) {
       final gap = _lastPracticeDate == null
           ? null
@@ -352,10 +512,32 @@ class AppProvider extends ChangeNotifier {
     await _savePrefs();
   }
 
+  Future<void> recordSpeechPractice({required bool correct}) async {
+    await ready;
+    final key = localDateKey(_now());
+    final d = _dailyActivity[key] ?? const DailyActivity();
+    _dailyActivity[key] = d.copyWith(
+        speechAttempts: d.speechAttempts + 1,
+        speechRecognized: d.speechRecognized + (correct ? 1 : 0));
+    _recordPracticeDay(key);
+    _changed();
+    await _savePrefs();
+  }
+
+  Future<void> recordSpeechCompletion() async {
+    await ready;
+    final key = localDateKey(_now());
+    final d = _dailyActivity[key] ?? const DailyActivity();
+    _dailyActivity[key] =
+        d.copyWith(speechActivitiesCompleted: d.speechActivitiesCompleted + 1);
+    _changed();
+    await _savePrefs();
+  }
+
   void _recordCompletion() {
     final key = localDateKey(_now());
     final d = _dailyActivity[key] ?? const DailyActivity();
-    _dailyActivity[key] = DailyActivity(
+    _dailyActivity[key] = d.copyWith(
         questionsAnswered: d.questionsAnswered,
         correctAnswers: d.correctAnswers,
         activitiesCompleted: d.activitiesCompleted + 1);
@@ -381,48 +563,71 @@ class AppProvider extends ChangeNotifier {
   }
 
   // Parent-authorized reset; authentication and screen time are separate stores.
-  Future<void> resetProgress() async {
+  Future<bool> resetProgress() async {
     await ready;
     parentAuth.requireSession();
     _xp = 0;
     _streak = 0;
     _stars = 0;
     _letterProgress.clear();
+    _adventures.clear();
     _journeyScores.clear();
     _dailyActivity.clear();
     _lastPracticeDate = null;
     _rhymingWordsDone = false;
     _changed();
     await _savePrefs();
+    return !hasUnsavedChanges;
   }
   // ── Persistence ───────────────────────────────────────────────────────────
 
   Future<void> _loadPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs;
+    try {
+      prefs = await SharedPreferences.getInstance();
+    } catch (error) {
+      // Do not continue with empty data or overwrite an unreadable save.
+      _loadError = error;
+      _changed();
+      return;
+    }
+    final snapshot = _decodeMap(prefs.get('appStateV1'));
+    Object? read(String key) =>
+        snapshot.containsKey(key) ? snapshot[key] : prefs.get(key);
+    T setting<T>(String key, T fallback) {
+      final value = read(key);
+      return value is T ? value : fallback;
+    }
+
     if (_disposed) return;
     parentAuth = ParentAuthService(prefs, now: _now);
     screenTime = ScreenTimeService(prefs, parentAuth, now: _now);
-    screenTime.addListener(_changed);
+    screenTime.addListener(_screenTimeChanged);
     parentAuth.addListener(_authChanged);
     isReady = true;
-    _voiceEnabled = _read(prefs, 'voice', true);
-    _sfxEnabled = _read(prefs, 'sfx', true);
-    _musicEnabled = _read(prefs, 'musicEnabled', true);
-    final volume = prefs.get('musicVolume');
+    _voiceEnabled = setting('voice', true);
+    _sfxEnabled = setting('sfx', true);
+    _musicEnabled = setting('musicEnabled', true);
+    final volume = read('musicVolume');
     _musicVolume =
         volume is num && volume.isFinite ? volume.toDouble().clamp(0, .4) : .12;
-    _gameAccess = _read(prefs, 'gameAccess', true);
+    _gameAccess = setting('gameAccess', true);
 
-    _rhymingWordsDone = _read(prefs, 'rhymingDone', false);
-    for (final entry in _decodeMap(prefs.get('journeyScoresV1')).entries) {
+    _rhymingWordsDone = setting('rhymingDone', false);
+    for (final entry in _decodeMap(read('letterAdventuresV1')).entries) {
+      if (RegExp(r'^[A-Z]$').hasMatch(entry.key) && entry.value is Map) {
+        _adventures[entry.key] = AdventureProgress.fromJson(entry.value as Map);
+      }
+    }
+    for (final entry in _decodeMap(read('journeyScoresV1')).entries) {
       if (entry.value is int && entry.value >= 0 && entry.value <= 100) {
         _journeyScores[entry.key] = entry.value as int;
       }
     }
-    _xp = safeCount(prefs.get('xp'));
-    _streak = safeCount(prefs.get('streakV2'));
-    _stars = safeCount(prefs.get('stars'));
-    final saved = prefs.get('letterProgressV2');
+    _xp = safeCount(read('xp'));
+    _streak = safeCount(read('streakV2'));
+    _stars = safeCount(read('stars'));
+    final saved = read('letterProgressV2');
     if (saved != null) {
       for (final entry in _decodeMap(saved).entries) {
         if (!RegExp(r'^[A-Z]$').hasMatch(entry.key) || entry.value is! Map) {
@@ -443,23 +648,20 @@ class AppProvider extends ChangeNotifier {
           _letterProgress[key] = LetterProgress(letter: key, viewCount: 1);
         }
       }
-      final migrated = await prefs.setString('letterProgressV2',
-          jsonEncode(_letterProgress.map((k, v) => MapEntry(k, v.toJson()))));
-      if (migrated) await prefs.remove('learned');
+      await _saveQueue.save(prefs, {
+        'letterProgressV2':
+            jsonEncode(_letterProgress.map((k, v) => MapEntry(k, v.toJson()))),
+        'learned': null,
+      });
     }
-    for (final entry in _decodeMap(prefs.get('dailyActivityV1')).entries) {
+    for (final entry in _decodeMap(read('dailyActivityV1')).entries) {
       if (validLocalDate(entry.key) == null || entry.value is! Map) continue;
       _dailyActivity[entry.key] =
           DailyActivity.fromJson(Map<String, dynamic>.from(entry.value as Map));
     }
-    _lastPracticeDate = validLocalDate(prefs.get('lastPracticeDateV1'));
+    _lastPracticeDate = validLocalDate(read('lastPracticeDateV1'));
     audio.enabled = _sfxEnabled;
     _changed();
-  }
-
-  static T _read<T>(SharedPreferences prefs, String key, T fallback) {
-    final value = prefs.get(key);
-    return value is T ? value : fallback;
   }
 
   static Map<String, dynamic> _decodeMap(Object? value) {
@@ -472,7 +674,7 @@ class AppProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> _savePrefs() {
+  Future<void> _savePrefs() async {
     // Serialize snapshots so an older save cannot overwrite a newer result.
     final letters =
         jsonEncode(_letterProgress.map((k, v) => MapEntry(k, v.toJson())));
@@ -490,35 +692,24 @@ class AppProvider extends ChangeNotifier {
       'stars': _stars,
       'streakV2': streak,
       'letterProgressV2': letters,
+      'letterAdventuresV1':
+          jsonEncode(_adventures.map((k, v) => MapEntry(k, v.toJson()))),
       'dailyActivityV1': activity,
     };
-    final lastDate = _lastPracticeDate;
-    _pendingSave = _pendingSave.then((_) async {
-      final prefs = await SharedPreferences.getInstance();
-      for (final entry in values.entries) {
-        final value = entry.value;
-        if (value is bool) {
-          await prefs.setBool(entry.key, value);
-        }
-        if (value is int) {
-          await prefs.setInt(entry.key, value);
-        }
-        if (value is double) {
-          await prefs.setDouble(entry.key, value);
-        }
-        if (value is String) {
-          await prefs.setString(entry.key, value);
-        }
-      }
-      if (lastDate == null) {
-        await prefs.remove('lastPracticeDateV1');
-      } else {
-        await prefs.setString('lastPracticeDateV1', lastDate);
-      }
-      await prefs.remove('learned');
-      await prefs.remove('streak');
+    final snapshot = <String, Object?>{
+      ...values,
+      'lastPracticeDateV1': _lastPracticeDate,
+    };
+    final prefs = await SharedPreferences.getInstance();
+    // Commit one authoritative snapshot before mirroring legacy keys.
+    final errorBefore = hasUnsavedChanges;
+    await _saveQueue.save(prefs, {
+      'appStateV1': jsonEncode(snapshot),
+      ...snapshot,
+      'learned': null,
+      'streak': null,
     });
-    return _pendingSave;
+    if (errorBefore != hasUnsavedChanges) _changed();
   }
 
   @override
@@ -527,7 +718,7 @@ class AppProvider extends ChangeNotifier {
     unawaited(_masteryMilestones.close());
     if (isReady) {
       parentAuth.removeListener(_authChanged);
-      screenTime.removeListener(_changed);
+      screenTime.removeListener(_screenTimeChanged);
       screenTime.dispose();
       parentAuth.dispose();
     }

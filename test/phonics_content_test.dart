@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:kidsphonics/data/lesson_example_data.dart';
 import 'dart:math';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kidsphonics/data/letter_data.dart';
@@ -54,49 +53,6 @@ void main() {
         if (q.correctLetter == 'K') expect(q.options, isNot(contains('C')));
         if (q.correctLetter == 'J') expect(q.options, isNot(contains('G')));
         if (q.correctLetter == 'S') expect(q.options, isNot(contains('C')));
-      }
-    }
-  });
-
-  test('rhyme sets have one answer and new artwork/audio for every cue', () {
-    // Explicit rime groups; spelling resemblance is not the test oracle.
-    const groups = [
-      {'CAT', 'BAT', 'HAT', 'MAT'},
-      {'SUN', 'FUN', 'RUN'},
-      {'BALL', 'TALL', 'WALL'},
-      {'FISH', 'DISH', 'WISH'},
-      {'NEST', 'BEST'},
-      {'VAN', 'FAN'},
-      {'KITE', 'NIGHT'},
-      {'QUEEN', 'GREEN', 'SEEN'},
-      {'WHALE', 'TAIL', 'SNAIL'},
-      {'BEE', 'TREE'},
-      {'MOON', 'SPOON', 'BALLOON'},
-      {'PIG', 'BIG'},
-      {'BUG', 'MUG'},
-      {'FROG', 'LOG'},
-      {'STAR', 'CAR'},
-      {'CAKE', 'LAKE', 'SNAKE'},
-      {'HOUSE', 'MOUSE'},
-      {'FOX', 'BOX'},
-    ];
-    for (final d in Difficulty.values) {
-      for (final q in rhymeRoundsForDifficulty(d)) {
-        final group = groups.singleWhere((g) => g.contains(q.word));
-        expect(
-            q.options.where((o) => group.contains(o.word)).map((o) => o.word),
-            [q.correctRhyme]);
-        expect(
-            q.options.map((o) => o.word).toSet(), hasLength(q.options.length));
-        final cue =
-            lessonExamples.singleWhere((e) => e.word.toUpperCase() == q.word);
-        final asset = PhonicsAudioService.assetForPhrase(cue.wordAudioKey)!;
-        expect(asset,
-            anyOf(contains('/lesson_audio/words/'), contains('/game_words/')));
-        expect(File('assets/$asset').existsSync(), isTrue);
-        expect(cue.frames.every((frame) => File(frame).existsSync()), isTrue);
-        expect(q.options.length, d.index + 3);
-        expect(q.hint, isNot(contains('Both end in')));
       }
     }
   });

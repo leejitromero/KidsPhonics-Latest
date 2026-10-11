@@ -18,6 +18,71 @@ void main() {
       t.widget<Text>(find.byKey(const ValueKey('memory-timer'))).data!;
   Finder card(int i) => find.byKey(ValueKey('memory-$i'));
 
+  testWidgets('preview shows all pictures for three seconds without scoring',
+      (t) async {
+    t.binding.platformDispatcher.accessibilityFeaturesTestValue =
+        const FakeAccessibilityFeatures(disableAnimations: true);
+    addTearDown(
+        t.binding.platformDispatcher.clearAccessibilityFeaturesTestValue);
+    final p =
+        await mount(t, const MemoryGameScreen(difficulty: Difficulty.easy));
+    final count = t.widget<GameScaffold>(find.byType(GameScaffold)).total! * 2;
+    final session = t.state(find.byType(MemoryGameScreen)) as GameSessionUi;
+    expect(find.byType(GameWordPicture), findsNWidgets(count));
+    for (var i = 0; i < count; i++) {
+      expect(t.widget<ElevatedButton>(card(i)).onPressed, isNull);
+    }
+    await t.tap(card(0));
+    await t.pump(const Duration(milliseconds: 2999));
+    expect(find.byKey(const ValueKey('memory-preview')), findsOneWidget);
+    expect(find.byType(GameWordPicture), findsNWidgets(count));
+    expect(timer(t), 'Time 1:00');
+    expect(session.scoredAttempts, 0);
+    expect(p.xp, 0);
+    expect(p.stars, 0);
+    await t.pump(const Duration(milliseconds: 1));
+    await t.pump();
+    expect(find.byKey(const ValueKey('memory-preview')), findsNothing);
+    expect(find.byType(GameWordPicture), findsNothing);
+    expect(t.widget<ElevatedButton>(card(0)).onPressed, isNotNull);
+    expect(timer(t), 'Time 1:00');
+    await t.tap(card(0));
+    await t.pump();
+    await t.pump(const Duration(seconds: 1));
+    expect(timer(t), 'Time 0:59');
+    await close(t, p);
+  });
+
+  testWidgets('preview pauses behind dialogs and while the app is inactive',
+      (t) async {
+    t.binding.platformDispatcher.accessibilityFeaturesTestValue =
+        const FakeAccessibilityFeatures(disableAnimations: true);
+    addTearDown(
+        t.binding.platformDispatcher.clearAccessibilityFeaturesTestValue);
+    final p =
+        await mount(t, const MemoryGameScreen(difficulty: Difficulty.easy));
+    await t.pump(const Duration(seconds: 1));
+    t.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    await t.pump(const Duration(seconds: 10));
+    expect(find.text('Remember the pictures! 2'), findsOneWidget);
+    t.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await t.pump();
+    final context = t.element(find.byType(MemoryGameScreen));
+    showDialog<void>(
+        context: context,
+        builder: (_) => const AlertDialog(title: Text('Preview help')));
+    await t.pump();
+    await t.pump(const Duration(seconds: 10));
+    expect(find.text('Remember the pictures! 2'), findsOneWidget);
+    Navigator.pop(context);
+    await t.pump();
+    await t.pump(const Duration(seconds: 2));
+    await t.pump();
+    expect(find.byKey(const ValueKey('memory-preview')), findsNothing);
+    expect(timer(t), 'Time 1:00');
+    await close(t, p);
+  });
+
   testWidgets('a pending pair resolves before timeout and restart', (t) async {
     t.binding.platformDispatcher.accessibilityFeaturesTestValue =
         const FakeAccessibilityFeatures(disableAnimations: true);
@@ -25,6 +90,8 @@ void main() {
         t.binding.platformDispatcher.clearAccessibilityFeaturesTestValue);
     final p =
         await mount(t, const MemoryGameScreen(difficulty: Difficulty.easy));
+    await t.pump(const Duration(seconds: 3));
+    await t.pump();
     await t.tap(card(0));
     await t.pump();
     await t.pump(const Duration(milliseconds: 59500));
@@ -44,6 +111,9 @@ void main() {
     await t.pump(const Duration(seconds: 2));
     expect(timer(t), 'Time 1:00');
     expect(session.scoredAttempts, 0);
+    expect(find.byType(GameWordPicture), findsWidgets);
+    await t.pump(const Duration(seconds: 1));
+    await t.pump();
     expect(find.byType(GameWordPicture), findsNothing);
     await close(t, p);
   });
@@ -104,6 +174,8 @@ void main() {
         t.binding.platformDispatcher.clearAccessibilityFeaturesTestValue);
     final p =
         await mount(t, const MemoryGameScreen(difficulty: Difficulty.easy));
+    await t.pump(const Duration(seconds: 3));
+    await t.pump();
     await t.tap(card(0));
     await t.pump();
     await t.pump(const Duration(seconds: 5));
@@ -140,6 +212,9 @@ void main() {
     await t.pump();
     await t.pump(const Duration(milliseconds: 300));
     expect(timer(t), 'Time 1:00');
+    expect(find.byType(GameWordPicture), findsWidgets);
+    await t.pump(const Duration(seconds: 3));
+    await t.pump();
     expect(find.byType(GameWordPicture), findsNothing);
     await t.pump(const Duration(seconds: 20));
     expect(timer(t), 'Time 1:00');

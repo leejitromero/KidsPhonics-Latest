@@ -1,9 +1,43 @@
-import 'button_sound.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/kids_ui.dart';
+import '../data/lesson_example_data.dart';
+import 'game_tutorial_design.dart';
+import 'game_design.dart';
+import 'flappy_bird_sprite.dart';
 
-enum GameTutorial { flappyLetters, wordBuilder, memoryFlip }
+enum GameTutorial {
+  flappyLetters,
+  wordBuilder,
+  memoryFlip,
+  soundMatch,
+  phonicsQuiz,
+  speechPractice,
+  alphabetOrder,
+  missingVowel,
+  pictureMatch,
+  rumbledWords,
+  rhymingWords,
+  soundPosition;
+
+  static GameTutorial? forTitle(String title) => switch (title) {
+        'Flappy Letters' => flappyLetters,
+        'Word Builder' => wordBuilder,
+        'Memory Flip' => memoryFlip,
+        'Sound Match' => soundMatch,
+        'Phonics Quiz' => phonicsQuiz,
+        'Speak & Recognize' => speechPractice,
+        'Alphabet Order' => alphabetOrder,
+        'Missing Vowel' => missingVowel,
+        'Picture Match' => pictureMatch,
+        'Rumbled Words' => rumbledWords,
+        'Rhyming Words' => rhymingWords,
+        'Sound Position' => soundPosition,
+        _ => null,
+      };
+  bool get showOnFirstVisit =>
+      this == flappyLetters || this == wordBuilder || this == memoryFlip;
+}
 
 class GameTutorialHost extends StatefulWidget {
   const GameTutorialHost(
@@ -30,6 +64,7 @@ class _GameTutorialHostState extends State<GameTutorialHost> {
 
   String get _key => 'gameTutorialV1.${widget.tutorial.name}';
   Future<void> _firstVisit() async {
+    if (!widget.tutorial.showOnFirstVisit) return;
     final prefs = await SharedPreferences.getInstance();
     if (!mounted ||
         prefs.getBool(_key) == true ||
@@ -72,6 +107,13 @@ class _TutorialDialog extends StatefulWidget {
 
 class _TutorialDialogState extends State<_TutorialDialog> {
   int _step = 0;
+  bool _dismissed = false;
+  void _dismiss() {
+    if (_dismissed) return;
+    _dismissed = true;
+    Navigator.pop(context, true);
+  }
+
   List<(IconData, String, String)> get _steps => switch (widget.tutorial) {
         GameTutorial.flappyLetters => [
             (
@@ -111,7 +153,7 @@ class _TutorialDialogState extends State<_TutorialDialog> {
             (
               Icons.touch_app_rounded,
               'Turn over two cards',
-              'Tap a card, then tap another to see both pictures.'
+              'Remember the pictures during the 3-second preview. Then tap two hidden cards.'
             ),
             (
               Icons.copy_rounded,
@@ -124,99 +166,349 @@ class _TutorialDialogState extends State<_TutorialDialog> {
               'Matched pictures fly into your collection. Find them all for a fireworks celebration!'
             ),
           ],
+        GameTutorial.soundMatch => [
+            (
+              Icons.volume_up_rounded,
+              'Listen first',
+              'Tap the magical orb or Hear Sound to listen to the letter sound.'
+            ),
+            (
+              Icons.touch_app_rounded,
+              'Choose a letter',
+              'Tap the letter that makes the sound you heard.'
+            ),
+            (
+              Icons.check_circle_rounded,
+              'Learn and continue',
+              'Try again if you need to. When you find the letter, the next sound appears!'
+            ),
+          ],
+        GameTutorial.phonicsQuiz => [
+            (
+              Icons.volume_up_rounded,
+              'Listen first',
+              'Tap the speaker to hear the sound or word.'
+            ),
+            (
+              Icons.touch_app_rounded,
+              'Choose a letter',
+              'Tap the letter that matches what you heard.'
+            ),
+            (
+              Icons.check_circle_rounded,
+              'Learn and continue',
+              'Watch the answer feedback. The next task appears automatically after a correct answer.'
+            ),
+          ],
+        GameTutorial.speechPractice => [
+            (
+              Icons.volume_up_rounded,
+              'Hear the word',
+              'Tap Hear Word. Watch each letter grow as you hear its name, then listen to the whole word.'
+            ),
+            (
+              Icons.mic_rounded,
+              'Say the whole word',
+              'Tap Start Listening, then say the picture word clearly.'
+            ),
+            (
+              Icons.hearing_rounded,
+              'See what was heard',
+              'Read the recognized word. Try again if needed. This activity recognizes words; it does not score pronunciation.'
+            ),
+          ],
+        GameTutorial.alphabetOrder => [
+            (
+              Icons.abc_rounded,
+              'Look at the letters',
+              'Put the letters in alphabet order. Start with A.'
+            ),
+            (
+              Icons.touch_app_rounded,
+              'Tap letters in order',
+              'Tap A, then B, then C. Each correct letter moves into its space.'
+            ),
+            (
+              Icons.check_circle_rounded,
+              'Keep going',
+              'Fill every space in order to finish the round and celebrate!'
+            ),
+          ],
+        GameTutorial.rumbledWords => [
+            (
+              Icons.volume_up_rounded,
+              'Hear the picture word',
+              'Look at the picture and listen to the word.'
+            ),
+            (
+              Icons.touch_app_rounded,
+              'Tap and hear the letters',
+              'Put the letters in order. Tap Erase or a chosen letter to change it.'
+            ),
+            (
+              Icons.auto_awesome_rounded,
+              'Watch and listen',
+              'A correct word lights up letter by letter, then you hear the whole word. The next task starts automatically.'
+            ),
+          ],
+        GameTutorial.missingVowel => [
+            (
+              Icons.volume_up_rounded,
+              'Hear the picture word',
+              'Look at the picture and listen to the word.'
+            ),
+            (
+              Icons.touch_app_rounded,
+              'Build the word',
+              'Choose A, E, I, O, or U to fill the missing vowel.'
+            ),
+            (
+              Icons.check_circle_rounded,
+              'Check your word',
+              'Use the feedback to try again or continue.'
+            ),
+          ],
+        GameTutorial.pictureMatch => [
+            (
+              Icons.volume_up_rounded,
+              'Hear the word',
+              'Tap the speaker and listen.'
+            ),
+            (
+              Icons.image_rounded,
+              'Choose its picture',
+              'Tap the picture that matches the word.'
+            ),
+            (
+              Icons.check_circle_rounded,
+              'Check and continue',
+              'Watch the feedback before continuing.'
+            ),
+          ],
+        GameTutorial.rhymingWords => [
+            (
+              Icons.volume_up_rounded,
+              'Hear the word',
+              'Listen to the word on the jar.'
+            ),
+            (
+              Icons.music_note_rounded,
+              'Find the same ending',
+              'Tap three different words with the same ending sound. Each correct answer fills the jar with energy.'
+            ),
+            (
+              Icons.check_circle_rounded,
+              'Check the rhyme',
+              'When the jar is full, watch the words appear and listen to them. The jar word is spoken first.'
+            ),
+          ],
+        GameTutorial.soundPosition => [
+            (
+              Icons.volume_up_rounded,
+              'Hear the word',
+              'Listen for the target sound.'
+            ),
+            (
+              Icons.compare_arrows_rounded,
+              'Find its place',
+              'Choose beginning, middle, or end.'
+            ),
+            (
+              Icons.check_circle_rounded,
+              'Check and continue',
+              'Watch the feedback before continuing.'
+            ),
+          ],
       };
   @override
   Widget build(BuildContext context) {
     final (icon, title, detail) = _steps[_step];
     return Theme(
         data: KidsUi.theme,
-        child: AlertDialog(
-          key: const ValueKey('game-tutorial'),
-          backgroundColor: const Color(0xFFF7F1FF),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(28),
-              side: const BorderSide(color: Color(0xFFBBA5E8), width: 2)),
-          title: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                      colors: [Color(0xFF7052CA), Color(0xFF398EAA)]),
-                  borderRadius: BorderRadius.circular(18)),
-              child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.auto_awesome_rounded, color: Color(0xFFFFDF88)),
-                    SizedBox(width: 8),
-                    Flexible(
-                        child: Text('How to Play',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w900))),
-                  ])),
-          content: SingleChildScrollView(
-              child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Text('Step ${_step + 1} of ${_steps.length}',
-                style: const TextStyle(fontSize: 14, color: KidsUi.muted)),
-            const SizedBox(height: 10),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              for (var i = 0; i < _steps.length; i++)
-                Container(
-                    width: 28,
-                    height: 6,
-                    margin: const EdgeInsets.symmetric(horizontal: 3),
-                    decoration: BoxDecoration(
-                        color: i <= _step
-                            ? const Color(0xFF7052CA)
-                            : const Color(0xFFDDD3EF),
-                        borderRadius: BorderRadius.circular(6))),
-            ]),
-            const SizedBox(height: 12),
-            TweenAnimationBuilder<double>(
-                key: ValueKey(_step),
-                tween: Tween(begin: .8, end: 1),
-                duration: MediaQuery.disableAnimationsOf(context)
-                    ? Duration.zero
-                    : const Duration(milliseconds: 450),
-                builder: (_, scale, child) =>
-                    Transform.scale(scale: scale, child: child),
-                child: Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [Color(0xFFE3D8FC), Color(0xFFD4F3ED)]),
-                        shape: BoxShape.circle),
-                    child:
-                        Icon(icon, size: 52, color: const Color(0xFF7052CA)))),
-            const SizedBox(height: 12),
-            Text(title,
-                textAlign: TextAlign.center,
-                style:
-                    const TextStyle(fontSize: 23, fontWeight: FontWeight.w900)),
-            const SizedBox(height: 10),
-            Text(detail,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 17, height: 1.4)),
-          ])),
-          actions: [
-            TextButton(
-                onPressed: withButtonSound(() => Navigator.pop(context, true)),
-                child: const Text('Skip')),
-            if (_step > 0)
-              TextButton(
-                  onPressed: withButtonSound(() => setState(() => _step--)),
-                  child: const Text('Back')),
-            FilledButton(
-                onPressed: withButtonSound(() {
-                  if (_step == _steps.length - 1) {
-                    Navigator.pop(context, true);
-                  } else {
-                    setState(() => _step++);
-                  }
-                }),
-                child:
-                    Text(_step == _steps.length - 1 ? "Let's Play" : 'Next')),
-          ],
-        ));
+        child: GameTutorialDesign(
+            step: _step,
+            total: _steps.length,
+            title: title,
+            detail: detail,
+            example: _VisualExample(
+                tutorial: widget.tutorial, step: _step, icon: icon),
+            onSkip: _dismiss,
+            onBack: _step == 0
+                ? null
+                : () {
+                    if (!_dismissed) setState(() => _step--);
+                  },
+            onNext: () {
+              if (_dismissed) return;
+              if (_step == _steps.length - 1) {
+                _dismiss();
+              } else {
+                setState(() => _step++);
+              }
+            }));
   }
+}
+
+class _VisualExample extends StatelessWidget {
+  const _VisualExample(
+      {required this.tutorial, required this.step, required this.icon});
+  final GameTutorial tutorial;
+  final int step;
+  final IconData icon;
+
+  Widget picture(String word, {double size = 58}) => Image.asset(
+      practiceExamples
+          .firstWhere((example) => example.word == word)
+          .frames
+          .first,
+      width: size,
+      height: size,
+      cacheWidth: 192,
+      fit: BoxFit.contain,
+      excludeFromSemantics: true);
+
+  Widget pictures(List<String> words) =>
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        for (final word in words)
+          Flexible(
+              child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: ForestPanel(
+                      leaves: false,
+                      accent: step == 2
+                          ? const Color(0xFF28BC7D)
+                          : const Color(0xFFFFB135),
+                      padding: const EdgeInsets.all(5),
+                      child: picture(word))))
+      ]);
+
+  @override
+  Widget build(BuildContext context) {
+    final completed = step == 2;
+    final visual = switch (tutorial) {
+      GameTutorial.flappyLetters =>
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          const FlappyBirdSprite(size: 72, frame: 1, tilt: -.1),
+          const SizedBox(width: 16),
+          Column(mainAxisSize: MainAxisSize.min, children: [
+            Container(
+                width: 35,
+                height: 20,
+                decoration: const BoxDecoration(
+                    color: Color(0xFF56B845),
+                    borderRadius:
+                        BorderRadius.vertical(bottom: Radius.circular(5)))),
+            Padding(
+                padding: const EdgeInsets.symmetric(vertical: 7),
+                child: Text(step == 2 ? 'Z' : 'A',
+                    style: const TextStyle(
+                        fontSize: 28,
+                        color: GameDesign.ink,
+                        fontWeight: FontWeight.w900))),
+            Container(
+                width: 35,
+                height: 20,
+                decoration: const BoxDecoration(
+                    color: Color(0xFF56B845),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(5)))),
+          ])
+        ]),
+      GameTutorial.memoryFlip => pictures(['Cat', 'Cat']),
+      GameTutorial.pictureMatch =>
+        pictures(step == 1 ? ['Cat', 'Dog'] : ['Cat']),
+      GameTutorial.speechPractice =>
+        Column(mainAxisSize: MainAxisSize.min, children: [
+          picture('Cat'),
+          const SizedBox(height: 5),
+          TutorialExampleTiles(
+              letters: const ['C', 'A', 'T'],
+              selected: step == 0 ? 0 : -1,
+              complete: completed)
+        ]),
+      GameTutorial.rhymingWords =>
+        Column(mainAxisSize: MainAxisSize.min, children: [
+          pictures(['Cat', 'Hat']),
+          const SizedBox(height: 5),
+          TutorialExampleTiles(
+              letters: const ['CAT', 'HAT'], complete: completed)
+        ]),
+      GameTutorial.wordBuilder ||
+      GameTutorial.missingVowel ||
+      GameTutorial.rumbledWords =>
+        Column(mainAxisSize: MainAxisSize.min, children: [
+          picture('Cat'),
+          const SizedBox(height: 5),
+          TutorialExampleTiles(
+              letters: tutorial == GameTutorial.rumbledWords && step == 1
+                  ? const ['T', 'C', 'A']
+                  : ['C', step == 0 ? '_' : 'A', 'T'],
+              selected:
+                  step == 1 && tutorial != GameTutorial.rumbledWords ? 1 : -1,
+              complete: completed)
+        ]),
+      GameTutorial.alphabetOrder => TutorialExampleTiles(
+          letters: ['A', 'B', step == 0 ? '_' : 'C'],
+          selected: step == 1 ? 2 : -1,
+          complete: completed),
+      GameTutorial.soundPosition =>
+        const TutorialExampleTiles(letters: ['B', 'A', 'T'], selected: 0),
+      GameTutorial.soundMatch ||
+      GameTutorial.phonicsQuiz =>
+        Column(mainAxisSize: MainAxisSize.min, children: [
+          if (tutorial == GameTutorial.phonicsQuiz) picture('Cat'),
+          if (tutorial == GameTutorial.phonicsQuiz) const SizedBox(height: 5),
+          TutorialExampleTiles(
+              letters: const ['C', 'B', 'A'], selected: step > 0 ? 0 : -1)
+        ]),
+    };
+    return Semantics(
+        label: 'Example only: ${tutorial.name}',
+        child: ExcludeSemantics(
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            const Icon(Icons.star_rounded, color: Color(0xFFFFE251), size: 23),
+            const SizedBox(width: 10),
+            if (tutorial == GameTutorial.alphabetOrder)
+              const _AlphabetEmblem()
+            else
+              Icon(icon,
+                  color: completed ? const Color(0xFF087D5A) : Colors.white,
+                  size: 32),
+            const SizedBox(width: 10),
+            const Icon(Icons.star_rounded, color: Color(0xFFFFE251), size: 23),
+          ]),
+          const SizedBox(height: 10),
+          visual,
+        ])));
+  }
+}
+
+class _AlphabetEmblem extends StatelessWidget {
+  const _AlphabetEmblem();
+  static const style = TextStyle(
+      fontFamily: 'Nunito',
+      fontSize: 40,
+      fontWeight: FontWeight.w900,
+      height: 1.1);
+  @override
+  Widget build(BuildContext context) => Stack(children: [
+        Text('ABC',
+            textScaler: TextScaler.noScaling,
+            style: style.copyWith(
+                foreground: Paint()
+                  ..color = Colors.white
+                  ..style = PaintingStyle.stroke
+                  ..strokeWidth = 5)),
+        Text.rich(
+            const TextSpan(children: [
+              TextSpan(text: 'A', style: TextStyle(color: Color(0xFFFF3192))),
+              TextSpan(text: 'B', style: TextStyle(color: Color(0xFF0077EE))),
+              TextSpan(text: 'C', style: TextStyle(color: Color(0xFFFFB51C))),
+            ]),
+            textScaler: TextScaler.noScaling,
+            style: style.copyWith(shadows: const [
+              Shadow(color: Color(0x443E126C), offset: Offset(0, 2))
+            ])),
+      ]);
 }

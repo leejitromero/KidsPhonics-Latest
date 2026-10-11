@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import '../theme/kids_ui.dart';
 
 enum LearningMascot {
-  wigloo('Wigloo', 'assets/images/mascot_wigloo.png', Color(0xFF7052CA)),
-  boopli('Boopli', 'assets/images/mascot_boopli.png', Color(0xFF167769)),
-  zoplet('Zoplet', 'assets/images/mascot_zoplet.png', Color(0xFF985018)),
-  jitjit('Jitjit', 'assets/images/mascot_jitjit.png', Color(0xFF3D681E));
+  wigloo('Wigloo', 'assets/images/mascot_wigloo.webp', Color(0xFF7052CA)),
+  boopli('Boopli', 'assets/images/mascot_boopli.webp', Color(0xFF167769)),
+  zoplet('Zoplet', 'assets/images/mascot_zoplet.webp', Color(0xFF985018)),
+  jitjit('Jitjit', 'assets/images/mascot_jitjit.webp', Color(0xFF3D681E));
 
   const LearningMascot(this.name, this.asset, this.color);
   final String name;
   final String asset;
   final Color color;
 
-  String get animatedAsset => asset.replaceAll('.png', '.gif');
+  String get animatedAsset => asset.replaceAll('.webp', '.gif');
 }
 
 /// Keeps the supplied artwork intact, including ears and antennae.

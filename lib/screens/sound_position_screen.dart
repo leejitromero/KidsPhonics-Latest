@@ -43,7 +43,7 @@ class SoundPositionitionScreenState extends State<SoundPositionScreen>
   List<SoundPositionRound> _newSession() => GameSessionOrder.next(
       'sound_position-${widget.difficulty.name}',
       positionRoundsFor(widget.difficulty),
-      (item) => item.word,
+      (item) => '${item.word}:${item.targetLetter}:${item.correctPos.name}',
       count: GameSessionOrder.roundLength(widget.difficulty));
   SoundPositionRound get _round => _rounds[_index];
 
@@ -57,21 +57,19 @@ class SoundPositionitionScreenState extends State<SoundPositionScreen>
     final isCorrect = pos == _round.correctPos;
     setState(() => _picked = pos);
 
-    final provider = context.read<AppProvider>();
     recordGameAnswer(correct: isCorrect);
     if (isCorrect) {
       setState(() {
         _answered = true;
       });
-      // Play correct.mp3 tone first — no voice feedback competing with it
-      provider.audio.playCorrect();
+      playGameCorrect();
       awardGameXp((8 * widget.difficulty.xpMultiplier).round());
       awardGameStar();
       // Keep a short pause for visual feedback.
       await Future.delayed(const Duration(milliseconds: 700));
     } else {
       // Wrong — play wrong.mp3 tone first, then voice
-      provider.audio.playWrong();
+      playGameWrong();
       await Future.delayed(const Duration(milliseconds: 700));
       await Future.delayed(const Duration(milliseconds: 600));
       if (mounted) setState(() => _picked = null);
@@ -114,6 +112,7 @@ class SoundPositionitionScreenState extends State<SoundPositionScreen>
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+        narration: gameNarration,
         showHeader: true,
         answerResult: _picked == null ? null : _picked == _round.correctPos,
         title: 'Sound Position',

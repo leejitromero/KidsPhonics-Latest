@@ -1,0 +1,26 @@
+{
+  "verifiedUtc": "2026-10-09T16:01:51.449368+00:00",
+  "sourceChangesApplied": true,
+  "apkRebuilt": true,
+  "sourceOnlyChangesAfterApk": "1.0.9+10",
+  "staticAnalysis": "No issues found",
+  "regressionChecks": "488 passed in full suite; three outdated dashboard/navigation fixtures were updated for new Quick Check records; all 57 tests in those files passed on rerun (491 distinct tests covered).",
+  "targetedTestsPassed": 55,
+  "finalResultLayoutTestsPassed": 5,
+  "savedProgressReopenVerified": true,
+  "legacyMasteryExcludedFromCurrentDisplays": true,
+  "lessonExposurePreserved": true,
+  "requiredAssets": 678,
+  "unusedAssets": 0,
+  "originalChoiceSheetsPreserved": true,
+  "logs": {
+    "fullSuite": "build/ui_refresh_full_suite.log",
+    "affectedFixtures": "build/ui_refresh_dashboard_recheck.log",
+    "targetedChecks": "build/ui_refresh_final_tests.log",
+    "finalResultLayout": "build/ui_refresh_result_final.log",
+    "analysis": "build/ui_refresh_analysis.log"
+  },
+  "deliveryVersion": "1.0.10+11",
+  "deliveryApk": "releases/KidsPhonics-1.0.10-build11.apk",
+  "deliverySHA256": "c1077be7e60bc93f072b7b6d5501fc5fe8ccfe0217d31e3546bf70699dfde742"
+}

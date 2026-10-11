@@ -65,6 +65,12 @@ void main() {
     final clickId = (clickSource.arguments as Map)['playerId'];
     expect(
         calls
+            .where((c) => c.method == 'setVolume')
+            .where((c) => (c.arguments as Map)['playerId'] == clickId)
+            .map((c) => (c.arguments as Map)['volume']),
+        contains(.3));
+    expect(
+        calls
             .where((c) => c.method == 'stop')
             .every((c) => (c.arguments as Map)['playerId'] == clickId),
         isTrue);

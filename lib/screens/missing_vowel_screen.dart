@@ -56,20 +56,17 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
       _picked = vowel;
     });
 
-    final provider = context.read<AppProvider>();
     recordGameAnswer(correct: isCorrect);
     if (isCorrect) {
       setState(() {
         _answered = true;
       });
-      // Play correct.mp3 tone first
-      provider.audio.playCorrect();
+      playGameCorrect();
       awardGameXp((8 * widget.difficulty.xpMultiplier).round());
       awardGameStar();
       await Future.delayed(const Duration(milliseconds: 700));
     } else {
-      // Play wrong.mp3 tone first
-      provider.audio.playWrong();
+      playGameWrong();
       await Future.delayed(const Duration(milliseconds: 700));
       await Future.delayed(const Duration(milliseconds: 600));
       if (mounted) setState(() => _picked = null);
@@ -112,6 +109,7 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+        narration: gameNarration,
         fitViewport: true,
         answerResult: _picked == null ? null : _picked == _puzzle.vowel,
         title: 'Missing Vowel',

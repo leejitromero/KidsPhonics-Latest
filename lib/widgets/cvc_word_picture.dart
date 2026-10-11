@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../data/cvc_lesson_data.dart';
 
-/// Reuses supplied pictures, with pictograms for the document's new vocabulary.
+/// Displays lesson pictures, with emoji or pictogram fallbacks for other words.
 class CvcWordPicture extends StatelessWidget {
   const CvcWordPicture({super.key, required this.word});
   final CvcLessonWord word;

@@ -1,0 +1,95 @@
+﻿[
+    {
+        "path":  "build",
+        "files":  11263,
+        "bytes":  3480513244,
+        "reason":  "Generated caches/import copies or retired voice tooling"
+    },
+    {
+        "path":  ".dart_tool/flutter_build",
+        "files":  32,
+        "bytes":  61105937,
+        "reason":  "Generated caches/import copies or retired voice tooling"
+    },
+    {
+        "path":  ".dart_tool/hooks_runner",
+        "files":  64,
+        "bytes":  81064098,
+        "reason":  "Generated caches/import copies or retired voice tooling"
+    },
+    {
+        "path":  ".dart_tool/dashboard_baseline",
+        "files":  0,
+        "bytes":  0,
+        "reason":  "Generated caches/import copies or retired voice tooling"
+    },
+    {
+        "path":  ".dart_tool/ui_baseline",
+        "files":  48,
+        "bytes":  559316,
+        "reason":  "Generated caches/import copies or retired voice tooling"
+    },
+    {
+        "path":  ".dart_tool/button-designs.zip",
+        "files":  1,
+        "bytes":  7358383,
+        "reason":  "Generated caches/import copies or retired voice tooling",
+        "sha256":  "CD78E769209A45E8C945C8F6BAF796DDDE0B3E40F8B4A5ADFA0060D987DFC1EB"
+    },
+    {
+        "path":  ".dart_tool/game-screen.zip",
+        "files":  1,
+        "bytes":  8318679,
+        "reason":  "Generated caches/import copies or retired voice tooling",
+        "sha256":  "D1DA1C155F8FC81970C25FA2D6B43BFA7BCCA5907096DCFE66B1E81E8B8C0104"
+    },
+    {
+        "path":  ".dart_tool/letter-images-supplied.zip",
+        "files":  1,
+        "bytes":  24641080,
+        "reason":  "Generated caches/import copies or retired voice tooling",
+        "sha256":  "ED146C1E49561A894592B90B75660908B6670A36052C0C541AFA6D7C6D48B4B7"
+    },
+    {
+        "path":  ".dart_tool/difficulty-reference.png",
+        "files":  1,
+        "bytes":  1699443,
+        "reason":  "Generated caches/import copies or retired voice tooling",
+        "sha256":  "1BCF34157ACEE36ED28B7DB0DCBCBF2B9AEF05FB12B68F76342B484D7349350D"
+    },
+    {
+        "path":  ".dart_tool/progress-top.png",
+        "files":  1,
+        "bytes":  286497,
+        "reason":  "Generated caches/import copies or retired voice tooling",
+        "sha256":  "87153040DADA742810A1B96A9775213ECD559307590C07B6D4228CF438CDCEF8"
+    },
+    {
+        "path":  ".dart_tool/progress-bottom.png",
+        "files":  1,
+        "bytes":  283247,
+        "reason":  "Generated caches/import copies or retired voice tooling",
+        "sha256":  "7C5A9D52679C02079742868C0C40812C44159CE82041F1F390052FCD777F1BA3"
+    },
+    {
+        "path":  "tools/generate_cvc_narration.ps1",
+        "files":  1,
+        "bytes":  1772,
+        "reason":  "Generated caches/import copies or retired voice tooling",
+        "sha256":  "605477EAE01FCB8C1F794E03C0849C39CAFD13F483831D5EB5D1111C9051304C"
+    },
+    {
+        "path":  "tools/generate_blending_narration.ps1",
+        "files":  1,
+        "bytes":  2176,
+        "reason":  "Generated caches/import copies or retired voice tooling",
+        "sha256":  "8CA8F7880713431FD28F80E38BD947ECC489B482818D8C89727D782B9B371583"
+    },
+    {
+        "path":  "tools/positive_praise.ps1",
+        "files":  1,
+        "bytes":  1111,
+        "reason":  "Generated caches/import copies or retired voice tooling",
+        "sha256":  "80F2022D342E3620F35C6A44D64E2586D108C187DFE1E8D4FA65BFC37A6FB162"
+    }
+]

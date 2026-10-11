@@ -151,8 +151,8 @@ void main() {
       final image =
           t.widget<Image>(find.byKey(const ValueKey('recognition-letter')));
       final asset = (image.image as ResizeImage).imageProvider as AssetImage;
-      expect(
-          asset.assetName, 'assets/images/letters/${letter.toLowerCase()}.png');
+      expect(asset.assetName,
+          'assets/images/letters/${letter.toLowerCase()}.webp');
       expect(File(asset.assetName).existsSync(), isTrue);
       expect(
           File('assets/audio/phonics/lesson_audio/letters/'

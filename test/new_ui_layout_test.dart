@@ -21,6 +21,9 @@ import 'package:kidsphonics/screens/word_builder_screen.dart';
 import 'package:kidsphonics/screens/parent_screen.dart';
 import 'package:kidsphonics/screens/letter_mastery_check_screen.dart';
 import 'package:kidsphonics/widgets/learner_widgets.dart';
+import 'package:kidsphonics/widgets/game_mascot_coach.dart';
+import 'package:kidsphonics/widgets/sound_match_design.dart';
+
 import 'package:kidsphonics/theme/kids_ui.dart';
 import 'learner_ui_test.dart' show mount, close;
 import 'learning_progress_test.dart' show mockProgressAudio;
@@ -54,12 +57,15 @@ void main() {
     await t.runAsync(() async {
       await p.parentAuth.setup('2580', '2580');
       await p.recordLetterPractice('Q', false);
+      await p.completeAdventure(
+          'Q', [true, false, true, false, true], 'parent-practice-q');
     });
     await t.pumpAndSettle();
-    final recommended = p.recommendedNextPractice!.letter;
-    await t.ensureVisible(find.text('Go to Practice'));
+    final recommended = p.recommendedAdventureLetter!;
+    final start = find.byKey(const ValueKey('home-start-adventure'));
+    await t.ensureVisible(start);
     await t.pumpAndSettle();
-    await t.tap(find.text('Go to Practice'));
+    await t.tap(start);
     await t.pumpAndSettle();
     expect(
         t
@@ -125,6 +131,27 @@ void main() {
         expect(find.byType(AppBar), findsNothing);
         expect(find.byType(LearnerHeader), findsNothing);
         expect(find.byTooltip('Back'), findsOneWidget);
+        if (entry.key == 'sound_match') {
+          expect(find.byType(MagicalSoundOrb), findsOneWidget);
+          expect(find.byType(GameAnswerButton), findsNWidgets(3));
+          expect(find.text('Hear Sound'), findsOneWidget);
+        }
+        if (entry.key != 'game_zone' &&
+            entry.key != 'parent' &&
+            entry.key != 'sound_match' &&
+            entry.key != 'rhyming_words' &&
+            entry.key != 'flappy_letters') {
+          final coach = t.widget<GameMascotCoach>(find.byType(GameMascotCoach));
+          expect(coach.instructions, isNotEmpty);
+          expect(find.byTooltip('Hear Instructions'), findsNothing);
+          expect(find.byKey(const ValueKey('game-mascot')), findsOneWidget);
+        }
+        if (entry.key == 'flappy_letters') {
+          expect(
+              find.byKey(const ValueKey('flappy-status-bar')), findsOneWidget);
+          expect(find.byTooltip('How to Play'), findsOneWidget);
+          expect(find.text('Start flying'), findsOneWidget);
+        }
         if (capture && size.width == 390) {
           if (entry.key == 'flappy_letters') {
             await t.tap(find.text('Start flying'));

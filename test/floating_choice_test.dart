@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kidsphonics/widgets/floating_choice.dart';
 import 'package:kidsphonics/widgets/learner_widgets.dart';
+import 'package:kidsphonics/widgets/answer_choice_button.dart';
 
 void main() {
-  testWidgets('choices share blue styling and float with a fixed tap target',
+  testWidgets(
+      'choices retain illustrated frames and float with a fixed tap target',
       (t) async {
     var taps = 0;
     await t.pumpWidget(MaterialApp(
@@ -22,8 +24,10 @@ void main() {
     )))));
     for (final button
         in t.widgetList<ElevatedButton>(find.byType(ElevatedButton))) {
-      expect(button.style!.backgroundColor!.resolve({}), choiceBlue);
+      expect(button.style!.backgroundColor!.resolve({}), Colors.transparent);
     }
+    expect(find.byType(AnswerChoiceButton), findsNWidgets(2));
+    expect(find.byType(Image), findsNWidgets(2));
     final resting = t.getRect(find.byKey(const ValueKey('a')));
     await t.pump(const Duration(milliseconds: 750));
     final floating = t.getRect(find.byKey(const ValueKey('a')));

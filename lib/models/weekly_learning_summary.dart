@@ -24,13 +24,23 @@ class WeeklyLearningSummary {
       days.fold(0, (n, d) => n + d.activity.correctAnswers);
   int get activitiesCompleted =>
       days.fold(0, (n, d) => n + d.activity.activitiesCompleted);
+  int get speechAttempts =>
+      days.fold(0, (n, d) => n + d.activity.speechAttempts);
+  int get speechRecognized =>
+      days.fold(0, (n, d) => n + d.activity.speechRecognized);
+  int get speechActivitiesCompleted =>
+      days.fold(0, (n, d) => n + d.activity.speechActivitiesCompleted);
   double? get accuracy =>
       questionsAnswered == 0 ? null : correctAnswers / questionsAnswered;
   int get maximumQuestions => days.fold(
       0,
       (n, d) =>
           d.activity.questionsAnswered > n ? d.activity.questionsAnswered : n);
-  bool get hasActivity => questionsAnswered > 0 || activitiesCompleted > 0;
+  bool get hasActivity =>
+      questionsAnswered > 0 ||
+      activitiesCompleted > 0 ||
+      speechAttempts > 0 ||
+      speechActivitiesCompleted > 0;
 }
 
 class LearningAchievement {

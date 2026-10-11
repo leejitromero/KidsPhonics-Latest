@@ -139,7 +139,7 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
 
     recordGameAnswer(correct: letter == _letters[_nextExpected]);
     if (letter == _letters[_nextExpected]) {
-      provider.audio.playCorrect();
+      playGameCorrect();
       awardGameXp((3 * widget.difficulty.xpMultiplier).round());
       awardGameStar();
       await _flyLetter(letter);
@@ -161,7 +161,7 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
       }
     } else {
       // Play the existing local feedback effect.
-      provider.audio.playWrong();
+      playGameWrong();
       setState(() => _wrongLetter = letter);
       await Future.delayed(const Duration(milliseconds: 700));
       await Future.delayed(const Duration(milliseconds: 600));
@@ -185,6 +185,7 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+      narration: gameNarration,
       answerResult: _busy ? _wrongLetter == null : null,
       title: 'Alphabet Order',
       instructions: 'Tap letters in order. Start with A.',

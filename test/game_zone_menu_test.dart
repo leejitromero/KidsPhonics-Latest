@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kidsphonics/screens/games_screen.dart';
 import 'package:kidsphonics/screens/rhyming_words_screen.dart';
 import 'package:kidsphonics/widgets/game_zone_card.dart';
-import 'package:kidsphonics/widgets/mascot_guide.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show mount, close;
 
@@ -29,8 +28,7 @@ void main() {
       final p = await mount(t, const GamesScreen());
       await t.pumpAndSettle();
       expect(find.byType(GameZoneCard), findsNWidgets(11));
-      expect(t.widget<MascotPortrait>(find.byType(MascotPortrait)).mascot,
-          LearningMascot.wigloo);
+      expect(find.byKey(const ValueKey('game-zone-mascot')), findsOneWidget);
       await t.ensureVisible(find.widgetWithText(ChoiceChip, 'Letters'));
       await t.pumpAndSettle();
       await t.tap(find.widgetWithText(ChoiceChip, 'Letters'));

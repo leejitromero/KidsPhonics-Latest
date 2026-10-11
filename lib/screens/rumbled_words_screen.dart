@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../widgets/answer_choice_button.dart';
 import '../widgets/button_sound.dart';
 import '../widgets/game_design.dart';
@@ -33,6 +35,13 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
   final List<int> _selected = [];
   bool _hintUsed = false;
   bool? _correct;
+  int _readingStep = 0;
+  int _activeLetter = -1;
+  bool _readingWord = false;
+  bool _runningPlayback = false;
+  int _roundGeneration = 0;
+  Timer? _resumeTimer, _highlightTimer;
+  Completer<void>? _highlightDone;
   bool get _finished => _correct == true || resultOpen;
   String get _word => _words[_index].word.toUpperCase();
 
@@ -43,6 +52,12 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
   }
 
   void _prepare() {
+    _roundGeneration++;
+    _resumeTimer?.cancel();
+    _endHighlightDelay();
+    _readingStep = 0;
+    _activeLetter = -1;
+    _readingWord = false;
     _tiles = _word.split('')..shuffle();
     if (_tiles.join() == _word) _tiles.add(_tiles.removeAt(0));
     _selected.clear();
@@ -50,19 +65,101 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
     _correct = null;
   }
 
-  void _check() {
+  void _tapTile(int index) {
+    if (_finished || _selected.contains(index) || !canAdvanceGameFeedback) {
+      return;
+    }
+    setState(() {
+      _selected.add(index);
+      _correct = null;
+    });
+    gameNarration.cancel();
+    final sound = gameNarration.letterSound(_tiles[index]);
+    if (_selected.length == _tiles.length) unawaited(_check(sound));
+  }
+
+  Future<void> _check(Future<void> selectionSound) async {
     if (_finished || _selected.length != _tiles.length) return;
     final correct = _selected.map((i) => _tiles[i]).join() == _word;
     setState(() => _correct = correct);
     recordGameAnswer(correct: correct);
-    final p = context.read<AppProvider>();
     if (correct) {
-      p.audio.playCorrect();
       awardGameXp((8 * widget.difficulty.xpMultiplier).round());
       awardGameStar();
-    } else {
-      p.audio.playWrong();
-      // Keep the attempted word visible, but require an edit before checking again.
+    }
+    final round = _roundGeneration;
+    final selectionGeneration = gameNarration.generation;
+    // Let the final selected tile finish sounding before reading the built word.
+    await selectionSound;
+    if (!mounted || round != _roundGeneration) return;
+    if (correct) {
+      unawaited(_readCompletedWord());
+    } else if (_correct == false &&
+        canAdvanceGameFeedback &&
+        selectionGeneration == gameNarration.generation) {
+      unawaited(playGameWrong());
+    }
+  }
+
+  void _endHighlightDelay() {
+    _highlightTimer?.cancel();
+    final done = _highlightDone;
+    _highlightDone = null;
+    if (done != null && !done.isCompleted) done.complete();
+  }
+
+  Future<void> _holdHighlight() {
+    _endHighlightDelay();
+    final done = Completer<void>();
+    _highlightDone = done;
+    // Still show each step when voice is muted or a recording fails to play.
+    _highlightTimer = Timer(const Duration(milliseconds: 400), () {
+      if (!done.isCompleted) done.complete();
+      if (_highlightDone == done) _highlightDone = null;
+    });
+    return done.future;
+  }
+
+  Future<void> _readCompletedWord() async {
+    if (_runningPlayback || !mounted || _correct != true || resultOpen) return;
+    _resumeTimer?.cancel();
+    _runningPlayback = true;
+    final round = _roundGeneration;
+    final provider = context.read<AppProvider>();
+    bool current() => mounted && round == _roundGeneration && !resultOpen;
+    try {
+      while (mounted && current() && _readingStep <= _word.length) {
+        if (!canAdvanceGameFeedback) return;
+        gameNarration.updateEnvironment(
+            enabled: provider.voiceEnabled, active: true);
+        final wholeWord = _readingStep == _word.length;
+        setState(() {
+          _activeLetter = wholeWord ? -1 : _readingStep;
+          _readingWord = wholeWord;
+        });
+        final hold = _holdHighlight();
+        final playback = wholeWord
+            ? gameNarration.word(_words[_index].audioKey)
+            : gameNarration.letterSound(_word[_readingStep]);
+        final audioGeneration = gameNarration.generation;
+        await playback;
+        await hold;
+        if (!current()) return;
+        // Replay the interrupted step after returning, including repeated letters.
+        if (!canAdvanceGameFeedback ||
+            audioGeneration != gameNarration.generation) {
+          return;
+        }
+        _readingStep++;
+      }
+      if (current() && canAdvanceGameFeedback) _next();
+    } finally {
+      _runningPlayback = false;
+      if (current() && _correct == true) {
+        _resumeTimer = Timer(const Duration(milliseconds: 200), () {
+          unawaited(_readCompletedWord());
+        });
+      }
     }
   }
 
@@ -90,10 +187,19 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
       });
 
   @override
+  void dispose() {
+    _roundGeneration++;
+    _resumeTimer?.cancel();
+    _endHighlightDelay();
+    super.dispose();
+  }
+
+  @override
   int get totalGameItems => _words.length;
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+        narration: gameNarration,
         fitViewport: true,
         answerResult: _correct,
         title: 'Rumbled Words',
@@ -116,6 +222,8 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
                           ? _tiles[_selected[slot]]
                           : '_',
                       filled: true,
+                      highlightKey: ValueKey('word-highlight-$slot'),
+                      highlighted: _readingWord || _activeLetter == slot,
                       onTap: _finished || slot >= _selected.length
                           ? null
                           : () => setState(() {
@@ -135,7 +243,7 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
             Text(_hintUsed ? 'Hint used' : '1 per word',
                 style: const TextStyle(fontSize: 12)),
           ]),
-          AudioButton(phrase: _words[_index].audioKey),
+          AudioButton(phrase: _words[_index].audioKey, enabled: !_finished),
           if (_hintUsed)
             Padding(
               padding: const EdgeInsets.only(top: 8),
@@ -146,23 +254,7 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
             ),
           const SizedBox(height: 6),
           const SizedBox(height: 4),
-          Center(
-            child: OutlinedButton.icon(
-              key: const ValueKey('word-erase'),
-              onPressed: withButtonSound(_finished || _selected.isEmpty
-                  ? null
-                  : () => setState(() {
-                        _selected.removeLast();
-                        _correct = null;
-                      })),
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size(120, 48),
-                foregroundColor: const Color(0xFFB45731),
-              ),
-              icon: const Icon(Icons.backspace_outlined),
-              label: const Text('Erase'),
-            ),
-          ),
+          Center(child: _eraseButton()),
           const SizedBox(height: 4),
           const Text('Tap a chosen letter to put it back.',
               textAlign: TextAlign.center, style: TextStyle(fontSize: 12)),
@@ -176,10 +268,7 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
                       label: _tiles[i],
                       onTap: _finished || _selected.contains(i)
                           ? null
-                          : () => setState(() {
-                                _selected.add(i);
-                                _correct = null;
-                              })),
+                          : () => _tapTile(i)),
               ])),
           const SizedBox(height: 6),
           if (_correct != null)
@@ -194,37 +283,94 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
                         ? const Color(0xFF167769)
                         : const Color(0xFFB45731))),
           const SizedBox(height: 4),
-          FilledButton(
-            onPressed: withButtonSound(_correct == true
-                ? _next
-                : _selected.length == _tiles.length &&
-                        _correct == null &&
-                        !resultOpen
-                    ? _check
-                    : null),
-            child: Text(_correct == true ? 'Next' : 'Check'),
-          ),
         ]),
       );
+
+  Widget _eraseButton() {
+    final enabled = !_finished && _selected.isNotEmpty;
+    return CustomPaint(
+        foregroundPainter: const ForestLeaves(),
+        child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: enabled
+                        ? const [Color(0xFFFFA96B), Color(0xFFD45A39)]
+                        : const [Color(0xFFF0DEC9), Color(0xFFCAB7AA)]),
+                border: Border.all(color: const Color(0xFFFFE697), width: 2),
+                boxShadow: const [
+                  BoxShadow(
+                      color: Color(0x443E2118),
+                      offset: Offset(0, 3),
+                      blurRadius: 4)
+                ]),
+            child: OutlinedButton.icon(
+                key: const ValueKey('word-erase'),
+                onPressed: withButtonSound(enabled
+                    ? () => setState(() {
+                          _selected.removeLast();
+                          _correct = null;
+                        })
+                    : null),
+                style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(142, 48),
+                    foregroundColor: Colors.white,
+                    disabledForegroundColor: const Color(0xFF625047),
+                    textStyle: const TextStyle(
+                        fontSize: 17, fontWeight: FontWeight.w900),
+                    side: const BorderSide(color: Color(0xBBFFFFFF)),
+                    shape: const StadiumBorder()),
+                icon: const Icon(Icons.backspace_rounded),
+                label: const Text('Erase'))));
+  }
 
   Widget _tile(
           {required Key key,
           required String label,
           VoidCallback? onTap,
-          bool filled = false}) =>
-      SizedBox(
-          width: 48,
-          height: 48,
-          child: FloatingChoice(
-              enabled: !filled && onTap != null && !_finished,
-              seed: label.codeUnitAt(0),
-              child: AnswerChoiceButton(
-                buttonKey: key,
-                onPressed: onTap,
-                variant: label.codeUnitAt(0),
-                selected: filled,
-                child: Text(label,
-                    style: const TextStyle(
-                        fontSize: 23, fontWeight: FontWeight.w800)),
-              )));
+          bool filled = false,
+          Key? highlightKey,
+          bool highlighted = false}) =>
+      AnimatedScale(
+        scale:
+            highlighted && !MediaQuery.disableAnimationsOf(context) ? 1.1 : 1,
+        duration: MediaQuery.disableAnimationsOf(context)
+            ? Duration.zero
+            : const Duration(milliseconds: 160),
+        child: AnimatedContainer(
+          key: highlightKey,
+          duration: MediaQuery.disableAnimationsOf(context)
+              ? Duration.zero
+              : const Duration(milliseconds: 160),
+          decoration: BoxDecoration(
+              color: highlighted ? const Color(0xFFFFE36B) : Colors.transparent,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                  color: highlighted
+                      ? const Color(0xFFFFB300)
+                      : Colors.transparent,
+                  width: 3),
+              boxShadow: highlighted
+                  ? const [BoxShadow(color: Color(0x99FFD23F), blurRadius: 12)]
+                  : const []),
+          child: SizedBox(
+            width: 48,
+            height: 48,
+            child: FloatingChoice(
+                enabled: !filled && onTap != null && !_finished,
+                seed: label.codeUnitAt(0),
+                child: AnswerChoiceButton(
+                  buttonKey: key,
+                  onPressed: onTap,
+                  variant: label.codeUnitAt(0),
+                  selected: highlighted,
+                  child: Text(label,
+                      style: const TextStyle(
+                          fontSize: 23, fontWeight: FontWeight.w800)),
+                )),
+          ),
+        ),
+      );
 }

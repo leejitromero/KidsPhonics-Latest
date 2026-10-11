@@ -36,7 +36,7 @@ class AnswerChoiceButton extends StatelessWidget {
               widthFactor: 1.22,
               heightFactor: 1.22,
               child: Image.asset(
-                  'assets/images/answer_choices/frame-${variant % 4 + 1}.png',
+                  'assets/images/answer_choices/frame-${variant % 4 + 1}.webp',
                   fit: BoxFit.fill,
                   cacheWidth: 512,
                   excludeFromSemantics: true),

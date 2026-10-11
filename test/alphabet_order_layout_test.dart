@@ -23,7 +23,7 @@ void main() {
         Difficulty.medium => 13,
         Difficulty.hard => 26
       };
-      expect(find.text('_'), findsNWidgets(count));
+      expect(find.byIcon(Icons.star_rounded), findsNWidgets(count));
       for (final button
           in t.widgetList<GameAnswerButton>(find.byType(GameAnswerButton))) {
         expect(button.accent, const Color(0xFF247BA5));
@@ -35,7 +35,7 @@ void main() {
       }
       await t.tap(find.byKey(const ValueKey('alphabet-choice-B')));
       await t.pump();
-      expect(find.text('_'), findsNWidgets(count));
+      expect(find.byIcon(Icons.star_rounded), findsNWidgets(count));
       expect(find.byType(GameLives), findsNothing);
       await t.pump(const Duration(milliseconds: 750));
       await t.pump(const Duration(milliseconds: 650));
@@ -52,7 +52,7 @@ void main() {
       await t.pump(const Duration(milliseconds: 350));
       expect(
           find.byKey(const ValueKey('flying-alphabet-letter')), findsNothing);
-      expect(find.text('_'), findsNWidgets(count - 1));
+      expect(find.byIcon(Icons.star_rounded), findsNWidgets(count - 1));
       expect(find.text('Find B'), findsOneWidget);
       expect(
           find.byWidgetPredicate((w) =>

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/app_provider.dart';
+import '../models/learning_progress.dart';
 import '../theme/kids_ui.dart';
 import 'button_sound.dart';
 import 'learner_widgets.dart';
@@ -104,7 +105,7 @@ class _LetterLessonPageState extends State<LetterLessonPage> {
                     ],
                   ),
                   child: Image.asset(
-                    'assets/images/letters/${_letter.toLowerCase()}.png',
+                    'assets/images/letters/${_letter.toLowerCase()}.webp',
                     key: const ValueKey('recognition-letter'),
                     fit: BoxFit.contain,
                     semanticLabel: 'Letter $_letter',
@@ -119,6 +120,11 @@ class _LetterLessonPageState extends State<LetterLessonPage> {
           AudioButton(
             key: ValueKey('letter-${widget.audio.name}-$_index-$_audioVersion'),
             phrase: _audioPhrase,
+            onPlayed: () => _provider!.recordLetterListening(
+                _letter,
+                widget.audio == LetterLessonAudio.name
+                    ? LetterListeningKind.name
+                    : LetterListeningKind.sound),
             label: 'Sound',
             icon: Icons.volume_up_rounded,
             color: const Color(0xFF087F86),

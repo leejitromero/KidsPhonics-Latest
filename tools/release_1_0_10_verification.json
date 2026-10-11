@@ -1,0 +1,40 @@
+{
+  "version": "1.0.10+11",
+  "verifiedUtc": "2026-10-09T16:19:48.622682+00:00",
+  "APK": "releases/KidsPhonics-1.0.10-build11.apk",
+  "sourceInputCount": 816,
+  "sourceSHA256": "cd8a266135ad03801d381cdcd4f3459a152228cb14e9864bcd8e092554c6cc64",
+  "inputsUnchangedAfterBuild": true,
+  "SuppliedWords": 71,
+  "VerifiedAssets": 678,
+  "RemovedAssetsAbsent": 365,
+  "CleanupFilesAbsent": 73,
+  "ApkBytes": 315963409,
+  "ApkSHA256": "C1077BE7E60BC93F072B7B6D5501FC5FE8CCFE0217D31E3546BF70699DFDE742",
+  "androidVersionName": "1.0.10",
+  "androidVersionCode": 11,
+  "signatureVerified": true,
+  "signerCertificateSHA256": "e51915ff388c75d5cb980d40ecb354a5379806fee2b3dc67a36ab4e701774f69",
+  "minimumAndroidSdk": 24,
+  "abis": [
+    "arm64-v8a",
+    "armeabi-v7a",
+    "x86_64"
+  ],
+  "homeRecordingsBundled": 5,
+  "quickCheckRecordingsBundled": 11,
+  "newRecordingHashesMatchSource": true,
+  "choiceArtworkHashesMatchSource": true,
+  "legacyCvcBlendingWavFiles": 0,
+  "fullStaticAnalysis": "No issues found",
+  "regressionTests": "488 passed in full suite; three outdated dashboard/navigation fixtures were updated for new Quick Check records; all 57 tests in those files passed on rerun (491 distinct tests covered).",
+  "savedProgressReopenVerified": true,
+  "legacyMasteryExcludedFromCurrentDisplays": true,
+  "testLogs": {
+    "fullSuite": "build/ui_refresh_full_suite.log",
+    "affectedFixtures": "build/ui_refresh_dashboard_recheck.log",
+    "targetedChecks": "build/ui_refresh_final_tests.log",
+    "finalResultLayout": "build/ui_refresh_result_final.log",
+    "analysis": "build/ui_refresh_analysis.log"
+  }
+}

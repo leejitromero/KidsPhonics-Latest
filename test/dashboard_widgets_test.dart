@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kidsphonics/models/learning_progress.dart';
+import 'package:kidsphonics/models/letter_adventure.dart';
 import 'package:kidsphonics/providers/app_provider.dart';
 import 'package:kidsphonics/screens/parent_screen.dart';
 import 'package:kidsphonics/screens/progress_screen.dart';
@@ -23,6 +24,24 @@ void main() {
   Future<AppProvider> make(WidgetTester tester,
       {bool parent = false, bool empty = false}) async {
     SharedPreferences.setMockInitialValues({
+      'letterAdventuresV1': jsonEncode(empty
+          ? {}
+          : {
+              'A': const AdventureProgress(
+                      completed: 1,
+                      best: 4,
+                      mastered: true,
+                      lastAnswers: [false, true, true, true, true],
+                      sessionId: 'new-a',
+                      masteredAt: '2026-09-23T12:00:00.000')
+                  .toJson(),
+              'B': const AdventureProgress(
+                      completed: 1,
+                      best: 3,
+                      lastAnswers: [true, false, true, false, true],
+                      sessionId: 'new-b')
+                  .toJson(),
+            }),
       'letterProgressV2': jsonEncode(empty
           ? {}
           : {
@@ -159,22 +178,35 @@ void main() {
     final p = await make(tester);
     await tester.pumpWidget(app(p, const ProgressScreen()));
     await tester.pumpAndSettle();
-    expect(find.text('1 / 26'), findsOneWidget);
+    expect(
+        find.descendant(
+            of: find.byKey(const ValueKey('overall-mastery-illustration')),
+            matching: find.text('1 / 26')),
+        findsOneWidget);
     await tester.scrollUntilVisible(find.text('1 / 5'), 180,
         scrollable: find.byType(Scrollable).first);
     expect(find.text('1 / 5'), findsOneWidget);
     await tester.tap(find.byKey(const ValueKey('progress-tab-1')));
     await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(ChoiceChip, 'Mastered (1)'));
+    final masteryFilter = find.widgetWithText(ChoiceChip, 'Mastered (1)');
+    await tester.scrollUntilVisible(masteryFilter, 150,
+        scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+    await tester.tap(masteryFilter);
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('progress-letter-B')), findsNothing);
     final letter = find.byKey(const ValueKey('progress-letter-A'));
-    await tester.ensureVisible(letter);
+    await tester.scrollUntilVisible(letter, 150,
+        scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
     await tester.tap(letter);
     await tester.pumpAndSettle();
     expect(find.text('4 / 5'), findsNWidgets(2));
     expect(find.text('80%'), findsOneWidget);
-    await tester.tap(find.byKey(const ValueKey('progress-practice-letter')));
+    final practice = find.byKey(const ValueKey('progress-practice-letter'));
+    await tester.ensureVisible(practice);
+    await tester.pumpAndSettle();
+    await tester.tap(practice);
     await tester.pumpAndSettle();
     expect(
         tester
@@ -206,7 +238,8 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('progress-tab-1')));
     await tester.pumpAndSettle();
     final filter = find.widgetWithText(ChoiceChip, 'Mastered (0)');
-    await tester.ensureVisible(filter);
+    await tester.scrollUntilVisible(filter, 150,
+        scrollable: find.byType(Scrollable).first);
     await tester.pumpAndSettle();
     await tester.tap(filter);
     await tester.pumpAndSettle();
@@ -228,14 +261,14 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('letter-status-B')));
     await tester.pumpAndSettle();
     expect(find.text('Status: Practiced'), findsOneWidget);
-    expect(find.text('Letter Practice Accuracy: 67%'), findsOneWidget);
+    expect(find.text('Latest Quick Check accuracy: 60%'), findsOneWidget);
     expect(find.text('Best Quick Check: 3 / 5'), findsOneWidget);
     await tester.tap(find.text('Close'));
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('letter-status-C')));
     await tester.pumpAndSettle();
-    expect(
-        find.text('Letter Practice Accuracy: No attempts yet'), findsOneWidget);
+    expect(find.text('Latest Quick Check accuracy: No attempts yet'),
+        findsOneWidget);
     expect(find.text('Best Quick Check: Not taken yet'), findsOneWidget);
     await tester.tap(find.text('Close'));
     await tester.pumpAndSettle();

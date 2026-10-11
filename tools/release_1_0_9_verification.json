@@ -1,0 +1,34 @@
+{
+  "version": "1.0.9+10",
+  "verifiedUtc": "2026-10-09T08:48:07.649295+00:00",
+  "APK": "releases/KidsPhonics-1.0.9-build10.apk",
+  "sourceInputCount": 811,
+  "sourceSHA256": "e0b17bda0f5a257361cc1dab78fc30e7ec9721547229dd4e8dfbe5ffbcd983d6",
+  "inputsUnchangedAfterBuild": true,
+  "SuppliedWords": 71,
+  "VerifiedAssets": 676,
+  "RemovedAssetsAbsent": 365,
+  "CleanupFilesAbsent": 73,
+  "ApkBytes": 312731614,
+  "ApkSHA256": "BC1199BC87D9A6EE12D008700467B8F30D6EA9D9E0AE8164B98DF9AF5BB5FBB0",
+  "androidVersionName": "1.0.9",
+  "androidVersionCode": 10,
+  "signatureVerified": true,
+  "signerCertificateSHA256": "e51915ff388c75d5cb980d40ecb354a5379806fee2b3dc67a36ab4e701774f69",
+  "minimumAndroidSdk": 24,
+  "abis": [
+    "arm64-v8a",
+    "armeabi-v7a",
+    "x86_64"
+  ],
+  "homeRecordingsBundled": 5,
+  "quickCheckRecordingsBundled": 11,
+  "newRecordingHashesMatchSource": true,
+  "legacyCvcBlendingWavFiles": 0,
+  "fullStaticAnalysis": "No issues found",
+  "regressionTests": "486 passed in full suite; two stale test setups corrected and all three affected tests passed on rerun (488 distinct tests passed).",
+  "testLogs": [
+    "build/release_1_0_9_tests.log",
+    "build/release_1_0_9_recheck.log"
+  ]
+}

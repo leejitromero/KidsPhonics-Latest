@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'mascot_guide.dart';
+import 'game_mascot_coach.dart';
 
 /// A compact welcome that lets the shared sky show behind the mascot and text.
 class GameZoneWelcome extends StatelessWidget {
@@ -47,7 +47,13 @@ class GameZoneWelcome extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            const MascotPortrait(mascot: LearningMascot.wigloo, size: 76),
+            Image.asset(GameMascotCoach.mascotAsset,
+                key: const ValueKey('game-zone-mascot'),
+                width: 76,
+                height: 76,
+                fit: BoxFit.contain,
+                cacheWidth: 192,
+                excludeFromSemantics: true),
           ],
         ),
       );

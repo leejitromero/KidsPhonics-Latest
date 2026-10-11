@@ -1,4 +1,8 @@
 import 'progress_design.dart';
+import 'overall_mastery_panel.dart';
+import 'quick_check_recommendation.dart';
+import 'mastery_illustration.dart';
+import 'progress_collection_design.dart';
 import 'button_sound.dart';
 import 'package:flutter/material.dart';
 import 'adventure_background.dart';
@@ -12,7 +16,6 @@ import '../screens/letter_mastery_check_screen.dart';
 import '../theme/kids_ui.dart';
 import 'learner_widgets.dart';
 import 'learning_progress_widgets.dart';
-import 'mascot_guide.dart';
 
 const _purple = progressPurple;
 const _teal = progressGreen;
@@ -39,8 +42,11 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
     if (_scroll.hasClients) _scroll.jumpTo(0);
   }
 
-  void _practice(String letter) => LearnerNavigation.open(
-      context, LetterMasteryCheckScreen(letter: letterContent(letter)));
+  void _practice(String letter) {
+    LearnerNavigation.open(
+        context, LetterMasteryCheckScreen(letter: letterContent(letter)),
+        cloudTransition: true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +72,7 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
                       child: Column(children: [
                         const ProgressHeader(),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+                          padding: const EdgeInsets.fromLTRB(14, 2, 14, 8),
                           child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -74,7 +80,7 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
                                   (
                                     0,
                                     'My Journey',
-                                    Icons.route_rounded,
+                                    Icons.map_rounded,
                                     const Color(0xFFFFCB39)
                                   ),
                                   (
@@ -112,7 +118,7 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
                                                     padding: const EdgeInsets
                                                         .symmetric(
                                                         horizontal: 3,
-                                                        vertical: 10),
+                                                        vertical: 6),
                                                     shape:
                                                         RoundedRectangleBorder(
                                                             borderRadius:
@@ -122,14 +128,14 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
                                                 child: Column(children: [
                                                   if (index == 1)
                                                     Image.asset(
-                                                        'assets/images/lesson_logos/letter_recognition.png',
-                                                        width: 38,
-                                                        height: 33,
+                                                        'assets/images/lesson_logos/letter_recognition.webp',
+                                                        width: 28,
+                                                        height: 24,
                                                         excludeFromSemantics:
                                                             true)
                                                   else
                                                     Icon(icon,
-                                                        size: 33,
+                                                        size: 24,
                                                         color: color,
                                                         shadows: const [
                                                           Shadow(
@@ -139,7 +145,7 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
                                                                   Offset(0, 2),
                                                               blurRadius: 2)
                                                         ]),
-                                                  const SizedBox(height: 4),
+                                                  const SizedBox(height: 2),
                                                   Text(title,
                                                       textAlign:
                                                           TextAlign.center,
@@ -155,11 +161,11 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
                         Expanded(
                             child: ListView(
                           controller: _scroll,
-                          padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+                          padding: const EdgeInsets.fromLTRB(14, 2, 14, 16),
                           children: [
                             ...switch (_tab) {
                               1 => _letters(p, themedContext),
-                              2 => _rewards(p),
+                              2 => _rewards(p, themedContext),
                               _ => _journey(p),
                             },
                             const Padding(
@@ -176,84 +182,76 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
                     )),
                   ),
                 ),
-                bottomNavigationBar: NavigationBar(
-                  selectedIndex: 3,
-                  labelTextStyle: WidgetStateProperty.resolveWith((states) =>
-                      TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 13,
-                          fontWeight: states.contains(WidgetState.selected)
-                              ? FontWeight.w900
-                              : FontWeight.w700,
-                          color: states.contains(WidgetState.selected)
-                              ? _purple
-                              : const Color(0xFF55505C))),
-                  backgroundColor: Colors.white,
-                  indicatorColor: const Color(0xFFE6DDFB),
-                  onDestinationSelected: withSelectionSound((index) {
-                    if (ModalRoute.of(context)?.isCurrent != true ||
-                        index == 3) {
-                      return;
-                    }
-                    if (index == 0) {
-                      Navigator.maybePop(context);
-                    } else {
-                      LearnerNavigation.open(
-                          context,
-                          index == 1
-                              ? const LessonsScreen()
-                              : const GamesScreen(),
-                          replace: true);
-                    }
-                  }),
-                  destinations: const [
-                    NavigationDestination(
-                        icon: Icon(Icons.home_rounded), label: 'Home'),
-                    NavigationDestination(
-                        icon: Icon(Icons.menu_book_rounded), label: 'Lessons'),
-                    NavigationDestination(
-                        icon: Icon(Icons.sports_esports_rounded),
-                        label: 'Games'),
-                    NavigationDestination(
-                        icon: Icon(Icons.auto_graph_rounded),
-                        selectedIcon:
-                            Icon(Icons.auto_graph_rounded, color: _purple),
-                        label: 'Progress'),
-                  ],
-                ),
+                bottomNavigationBar: ClipRRect(
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(24)),
+                    child: NavigationBar(
+                      selectedIndex: 3,
+                      labelTextStyle: WidgetStateProperty.resolveWith(
+                          (states) => TextStyle(
+                              fontFamily: 'Nunito',
+                              fontSize: 13,
+                              fontWeight: states.contains(WidgetState.selected)
+                                  ? FontWeight.w900
+                                  : FontWeight.w700,
+                              color: states.contains(WidgetState.selected)
+                                  ? _purple
+                                  : const Color(0xFF55505C))),
+                      backgroundColor: Colors.white,
+                      indicatorColor: const Color(0xFFE6DDFB),
+                      onDestinationSelected: withSelectionSound((index) {
+                        if (ModalRoute.of(context)?.isCurrent != true ||
+                            index == 3) {
+                          return;
+                        }
+                        if (index == 0) {
+                          Navigator.maybePop(context);
+                        } else {
+                          LearnerNavigation.open(
+                              context,
+                              index == 1
+                                  ? const LessonsScreen()
+                                  : const GamesScreen(),
+                              replace: true);
+                        }
+                      }),
+                      destinations: const [
+                        NavigationDestination(
+                            icon: Icon(Icons.home_rounded), label: 'Home'),
+                        NavigationDestination(
+                            icon: Icon(Icons.menu_book_rounded),
+                            label: 'Lessons'),
+                        NavigationDestination(
+                            icon: Icon(Icons.sports_esports_rounded),
+                            label: 'Games'),
+                        NavigationDestination(
+                            icon: Icon(Icons.bar_chart_rounded),
+                            selectedIcon:
+                                Icon(Icons.bar_chart_rounded, color: _purple),
+                            label: 'Progress'),
+                      ],
+                    )),
               )),
     );
   }
 
   List<Widget> _journey(AppProvider p) {
-    final next = p.recommendedNextPractice;
     return [
-      _card(
-          tint: const Color(0xFFFFF0BA),
-          child: Row(children: [
-            const MascotPortrait(mascot: LearningMascot.zoplet, size: 118),
-            const SizedBox(width: 10),
-            Expanded(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                  _title('Look how you grow!'),
-                  const SizedBox(height: 8),
-                  const Text('Keep going!',
-                      style: TextStyle(fontSize: 16, color: KidsUi.muted)),
-                ])),
-          ])),
+      const QuickCheckRecommendation(),
+      const SizedBox(height: 8),
+      const OverallMasteryPanel(dense: true),
+      const ProgressGrowthIllustration(),
       ProgressMasteryCard(
-          letters: p.allLetterProgress,
+          letters: p.quickCheckLetters,
           title: 'My alphabet',
           color: _purple,
           icon: Icons.menu_book_rounded,
           onOpen: () => _selectTab(1)),
       ProgressMasteryCard(
-          letters: p.allLetterProgress
+          letters: p.quickCheckLetters
               .where((l) => 'AEIOU'.contains(l.letter))
               .toList(),
-          title: 'Vowel Sounds',
+          title: 'Vowel Adventures',
           color: _teal,
           icon: Icons.star_rounded,
           vowels: true,
@@ -265,14 +263,16 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const ProgressHeading('Practice', Icons.edit_rounded,
                   color: Color(0xFFE8A421)),
-              const SizedBox(height: 12),
+              const SizedBox(height: 6),
               _badge(
                   Icons.menu_book_rounded,
-                  '${p.practicedLetterCount} practiced',
+                  '${p.quickCheckStatusCount(LearningStatus.practiced)} practiced',
                   const Color(0xFFBE540E)),
-              const SizedBox(height: 8),
-              _badge(Icons.visibility_rounded,
-                  '${p.viewedLetterCount} explored', const Color(0xFF167BDC)),
+              const SizedBox(height: 5),
+              _badge(
+                  Icons.visibility_rounded,
+                  '${p.quickCheckStatusCount(LearningStatus.viewed)} explored',
+                  const Color(0xFF167BDC)),
             ]));
         final streak = _card(
             tint: const Color(0xFFFFEFF1),
@@ -280,14 +280,14 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
               const ProgressHeading(
                   'My streak', Icons.local_fire_department_rounded,
                   color: Color(0xFFE95666)),
-              const SizedBox(height: 10),
+              const SizedBox(height: 6),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 const Icon(Icons.local_fire_department_rounded,
-                    size: 36, color: Color(0xFFFF7131)),
+                    size: 26, color: Color(0xFFFF7131)),
                 const SizedBox(width: 5),
                 Text('${p.streak}',
                     style: const TextStyle(
-                        fontSize: 30,
+                        fontSize: 24,
                         fontWeight: FontWeight.w900,
                         color: Color(0xFFD92942))),
               ]),
@@ -311,93 +311,30 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
         }
         return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Expanded(child: practice),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Expanded(child: streak),
         ]);
       }),
-      _card(
-          tint: const Color(0xFFDDF3FF),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const ProgressHeading('Up next', Icons.play_circle_rounded,
-                color: Color(0xFF49B5EB)),
-            const SizedBox(height: 12),
-            Row(children: [
-              Image.asset('assets/images/lesson_logos/letter_recognition.png',
-                  width: 64, height: 64, excludeFromSemantics: true),
-              const SizedBox(width: 10),
-              Expanded(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                    _title(next == null
-                        ? 'All letters mastered!'
-                        : 'Let’s practice ${next.letter}!'),
-                    Text(
-                        next == null
-                            ? 'Pick a letter to practice.'
-                            : 'Ready to try?',
-                        style:
-                            const TextStyle(fontSize: 15, color: KidsUi.muted)),
-                  ])),
-            ]),
-            const SizedBox(height: 12),
-            Align(
-                alignment: Alignment.centerRight,
-                child: DecoratedBox(
-                    decoration: progressGloss(_teal, radius: 40),
-                    child: FilledButton.icon(
-                        onPressed: withButtonSound(next == null
-                            ? () => _selectTab(1)
-                            : () => _practice(next.letter)),
-                        style: FilledButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            minimumSize: const Size(0, 48),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10)),
-                        icon: const Icon(Icons.play_arrow_rounded),
-                        label: Text(next == null
-                            ? 'Choose a letter'
-                            : 'Practice ${next.letter}')))),
-          ])),
     ];
   }
 
   List<Widget> _letters(AppProvider p, BuildContext themedContext) {
-    final letters = p.allLetterProgress
+    final letters = p.quickCheckLetters
         .where((l) => _filter == null || l.status == _filter)
         .toList();
     return [
-      _card(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        _heading(Icons.abc_rounded, 'My letter collection'),
-        const SizedBox(height: 6),
-        const Text('Tap a letter to practice.',
-            style: TextStyle(fontSize: 16, color: KidsUi.muted)),
-        const SizedBox(height: 12),
-        Wrap(spacing: 8, runSpacing: 8, children: [
-          ChoiceChip(
-              label: const Text('All 26'),
-              selected: _filter == null,
-              onSelected: (_) => setState(() => _filter = null)),
-          for (final status in LearningStatus.values)
-            ChoiceChip(
-              avatar: Icon(status.icon, size: 18, color: _statusColor(status)),
-              label: Text(
-                  '${_statusName(status)} (${p.allLetterProgress.where((l) => l.status == status).length})'),
-              selected: _filter == status,
-              onSelected: (_) => setState(() => _filter = status),
-            ),
-        ]),
-      ])),
+      const OverallMasteryPanel(showLetters: true, dense: true),
+      ProgressCollectionHeader(
+          letters: p.quickCheckLetters,
+          selected: _filter,
+          onSelected: (status) => setState(() => _filter = status)),
       if (letters.isEmpty)
         _card(
             child: const Column(children: [
-          Icon(Icons.explore_outlined, size: 42, color: _purple),
-          SizedBox(height: 10),
+          Icon(Icons.explore_outlined, size: 30, color: _purple),
+          SizedBox(height: 6),
           Text('No letters here yet.',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
           SizedBox(height: 6),
           Text('Tap All 26 to choose your next letter.',
               textAlign: TextAlign.center),
@@ -405,56 +342,20 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
       else
         LayoutBuilder(builder: (_, box) {
           final scale = MediaQuery.textScalerOf(context).scale(16) / 16;
-          final count = (box.maxWidth / (94 * scale)).floor().clamp(2, 6);
+          final count = (box.maxWidth / (80 * scale)).floor().clamp(2, 8);
           return GridView.count(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: count,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: .82,
-            children: [
-              for (final letter in letters)
-                Semantics(
-                  label: '${letter.letter}: ${_statusName(letter.status)}',
-                  button: true,
-                  child: Tooltip(
-                      message: _statusName(letter.status),
-                      child: Material(
-                        color: KidsUi.cardSurface,
-                        surfaceTintColor: Colors.transparent,
-                        borderRadius: BorderRadius.circular(20),
-                        child: InkWell(
-                          key: ValueKey('progress-letter-${letter.letter}'),
-                          borderRadius: BorderRadius.circular(20),
-                          onTap: withButtonSound(
-                              () => _letterDetail(themedContext, letter)),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                    color: _statusColor(letter.status)
-                                        .withValues(alpha: .4),
-                                    width: 2)),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(letter.letter,
-                                      style: TextStyle(
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.w900,
-                                          color: _statusColor(letter.status))),
-                                  const SizedBox(height: 4),
-                                  Icon(letter.status.icon,
-                                      color: _statusColor(letter.status),
-                                      size: 24),
-                                ]),
-                          ),
-                        ),
-                      )),
-                ),
-            ],
-          );
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: count,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              childAspectRatio: 1.15,
+              children: [
+                for (final letter in letters)
+                  ProgressLetterTile(
+                      letter: letter,
+                      onPressed: () => _letterDetail(themedContext, letter))
+              ]);
         }),
     ];
   }
@@ -469,7 +370,7 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
       builder: (ctx) => SafeArea(
           top: false,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -477,7 +378,7 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
                   Text('Letter ${letter.letter}',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                          fontSize: 32,
+                          fontSize: 26,
                           fontWeight: FontWeight.w900,
                           color: _purple)),
                   const SizedBox(height: 10),
@@ -486,7 +387,7 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
                           letter.status.icon,
                           _statusName(letter.status),
                           _statusColor(letter.status))),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 12),
                   _detailRow(Icons.check_circle_outline, 'Correct answers',
                       '${letter.correctAnswers} / ${letter.attempts}'),
                   _detailRow(
@@ -495,8 +396,19 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
                       letter.completedAssessments == 0
                           ? 'Not tried yet'
                           : '${letter.bestAssessmentScore} / 5'),
-                  _detailRow(Icons.auto_graph_rounded, 'Practice accuracy',
+                  _detailRow(
+                      Icons.auto_graph_rounded,
+                      'Latest Quick Check accuracy',
                       accuracyLabel(letter.accuracy)),
+                  _detailRow(Icons.abc_rounded, 'Letter recordings heard',
+                      '${letter.nameListens}'),
+                  _detailRow(Icons.hearing_rounded, 'Sound recordings heard',
+                      '${letter.soundListens}'),
+                  _detailRow(Icons.image_rounded, 'Word recordings heard',
+                      '${letter.wordListens}'),
+                  const Text(
+                      'Listening counts show practice, not sound mastery. Quick Check covers letters and words.',
+                      style: TextStyle(color: KidsUi.muted)),
                   const SizedBox(height: 16),
                   FilledButton.icon(
                     key: const ValueKey('progress-practice-letter'),
@@ -517,68 +429,54 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
     );
   }
 
-  List<Widget> _rewards(AppProvider p) => [
-        _card(
-            tint: const Color(0xFFFFF1CD),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              _heading(Icons.emoji_events_rounded, 'My treasure shelf',
-                  color: const Color(0xFF985018)),
-              const SizedBox(height: 14),
-              Wrap(spacing: 10, runSpacing: 10, children: [
-                _badge(Icons.emoji_events_rounded, 'Level ${p.level}',
-                    const Color(0xFF985018)),
-                _badge(Icons.star_rounded, '${p.stars} stars',
-                    const Color(0xFF985018)),
-                _badge(Icons.bolt_rounded, '${p.xp} XP', _purple),
-              ]),
-              const SizedBox(height: 12),
-              const Text('Stars and XP celebrate your practice!',
-                  style: TextStyle(fontSize: 16)),
-            ])),
+  List<Widget> _rewards(AppProvider p, BuildContext themedContext) => [
+        const OverallMasteryPanel(showAchievements: true, dense: true),
+        ProgressTreasureShelf(level: p.level, stars: p.stars, xp: p.xp),
         Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: _title(
-                'My badges · ${p.unlockedAchievementCount} / ${p.learningAchievements.length}')),
-        for (final badge in p.learningAchievements)
-          _card(
-              child:
-                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                    color: badge.unlocked
-                        ? const Color(0xFFFFF1CD)
-                        : const Color(0xFFF0EDF5),
-                    shape: BoxShape.circle),
-                child: Icon(
-                    badge.unlocked
-                        ? Icons.workspace_premium_rounded
-                        : Icons.lock_outline_rounded,
-                    size: 30,
-                    color: badge.unlocked
-                        ? const Color(0xFF985018)
-                        : KidsUi.muted)),
-            const SizedBox(width: 12),
-            Expanded(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                  Text(badge.title,
-                      style: const TextStyle(
-                          fontSize: 19, fontWeight: FontWeight.w900)),
-                  const SizedBox(height: 4),
-                  Text(badge.description,
-                      style:
-                          const TextStyle(fontSize: 15, color: KidsUi.muted)),
-                  const SizedBox(height: 6),
-                  Text(badge.unlocked ? 'You earned it!' : 'Keep exploring!',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w800,
-                          color: badge.unlocked ? _teal : _purple)),
-                ])),
-          ])),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+            child: Text(
+                'My Badges \u00b7 ${p.quickCheckAchievements.where((a) => a.unlocked).length} / ${p.quickCheckAchievements.length}',
+                style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                    color: progressInk,
+                    shadows: [
+                      Shadow(
+                          color: Colors.white,
+                          blurRadius: 4,
+                          offset: Offset(0, 2))
+                    ]))),
+        for (final badge in p.quickCheckAchievements)
+          ProgressAchievementCard(
+              achievement: badge,
+              onPressed: () => showDialog<void>(
+                  context: themedContext,
+                  builder: (ctx) => AlertDialog(
+                          backgroundColor: const Color(0xFFFFFEF5),
+                          title: Text(badge.title,
+                              style: const TextStyle(
+                                  color: progressInk,
+                                  fontWeight: FontWeight.w900)),
+                          content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(badge.description),
+                                const SizedBox(height: 12),
+                                Text(
+                                    badge.unlocked
+                                        ? 'You earned it!'
+                                        : 'Keep exploring!',
+                                    style: TextStyle(
+                                        color: badge.unlocked ? _teal : _purple,
+                                        fontWeight: FontWeight.w900)),
+                              ]),
+                          actions: [
+                            TextButton(
+                                onPressed:
+                                    withButtonSound(() => Navigator.pop(ctx)),
+                                child: const Text('Close'))
+                          ]))),
         const Padding(
             padding: EdgeInsets.symmetric(vertical: 8),
             child: Text('Quick Checks show which letters you have mastered.',
@@ -599,13 +497,8 @@ Color _statusColor(LearningStatus status) => switch (status) {
       LearningStatus.practiced => const Color(0xFF995019),
       LearningStatus.mastered => _teal,
     };
-Widget _title(String title) => Text(title,
-    style: const TextStyle(
-        fontSize: 22, fontWeight: FontWeight.w900, color: progressInk));
-Widget _heading(IconData icon, String title, {Color color = _purple}) =>
-    ProgressHeading(title, icon, color: color);
 Widget _badge(IconData icon, String label, Color color) => Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       decoration: BoxDecoration(
           color: color.withValues(alpha: .09),
           borderRadius: BorderRadius.circular(14)),

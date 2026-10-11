@@ -1,0 +1,16 @@
+﻿[
+    {
+        "Source":  "C:/Users/leeji/KidsPhonicsProject/screen animations/button.png",
+        "Asset":  "assets/images/quick_check/sound_choices.png",
+        "SHA256":  "2867797B5A7ABB3250FE42696678A0D62CA6B56E6DBD398365D4D78AAE2FCC65",
+        "Bytes":  1686467,
+        "OriginalBytesPreserved":  true
+    },
+    {
+        "Source":  "C:/Users/leeji/KidsPhonicsProject/screen animations/button options.png",
+        "Asset":  "assets/images/quick_check/letter_choices.png",
+        "SHA256":  "1C9E7E17622C26FD16F94FC4A4ECC478FD82D7AB2F332FC0B34498A7E37CE486",
+        "Bytes":  1528101,
+        "OriginalBytesPreserved":  true
+    }
+]

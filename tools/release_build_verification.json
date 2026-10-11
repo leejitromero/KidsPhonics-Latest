@@ -1,0 +1,32 @@
+{
+  "version": "1.0.8+9",
+  "verifiedUtc": "2026-10-09T04:24:52.334064+00:00",
+  "APK": "releases/KidsPhonics-1.0.8-build9.apk",
+  "APKBytes": 311671927,
+  "APKSHA256": "7230ce3c2ef9ccbb10a248b6db0598bcb6255adb5450eefafc178a0b5f5b98e4",
+  "sourceInputCount": 791,
+  "sourceSHA256": "7cfd1a33be84e925abb8f3e2ecdfcf22c2da4548ebc3bfe5e016526bfaaddf48",
+  "inputsUnchangedAfterBuild": true,
+  "compiledFeatures": {
+    "arm64-v8a": {
+      "LetterAdventure": true,
+      "RhymingJar": true,
+      "CVC": true,
+      "Blending": true
+    },
+    "armeabi-v7a": {
+      "LetterAdventure": true,
+      "RhymingJar": true,
+      "CVC": true,
+      "Blending": true
+    },
+    "x86_64": {
+      "LetterAdventure": true,
+      "RhymingJar": true,
+      "CVC": true,
+      "Blending": true
+    }
+  },
+  "legacyCvcBlendingWavFiles": 0,
+  "instructionNarration": "Awaiting the 11 user recordings; existing word and phoneme recordings are active"
+}

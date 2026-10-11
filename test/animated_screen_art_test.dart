@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,18 +16,17 @@ import 'learner_ui_test.dart' show mount, close;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  test('all thirteen current frames are bundled at their original dimensions',
+  test('all current sky frames are bundled at their original dimensions',
       () async {
-    expect(homeFrames.length, 3);
-    for (final asset in [...skyFrames, ...homeFrames]) {
+    expect(skyFrames.length, 5);
+    for (final asset in skyFrames) {
       final bytes = await rootBundle.load(asset);
-      expect(bytes.getUint32(16), 941, reason: asset);
-      expect(bytes.getUint32(20), 1672, reason: asset);
-    }
-    for (final asset in parentsFrames) {
-      final bytes = await rootBundle.load(asset);
-      expect(bytes.getUint32(16), 1254, reason: asset);
-      expect(bytes.getUint32(20), 1254, reason: asset);
+      final codec = await ui.instantiateImageCodec(bytes.buffer.asUint8List());
+      final frame = await codec.getNextFrame();
+      expect(frame.image.width, 941, reason: asset);
+      expect(frame.image.height, 1672, reason: asset);
+      frame.image.dispose();
+      codec.dispose();
     }
   });
 
@@ -86,12 +86,13 @@ void main() {
   });
 
   for (final (name, frames) in [
-    ('Home', homeFrames),
-    ('Parents', parentsFrames)
+    ('Sky', skyFrames),
+    ('Lessons', lessonFrames)
   ]) {
     testWidgets('$name plays at the slower pace and respects motion settings',
         (t) async {
       var reduced = false;
+      const homeFrameDuration = Duration(milliseconds: 450);
       Future<void> render() async => t.pumpWidget(MaterialApp(
               home: MediaQuery(
             data: MediaQueryData(

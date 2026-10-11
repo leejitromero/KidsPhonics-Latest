@@ -31,7 +31,7 @@ class _LessonControlButtonState extends State<LessonControlButton> {
     final art = widget.art;
     final asset = art == null
         ? null
-        : 'assets/images/button_designs/${art.name}_button_${_variant % (art == LessonButtonArt.previous ? 2 : 3) + 1}.png';
+        : 'assets/images/button_designs/${art.name}_button_${_variant % (art == LessonButtonArt.previous ? 2 : 3) + 1}.webp';
     return OutlinedButton(
       onPressed: withButtonSound(widget.onPressed),
       style: OutlinedButton.styleFrom(

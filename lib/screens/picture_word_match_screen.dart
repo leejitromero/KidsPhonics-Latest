@@ -128,20 +128,18 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
     final isCorrect = emoji == _round.correctEmoji;
     setState(() => _picked = emoji);
 
-    final provider = context.read<AppProvider>();
     recordGameAnswer(correct: isCorrect);
     if (isCorrect) {
       setState(() {
         _answered = true;
       });
-      provider.audio.playCorrect();
+      playGameCorrect();
       awardGameXp((8 * widget.difficulty.xpMultiplier).round());
       awardGameStar();
       await _flyToFrame(_round.options.indexOf(emoji));
-      // No competing voice — correct.mp3 plays cleanly
     } else {
       // Wrong — play wrong.mp3 tone, show red flash, then clear so child can retry
-      provider.audio.playWrong();
+      playGameWrong();
       await Future.delayed(const Duration(milliseconds: 900));
       if (mounted) setState(() => _picked = null);
     }
@@ -188,6 +186,7 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+        narration: gameNarration,
         answerResult: _picked == null ? null : _picked == _round.correctEmoji,
         title: 'Picture Match',
         fitViewport: true,

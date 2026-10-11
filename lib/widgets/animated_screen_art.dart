@@ -2,40 +2,24 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 const skyFrames = [
-  'assets/images/screen_frames/background/bg-1.png',
-  'assets/images/screen_frames/background/bg-2.png',
-  'assets/images/screen_frames/background/bg-3.png',
-  'assets/images/screen_frames/background/bg-4.png',
-  'assets/images/screen_frames/background/bg-5.png',
-];
-const homeFrames = [
-  'assets/images/screen_frames/home/main-1.png',
-  'assets/images/screen_frames/home/main-2.png',
-  'assets/images/screen_frames/home/main-3.png',
+  'assets/images/screen_frames/background/bg-1.webp',
+  'assets/images/screen_frames/background/bg-2.webp',
+  'assets/images/screen_frames/background/bg-3.webp',
+  'assets/images/screen_frames/background/bg-4.webp',
+  'assets/images/screen_frames/background/bg-5.webp',
 ];
 const lessonFrames = [
-  'assets/images/screen_frames/lessons/b1.png',
-  'assets/images/screen_frames/lessons/b2.png',
-  'assets/images/screen_frames/lessons/b3.png',
-  'assets/images/screen_frames/lessons/b4.png',
-  'assets/images/screen_frames/lessons/b5.png',
+  'assets/images/screen_frames/lessons/leson1.webp',
+  'assets/images/screen_frames/lessons/leson2.webp',
+  'assets/images/screen_frames/lessons/leson3.webp',
+  'assets/images/screen_frames/lessons/leson4.webp',
 ];
 const gameFrames = [
-  'assets/images/screen_frames/games/g1.png',
-  'assets/images/screen_frames/games/g2.png',
-  'assets/images/screen_frames/games/g3.png',
-  'assets/images/screen_frames/games/g4.png',
+  'assets/images/screen_frames/games/g1.webp',
+  'assets/images/screen_frames/games/g2.webp',
+  'assets/images/screen_frames/games/g3.webp',
+  'assets/images/screen_frames/games/g4.webp',
 ];
-const parentsFrames = [
-  'assets/images/screen_frames/parents/f1.png',
-  'assets/images/screen_frames/parents/f2.png',
-  'assets/images/screen_frames/parents/f3.png',
-  'assets/images/screen_frames/parents/f4.png',
-  'assets/images/screen_frames/parents/f5.png',
-];
-
-// A gentler pace for the main menu's three-frame illustration.
-const homeFrameDuration = Duration(milliseconds: 450);
 
 /// Preloaded, local frames. Only this artwork repaints when the frame changes.
 /// Motion pauses off-route, in the background, and with reduced motion enabled.

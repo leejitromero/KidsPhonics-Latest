@@ -48,6 +48,11 @@ void main() {
 
       await tester.pumpWidget(app());
       await settle();
+      if (!tutorial.showOnFirstVisit) {
+        expect(find.byKey(const ValueKey('game-tutorial')), findsNothing);
+        await tester.tap(find.text('Help'));
+        await settle();
+      }
       expect(find.text('Step 1 of 3'), findsOneWidget);
       await tester.tap(find.text('Skip'));
       await settle();

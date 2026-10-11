@@ -4,6 +4,7 @@ import '../models/learning_progress.dart';
 import '../providers/app_provider.dart';
 import '../theme/app_theme.dart';
 import 'learning_progress_widgets.dart';
+import 'parent_settings_design.dart';
 
 class DashboardSection extends StatelessWidget {
   const DashboardSection({super.key, required this.title, required this.child});
@@ -31,8 +32,10 @@ class DashboardSection extends StatelessWidget {
 }
 
 class RewardsSummary extends StatelessWidget {
-  const RewardsSummary({super.key, this.showAchievements = false});
+  const RewardsSummary(
+      {super.key, this.showAchievements = false, this.light = false});
   final bool showAchievements;
+  final bool light;
   @override
   Widget build(BuildContext context) {
     final p = context.watch<AppProvider>();
@@ -44,13 +47,14 @@ class RewardsSummary extends StatelessWidget {
       ]),
       const SizedBox(height: 10),
       Text(
-          '${p.unlockedAchievementCount} / ${p.learningAchievements.length} Achievements'),
-      const Text(
+          '${p.quickCheckAchievements.where((a) => a.unlocked).length} / ${p.quickCheckAchievements.length} Achievements'),
+      Text(
           'Rewards celebrate your practice. Mastery comes from letter quick checks.',
-          style: TextStyle(color: Colors.white70, fontSize: 14)),
+          style: TextStyle(
+              color: light ? parentMuted : Colors.white70, fontSize: 14)),
       if (showAchievements) ...[
         const SizedBox(height: 12),
-        ...p.learningAchievements.map((a) => Padding(
+        ...p.quickCheckAchievements.map((a) => Padding(
               padding: const EdgeInsets.symmetric(vertical: 6),
               child:
                   Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -143,19 +147,44 @@ class ParentScreenTimeSummary extends StatelessWidget {
     final time = context.watch<AppProvider>().screenTime;
     final limited = time.isLimitEnabled && !time.isBypassedToday;
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(
-          limited
-              ? '${time.usedSecondsToday ~/ 60} / ${time.allowedSecondsToday ~/ 60} minutes allowed today'
-              : '${time.usedSecondsToday ~/ 60} minutes used today',
-          style: const TextStyle(fontSize: 18)),
-      const SizedBox(height: 8),
+      Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                  colors: [Color(0xFFF0F9DF), Color(0xFFEAF7D5)]),
+              borderRadius: BorderRadius.circular(20)),
+          child: Row(children: [
+            const ParentIconBadge(icon: Icons.timer_rounded, size: 32),
+            const SizedBox(width: 8),
+            Expanded(
+                child: Text.rich(
+                    TextSpan(children: [
+                      TextSpan(
+                          text: limited
+                              ? '${time.usedSecondsToday ~/ 60} / ${time.allowedSecondsToday ~/ 60}'
+                              : '${time.usedSecondsToday ~/ 60}',
+                          style: const TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.w900)),
+                      TextSpan(
+                          text: limited
+                              ? ' minutes allowed today'
+                              : ' minutes used today'),
+                    ]),
+                    style: const TextStyle(
+                        fontFamily: 'Nunito',
+                        color: parentInk,
+                        fontSize: 14,
+                        height: 1.2))),
+          ])),
+      const SizedBox(height: 5),
       if (limited)
         LinearProgressIndicator(
             value: (time.usedSecondsToday / time.allowedSecondsToday)
                 .clamp(0.0, 1.0),
-            minHeight: 8,
+            minHeight: 6,
             color: AppColors.teal),
-      const SizedBox(height: 8),
+      const SizedBox(height: 5),
       Text(!time.isLimitEnabled
           ? 'Daily limit is turned off.'
           : time.isBypassedToday
@@ -163,9 +192,16 @@ class ParentScreenTimeSummary extends StatelessWidget {
               : '${(time.remainingSeconds / 60).ceil()} minutes remaining'),
       Text('Configured Daily Limit: ${time.dailyLimitMinutes} minutes'),
       Text('Extra Time Today: ${time.extraSecondsToday ~/ 60} minutes'),
-      const SizedBox(height: 6),
-      const Text('App usage is separate from learning performance.',
-          style: TextStyle(fontSize: 14, color: Colors.white70)),
+      const Padding(
+          padding: EdgeInsets.symmetric(vertical: 6),
+          child: Divider(height: 1, color: Color(0xFFDCEADB))),
+      const Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Icon(Icons.info_rounded, color: Color(0xFFAACF64), size: 18),
+        SizedBox(width: 8),
+        Expanded(
+            child: Text('App usage is separate from learning performance.',
+                style: TextStyle(fontSize: 12, color: parentMuted))),
+      ]),
     ]);
   }
 }

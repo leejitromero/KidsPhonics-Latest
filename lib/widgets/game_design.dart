@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'button_sound.dart';
 
-/// UI primitives matched to design_reference/new_ui; all content stays live.
+/// UI primitives matched to the supplied design references; all content stays live.
 class GameDesign extends InheritedWidget {
   const GameDesign({super.key, required super.child});
   static bool active(BuildContext context) =>
@@ -160,11 +160,11 @@ class ForestTile extends StatelessWidget {
   final Widget child;
   final int variant;
   static const frames = [
-    'assets/images/new_ui/frame_pink.png',
-    'assets/images/answer_choices/frame-1.png',
-    'assets/images/answer_choices/frame-4.png',
-    'assets/images/answer_choices/frame-3.png',
-    'assets/images/answer_choices/frame-2.png',
+    'assets/images/new_ui/frame_pink.webp',
+    'assets/images/answer_choices/frame-1.webp',
+    'assets/images/answer_choices/frame-4.webp',
+    'assets/images/answer_choices/frame-3.webp',
+    'assets/images/answer_choices/frame-2.webp',
   ];
   @override
   Widget build(BuildContext context) => CustomPaint(

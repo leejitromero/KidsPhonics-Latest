@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
+import '../models/learning_progress.dart';
 import '../theme/kids_ui.dart';
 import '../widgets/button_sound.dart';
 import '../widgets/learner_widgets.dart';
@@ -125,7 +126,7 @@ class _VowelSoundsScreenState extends State<VowelSoundsScreen> {
                       child: Column(children: [
                     Expanded(
                         child: Image.asset(
-                            'assets/images/letters/${_letter.toLowerCase()}.png',
+                            'assets/images/letters/${_letter.toLowerCase()}.webp',
                             key: const ValueKey('vowel-letter'),
                             fit: BoxFit.contain,
                             cacheWidth: 480)),
@@ -150,6 +151,8 @@ class _VowelSoundsScreenState extends State<VowelSoundsScreen> {
             AudioButton(
                 key: ValueKey('vowel-sound-$_letter'),
                 phrase: 'lesson-sound-$_letter',
+                onPlayed: () => _provider!
+                    .recordLetterListening(_letter, LetterListeningKind.sound),
                 label: '/${_letter.toLowerCase()}/',
                 lessonArt: true),
             const SizedBox(height: 8),

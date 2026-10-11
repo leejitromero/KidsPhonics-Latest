@@ -1,0 +1,342 @@
+{
+  "recordings": [
+    {
+      "source": "rhyming words/intro rhyming words.mp3",
+      "asset": "assets/audio/rhyming_jar/intro.mp3",
+      "bytes": 177434,
+      "sha256": "5e2b8dce5b8549b7df8183a167de0ae2fb4c93ae2878dce9125feface43d374c"
+    },
+    {
+      "source": "rhyming words/word praise/praise-bed.mp3",
+      "asset": "assets/audio/rhyming_jar/praise-bed.mp3",
+      "bytes": 118502,
+      "sha256": "76110fbba463e0c174b474c598a4c678995177c060537189f733d3f4d5b5f7ef"
+    },
+    {
+      "source": "rhyming words/word praise/praise-bug.mp3",
+      "asset": "assets/audio/rhyming_jar/praise-bug.mp3",
+      "bytes": 118502,
+      "sha256": "1b361036b207292d5248183492d249d1eb4cb74619d834136cf3ba61ea845356"
+    },
+    {
+      "source": "rhyming words/word praise/praise-cat.mp3",
+      "asset": "assets/audio/rhyming_jar/praise-cat.mp3",
+      "bytes": 110978,
+      "sha256": "33c4a2d2238c5ba61ef783ed2770d372559e6b174c9c9b083324e6a8d7cab554"
+    },
+    {
+      "source": "rhyming words/word praise/praise-fan.mp3",
+      "asset": "assets/audio/rhyming_jar/praise-fan.mp3",
+      "bytes": 114740,
+      "sha256": "953ff92afe4e72d89a57fee2850af8a4651e1ea93abbf5dc81bfc64b7d87644a"
+    },
+    {
+      "source": "rhyming words/word praise/praise-lip.mp3",
+      "asset": "assets/audio/rhyming_jar/praise-lip.mp3",
+      "bytes": 114740,
+      "sha256": "c5fac920340f285c7b0eaf9db7697a5d56dd620ed10b8853e71576397ff5def3"
+    },
+    {
+      "source": "rhyming words/word praise/praise-pen.mp3",
+      "asset": "assets/audio/rhyming_jar/praise-pen.mp3",
+      "bytes": 115994,
+      "sha256": "fb633b0e3e13950447af1d03191f179c4182e4aebc081285bf747d72222d3417"
+    },
+    {
+      "source": "rhyming words/word praise/praise-pig.mp3",
+      "asset": "assets/audio/rhyming_jar/praise-pig.mp3",
+      "bytes": 112232,
+      "sha256": "7fa2c10c591e070b31c91bc31fc3a4a2c1159778cf4753e2dda6858fba5fa1a8"
+    },
+    {
+      "source": "rhyming words/word praise/praise-pin.mp3",
+      "asset": "assets/audio/rhyming_jar/praise-pin.mp3",
+      "bytes": 113486,
+      "sha256": "4e40a8b36e5227a4ae6535a6fbd1cadcb98d88e0897a0fcea851c2471e941bcb"
+    },
+    {
+      "source": "rhyming words/word praise/praise-sun.mp3",
+      "asset": "assets/audio/rhyming_jar/praise-sun.mp3",
+      "bytes": 113486,
+      "sha256": "bdc90e9e4acc93e08c8431252f30c90628f052e74fee457dd0e022682170420c"
+    },
+    {
+      "source": "rhyming words/word praise/praise-top.mp3",
+      "asset": "assets/audio/rhyming_jar/praise-top.mp3",
+      "bytes": 105963,
+      "sha256": "94e33b634f9946fa75e4b4b3b371f5d2bd32e72651eb42769d6daf3f4312fa74"
+    },
+    {
+      "source": "rhyming words/word--only/bat.mp3",
+      "asset": "assets/audio/rhyming_jar/word-bat.mp3",
+      "bytes": 34074,
+      "sha256": "eb015bf82074cb2d28ccceaf668adf1010b3bcdd22dc2adac62841fdd378ff9f"
+    },
+    {
+      "source": "rhyming words/word--only/bed.mp3",
+      "asset": "assets/audio/rhyming_jar/word-bed.mp3",
+      "bytes": 34074,
+      "sha256": "06c8881c680bf32b96ca968279800b19897ed1130db630eb20ed35b23bcf0b8e"
+    },
+    {
+      "source": "rhyming words/word--only/big.mp3",
+      "asset": "assets/audio/rhyming_jar/word-big.mp3",
+      "bytes": 32820,
+      "sha256": "7ba2cf8e50cbcc0876cf45e5ed084ed8bf5e20bb1a474ce9ba4ba0bd4ddf43b3"
+    },
+    {
+      "source": "rhyming words/word--only/bin.mp3",
+      "asset": "assets/audio/rhyming_jar/word-bin.mp3",
+      "bytes": 31566,
+      "sha256": "07aa651e6d1f050e13c94215db44c919c8bb3d0fdbae52dac9d0ec87fe2a99a6"
+    },
+    {
+      "source": "rhyming words/word--only/bug.mp3",
+      "asset": "assets/audio/rhyming_jar/word-bug.mp3",
+      "bytes": 36582,
+      "sha256": "17e9d121daa13e27289b96de8e87751d044803bcca60d662b0a3fd3c598513c2"
+    },
+    {
+      "source": "rhyming words/word--only/bun.mp3",
+      "asset": "assets/audio/rhyming_jar/word-bun.mp3",
+      "bytes": 32820,
+      "sha256": "a96790dbd86e74e188340b2c4e6ba960bf6eb168c5812ba40b79081f3090d1b3"
+    },
+    {
+      "source": "rhyming words/word--only/can.mp3",
+      "asset": "assets/audio/rhyming_jar/word-can.mp3",
+      "bytes": 32820,
+      "sha256": "85f4e57713ba83d8bcfb01c8dc0df4cdc901336980e74026c411cfbae391a19b"
+    },
+    {
+      "source": "rhyming words/word--only/cat.mp3",
+      "asset": "assets/audio/rhyming_jar/word-cat.mp3",
+      "bytes": 34074,
+      "sha256": "ae9554cd7fa7c40411a9c0c548be8b373a2d57aa3f129d949f049cfe5969b33a"
+    },
+    {
+      "source": "rhyming words/word--only/dig.mp3",
+      "asset": "assets/audio/rhyming_jar/word-dig.mp3",
+      "bytes": 32820,
+      "sha256": "9ec80f92d21889164f1d5d1685cf4e3db807863ef2c54a0b9ef85388d8585119"
+    },
+    {
+      "source": "rhyming words/word--only/dip.mp3",
+      "asset": "assets/audio/rhyming_jar/word-dip.mp3",
+      "bytes": 31566,
+      "sha256": "5f5b81d355a6525dbbff6a06ab10bb8f7df153a29db6a095c357237e05033306"
+    },
+    {
+      "source": "rhyming words/word--only/fan.mp3",
+      "asset": "assets/audio/rhyming_jar/word-fan.mp3",
+      "bytes": 36582,
+      "sha256": "7fe6e47f14396a7732fd09be5ba229d13501e34fc704ec95195079bdb2e6de28"
+    },
+    {
+      "source": "rhyming words/word--only/fed.mp3",
+      "asset": "assets/audio/rhyming_jar/word-fed.mp3",
+      "bytes": 32820,
+      "sha256": "90e338b71cfe4118daadf2740eac9d776b8e08ee8f94ba7be9b7663097d71eda"
+    },
+    {
+      "source": "rhyming words/word--only/fin.mp3",
+      "asset": "assets/audio/rhyming_jar/word-fin.mp3",
+      "bytes": 32820,
+      "sha256": "ac8b34de8ce84fd459f4fbf16614cc96103e5a9579ae853851ac3aa8b588a107"
+    },
+    {
+      "source": "rhyming words/word--only/fun.mp3",
+      "asset": "assets/audio/rhyming_jar/word-fun.mp3",
+      "bytes": 34074,
+      "sha256": "c735a7c381813ec4c330d5e68129b3b5a9f0e98dd0414d3520533d0a5adabd6d"
+    },
+    {
+      "source": "rhyming words/word--only/hat.mp3",
+      "asset": "assets/audio/rhyming_jar/word-hat.mp3",
+      "bytes": 36582,
+      "sha256": "9331816b931d225fb2735fb1dd69b1a4ab43e04a121afdcb71270dff742b3192"
+    },
+    {
+      "source": "rhyming words/word--only/hen.mp3",
+      "asset": "assets/audio/rhyming_jar/word-hen.mp3",
+      "bytes": 32820,
+      "sha256": "5943f94ce259dfd87bf26dcae1ac4f332a986386127d03ef977ced2b77c8d257"
+    },
+    {
+      "source": "rhyming words/word--only/hip.mp3",
+      "asset": "assets/audio/rhyming_jar/word-hip.mp3",
+      "bytes": 32820,
+      "sha256": "18e5d46950d162238ec14c2fcd8fddf300052500aca57f558703947dd365e311"
+    },
+    {
+      "source": "rhyming words/word--only/hop.mp3",
+      "asset": "assets/audio/rhyming_jar/word-hop.mp3",
+      "bytes": 30312,
+      "sha256": "9fe7136144fbe13852d17ee883086495644667e23054b675916389b9b32c3e0d"
+    },
+    {
+      "source": "rhyming words/word--only/hug.mp3",
+      "asset": "assets/audio/rhyming_jar/word-hug.mp3",
+      "bytes": 30312,
+      "sha256": "fbf29e1f584c26f1b28afa9d5e00af2fa91b785d44b317b159ea4b550c906572"
+    },
+    {
+      "source": "rhyming words/word--only/led.mp3",
+      "asset": "assets/audio/rhyming_jar/word-led.mp3",
+      "bytes": 34074,
+      "sha256": "78fa58a1fc0a000fa5c6a3a12b55dbf314f929156732d56f26eacbe5603e326f"
+    },
+    {
+      "source": "rhyming words/word--only/lip.mp3",
+      "asset": "assets/audio/rhyming_jar/word-lip.mp3",
+      "bytes": 31566,
+      "sha256": "c9e9a63f41d3831e754cfda096a55bd95e3cbdb7156f923fdf4c26aecadc5c46"
+    },
+    {
+      "source": "rhyming words/word--only/man.mp3",
+      "asset": "assets/audio/rhyming_jar/word-man.mp3",
+      "bytes": 36582,
+      "sha256": "2997dc91a737bee1426784ec0d41e6b6e1a23863bcac8db2e58cfdb97cb47687"
+    },
+    {
+      "source": "rhyming words/word--only/mat.mp3",
+      "asset": "assets/audio/rhyming_jar/word-mat.mp3",
+      "bytes": 32820,
+      "sha256": "b1108435c841e2360c125c8b45bea00871148d0d1cd0818d23345050a02d30ad"
+    },
+    {
+      "source": "rhyming words/word--only/men.mp3",
+      "asset": "assets/audio/rhyming_jar/word-men.mp3",
+      "bytes": 35328,
+      "sha256": "f645c685c0708e6365d7b6a2b548c0969a97dfdb4f1820483261f5d777c2d597"
+    },
+    {
+      "source": "rhyming words/word--only/mop.mp3",
+      "asset": "assets/audio/rhyming_jar/word-mop.mp3",
+      "bytes": 32820,
+      "sha256": "016c62b4e7dea622014f84260e1cb5ef5d48b81276e3da6b1c54fa4cd304e20b"
+    },
+    {
+      "source": "rhyming words/word--only/mug.mp3",
+      "asset": "assets/audio/rhyming_jar/word-mug.mp3",
+      "bytes": 32820,
+      "sha256": "14f0ac3cdab208871552e5503921e2547450fff2b6c49501b4bdc244fc5716a9"
+    },
+    {
+      "source": "rhyming words/word--only/pan.mp3",
+      "asset": "assets/audio/rhyming_jar/word-pan.mp3",
+      "bytes": 34074,
+      "sha256": "b3dd55001a16ead294c0e2462b61cb194fcdca17c2db9aefc1974cd3cd277575"
+    },
+    {
+      "source": "rhyming words/word--only/pen.mp3",
+      "asset": "assets/audio/rhyming_jar/word-pen.mp3",
+      "bytes": 31566,
+      "sha256": "2a0779628e44bf0b42f4d82dcae5c98f31fa83068b616f451358888f3a477e93"
+    },
+    {
+      "source": "rhyming words/word--only/pig.mp3",
+      "asset": "assets/audio/rhyming_jar/word-pig.mp3",
+      "bytes": 32820,
+      "sha256": "8dfbab95c6b5a1b29383fcff07639123d6dbbf5289a83d17c27bcc18c0307cab"
+    },
+    {
+      "source": "rhyming words/word--only/pin.mp3",
+      "asset": "assets/audio/rhyming_jar/word-pin.mp3",
+      "bytes": 31566,
+      "sha256": "818d6614f06487d97c1a20750db87b80fea2563a9b56e25fc6cfd89f8aa81704"
+    },
+    {
+      "source": "rhyming words/word--only/pop.mp3",
+      "asset": "assets/audio/rhyming_jar/word-pop.mp3",
+      "bytes": 30312,
+      "sha256": "7c63622dcad493dfad93b1d78ed87fd2e0f5f1893873a6ba6ce758c5a3eb2505"
+    },
+    {
+      "source": "rhyming words/word--only/red.mp3",
+      "asset": "assets/audio/rhyming_jar/word-red.mp3",
+      "bytes": 32820,
+      "sha256": "46159c79942fe51612938f8c82ad581aaaba0952925080fd3b87b1ac617b5884"
+    },
+    {
+      "source": "rhyming words/word--only/rug.mp3",
+      "asset": "assets/audio/rhyming_jar/word-rug.mp3",
+      "bytes": 34074,
+      "sha256": "6addf298d04bfc1320496b68521a49f65011d64d7e6c5207e2b5ca6dca2f64b7"
+    },
+    {
+      "source": "rhyming words/word--only/run.mp3",
+      "asset": "assets/audio/rhyming_jar/word-run.mp3",
+      "bytes": 35328,
+      "sha256": "c6f5fd47611cff5af4e0597385f53fdf2f25063959c7feeab9ee597b30d27344"
+    },
+    {
+      "source": "rhyming words/word--only/sip.mp3",
+      "asset": "assets/audio/rhyming_jar/word-sip.mp3",
+      "bytes": 31566,
+      "sha256": "5459dfd73b26e4cf48e3c70f114ea48a7b787d4c94ee1d2cf4c485b0573bb0f3"
+    },
+    {
+      "source": "rhyming words/word--only/sun.mp3",
+      "asset": "assets/audio/rhyming_jar/word-sun.mp3",
+      "bytes": 35328,
+      "sha256": "3dd618d51790c619f4c8ca2441a77f9e850c8ee0627164c31886925bd55065c8"
+    },
+    {
+      "source": "rhyming words/word--only/ten.mp3",
+      "asset": "assets/audio/rhyming_jar/word-ten.mp3",
+      "bytes": 34074,
+      "sha256": "5f3eae024959ac470db3d986c06986bb764362cc7c80f7946ddec63061564cc8"
+    },
+    {
+      "source": "rhyming words/word--only/top.mp3",
+      "asset": "assets/audio/rhyming_jar/word-top.mp3",
+      "bytes": 30312,
+      "sha256": "9ae8d1c3d61ca45a9d75bbaf608f32e825200627f60893ed37d07ee4e522d25f"
+    },
+    {
+      "source": "rhyming words/word--only/wig.mp3",
+      "asset": "assets/audio/rhyming_jar/word-wig.mp3",
+      "bytes": 31566,
+      "sha256": "3b7f9a29d43722e093ab2154974ea01eddc3020b92a8d5daeb9b44f50526b9eb"
+    },
+    {
+      "source": "rhyming words/word--only/win.mp3",
+      "asset": "assets/audio/rhyming_jar/word-win.mp3",
+      "bytes": 36582,
+      "sha256": "2c4669e961cd3bfeaeea20abf8fc730a24445d0a32de099c123249885573d238"
+    }
+  ],
+  "images": [
+    {
+      "asset": "assets/images/rhyming_jar/cloud.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "cornerAlpha": 0,
+      "sha256": "7ab9a19212042a34dbaf445d80773aa7d391a8c192be1b7538a064c16cbe8a0f"
+    },
+    {
+      "asset": "assets/images/rhyming_jar/jar.png",
+      "size": [
+        1236,
+        1273
+      ],
+      "mode": "RGBA",
+      "cornerAlpha": 0,
+      "sha256": "31c7e5ad30ad542fd62cb590e06edbdad552390e8f62897784780d7d5c2f0d5c"
+    }
+  ],
+  "missingOptional": [
+    "game-complete.mp3"
+  ],
+  "wordOnly": 40,
+  "familyPraise": 10,
+  "intro": 1,
+  "decodeValidation": {
+    "passed": 51,
+    "failed": 0
+  }
+}

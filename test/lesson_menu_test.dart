@@ -44,7 +44,7 @@ void main() {
               ? (w.image as ResizeImage).imageProvider
               : w.image;
           return provider is AssetImage &&
-              provider.assetName == 'assets/images/lesson_logos/$name.png';
+              provider.assetName == 'assets/images/lesson_logos/$name.webp';
         });
         // The compact phone keeps readable cards and scrolls the third row.
         if (logo.evaluate().isEmpty) {
@@ -53,10 +53,12 @@ void main() {
         }
         expect(logo, findsOneWidget);
       }
-      expect(find.byType(MascotGuide), findsOneWidget);
-      expect(t.widget<MascotGuide>(find.byType(MascotGuide)).mascot,
-          LearningMascot.wigloo);
-      expect(t.getRect(find.byType(MascotGuide)).bottom,
+      expect(find.byType(MascotGuide), findsNothing);
+      expect(find.byType(AppBar), findsNothing);
+      expect(find.text('Lessons'), findsNothing);
+      final banner = find.byKey(const ValueKey('lessons-banner'));
+      expect(banner, findsOneWidget);
+      expect(t.getRect(banner).bottom,
           lessThanOrEqualTo(t.getRect(find.byType(GridView)).top));
       expect(
           (t.widget<GridView>(find.byType(GridView)).gridDelegate

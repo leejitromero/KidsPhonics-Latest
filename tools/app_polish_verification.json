@@ -1,0 +1,48 @@
+﻿{
+    "reviewDate":  "2026-10-10",
+    "timezone":  "Asia/Manila",
+    "verifiedUtc":  "2026-10-10T11:29:53.4180005Z",
+    "fullSuitePassed":  504,
+    "finalParentExitChecksPassed":  8,
+    "fullAnalysis":  "No issues found",
+    "overviewScrollExtentAt390x844":  0,
+    "connectedAndroidDevices":  0,
+    "physicalDeviceTested":  false,
+    "apkRebuilt":  false,
+    "fixed":  [
+                  "Parents overview duplicated mastery and letter details",
+                  "Parent session leaked into learner routes",
+                  "Reset reported success after failed storage writes",
+                  "Startup had no recovery after failed saved-data read",
+                  "Sound Match menu described an outdated number of choices"
+              ],
+    "remainingDeviceChecks":  [
+                                  "Real microphone permission and recognition availability",
+                                  "Speaker playback and interruptions",
+                                  "Installing an updated APK over the prior build",
+                                  "Animation and memory behavior on a low-memory Android phone"
+                              ],
+    "logs":  {
+                 "fullSuite":  "build/polish_final_full_suite.log",
+                 "finalParentExit":  "build/polish_parent_exit_final.log",
+                 "startupRecovery":  "build/polish_startup_final.log",
+                 "layoutAndNavigation":  "build/polish_navigation_recheck.log",
+                 "analysis":  "build/polish_analysis.log"
+             },
+    "sourceSHA256":  {
+                         "lib/providers/app_provider.dart":  "f3bd69f4caa2a95be0df852ae81c4ebbb63da8074b5bbd8ba9cdd790a187c11c",
+                         "lib/screens/parent_screen.dart":  "c8b4e47fa5cd5267384d001127d93d314d48298cd5cb70073c22c5755f15d93d",
+                         "lib/screens/games_screen.dart":  "c012b9828ab046e0e67c930d87d375284c70f9ce5da12ffd9a6753160c5f5ff1",
+                         "lib/widgets/parent_garden_overview.dart":  "fae3b617375fa50d5deb07463e4ed8b97e95938026d091a9dc3e01b57b530bc9",
+                         "lib/widgets/learner_widgets.dart":  "6ad5d998344edaa3762c6aa9c771d5c02b2d4667d0b160b8a3101bfa1db2aeb5",
+                         "lib/widgets/quick_check_recommendation.dart":  "dec724e8bd421ae4416637821be435bfc454ac37d16ed26be90651ef91ed1dd8",
+                         "lib/widgets/time_limit_overlay.dart":  "ea12181abb06a750320c1c9a2f7a011909b859d9c1bc6d8b66bcb11dbe920ca0",
+                         "test/save_recovery_test.dart":  "59e091adad16521779650eab94ad954ffe5ac7754adbef0e96a4867fc9a37e1b",
+                         "test/quick_check_progress_integration_test.dart":  "e985d4776bea8b58e99aa1ea09b36a36b801a3253a2c56781e3efb173797aa73",
+                         "test/letter_adventure_navigation_test.dart":  "0e4ba0b63aebec1afeaf16baaeea587cc4b6904fe5463b71d4a91f0fdc44a10b",
+                         "test/parent_controls_widget_test.dart":  "ea8965062b818a3dc1f948d8e81aa7e609bd7ff63d43cfcb894b6f674854cad5",
+                         "test/learner_ui_test.dart":  "71c3647b07626a897c07c682e9b485b84464c6e880db11fc684e856d2b1ff769",
+                         "test/new_ui_layout_test.dart":  "ca932ab53f87831f3b41954ad6f521d9cf06a3c3c70867a81f4202e45cec444d",
+                         "test/letter_introduction_test.dart":  "6fac9ac142194386b83301dea529bba1178368c0402a776de842a8d141a6da31"
+                     }
+}

@@ -86,7 +86,7 @@ void main() {
           .widget<Image>(find.byKey(const ValueKey('recognition-letter')));
       expect(image.semanticLabel, 'Letter ${letter.letter}');
       final asset = (image.image as ResizeImage).imageProvider as AssetImage;
-      expect(asset.assetName, 'assets/images/letters/${letter.lowercase}.png');
+      expect(asset.assetName, 'assets/images/letters/${letter.lowercase}.webp');
       expect(find.text('Sound'), findsOneWidget);
       expect(find.text('LETTER'), findsNothing);
       expect(find.text('WORD'), findsNothing);

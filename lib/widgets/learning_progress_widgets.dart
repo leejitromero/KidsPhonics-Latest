@@ -37,28 +37,31 @@ class LearningProgressSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.watch<AppProvider>();
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text('Letters Mastered: ${p.masteredLetterCount} / 26',
+      Text('Letters Mastered: ${p.overallMasteredCount} / 26',
           style: const TextStyle(
               color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
       const SizedBox(height: 8),
       LinearProgressIndicator(
-          value: p.masteryPercentage / 100,
+          value: p.overallMasteredCount / 26,
           minHeight: 10,
           color: AppColors.teal,
           backgroundColor: Colors.white12),
       const SizedBox(height: 8),
-      Text('Phonics Mastery: ${p.masteryPercentage.round()}%',
+      Text(
+          'Letter Adventure Quick Checks: ${(p.overallMasteredCount / 26 * 100).round()}%',
           style: const TextStyle(fontSize: 16)),
-      if (p.masteredLetterCount == 0)
+      if (p.overallMasteredCount == 0)
         const Text('Start practicing letters to see progress here.'),
-      Text('Vowel Progress: ${p.masteredVowelCount} / 5 mastered',
+      Text('Vowel Adventures: ${p.quickCheckVowelsMastered} / 5 mastered',
           style: const TextStyle(fontSize: 16)),
       if (detailed) ...[
         const SizedBox(height: 12),
         Wrap(spacing: 16, runSpacing: 8, children: [
-          Text('Practiced: ${p.practicedLetterCount}'),
-          Text('Viewed: ${p.viewedLetterCount}'),
-          Text('Not Started: ${p.notStartedLetterCount}'),
+          Text(
+              'Practiced: ${p.quickCheckStatusCount(LearningStatus.practiced)}'),
+          Text('Viewed: ${p.quickCheckStatusCount(LearningStatus.viewed)}'),
+          Text(
+              'Not Started: ${p.quickCheckStatusCount(LearningStatus.notStarted)}'),
         ]),
         const SizedBox(height: 8),
         Text(
@@ -91,7 +94,8 @@ void showLetterDetail(BuildContext context, LetterProgress p) {
                 Text('Status: ${p.status.label}'),
                 Text('Attempts: ${p.attempts}'),
                 Text('Correct: ${p.correctAnswers}'),
-                Text('Letter Practice Accuracy: ${accuracyLabel(p.accuracy)}'),
+                Text(
+                    'Latest Quick Check accuracy: ${accuracyLabel(p.accuracy)}'),
                 Text(
                     'Best Quick Check: ${p.completedAssessments == 0 ? 'Not taken yet' : '${p.bestAssessmentScore} / 5'}'),
                 if (p.mastered && date != null)
@@ -108,7 +112,8 @@ void showLetterDetail(BuildContext context, LetterProgress p) {
 }
 
 class LetterProgressGrid extends StatelessWidget {
-  const LetterProgressGrid({super.key});
+  const LetterProgressGrid({super.key, this.dense = false});
+  final bool dense;
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AppProvider>();
@@ -116,30 +121,32 @@ class LetterProgressGrid extends StatelessWidget {
     return Column(children: [
       Wrap(
           spacing: 12,
-          runSpacing: 8,
+          runSpacing: dense ? 4 : 8,
           children: LearningStatus.values
               .map((s) => Row(mainAxisSize: MainAxisSize.min, children: [
-                    Icon(s.icon, color: s.color, size: 20),
+                    Icon(s.icon, color: s.color, size: dense ? 16 : 20),
                     const SizedBox(width: 4),
                     Text(s.label,
-                        style: TextStyle(color: s.color, fontSize: 14)),
+                        style: TextStyle(
+                            color: s.color, fontSize: dense ? 12 : 14)),
                   ]))
               .toList()),
-      const SizedBox(height: 12),
+      SizedBox(height: dense ? 8 : 12),
       LayoutBuilder(
           builder: (_, box) => GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount:
-                        (box.maxWidth / (60 * scale)).floor().clamp(3, 6),
-                    mainAxisExtent: 68 * scale,
+                    crossAxisCount: (box.maxWidth / ((dense ? 52 : 60) * scale))
+                        .floor()
+                        .clamp(3, 6),
+                    mainAxisExtent: (dense ? 56 : 68) * scale,
                     crossAxisSpacing: 6,
                     mainAxisSpacing: 6),
                 itemCount: 26,
                 itemBuilder: (context, index) {
                   final p = provider
-                      .getLetterProgress(String.fromCharCode(65 + index));
+                      .quickCheckLetter(String.fromCharCode(65 + index));
                   final s = p.status;
                   return Semantics(
                       label: '${p.letter}: ${s.label}',
@@ -160,8 +167,11 @@ class LetterProgressGrid extends StatelessWidget {
                                     children: [
                                       Text(p.letter,
                                           style: TextStyle(
-                                              color: s.color, fontSize: 24)),
-                                      Icon(s.icon, color: s.color, size: 20),
+                                              color: s.color,
+                                              fontSize: dense ? 22 : 24)),
+                                      Icon(s.icon,
+                                          color: s.color,
+                                          size: dense ? 16 : 20),
                                     ])),
                           )));
                 },
@@ -250,7 +260,7 @@ class NeedsPractice extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Text(
           '${p.letter} · ${p.correctAnswers} correct / ${p.attempts} attempts\n'
-          'Letter Practice Accuracy: ${accuracyLabel(p.accuracy)}',
+          'Latest Quick Check accuracy: ${accuracyLabel(p.accuracy)}',
           style: const TextStyle(fontSize: 15)));
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,7 @@
 import '../data/game_word_data.dart';
+import '../data/rhyming_jar_data.dart';
+import '../data/adventure_narration.dart';
+import '../data/home_narration.dart';
 import '../data/cvc_lesson_data.dart';
 import '../data/blending_lesson_data.dart';
 import 'local_audio_focus.dart';
@@ -68,6 +71,14 @@ class PhonicsAudioService {
   };
 
   static String? assetForPhrase(String phrase) {
+    if (phrase.startsWith('home-')) {
+      return homeNarrationAssets[phrase.substring('home-'.length)];
+    }
+    if (phrase.startsWith('adventure-')) {
+      return adventureNarrationAssets[phrase.substring('adventure-'.length)];
+    }
+    final rhymeAsset = rhymingAudioAsset(phrase);
+    if (rhymeAsset != null) return rhymeAsset;
     final cvcAsset = cvcAudioAsset(phrase);
     final blendingAsset = blendingAudioAsset(phrase);
     if (blendingAsset != null) return blendingAsset;
@@ -102,8 +113,11 @@ class PhonicsAudioService {
   bool _disposed = false;
   int _request = 0;
   Completer<bool>? _completion;
+  String? _currentPhrase;
+  String? get currentPhrase => _currentPhrase;
   Future<void> stop() async {
     _request++;
+    _currentPhrase = null;
     final completion = _completion;
     _completion = null;
     if (completion != null && !completion.isCompleted) {
@@ -124,6 +138,7 @@ class PhonicsAudioService {
     if (_disposed || request != _request) return false;
     final asset = assetForPhrase(phrase);
     if (asset == null) return false;
+    _currentPhrase = phrase;
     final completed = Completer<bool>();
     _completion = completed;
     final subscription = _player.onPlayerComplete.listen((_) {

@@ -1,0 +1,100 @@
+{
+  "introInputs": [
+    {
+      "filename": "intro.mp3",
+      "sha256": "b5ee7603116fac3218c1ec89a6c84eaffddc17e527eef1434fb753c387a364f7",
+      "seconds": 1.5673469387755101,
+      "onsetSeconds": 0.08,
+      "activeRmsDbfs": -15.339695783542378,
+      "peakDbfs": -1.4447422135402797
+    },
+    {
+      "filename": "intro1.mp3",
+      "sha256": "865f01a7df70fcefa3bca8e25daff87340c1550e5b835770dad575653084bc9e",
+      "seconds": 1.7240816326530612,
+      "onsetSeconds": 0.06,
+      "activeRmsDbfs": -17.92400819670122,
+      "peakDbfs": -3.2122196022265834
+    },
+    {
+      "filename": "intro2.mp3",
+      "sha256": "dc57444c4a5f9458768e045ba8aa09e7930e06fa7023939382e8d2262ef0dd13",
+      "seconds": 1.5673469387755101,
+      "onsetSeconds": 0.08,
+      "activeRmsDbfs": -22.406611170000645,
+      "peakDbfs": -2.649600250585859
+    },
+    {
+      "filename": "intro3.mp3",
+      "sha256": "8486bc38e7bc8e1cc336f64b5148dbfe354dd55af13b1a2106c2ff1085b3ce1f",
+      "seconds": 1.4889795918367348,
+      "onsetSeconds": 0.06,
+      "activeRmsDbfs": -17.36279745602365,
+      "peakDbfs": -4.616368960263932
+    }
+  ],
+  "introMix": {
+    "seconds": 1.6740816326530612,
+    "onsetSeconds": 0.0,
+    "activeRmsDbfs": -14.49718363106324,
+    "peakDbfs": -2.2863684139800178
+  },
+  "menu": {
+    "lessons": {
+      "before": {
+        "seconds": 1.8808163265306121,
+        "onsetSeconds": 0.06,
+        "activeRmsDbfs": -16.966856248364838,
+        "peakDbfs": -1.9042491725328143
+      },
+      "after": {
+        "seconds": 1.8808163265306121,
+        "onsetSeconds": 0.04,
+        "activeRmsDbfs": -15.119330859625533,
+        "peakDbfs": -2.4106033290251347
+      }
+    },
+    "games": {
+      "before": {
+        "seconds": 2.115918367346939,
+        "onsetSeconds": 0.04,
+        "activeRmsDbfs": -13.881679349497949,
+        "peakDbfs": -1.2367906236354556
+      },
+      "after": {
+        "seconds": 2.115918367346939,
+        "onsetSeconds": 0.04,
+        "activeRmsDbfs": -14.578521556148146,
+        "peakDbfs": -2.4209214478276637
+      }
+    },
+    "progress": {
+      "before": {
+        "seconds": 2.1942857142857144,
+        "onsetSeconds": 0.06,
+        "activeRmsDbfs": -22.32572003090951,
+        "peakDbfs": -6.40400682377618
+      },
+      "after": {
+        "seconds": 2.1942857142857144,
+        "onsetSeconds": 0.06,
+        "activeRmsDbfs": -15.050663384311108,
+        "peakDbfs": -2.322112557891555
+      }
+    },
+    "parents": {
+      "before": {
+        "seconds": 2.1942857142857144,
+        "onsetSeconds": 0.06,
+        "activeRmsDbfs": -16.001386512233505,
+        "peakDbfs": -0.4951991526094266
+      },
+      "after": {
+        "seconds": 2.1942857142857144,
+        "onsetSeconds": 0.06,
+        "activeRmsDbfs": -15.441788938970875,
+        "peakDbfs": -2.3961903937085065
+      }
+    }
+  }
+}

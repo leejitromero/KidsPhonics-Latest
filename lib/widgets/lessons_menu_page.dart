@@ -4,10 +4,11 @@ import '../theme/kids_ui.dart';
 import 'animated_screen_art.dart';
 import 'button_sound.dart';
 
-/// Keeps the artwork's hanging Lessons sign above the interactive lesson cards.
+/// Full-screen lesson scenery with the supplied sign above the lesson content.
 class LessonsMenuPage extends StatelessWidget {
   const LessonsMenuPage({super.key, required this.child});
   final Widget child;
+  static const bannerAsset = 'assets/images/new_ui/lessons_banner.webp';
 
   @override
   Widget build(BuildContext context) => Theme(
@@ -16,10 +17,10 @@ class LessonsMenuPage extends StatelessWidget {
           backgroundColor: const Color(0xFF94DAFA),
           body: LayoutBuilder(builder: (context, box) {
             final safe = MediaQuery.paddingOf(context);
-            // Match BoxFit.cover at top center, preserving the title on tablets.
-            final artworkHeight =
-                math.max(box.maxHeight, box.maxWidth * 1672 / 941);
-            final contentTop = math.max(artworkHeight * .20, safe.top + 60);
+            final bannerWidth =
+                math.min(540.0, box.maxWidth - safe.left - safe.right - 76);
+            final bannerHeight = bannerWidth / 3;
+            final contentTop = safe.top + math.max(48, bannerHeight) + 24;
             return Stack(fit: StackFit.expand, children: [
               const AnimatedScreenArt(
                 frames: lessonFrames,
@@ -28,16 +29,19 @@ class LessonsMenuPage extends StatelessWidget {
                 frameDuration: Duration(milliseconds: 650),
               ),
               Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                height: contentTop,
+                top: safe.top + 8,
+                left: safe.left + 64,
+                right: safe.right + 12,
+                height: bannerHeight,
                 child: IgnorePointer(
-                  child: Semantics(
-                    header: true,
-                    namesRoute: true,
-                    label: 'Lessons',
-                    child: const SizedBox.expand(),
+                  child: Image.asset(
+                    bannerAsset,
+                    key: const ValueKey('lessons-banner'),
+                    fit: BoxFit.contain,
+                    semanticLabel: 'Lessons',
+                    cacheWidth:
+                        (bannerWidth * MediaQuery.devicePixelRatioOf(context))
+                            .ceil(),
                   ),
                 ),
               ),

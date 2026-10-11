@@ -1,0 +1,440 @@
+[
+    {
+        "path":  "assets/images/new_ui/flappy_bird.png",
+        "bytes":  1065128,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "B8AA491583249675C08B4E6F32D3898C21FE7E78615EF91BED3384B536101B7D"
+    },
+    {
+        "path":  "assets/images/screen_frames/home/fr-1.png",
+        "bytes":  1268103,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "DF091C8F64E7EEB6CE9829454C67EF20FF9E01A619CB6219748744F5D3C23FB7"
+    },
+    {
+        "path":  "assets/images/screen_frames/home/fr-2.png",
+        "bytes":  1240503,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "3E6C5D1F227EFE35A2AFDC5598BD4E6984D9C9FB6AB57B7A452EDD939D674237"
+    },
+    {
+        "path":  "assets/images/screen_frames/home/fr-3.png",
+        "bytes":  1267394,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "2771ABF671855DF415AB37940D4280DBBA12C9591EC43E335C33018EA5E01C7E"
+    },
+    {
+        "path":  "assets/images/screen_frames/home/fr-4.png",
+        "bytes":  1241670,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "6DD4FC1AD3538B63877236C9A75A780CE02D1A5EE7E58C40804C3779295EBBC5"
+    },
+    {
+        "path":  "assets/images/screen_frames/home/fr-5.png",
+        "bytes":  1283400,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "2C7E2D21E9AB22C8F9B1BEF0E1AB65E86ED1B52C0EA11AFD26380E8ACF1AF933"
+    },
+    {
+        "path":  "assets/images/screen_frames/home/main-1.png",
+        "bytes":  1733211,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "EBE4DE8D2D25DAE18D40EDACDB1E1C68AF7A5916BEC96FAA8CAC04D1B3D48102"
+    },
+    {
+        "path":  "assets/images/screen_frames/home/main-2.png",
+        "bytes":  1741561,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "66AC16E6D2475A152622994EA23C32159D96C07F0650886050660680B3824368"
+    },
+    {
+        "path":  "assets/images/screen_frames/home/main-3.png",
+        "bytes":  1777195,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "79B765BCFE6DB6D07D4604894AE453F7446C0B44BFB07FEE26B34F75FE13CD39"
+    },
+    {
+        "path":  "assets/images/screen_frames/lessons/b1.png",
+        "bytes":  2183689,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "7B3C45E0768ABAB07538E97EA8E8FF42989FF3E916B0CBE9F4EC0032A450CCAF"
+    },
+    {
+        "path":  "assets/images/screen_frames/lessons/b2.png",
+        "bytes":  2153620,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "E6584757C5C040F41040D53FD4F3A8F706A1C33B1EFAD34BD3A2F510F21C9AB3"
+    },
+    {
+        "path":  "assets/images/screen_frames/lessons/b3.png",
+        "bytes":  2133093,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "3806A9A432F308B0671C33C9A12DC565DDD37175C99F7F6FA001D823139F26C0"
+    },
+    {
+        "path":  "assets/images/screen_frames/lessons/b4.png",
+        "bytes":  2180333,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "2A74EC1EFB912AE962A36BACDA97E96C61A917E36DCCAED413EE40D948605860"
+    },
+    {
+        "path":  "assets/images/screen_frames/lessons/b5.png",
+        "bytes":  2129862,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "8D4A14E1FF64F70F70C3046188F2257767CE0607A408D9D3F2D8D38BD5C0F904"
+    },
+    {
+        "path":  "assets/images/screen_frames/parents/f1.png",
+        "bytes":  1080546,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "6193EEB5BF3C091AEC8BC624F363806FCDBDC2B5BB9BDF5A318ED210DCC1C2A2"
+    },
+    {
+        "path":  "assets/images/screen_frames/parents/f2.png",
+        "bytes":  1131212,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "2BA575D0D380048F74530AAD4DB9987A6E2A2A3B74CABDB730E1F1492A1C7B9E"
+    },
+    {
+        "path":  "assets/images/screen_frames/parents/f3.png",
+        "bytes":  1071838,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "07F9BDB43C0195273AD2F1C656934954D502588CA8859B0231EB9DF36AA3280F"
+    },
+    {
+        "path":  "assets/images/screen_frames/parents/f4.png",
+        "bytes":  1088914,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "3334852C9A53796EAC4076C5C765B6FC1C981D7A0002AAA5626BD2D9E81CC8E6"
+    },
+    {
+        "path":  "assets/images/screen_frames/parents/f5.png",
+        "bytes":  1105156,
+        "reason":  "No current runtime image or evaluated audio getter uses this replaced asset.",
+        "sha256":  "C1EC3E641AF239482194CCBDFAF6B365D1016C935506F6945C490CF1041F2C80"
+    },
+    {
+        "path":  "design_reference/new_ui/alphabet order UI.png",
+        "bytes":  2121640,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "E1A6D3F7C6A01FCB5CD2A57AE16752238E08FD251DCE65F20E80A9D1DBFA5E0F"
+    },
+    {
+        "path":  "design_reference/new_ui/flappy letter UI.png",
+        "bytes":  2112462,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "1D5FCA07F069922F125B89E8F043E0ED459E43F61EEF8923AC16A6FB82C38C28"
+    },
+    {
+        "path":  "design_reference/new_ui/game zone ui.png",
+        "bytes":  2164687,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "D93085BF2210910E3204D1D5C2280823C5B617766DB4B3431987C8A336CEC02D"
+    },
+    {
+        "path":  "design_reference/new_ui/memory flip UI.png",
+        "bytes":  2013324,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "19207DDFDC21328C179B0FEF4A83173E252A52D86D5E63B7E51108CA454B475F"
+    },
+    {
+        "path":  "design_reference/new_ui/missing vowel UI.png",
+        "bytes":  2230122,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "49E0053C81EDDF5BD39A636D9C91E59970E10D3699F19E3E45553FE8DA6E54D5"
+    },
+    {
+        "path":  "design_reference/new_ui/parent ui design.png",
+        "bytes":  1662280,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "298DB4AC891AF5378134F7D6EF2640C9A59EF67B1340D69F7BE00A135B016696"
+    },
+    {
+        "path":  "design_reference/new_ui/phonics quiz UI..png",
+        "bytes":  2149769,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "42B0E680B9A539FC2765196C65AE77B4EB9BD87F4F8EB8E947E5DAD0E80C0401"
+    },
+    {
+        "path":  "design_reference/new_ui/picture match.png",
+        "bytes":  2136906,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "1A18C159A9777E27DDD9DF7C4C78EAC5AE45FA7F27B14B59A2232464025FB2C5"
+    },
+    {
+        "path":  "design_reference/new_ui/rhyming words UI.png",
+        "bytes":  2307310,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "DE71B59A9FB24CA3562419BFFEF11125F0D1AEE16EF1C353696C3369ABE9BD58"
+    },
+    {
+        "path":  "design_reference/new_ui/rumbled words.png",
+        "bytes":  2158450,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "CD45DCC824EEEF96DABDEE9A9C813F78F720927F875D2B6242E8560C5DA1398B"
+    },
+    {
+        "path":  "design_reference/new_ui/sound match UI.png",
+        "bytes":  2141194,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "E3410DAFF3C3CA16EE509A095FF2C22454FA0F240C32A0259AE4E7A728D81AEA"
+    },
+    {
+        "path":  "design_reference/new_ui/speak and recognize UI.png",
+        "bytes":  2077604,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "A6F14C1F3B6B3F978406137CB4F14CB5A5F8AFD6BBA8803679EEBF5502BF8284"
+    },
+    {
+        "path":  "design_reference/new_ui/world bulder UI.png",
+        "bytes":  2174833,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "53A7332396D95152FFECA9D286D14F73FF438BBD101646B450E891E471AE7A4E"
+    },
+    {
+        "path":  "tools/mascot_frames/app_logo/1.png",
+        "bytes":  1619653,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "95ABA6F043FD0CE3DCFDCE87DAE730826BC1C79C242D93AB773B14D609657B39"
+    },
+    {
+        "path":  "tools/mascot_frames/app_logo/2.png",
+        "bytes":  1673697,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "65B1727E363AC2CF45FEA99D89DAEE5E2B0DB1F9D9A5DA0501ECF15287B93726"
+    },
+    {
+        "path":  "tools/mascot_frames/app_logo/3.png",
+        "bytes":  1552621,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "C555AFE89C223408D77934AAF01F08183E29E5D058E8B44C2CD1B1D1E1B6DCD2"
+    },
+    {
+        "path":  "tools/mascot_frames/app_logo/5.png",
+        "bytes":  1720345,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "04E2AEF8B1AEBA82C1E464ED84AE545A0C054548B741E12EAB9A578BDCBFBEC6"
+    },
+    {
+        "path":  "tools/mascot_frames/app_logo/6.png",
+        "bytes":  1680286,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "D747FE0541B97DD02A192EB682C4FCDF225F260D5FC88567CD5A4623C70CC6FC"
+    },
+    {
+        "path":  "tools/mascot_frames/app_logo/7.png",
+        "bytes":  1673115,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "F5AAB1FA2964463B4B87A1E2DECBB72C8AD745EA2575B894638335053CFB8802"
+    },
+    {
+        "path":  "tools/mascot_frames/app_logo/appicon.png",
+        "bytes":  1693657,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "A72F6C35F692CE95DED4410EAD7B44CD9E79FE4ED63A3CC21EAB31B24517846A"
+    },
+    {
+        "path":  "tools/mascot_frames/jitjit/1.png",
+        "bytes":  1214230,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "092321736A4D164BCA7134234CCC52DF10B4702C2BFD160487ABEAAF5227D5C4"
+    },
+    {
+        "path":  "tools/mascot_frames/jitjit/2.png",
+        "bytes":  1163260,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "AE9CEE5A4566E2A66158CB3C587B5E0441C8B1FA78302E5240BF34AF160F1660"
+    },
+    {
+        "path":  "tools/mascot_frames/jitjit/3.png",
+        "bytes":  1102228,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "43E3D498DBB199E20C7776A27313428440A56E692DF37AB034AA5BFF7D1DF25D"
+    },
+    {
+        "path":  "tools/mascot_frames/jitjit/4.png",
+        "bytes":  1155426,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "6C118131232885B3AD5BE7D7CD8008171F343FB94A2A346DD8EC0C7787C8EDC5"
+    },
+    {
+        "path":  "tools/mascot_frames/zoplet/1.png",
+        "bytes":  1162923,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "479FDD5B49B81D65E4CD11BB1E423B606419BE4D140E013AA66DB347E0708A62"
+    },
+    {
+        "path":  "tools/mascot_frames/zoplet/2.png",
+        "bytes":  1093081,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "9A9C684E5B70F92E9155B3150415C750814F3F799DFBD04044F1D5BCA5D2BCE8"
+    },
+    {
+        "path":  "tools/mascot_frames/zoplet/3.png",
+        "bytes":  1143299,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "6FDF6B1FC27E31D9B91A292DBB3151BF82E14971363EFA7FCD95CCC10E77D885"
+    },
+    {
+        "path":  "tools/mascot_frames/zoplet/4.png",
+        "bytes":  1153919,
+        "reason":  "Source/reference copy only; no app, generator, or build tool consumes it. Current runtime PNG/GIF files remain.",
+        "sha256":  "4D692E5E00435D1AE27AECBE8B52CF6BE7D5861C5B58024D5DB57BAF396CF97C"
+    },
+    {
+        "path":  "lib/widgets/shared_widgets.dart",
+        "bytes":  3775,
+        "reason":  "Old emoji navigation widgets have no imports in lib or test.",
+        "sha256":  "317D6690406C0B302654EBF5D07C85ACDF0EA9FC39DA4F20F57082037530E272"
+    },
+    {
+        "path":  ".dart_tool/assemble_jitjit.dart",
+        "bytes":  1234,
+        "reason":  "Completed one-off mascot preparation or superseded APK verification; unused by the app and build.",
+        "sha256":  "2B49C42FD553217470815F92E9AE5856D4370C1FA80906CDD20CFB31E553E219"
+    },
+    {
+        "path":  ".dart_tool/assemble_logo.dart",
+        "bytes":  1237,
+        "reason":  "Completed one-off mascot preparation or superseded APK verification; unused by the app and build.",
+        "sha256":  "39702A080F3FE06E6113B58F47A537EB1FC363C93F6CE3E080DDCB943E2B4319"
+    },
+    {
+        "path":  ".dart_tool/assemble_zoplet.dart",
+        "bytes":  1233,
+        "reason":  "Completed one-off mascot preparation or superseded APK verification; unused by the app and build.",
+        "sha256":  "35CC86F3F0E6C9F29041D4CFA60750E71F1CF363980B9863A8CF054E76254D25"
+    },
+    {
+        "path":  ".dart_tool/prepare_launcher.dart",
+        "bytes":  574,
+        "reason":  "Completed one-off mascot preparation or superseded APK verification; unused by the app and build.",
+        "sha256":  "4F5BF38BC4C0CB7B698B49FFD0D3F7E3C1A88DD263FA771CA8D25C349BB77C18"
+    },
+    {
+        "path":  ".dart_tool/verify_latest_apk.ps1",
+        "bytes":  1022,
+        "reason":  "Completed one-off mascot preparation or superseded APK verification; unused by the app and build.",
+        "sha256":  "118EC54201AF6F2250E9313BA2B9C4A30958AE154D9BA408C7EBB2AA3CF1623A"
+    },
+    {
+        "path":  "assets/audio/game_narration/intro-alphabet-order.wav",
+        "bytes":  440956,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "7F861554E7A16E4FB8428CCEDF11F53BFBB252876E96B777343F25D2666A767E"
+    },
+    {
+        "path":  "assets/audio/game_narration/intro-flappy-letters.wav",
+        "bytes":  505128,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "CA37DFA7104D9D93A0BE4032D5481252F541DE70A5990D03D96E139843FA497A"
+    },
+    {
+        "path":  "assets/audio/game_narration/intro-memory-flip.wav",
+        "bytes":  483058,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "F412DA831A4558C9B6CFAF09F15E0716FFB6292AF58FE99F60A11A805EAC7D73"
+    },
+    {
+        "path":  "assets/audio/game_narration/intro-missing-vowel.wav",
+        "bytes":  565006,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "FB34DB08A9FE42E788DD6DB6AC7FC0E07D8CDC7A5A4035EF55ACBC80554BF01A"
+    },
+    {
+        "path":  "assets/audio/game_narration/intro-phonics-quiz.wav",
+        "bytes":  410970,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "3D97B2135939AE14A76C89FA0FBF84A3B4A8B096B62AC699151250930A827EC5"
+    },
+    {
+        "path":  "assets/audio/game_narration/intro-picture-match.wav",
+        "bytes":  384516,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "4D536EE7DC148488C216A31D828979CA3A0B1F7F76A86C8B89E6716CC0FE333E"
+    },
+    {
+        "path":  "assets/audio/game_narration/intro-rhyming-words.wav",
+        "bytes":  341310,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "91EBA4B6C3443C3B0FCF8E4AB06E4EF61BE6212AD893634FEBBD57C2F3D7FF35"
+    },
+    {
+        "path":  "assets/audio/game_narration/intro-rumbled-words.wav",
+        "bytes":  483512,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "CF0E024BBA8097D871A4E0F3B2EB72D55287141B5A43AE1D2CA622BB145AE43F"
+    },
+    {
+        "path":  "assets/audio/game_narration/intro-sound-match.wav",
+        "bytes":  489018,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "A7B94D1166CED0D6A2CA3AB40465187293776C0BC06B747BC8E6D70910B4D032"
+    },
+    {
+        "path":  "assets/audio/game_narration/intro-sound-position.wav",
+        "bytes":  449566,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "81071C448E58C38D4A0336BAF2684D0526CBE3ACD285D3F7611ACD6681EBCE9C"
+    },
+    {
+        "path":  "assets/audio/game_narration/intro-speak-recognize.wav",
+        "bytes":  462348,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "8A2C45DABA3403CC5CB68886DAA7829D096FD190E570D89749125203DFD8214C"
+    },
+    {
+        "path":  "assets/audio/game_narration/intro-word-builder.wav",
+        "bytes":  484598,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "14ED7552A95BFFC9A379E75CAA96FB55E3661219F348E96D924A0A9DDF7B5F82"
+    },
+    {
+        "path":  "assets/audio/game_narration/praise-0.wav",
+        "bytes":  127684,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "46B39E64A12928C26310C7AD905D8339C83F88D18839A3D8241E33C4142578B3"
+    },
+    {
+        "path":  "assets/audio/game_narration/praise-1.wav",
+        "bytes":  118866,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "4838D79D899DCB1198D2504CE60EAB74E622CC06F59ECDE651955A95F0960E88"
+    },
+    {
+        "path":  "assets/audio/game_narration/praise-2.wav",
+        "bytes":  131876,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "6BA894DAA46A20145858C391FCCF280A51736EF18B0234F6B48A950E1122B064"
+    },
+    {
+        "path":  "assets/audio/game_narration/praise-3.wav",
+        "bytes":  120188,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "C8FC9B09C5DE747C17F1F849D02E864ECDE7DD1CCDD2BBE64D9E5E3E90383288"
+    },
+    {
+        "path":  "assets/audio/game_narration/praise-4.wav",
+        "bytes":  133638,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "1A1FAFD2A8EA637BBD4FAB079EE7EC672589E8F5D6DC3B3289F0B7891FB0CFE2"
+    },
+    {
+        "path":  "assets/audio/game_narration/praise-5.wav",
+        "bytes":  134736,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "C763484894F029B6CFB813E9C36CA86D1820154B2E9D6F42017BD42E8039E57A"
+    },
+    {
+        "path":  "lib/data/game_narration_data.dart",
+        "bytes":  2940,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "A6E9A7D29C55C6D241532AA4B54157F5D77DAD5F6F63F16DE09FA7DB94C3B562"
+    },
+    {
+        "path":  "tools/generate_game_narration.ps1",
+        "bytes":  2234,
+        "reason":  "Generated game narration and praise removed at user request; no longer used by game playback",
+        "sha256":  "F45EF8135B7B6A56AF7FC816124BABBCF05692323B8677659EE5A7ED293F55F4"
+    }
+]

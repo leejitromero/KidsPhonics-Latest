@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
 import '../theme/app_theme.dart';
 import 'parent_pin_form.dart';
+import 'adventure_background.dart';
 
 /// Installed above the Navigator so every lesson, dialog and game is covered.
 class TimeLimitOverlay extends StatefulWidget {
@@ -33,10 +34,9 @@ class _TimeLimitOverlayState extends State<TimeLimitOverlay>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_provider != null) return;
-    final provider = _provider = context.read<AppProvider>();
+    final provider = _provider ??= context.read<AppProvider>();
     provider.ready.then((_) {
-      if (!mounted) return;
+      if (!mounted || !provider.isReady || _warnings != null) return;
       _warnings = provider.screenTime.warnings.listen((minutes) {
         if (!mounted) return;
         setState(() => _warning = minutes);
@@ -111,6 +111,53 @@ class _TimeLimitOverlayState extends State<TimeLimitOverlay>
   Widget build(BuildContext context) {
     final provider = context.watch<AppProvider>();
     if (!provider.isReady) {
+      if (provider.hasLoadError) {
+        return Material(
+            child: AdventureBackground(
+                child: SafeArea(
+                    child: Center(
+                        child: SingleChildScrollView(
+                            padding: const EdgeInsets.all(24),
+                            child: ConstrainedBox(
+                                constraints:
+                                    const BoxConstraints(maxWidth: 380),
+                                child: Card(
+                                    color: const Color(0xFFF8F4FF),
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(20),
+                                        child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Icon(Icons.refresh_rounded,
+                                                  color: Color(0xFF582AA5),
+                                                  size: 40),
+                                              const SizedBox(height: 12),
+                                              const Text(
+                                                  'Let\'s try opening your adventure again.',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Color(0xFF582AA5),
+                                                      fontSize: 22,
+                                                      fontWeight:
+                                                          FontWeight.w900)),
+                                              const SizedBox(height: 8),
+                                              const Text(
+                                                  'Your saved progress could not be loaded. Tap Retry.',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color:
+                                                          Color(0xFF263858))),
+                                              const SizedBox(height: 16),
+                                              FilledButton.icon(
+                                                  key: const ValueKey(
+                                                      'startup-retry'),
+                                                  onPressed: withButtonSound(
+                                                      provider.retryLoading),
+                                                  icon: const Icon(
+                                                      Icons.refresh_rounded),
+                                                  label: const Text('Retry')),
+                                            ])))))))));
+      }
       return const Material(child: Center(child: CircularProgressIndicator()));
     }
     final blocked = provider.screenTime.isLimitReached &&

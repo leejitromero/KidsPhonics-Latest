@@ -10,47 +10,39 @@ class CvcLessonWord {
   String get praiseAudio => 'cvc-praise-$slug';
   String soundAudio(int index) => 'lesson-sound-${word[index]}';
   String get praise =>
-      '$word! Great job! ${word.split('').join('-')} makes $word!';
+      '${word[0]}${word.substring(1).toLowerCase()}! Nice work! ${word.split('').join('-')} makes $slug!';
   String? get imageAsset => picture ?? gameWordFor(word)?.frames.first;
 }
 
-// Column groups from the user's CVC WORDS LESSON SCENARIO.docx.
+// Words supplied in the user's new CVC recording and picture collection.
 const cvcLessonWords = [
-  CvcLessonWord('CAT', '🐱', picture: 'assets/images/lesson_frames/cat_C.png'),
-  CvcLessonWord('BAT', '🦇'),
-  CvcLessonWord('HAT', '🎩', picture: 'assets/images/lesson_frames/hat_H.png'),
-  CvcLessonWord('MAP', '🗺️'),
-  CvcLessonWord('FAN', '🪭'),
-  CvcLessonWord('BED', '🛏️'),
-  CvcLessonWord('HEN', '🐔'),
-  CvcLessonWord('PEN', '🖊️'),
-  CvcLessonWord('NET', '🥅'),
-  CvcLessonWord('PET', '🐶'),
-  CvcLessonWord('PIG', '🐷'),
-  CvcLessonWord('WIG', ''),
-  CvcLessonWord('FIN', ''),
-  CvcLessonWord('PIN', '📌'),
-  CvcLessonWord('SIT', ''),
-  CvcLessonWord('DOG', '🐶'),
-  CvcLessonWord('LOG', '🪵'),
-  CvcLessonWord('FOX', '🦊'),
-  CvcLessonWord('TOP', ''),
-  CvcLessonWord('HOP', '🐇'),
-  CvcLessonWord('SUN', '☀️', picture: 'assets/images/lesson_frames/sun_S.png'),
-  CvcLessonWord('BUS', '🚌'),
-  CvcLessonWord('CUP', '🥤'),
-  CvcLessonWord('BUG', '🐞'),
-  CvcLessonWord('RUN', '🏃'),
+  CvcLessonWord('CAT', '', picture: 'assets/images/cvc_blending/cat.webp'),
+  CvcLessonWord('BAT', '', picture: 'assets/images/cvc_blending/bat.webp'),
+  CvcLessonWord('HAT', '', picture: 'assets/images/cvc_blending/hat.webp'),
+  CvcLessonWord('MAP', '', picture: 'assets/images/cvc_blending/map.webp'),
+  CvcLessonWord('FAN', '', picture: 'assets/images/cvc_blending/fan.webp'),
+  CvcLessonWord('BAG', '', picture: 'assets/images/cvc_blending/bag.webp'),
+  CvcLessonWord('BED', '', picture: 'assets/images/cvc_blending/bed.webp'),
+  CvcLessonWord('HEN', '', picture: 'assets/images/cvc_blending/hen.webp'),
+  CvcLessonWord('PEN', '', picture: 'assets/images/cvc_blending/pen.webp'),
+  CvcLessonWord('NET', '', picture: 'assets/images/cvc_blending/net.webp'),
+  CvcLessonWord('RED', '', picture: 'assets/images/cvc_blending/red.webp'),
+  CvcLessonWord('PIG', '', picture: 'assets/images/cvc_blending/pig.webp'),
+  CvcLessonWord('PIN', '', picture: 'assets/images/cvc_blending/pin.webp'),
+  CvcLessonWord('DOG', '', picture: 'assets/images/cvc_blending/dog.webp'),
+  CvcLessonWord('POT', '', picture: 'assets/images/cvc_blending/pot.webp'),
+  CvcLessonWord('RUG', '', picture: 'assets/images/cvc_blending/rug.webp'),
+  CvcLessonWord('RUN', '', picture: 'assets/images/cvc_blending/run.webp'),
 ];
 
 String? cvcAudioAsset(String phrase) {
-  if (phrase == 'cvc-intro') return 'audio/cvc_lesson/intro.wav';
+  if (phrase == 'cvc-intro') return 'audio/cvc_lesson/intro.mp3';
   for (final word in cvcLessonWords) {
     if (phrase == word.wordAudio) {
-      return 'audio/cvc_lesson/word-${word.slug}.wav';
+      return 'audio/cvc_lesson/word-${word.slug}.mp3';
     }
     if (phrase == word.praiseAudio) {
-      return 'audio/cvc_lesson/praise-${word.slug}.wav';
+      return 'audio/cvc_lesson/praise-${word.slug}.mp3';
     }
   }
   return null;

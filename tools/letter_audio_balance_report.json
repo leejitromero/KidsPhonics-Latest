@@ -1,0 +1,1161 @@
+{
+  "targetActiveRmsDbfs": -14.0,
+  "limiterCeilingDbfs": -2.0,
+  "maximumMeasuredOversampledPeakDbfs": -0.7678098486810202,
+  "beforeRangeDbfs": [
+    -36.65631257531387,
+    -11.03235953991443
+  ],
+  "afterRangeDbfs": [
+    -14.580757647669301,
+    -14.089182867317584
+  ],
+  "durationPreserved": true,
+  "applied": true,
+  "recordings": [
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-a.mp3",
+      "gainDb": 1.309,
+      "before": {
+        "activeRmsDbfs": -15.308661787412099,
+        "peakDbfs": -4.978736832172537,
+        "oversampledPeakDbfs": -4.9647627040515845,
+        "samplesPerChannel": 38016,
+        "seconds": 0.8620408163265306
+      },
+      "after": {
+        "activeRmsDbfs": -14.268059757455633,
+        "peakDbfs": -3.8138072083993317,
+        "oversampledPeakDbfs": -3.8138072083993317,
+        "samplesPerChannel": 38016,
+        "seconds": 0.8620408163265306
+      },
+      "originalSha256": "f173c7cf665078d062298063bbb0b2a107c589bdfdb0f0a570d16512dbe21920",
+      "normalizedSha256": "831abc3fe09860dcb5153c3fdeff8f39807c2a627720423be9630d867d564b23",
+      "originalBytes": 13842,
+      "normalizedBytes": 21985
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-b.mp3",
+      "gainDb": 1.947,
+      "before": {
+        "activeRmsDbfs": -15.947151651113812,
+        "peakDbfs": -5.629592015634134,
+        "oversampledPeakDbfs": -5.629592015634134,
+        "samplesPerChannel": 54144,
+        "seconds": 1.2277551020408164
+      },
+      "after": {
+        "activeRmsDbfs": -14.266297678426207,
+        "peakDbfs": -3.991468756057914,
+        "oversampledPeakDbfs": -3.991468756057914,
+        "samplesPerChannel": 54144,
+        "seconds": 1.2277551020408164
+      },
+      "originalSha256": "485aef2d2cc3b22a2fba6f0b0eb79264f7108b47ce0eb3658dce0b1ab74c8429",
+      "normalizedSha256": "e77a0aa875fe68212234a21e470aad9e87f657e08bf46bc25ef2ae726642154e",
+      "originalBytes": 19694,
+      "normalizedBytes": 30763
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-c.mp3",
+      "gainDb": 2.545,
+      "before": {
+        "activeRmsDbfs": -16.545318545890837,
+        "peakDbfs": -6.309138007385856,
+        "oversampledPeakDbfs": -4.730493360883049,
+        "samplesPerChannel": 47232,
+        "seconds": 1.0710204081632653
+      },
+      "after": {
+        "activeRmsDbfs": -14.263935920905425,
+        "peakDbfs": -4.241594170497581,
+        "oversampledPeakDbfs": -2.5435053862360455,
+        "samplesPerChannel": 47232,
+        "seconds": 1.0710204081632653
+      },
+      "originalSha256": "49eb7c4caf8b356d7d7241c077f0462831214da09100d4ace21f7675d47a3199",
+      "normalizedSha256": "c146fd608f9eaeae83c08af350fce33085d85853c9013036344cc640287a2486",
+      "originalBytes": 17186,
+      "normalizedBytes": 27001
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-d.mp3",
+      "gainDb": 2.295,
+      "before": {
+        "activeRmsDbfs": -16.294646705432893,
+        "peakDbfs": -4.8401226851107575,
+        "oversampledPeakDbfs": -4.7627428653318935,
+        "samplesPerChannel": 41472,
+        "seconds": 0.9404081632653061
+      },
+      "after": {
+        "activeRmsDbfs": -14.264583767491104,
+        "peakDbfs": -2.835169492705392,
+        "oversampledPeakDbfs": -2.7645710180846623,
+        "samplesPerChannel": 41472,
+        "seconds": 0.9404081632653061
+      },
+      "originalSha256": "e587cd31a0381f9f1db8c98289c9d087f126fe12cf24c3fd116549647f973b0d",
+      "normalizedSha256": "767ef677506a147e8d935d5d671a8855dfdb1afd8079a8bb76daca488190864b",
+      "originalBytes": 15096,
+      "normalizedBytes": 23866
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-e.mp3",
+      "gainDb": 1.814,
+      "before": {
+        "activeRmsDbfs": -15.029372108334778,
+        "peakDbfs": -1.2698525582576836,
+        "oversampledPeakDbfs": -1.2189227668235645,
+        "samplesPerChannel": 41472,
+        "seconds": 0.9404081632653061
+      },
+      "after": {
+        "activeRmsDbfs": -14.239991525072568,
+        "peakDbfs": -2.180378146991715,
+        "oversampledPeakDbfs": -2.0833865027381737,
+        "samplesPerChannel": 41472,
+        "seconds": 0.9404081632653061
+      },
+      "originalSha256": "5114ce708dae2d263e729a4ac79cc7c407c48b19f01da50445e10e333513c8c9",
+      "normalizedSha256": "5d16680a0845155f3282d36ecda72b17e6e92e2aa8c06538a4c8dff51d51f649",
+      "originalBytes": 15096,
+      "normalizedBytes": 23866
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-f.mp3",
+      "gainDb": 1.848,
+      "before": {
+        "activeRmsDbfs": -14.883540548874718,
+        "peakDbfs": -0.7573169829599734,
+        "oversampledPeakDbfs": -0.7505568077361885,
+        "samplesPerChannel": 19584,
+        "seconds": 0.4440816326530612
+      },
+      "after": {
+        "activeRmsDbfs": -14.39462598769412,
+        "peakDbfs": -2.2490515134335713,
+        "oversampledPeakDbfs": -2.2490515134335713,
+        "samplesPerChannel": 19584,
+        "seconds": 0.4440816326530612
+      },
+      "originalSha256": "635380ae38a6613f7ed04a57f42c923cb718db97902344760ba816beea978954",
+      "normalizedSha256": "61aada55f6d2c93c04e584449fc65553c955999d0e5a946ebbdae0ab17560c70",
+      "originalBytes": 7155,
+      "normalizedBytes": 11954
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-g.mp3",
+      "gainDb": 1.175,
+      "before": {
+        "activeRmsDbfs": -15.174884669909448,
+        "peakDbfs": -2.2190012445981973,
+        "oversampledPeakDbfs": -2.1807394921014462,
+        "samplesPerChannel": 31104,
+        "seconds": 0.7053061224489796
+      },
+      "after": {
+        "activeRmsDbfs": -14.422112183687776,
+        "peakDbfs": -2.2021508822307636,
+        "oversampledPeakDbfs": -2.143900529063222,
+        "samplesPerChannel": 31104,
+        "seconds": 0.7053061224489796
+      },
+      "originalSha256": "100f9dcb199371564bb17dce73603a31e7d4936d30ee2b75f229f2f3ef920a02",
+      "normalizedSha256": "dd8888217e546a70c388551cb7e7ce07a391aa996148e7c2d1806643310e3b8f",
+      "originalBytes": 11334,
+      "normalizedBytes": 18224
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-h.mp3",
+      "gainDb": 1.376,
+      "before": {
+        "activeRmsDbfs": -15.375800335608602,
+        "peakDbfs": -2.9655054951447535,
+        "oversampledPeakDbfs": -2.9335315892444336,
+        "samplesPerChannel": 29952,
+        "seconds": 0.6791836734693878
+      },
+      "after": {
+        "activeRmsDbfs": -14.354755923629714,
+        "peakDbfs": -2.2032223380852782,
+        "oversampledPeakDbfs": -2.1762340678272696,
+        "samplesPerChannel": 29952,
+        "seconds": 0.6791836734693878
+      },
+      "originalSha256": "2af486b98dedb6648bb09228904e42c431c3dc06f354fbf671702ff75cba226e",
+      "normalizedSha256": "8f7b12688f3243699915eda7f13d03daaec67c43321604b11c9d6056b6aa1b36",
+      "originalBytes": 10916,
+      "normalizedBytes": 17597
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-i.mp3",
+      "gainDb": 0.96,
+      "before": {
+        "activeRmsDbfs": -14.960250732734137,
+        "peakDbfs": -1.801236466692961,
+        "oversampledPeakDbfs": -1.7806893518737401,
+        "samplesPerChannel": 28800,
+        "seconds": 0.6530612244897959
+      },
+      "after": {
+        "activeRmsDbfs": -14.432458317897659,
+        "peakDbfs": -2.2951217565814743,
+        "oversampledPeakDbfs": -2.2850421639974696,
+        "samplesPerChannel": 28800,
+        "seconds": 0.6530612244897959
+      },
+      "originalSha256": "c5775a6dad78a93b46c9fe8a0d9e5912a5cde11bb746ae5aa7825d00e629faa5",
+      "normalizedSha256": "513549782114802c2a9b679de4a86e94523039d8c336e17a7d855ac22e88059c",
+      "originalBytes": 10499,
+      "normalizedBytes": 16970
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-j.mp3",
+      "gainDb": 1.258,
+      "before": {
+        "activeRmsDbfs": -15.257951502571261,
+        "peakDbfs": -2.6106394419614745,
+        "oversampledPeakDbfs": -2.3952115094166464,
+        "samplesPerChannel": 40320,
+        "seconds": 0.9142857142857143
+      },
+      "after": {
+        "activeRmsDbfs": -14.309075763950812,
+        "peakDbfs": -1.6013572949370127,
+        "oversampledPeakDbfs": -1.1756197440789142,
+        "samplesPerChannel": 40320,
+        "seconds": 0.9142857142857143
+      },
+      "originalSha256": "a3ec036e8287e52cd5afb2d72477a1b373d39dd0f8a747cb2e416ab8fb41134e",
+      "normalizedSha256": "a85e8f85412f001ddd0b6226bd882b02bbf3191a920866a1d1d41df14ebb5d12",
+      "originalBytes": 14678,
+      "normalizedBytes": 23239
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-k.mp3",
+      "gainDb": 1.489,
+      "before": {
+        "activeRmsDbfs": -15.489153629036242,
+        "peakDbfs": -3.1465123308303555,
+        "oversampledPeakDbfs": -3.1465123308303555,
+        "samplesPerChannel": 47232,
+        "seconds": 1.0710204081632653
+      },
+      "after": {
+        "activeRmsDbfs": -14.47200747025981,
+        "peakDbfs": -2.4805632127447947,
+        "oversampledPeakDbfs": -2.4805632127447947,
+        "samplesPerChannel": 47232,
+        "seconds": 1.0710204081632653
+      },
+      "originalSha256": "49735c76236250fb35c4b34f68eb41ea7a664a787cf8346618ce2fe06a9d6101",
+      "normalizedSha256": "f97b1d72ef4f740c45c5958426f44fcdc5dc49720ac1311cd3ac46c4f8c74b19",
+      "originalBytes": 17186,
+      "normalizedBytes": 27001
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-l.mp3",
+      "gainDb": 2.699,
+      "before": {
+        "activeRmsDbfs": -16.698666473838696,
+        "peakDbfs": -4.95732414855588,
+        "oversampledPeakDbfs": -4.922088694217378,
+        "samplesPerChannel": 31104,
+        "seconds": 0.7053061224489796
+      },
+      "after": {
+        "activeRmsDbfs": -14.26932040870685,
+        "peakDbfs": -2.4907503383035063,
+        "oversampledPeakDbfs": -2.4803386516289234,
+        "samplesPerChannel": 31104,
+        "seconds": 0.7053061224489796
+      },
+      "originalSha256": "4d71ced87543e812649d64bc2339cf58d3206e37a108fa213ac6bcb3c2f526b1",
+      "normalizedSha256": "4bdde39fcaac7c6dc3f3a73932714c00593cc52954f30e703d4b4ac7c0794f36",
+      "originalBytes": 11334,
+      "normalizedBytes": 18224
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-m.mp3",
+      "gainDb": 1.357,
+      "before": {
+        "activeRmsDbfs": -15.356787216537825,
+        "peakDbfs": -4.803899356852221,
+        "oversampledPeakDbfs": -4.803899356852221,
+        "samplesPerChannel": 36864,
+        "seconds": 0.8359183673469388
+      },
+      "after": {
+        "activeRmsDbfs": -14.267299525363843,
+        "peakDbfs": -3.8254949590201006,
+        "oversampledPeakDbfs": -3.8254949590201006,
+        "samplesPerChannel": 36864,
+        "seconds": 0.8359183673469388
+      },
+      "originalSha256": "d51fbd72de072d8067b429eee09b9327e1a27b7bd28fc9b19d9bc7b04bc0ac86",
+      "normalizedSha256": "19317136fb1eac9c9424d74bda59650cd0b8cb7167e8664fd89921b7f064f4e8",
+      "originalBytes": 13424,
+      "normalizedBytes": 21359
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-n.mp3",
+      "gainDb": 1.818,
+      "before": {
+        "activeRmsDbfs": -15.81823827486711,
+        "peakDbfs": -4.84860411545421,
+        "oversampledPeakDbfs": -4.78803344252847,
+        "samplesPerChannel": 29952,
+        "seconds": 0.6791836734693878
+      },
+      "after": {
+        "activeRmsDbfs": -14.259224145611217,
+        "peakDbfs": -3.185098256788529,
+        "oversampledPeakDbfs": -3.1247525459980148,
+        "samplesPerChannel": 29952,
+        "seconds": 0.6791836734693878
+      },
+      "originalSha256": "32affa5f18be16ecc01e5f95e0fcd13f1435455d155f2e68bbee27b4f9e55a0a",
+      "normalizedSha256": "072f3235860efa8ffc76c3f57c61462135616fb29277c239c09e86b40dc213e4",
+      "originalBytes": 10916,
+      "normalizedBytes": 17597
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-o.mp3",
+      "gainDb": 2.427,
+      "before": {
+        "activeRmsDbfs": -16.42686633903484,
+        "peakDbfs": -4.8764405288376045,
+        "oversampledPeakDbfs": -4.872931371202302,
+        "samplesPerChannel": 24192,
+        "seconds": 0.5485714285714286
+      },
+      "after": {
+        "activeRmsDbfs": -14.264060718309892,
+        "peakDbfs": -2.6861779335121785,
+        "oversampledPeakDbfs": -2.6861779335121785,
+        "samplesPerChannel": 24192,
+        "seconds": 0.5485714285714286
+      },
+      "originalSha256": "7313f8fdda56dc47688707a14299c82dd50c6217d8fc77f3cbc5349c5733e336",
+      "normalizedSha256": "80a545d2099dc0780352a7263a2d64604143884fdbff86720f4fc47518bd7e78",
+      "originalBytes": 8827,
+      "normalizedBytes": 14462
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-p.mp3",
+      "gainDb": 1.814,
+      "before": {
+        "activeRmsDbfs": -15.813859970423787,
+        "peakDbfs": -3.12344842374499,
+        "oversampledPeakDbfs": -3.112573529423149,
+        "samplesPerChannel": 27648,
+        "seconds": 0.626938775510204
+      },
+      "after": {
+        "activeRmsDbfs": -14.376115544260582,
+        "peakDbfs": -2.2399538183928955,
+        "oversampledPeakDbfs": -2.225918724305197,
+        "samplesPerChannel": 27648,
+        "seconds": 0.626938775510204
+      },
+      "originalSha256": "fdb7026e295df32b7e7a95047e8e2dc70c7455007d16f667257ded0b00c84ec1",
+      "normalizedSha256": "3098d4b386d5492bfc9bbef58b32d15f4b625335d05fb30c2ca0efbe197bb066",
+      "originalBytes": 10081,
+      "normalizedBytes": 16343
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-q.mp3",
+      "gainDb": 1.732,
+      "before": {
+        "activeRmsDbfs": -15.013945947489297,
+        "peakDbfs": -1.857127529963424,
+        "oversampledPeakDbfs": -1.8297384327632287,
+        "samplesPerChannel": 34560,
+        "seconds": 0.7836734693877551
+      },
+      "after": {
+        "activeRmsDbfs": -14.089182867317584,
+        "peakDbfs": -2.265536894652673,
+        "oversampledPeakDbfs": -2.206554970230932,
+        "samplesPerChannel": 34560,
+        "seconds": 0.7836734693877551
+      },
+      "originalSha256": "0a41aeca96ddfd85ba29869a8908f18ddb0fb69e86debf0ac22bddb0e8e2da1f",
+      "normalizedSha256": "22e588932132876917e7e39586d7c0d4fe5d349ac67078f56b619593a07e0fb6",
+      "originalBytes": 12588,
+      "normalizedBytes": 20105
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-r.mp3",
+      "gainDb": 1.182,
+      "before": {
+        "activeRmsDbfs": -15.182426345707722,
+        "peakDbfs": -3.2766684784842743,
+        "oversampledPeakDbfs": -3.2766684784842743,
+        "samplesPerChannel": 28800,
+        "seconds": 0.6530612244897959
+      },
+      "after": {
+        "activeRmsDbfs": -14.26429693953442,
+        "peakDbfs": -2.402076257027519,
+        "oversampledPeakDbfs": -2.383141761626743,
+        "samplesPerChannel": 28800,
+        "seconds": 0.6530612244897959
+      },
+      "originalSha256": "2e4bda6bf8b811c3cf3bb5aec4b3decbd7bced3a0ffabcdc47a4776ae844ef31",
+      "normalizedSha256": "b2152bd2e68e5e880ebff1f470bb6e647a47890f7a031c8b3324ec7ae3ad41bc",
+      "originalBytes": 10499,
+      "normalizedBytes": 16970
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-s.mp3",
+      "gainDb": 3.448,
+      "before": {
+        "activeRmsDbfs": -16.341523457859054,
+        "peakDbfs": -1.5830498573171983,
+        "oversampledPeakDbfs": -1.5517427057959263,
+        "samplesPerChannel": 27648,
+        "seconds": 0.626938775510204
+      },
+      "after": {
+        "activeRmsDbfs": -14.220868684516807,
+        "peakDbfs": -2.237416797872288,
+        "oversampledPeakDbfs": -2.2030915680231606,
+        "samplesPerChannel": 27648,
+        "seconds": 0.626938775510204
+      },
+      "originalSha256": "b3ff5fd385e76b1ee65ae5a9206f43c2ecc9cfc3c384e9bc69b8306742a98df0",
+      "normalizedSha256": "cdfcbf41b2b4067f1eef93fcfea1a455e06fa399a536e03a8fd4bee4a174e06c",
+      "originalBytes": 10081,
+      "normalizedBytes": 16343
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-t.mp3",
+      "gainDb": 1.592,
+      "before": {
+        "activeRmsDbfs": -15.592235874392355,
+        "peakDbfs": -3.327690722368298,
+        "oversampledPeakDbfs": -3.3096058777713515,
+        "samplesPerChannel": 29952,
+        "seconds": 0.6791836734693878
+      },
+      "after": {
+        "activeRmsDbfs": -14.315940869849026,
+        "peakDbfs": -2.248180951015371,
+        "oversampledPeakDbfs": -2.230134769169693,
+        "samplesPerChannel": 29952,
+        "seconds": 0.6791836734693878
+      },
+      "originalSha256": "397d6f17a8f633ea124db9562c203198a64a09e9560107e3c50ffd37832cdc76",
+      "normalizedSha256": "e15cd4bfa10391804a517d0d63686ba167faab54181d636bdf9931788f5fd5ac",
+      "originalBytes": 10916,
+      "normalizedBytes": 17597
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-u.mp3",
+      "gainDb": 1.399,
+      "before": {
+        "activeRmsDbfs": -15.39854434498353,
+        "peakDbfs": -6.391572958058314,
+        "oversampledPeakDbfs": -6.391572958058314,
+        "samplesPerChannel": 38016,
+        "seconds": 0.8620408163265306
+      },
+      "after": {
+        "activeRmsDbfs": -14.259712292806647,
+        "peakDbfs": -5.383467488152844,
+        "oversampledPeakDbfs": -5.380817978647414,
+        "samplesPerChannel": 38016,
+        "seconds": 0.8620408163265306
+      },
+      "originalSha256": "8a95090b9944d1ee8e8bf2bce5a5fdf7459eeb5eb072a6e2da4f37015b23fecb",
+      "normalizedSha256": "52a5630b6ee9fba31472fc5766561ced677a0ae126519427c4c94a580ef3a553",
+      "originalBytes": 13842,
+      "normalizedBytes": 21985
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-v.mp3",
+      "gainDb": 1.501,
+      "before": {
+        "activeRmsDbfs": -15.501136390894722,
+        "peakDbfs": -3.113333662185622,
+        "oversampledPeakDbfs": -3.113333662185622,
+        "samplesPerChannel": 36864,
+        "seconds": 0.8359183673469388
+      },
+      "after": {
+        "activeRmsDbfs": -14.316252827802403,
+        "peakDbfs": -2.1090715687014363,
+        "oversampledPeakDbfs": -2.063259466312276,
+        "samplesPerChannel": 36864,
+        "seconds": 0.8359183673469388
+      },
+      "originalSha256": "ccad4c3f42da113c388181cd24a93ed5135e5421e3b0069e6a792343aabdb160",
+      "normalizedSha256": "a9dcaaaa46cf235d15a0289dc1611abd829ea5c30a73d665e0f444b41f5e4579",
+      "originalBytes": 13424,
+      "normalizedBytes": 21359
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-w.mp3",
+      "gainDb": 1.717,
+      "before": {
+        "activeRmsDbfs": -15.716933842705693,
+        "peakDbfs": -4.875538375691798,
+        "oversampledPeakDbfs": -4.8570874962940245,
+        "samplesPerChannel": 34560,
+        "seconds": 0.7836734693877551
+      },
+      "after": {
+        "activeRmsDbfs": -14.261418353236682,
+        "peakDbfs": -3.4080627172100497,
+        "oversampledPeakDbfs": -3.387803920632053,
+        "samplesPerChannel": 34560,
+        "seconds": 0.7836734693877551
+      },
+      "originalSha256": "348ec5f40b3965c207998ff76ee44bd2a3feb66225b681f5203f2af665c27ca7",
+      "normalizedSha256": "4b482178a2344dcdb2669be5db1b8eb86121ed41a65c1bb5cbd808d26db7c9ea",
+      "originalBytes": 12588,
+      "normalizedBytes": 20105
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-x.mp3",
+      "gainDb": 0.776,
+      "before": {
+        "activeRmsDbfs": -14.776451751306572,
+        "peakDbfs": -1.727046538301533,
+        "oversampledPeakDbfs": -1.557185306572662,
+        "samplesPerChannel": 28800,
+        "seconds": 0.6530612244897959
+      },
+      "after": {
+        "activeRmsDbfs": -14.365075052241313,
+        "peakDbfs": -2.151460770038525,
+        "oversampledPeakDbfs": -2.044595225448646,
+        "samplesPerChannel": 28800,
+        "seconds": 0.6530612244897959
+      },
+      "originalSha256": "e24c754fad8c7c6d66ce33cea46cd4593debce39e6d1e6c447df983d1aa75b57",
+      "normalizedSha256": "19cf819f95f88a0912eeb5c08cea2e20dae323c7c3256d5eca7be1a90cad7f4c",
+      "originalBytes": 10499,
+      "normalizedBytes": 16970
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-y.mp3",
+      "gainDb": 1.783,
+      "before": {
+        "activeRmsDbfs": -15.783285309997286,
+        "peakDbfs": -3.4227316166589934,
+        "oversampledPeakDbfs": -3.422384591668479,
+        "samplesPerChannel": 36864,
+        "seconds": 0.8359183673469388
+      },
+      "after": {
+        "activeRmsDbfs": -14.319413340638745,
+        "peakDbfs": -2.2914193128835545,
+        "oversampledPeakDbfs": -2.288985135278794,
+        "samplesPerChannel": 36864,
+        "seconds": 0.8359183673469388
+      },
+      "originalSha256": "84782770ebf29c9746b47757a5aeb111cfe5f26a64d9ac0a6d9dccd1982d3700",
+      "normalizedSha256": "48c9f1005857991248d9a25a100cb031830e9d46d25247afdf4f517a0c4de564",
+      "originalBytes": 13424,
+      "normalizedBytes": 21359
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/letters/letter-z.mp3",
+      "gainDb": 2.329,
+      "before": {
+        "activeRmsDbfs": -16.32933015196751,
+        "peakDbfs": -3.952942845380938,
+        "oversampledPeakDbfs": -3.5291892358731665,
+        "samplesPerChannel": 36864,
+        "seconds": 0.8359183673469388
+      },
+      "after": {
+        "activeRmsDbfs": -14.29193949544314,
+        "peakDbfs": -2.23697472065436,
+        "oversampledPeakDbfs": -1.6822072355526305,
+        "samplesPerChannel": 36864,
+        "seconds": 0.8359183673469388
+      },
+      "originalSha256": "c22992f4b845b9cdfbc2e350ac107b33b61f1c1988aa179e15edaf49dac84a96",
+      "normalizedSha256": "5667aad036b1533d427e8395fa49f036bd677877a1c4ace7812420374635de97",
+      "originalBytes": 13424,
+      "normalizedBytes": 21359
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-a.mp3",
+      "gainDb": 2.487,
+      "before": {
+        "activeRmsDbfs": -16.487382708117643,
+        "peakDbfs": -4.619804159823326,
+        "oversampledPeakDbfs": -4.406477630316802,
+        "samplesPerChannel": 51840,
+        "seconds": 1.1755102040816328
+      },
+      "after": {
+        "activeRmsDbfs": -14.275246503499432,
+        "peakDbfs": -2.501475576246361,
+        "oversampledPeakDbfs": -2.278650849219969,
+        "samplesPerChannel": 51840,
+        "seconds": 1.1755102040816328
+      },
+      "originalSha256": "a368cb26b24ef3e0115a62e709966892652f9bfe007166b06fc787490edf8354",
+      "normalizedSha256": "4db5b653cf3d11dc13573cfcbd14a167766672b7ccd0c4cb4311f8096685bf06",
+      "originalBytes": 18858,
+      "normalizedBytes": 29509
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-b.mp3",
+      "gainDb": 3.124,
+      "before": {
+        "activeRmsDbfs": -17.12356763730918,
+        "peakDbfs": -3.9336358878017736,
+        "oversampledPeakDbfs": -3.928247809758678,
+        "samplesPerChannel": 50688,
+        "seconds": 1.1493877551020408
+      },
+      "after": {
+        "activeRmsDbfs": -14.529234063958645,
+        "peakDbfs": -2.2783399202731585,
+        "oversampledPeakDbfs": -2.2735105097934665,
+        "samplesPerChannel": 50688,
+        "seconds": 1.1493877551020408
+      },
+      "originalSha256": "50abc71e79e0aaf75af8f84bb35ee3a46fb34b3db1b066e3a6634a82ee37643b",
+      "normalizedSha256": "d5967f265d120e1d3fc36c47d37e8123713f459c4ee1bd1310837e137b913e70",
+      "originalBytes": 18440,
+      "normalizedBytes": 28882
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-c.mp3",
+      "gainDb": 14.363,
+      "before": {
+        "activeRmsDbfs": -24.442381448273217,
+        "peakDbfs": -8.749838678476204,
+        "oversampledPeakDbfs": -8.709245503845377,
+        "samplesPerChannel": 34560,
+        "seconds": 0.7836734693877551
+      },
+      "after": {
+        "activeRmsDbfs": -14.580757647669301,
+        "peakDbfs": -1.8868823100552774,
+        "oversampledPeakDbfs": -1.745606537160721,
+        "samplesPerChannel": 34560,
+        "seconds": 0.7836734693877551
+      },
+      "originalSha256": "345899f07f596b119986a64767462caa88f147135c3ad6bb848f6ac92466e9df",
+      "normalizedSha256": "75eada2c74ffc71e116fe7830ba542db3271e2ebbed05c2fa4d0c229d0471835",
+      "originalBytes": 12588,
+      "normalizedBytes": 20105
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-d.mp3",
+      "gainDb": 3.364,
+      "before": {
+        "activeRmsDbfs": -16.433875798368444,
+        "peakDbfs": -2.401805931753646,
+        "oversampledPeakDbfs": -2.3874804955522486,
+        "samplesPerChannel": 34560,
+        "seconds": 0.7836734693877551
+      },
+      "after": {
+        "activeRmsDbfs": -14.274969057026816,
+        "peakDbfs": -2.040606430223896,
+        "oversampledPeakDbfs": -2.040606430223896,
+        "samplesPerChannel": 34560,
+        "seconds": 0.7836734693877551
+      },
+      "originalSha256": "69c8b472a4ccb9eb922f0adff3a57c53175fdef09a59ef6b331a5b0b4999966a",
+      "normalizedSha256": "591ac65c2cad8d2543cf9ee758940e0c08a3b6c97f9c34160e718c9c82fa1a44",
+      "originalBytes": 12588,
+      "normalizedBytes": 20105
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-e.mp3",
+      "gainDb": 12.864,
+      "before": {
+        "activeRmsDbfs": -26.863858987610463,
+        "peakDbfs": -14.402774814533457,
+        "oversampledPeakDbfs": -14.402774814533457,
+        "samplesPerChannel": 23040,
+        "seconds": 0.5224489795918368
+      },
+      "after": {
+        "activeRmsDbfs": -14.388610400036297,
+        "peakDbfs": -2.3492214181305973,
+        "oversampledPeakDbfs": -2.3492214181305973,
+        "samplesPerChannel": 23040,
+        "seconds": 0.5224489795918368
+      },
+      "originalSha256": "c3cb7ce0492e00da6cde1330cc93c221ed6a6e6033fdd3bfc127b33146276dca",
+      "normalizedSha256": "fbc3e176deb044545d1570e02b8eeba1122ad3440309867e2b305af13169b8c0",
+      "originalBytes": 8409,
+      "normalizedBytes": 13835
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-f.mp3",
+      "gainDb": 30.762,
+      "before": {
+        "activeRmsDbfs": -34.418445073090986,
+        "peakDbfs": -16.39253839293475,
+        "oversampledPeakDbfs": -15.855152402344409,
+        "samplesPerChannel": 10368,
+        "seconds": 0.23510204081632652
+      },
+      "after": {
+        "activeRmsDbfs": -14.441846346632772,
+        "peakDbfs": -2.0375999977835764,
+        "oversampledPeakDbfs": -1.0378760809328045,
+        "samplesPerChannel": 10368,
+        "seconds": 0.23510204081632652
+      },
+      "originalSha256": "6efc0902f821428bbde007b91908c6e614382bcbb42df75039da828dd32135cd",
+      "normalizedSha256": "c13974f7ed2258a917a51b4d27318846fb302b9420aae14cd2f63ad3ba8e0984",
+      "originalBytes": 3811,
+      "normalizedBytes": 6939
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-g.mp3",
+      "gainDb": 11.908,
+      "before": {
+        "activeRmsDbfs": -25.907675001023627,
+        "peakDbfs": -13.960919576834534,
+        "oversampledPeakDbfs": -13.960919576834534,
+        "samplesPerChannel": 10368,
+        "seconds": 0.23510204081632652
+      },
+      "after": {
+        "activeRmsDbfs": -14.266001190976416,
+        "peakDbfs": -2.3134569937837908,
+        "oversampledPeakDbfs": -2.3134569937837908,
+        "samplesPerChannel": 10368,
+        "seconds": 0.23510204081632652
+      },
+      "originalSha256": "723e6e26cc51e4042b0d3bad41095262045ceb664cde21c470caf7bf97f60dcd",
+      "normalizedSha256": "6e958bdb74dde6bbce7d4f3b644a68383c13643ae1ef5b813b0754e2332f0362",
+      "originalBytes": 3811,
+      "normalizedBytes": 6939
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-h.mp3",
+      "gainDb": 23.309,
+      "before": {
+        "activeRmsDbfs": -36.65631257531387,
+        "peakDbfs": -23.617105531110724,
+        "oversampledPeakDbfs": -23.534944255659713,
+        "samplesPerChannel": 10368,
+        "seconds": 0.23510204081632652
+      },
+      "after": {
+        "activeRmsDbfs": -14.322398937450522,
+        "peakDbfs": -2.2165097606795285,
+        "oversampledPeakDbfs": -2.1286165244456656,
+        "samplesPerChannel": 10368,
+        "seconds": 0.23510204081632652
+      },
+      "originalSha256": "b9a6b2c6d8ba9c28090db1f18da5cd0473c048e9a6fd2a3ae0aeec84a9e81f52",
+      "normalizedSha256": "9985815a8844f84a09d2dc2807d9d90d0a17d66bc7f55162975cece934c0dfa5",
+      "originalBytes": 3811,
+      "normalizedBytes": 6939
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-i.mp3",
+      "gainDb": 12.268,
+      "before": {
+        "activeRmsDbfs": -26.267506098041746,
+        "peakDbfs": -14.234276656070568,
+        "oversampledPeakDbfs": -14.208632042936278,
+        "samplesPerChannel": 12672,
+        "seconds": 0.2873469387755102
+      },
+      "after": {
+        "activeRmsDbfs": -14.278001447812429,
+        "peakDbfs": -2.2424654415190024,
+        "oversampledPeakDbfs": -2.211693893259793,
+        "samplesPerChannel": 12672,
+        "seconds": 0.2873469387755102
+      },
+      "originalSha256": "f0094857b38605b7890f35c1dcec425d4a41779ca955636cc99c906bcc0d4b81",
+      "normalizedSha256": "70cce9c193436cc9d3a9dc9505f6b3441080a02874c193fa6657c5f71faa1831",
+      "originalBytes": 4647,
+      "normalizedBytes": 8193
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-j.mp3",
+      "gainDb": 1.904,
+      "before": {
+        "activeRmsDbfs": -14.779993114339582,
+        "peakDbfs": -0.8886522051748036,
+        "oversampledPeakDbfs": -0.8750498926507672,
+        "samplesPerChannel": 24192,
+        "seconds": 0.5485714285714286
+      },
+      "after": {
+        "activeRmsDbfs": -14.539572602579083,
+        "peakDbfs": -2.023670861931577,
+        "oversampledPeakDbfs": -2.0208009502248756,
+        "samplesPerChannel": 24192,
+        "seconds": 0.5485714285714286
+      },
+      "originalSha256": "46c0cefc40585c50ad3199baa2972a95c29e4271a87687b7b3ad00b0bdfd9b04",
+      "normalizedSha256": "3dba529ff3defc56347468f02fd3b58ec5ca8ea11dec1d24fa0e11dbd668c16f",
+      "originalBytes": 8827,
+      "normalizedBytes": 14462
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-k.mp3",
+      "gainDb": 4.636,
+      "before": {
+        "activeRmsDbfs": -15.10100426179953,
+        "peakDbfs": -0.22345098970634217,
+        "oversampledPeakDbfs": -0.03037483689062153,
+        "samplesPerChannel": 20736,
+        "seconds": 0.47020408163265304
+      },
+      "after": {
+        "activeRmsDbfs": -14.488723560334531,
+        "peakDbfs": -1.9346641801871445,
+        "oversampledPeakDbfs": -1.7041909973833724,
+        "samplesPerChannel": 20736,
+        "seconds": 0.47020408163265304
+      },
+      "originalSha256": "53bee6da9f63ce1f8c56cc2bb18093d16cb0718a8a4bb19b82a57efbd5c89c98",
+      "normalizedSha256": "764a17cfd217081c7811e8033f34381907b471a79cb159a25d1fbd41b3154d1f",
+      "originalBytes": 7573,
+      "normalizedBytes": 12581
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-l.mp3",
+      "gainDb": -2.515,
+      "before": {
+        "activeRmsDbfs": -11.485161505035709,
+        "peakDbfs": -0.3080924471027206,
+        "oversampledPeakDbfs": -0.2791401385149018,
+        "samplesPerChannel": 33408,
+        "seconds": 0.7575510204081632
+      },
+      "after": {
+        "activeRmsDbfs": -14.262822846769227,
+        "peakDbfs": -3.053659376517256,
+        "oversampledPeakDbfs": -3.0265041278264477,
+        "samplesPerChannel": 33408,
+        "seconds": 0.7575510204081632
+      },
+      "originalSha256": "21aeb7c4bd2a1f79c1dc6617b7af90e818618cd65760ab7ee6e080576bd65644",
+      "normalizedSha256": "69ccc558f06b20a2f9823b2ca45fabbd7ab3617be7089bcc341d47b0bd5eff55",
+      "originalBytes": 12170,
+      "normalizedBytes": 19478
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-m.mp3",
+      "gainDb": 0.533,
+      "before": {
+        "activeRmsDbfs": -14.532771600817899,
+        "peakDbfs": -6.685513078001191,
+        "oversampledPeakDbfs": -6.683582266621385,
+        "samplesPerChannel": 48384,
+        "seconds": 1.0971428571428572
+      },
+      "after": {
+        "activeRmsDbfs": -14.264363099003987,
+        "peakDbfs": -6.383676674813934,
+        "oversampledPeakDbfs": -6.382947409821261,
+        "samplesPerChannel": 48384,
+        "seconds": 1.0971428571428572
+      },
+      "originalSha256": "844c69f7b9b7ddcce7eae12a37192a976eac214a50150efbacd41d59dbc0037f",
+      "normalizedSha256": "d86fbdb44791a071cc43ba540b711423cb92d28b86d6d70f4ab0d126ebab628b",
+      "originalBytes": 17604,
+      "normalizedBytes": 27628
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-n.mp3",
+      "gainDb": -1.705,
+      "before": {
+        "activeRmsDbfs": -12.295084691527,
+        "peakDbfs": -2.537664384780341,
+        "oversampledPeakDbfs": -2.530677823275535,
+        "samplesPerChannel": 34560,
+        "seconds": 0.7836734693877551
+      },
+      "after": {
+        "activeRmsDbfs": -14.265414975743294,
+        "peakDbfs": -4.529069002804667,
+        "oversampledPeakDbfs": -4.515593007776676,
+        "samplesPerChannel": 34560,
+        "seconds": 0.7836734693877551
+      },
+      "originalSha256": "e086049b759699d20ef9825584c790c96a22197cde670de729e6222061e17461",
+      "normalizedSha256": "30abde51d08471dc93039919ffb5ebbb9b5c2c0d9c886bb36b5e0797ed8266cb",
+      "originalBytes": 12588,
+      "normalizedBytes": 20105
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-o.mp3",
+      "gainDb": -2.968,
+      "before": {
+        "activeRmsDbfs": -11.03235953991443,
+        "peakDbfs": -0.3421246818033222,
+        "oversampledPeakDbfs": -0.3288420518137982,
+        "samplesPerChannel": 19584,
+        "seconds": 0.4440816326530612
+      },
+      "after": {
+        "activeRmsDbfs": -14.26281952861733,
+        "peakDbfs": -3.584974690985814,
+        "oversampledPeakDbfs": -3.56391247060385,
+        "samplesPerChannel": 19584,
+        "seconds": 0.4440816326530612
+      },
+      "originalSha256": "7a13540d8404244421acd251ceb0d4e602fd30e712a7a9ddc7ae16f13f78a165",
+      "normalizedSha256": "6bc52ab6d8dd5c500abfccdc27f56c54bc90376d3e07a6c7cd125890db0ece25",
+      "originalBytes": 7155,
+      "normalizedBytes": 11954
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-p.mp3",
+      "gainDb": -1.147,
+      "before": {
+        "activeRmsDbfs": -12.853369273115831,
+        "peakDbfs": -0.37910635687612154,
+        "oversampledPeakDbfs": -0.37910635687612154,
+        "samplesPerChannel": 12672,
+        "seconds": 0.2873469387755102
+      },
+      "after": {
+        "activeRmsDbfs": -14.574246484493818,
+        "peakDbfs": -2.063989563076874,
+        "oversampledPeakDbfs": -2.0438248326152832,
+        "samplesPerChannel": 12672,
+        "seconds": 0.2873469387755102
+      },
+      "originalSha256": "aeacdd347dd6d8f5611ec78075c8f2d99a0ce4361c6c7a1513a483025fb559a8",
+      "normalizedSha256": "6eb1c3254744fbf131c98be5b3598d75c4fe6db02943a529530dbc4c10d81fc5",
+      "originalBytes": 4647,
+      "normalizedBytes": 8193
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-q.mp3",
+      "gainDb": 0.955,
+      "before": {
+        "activeRmsDbfs": -13.289318934313297,
+        "peakDbfs": -0.280872504854234,
+        "oversampledPeakDbfs": -0.27611093188811586,
+        "samplesPerChannel": 20736,
+        "seconds": 0.47020408163265304
+      },
+      "after": {
+        "activeRmsDbfs": -14.393599050119924,
+        "peakDbfs": -2.166730579512679,
+        "oversampledPeakDbfs": -2.163822314433373,
+        "samplesPerChannel": 20736,
+        "seconds": 0.47020408163265304
+      },
+      "originalSha256": "94c125067f62b50dd483fbeff9d74a15038f5893800740a4ec9ed878035a5db3",
+      "normalizedSha256": "cf748523b91e249b07a8021dede9b68e61bf1911639c984b2f28e0458b908da4",
+      "originalBytes": 7573,
+      "normalizedBytes": 12581
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-r.mp3",
+      "gainDb": 1.013,
+      "before": {
+        "activeRmsDbfs": -15.013123085694339,
+        "peakDbfs": -2.89496459658554,
+        "oversampledPeakDbfs": -2.874553903742336,
+        "samplesPerChannel": 40320,
+        "seconds": 0.9142857142857143
+      },
+      "after": {
+        "activeRmsDbfs": -14.389873316146687,
+        "peakDbfs": -2.2745887869768433,
+        "oversampledPeakDbfs": -2.262932601223541,
+        "samplesPerChannel": 40320,
+        "seconds": 0.9142857142857143
+      },
+      "originalSha256": "3f6b677f90a24c5f207bbd352828ac2bb495263d25a0c87957f73cabca557e9e",
+      "normalizedSha256": "f4ab33f055476b2e8ddba055755b1f7a4fec4a152ae9cccfdb04ecb46662fbda",
+      "originalBytes": 14678,
+      "normalizedBytes": 23239
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-s.mp3",
+      "gainDb": 3.684,
+      "before": {
+        "activeRmsDbfs": -15.845485180787392,
+        "peakDbfs": 0.005060785359384227,
+        "oversampledPeakDbfs": 0.005060785359384227,
+        "samplesPerChannel": 23040,
+        "seconds": 0.5224489795918368
+      },
+      "after": {
+        "activeRmsDbfs": -14.333980033949372,
+        "peakDbfs": -2.007786515873025,
+        "oversampledPeakDbfs": -1.536678490544866,
+        "samplesPerChannel": 23040,
+        "seconds": 0.5224489795918368
+      },
+      "originalSha256": "e1b41e913acbce90f55292060bf04fa35447953aa21086362e0bf009a9b56eec",
+      "normalizedSha256": "9a28084501fcbf877f9d6b502ec26c1aa11f1071472ac9658f4cd089d35fef1e",
+      "originalBytes": 8409,
+      "normalizedBytes": 13835
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-t.mp3",
+      "gainDb": 6.62,
+      "before": {
+        "activeRmsDbfs": -15.050230450592966,
+        "peakDbfs": -0.12121473600241864,
+        "oversampledPeakDbfs": 0.9154381761138066,
+        "samplesPerChannel": 10368,
+        "seconds": 0.23510204081632652
+      },
+      "after": {
+        "activeRmsDbfs": -14.380907310880552,
+        "peakDbfs": -2.1147706111190083,
+        "oversampledPeakDbfs": -1.2610999536806888,
+        "samplesPerChannel": 10368,
+        "seconds": 0.23510204081632652
+      },
+      "originalSha256": "d28e707ac2118502d0a54fa74b89f16c242891f8bd7ab5f17ad42803615637e1",
+      "normalizedSha256": "301c287329fc0c566322145c6fdd39d8af3d702db8dfc0c5c41436a43927fb19",
+      "originalBytes": 3811,
+      "normalizedBytes": 6939
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-u.mp3",
+      "gainDb": -1.112,
+      "before": {
+        "activeRmsDbfs": -12.88834023152731,
+        "peakDbfs": -0.402185498102113,
+        "oversampledPeakDbfs": -0.39648338824096463,
+        "samplesPerChannel": 13824,
+        "seconds": 0.313469387755102
+      },
+      "after": {
+        "activeRmsDbfs": -14.43105539113332,
+        "peakDbfs": -2.2647977227307288,
+        "oversampledPeakDbfs": -2.259721982975282,
+        "samplesPerChannel": 13824,
+        "seconds": 0.313469387755102
+      },
+      "originalSha256": "98e920883829f7fed796a7cf5d8aab7ad0bbf9ddf46972f43e7c60626f9d7237",
+      "normalizedSha256": "d87d8998355b3a990f1dd30bf86ac8e9f61b6b75755c065826dc6a82db09e7d5",
+      "originalBytes": 5065,
+      "normalizedBytes": 8820
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-v.mp3",
+      "gainDb": -2.332,
+      "before": {
+        "activeRmsDbfs": -11.667633837199,
+        "peakDbfs": -2.039706093588888,
+        "oversampledPeakDbfs": -2.039706093588888,
+        "samplesPerChannel": 25344,
+        "seconds": 0.5746938775510204
+      },
+      "after": {
+        "activeRmsDbfs": -14.26826215447206,
+        "peakDbfs": -4.620834367745254,
+        "oversampledPeakDbfs": -4.620834367745254,
+        "samplesPerChannel": 25344,
+        "seconds": 0.5746938775510204
+      },
+      "originalSha256": "31b5b3b120957586fe9acdc832f570f6de9ce6f90ecd7b5c2603233994f8f29e",
+      "normalizedSha256": "30fda90ee020dcfd21b951459af577b641fccde2452370e3743881b50f70b2f9",
+      "originalBytes": 9245,
+      "normalizedBytes": 15089
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-w.mp3",
+      "gainDb": 0.777,
+      "before": {
+        "activeRmsDbfs": -13.977856159384947,
+        "peakDbfs": -0.4716674369499856,
+        "oversampledPeakDbfs": -0.47125256966705753,
+        "samplesPerChannel": 23040,
+        "seconds": 0.5224489795918368
+      },
+      "after": {
+        "activeRmsDbfs": -14.302707086486839,
+        "peakDbfs": -2.2419996507871116,
+        "oversampledPeakDbfs": -2.234448614034643,
+        "samplesPerChannel": 23040,
+        "seconds": 0.5224489795918368
+      },
+      "originalSha256": "5225e847a4694435acdd8a43c351ff52aefbcfe2f82f5a3ea6446ee1d98f9a9a",
+      "normalizedSha256": "1c7c89e7c63061fe16a9e330af00ae4a66c420e091694e1481904ba22d9eb43e",
+      "originalBytes": 8409,
+      "normalizedBytes": 13835
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-x.mp3",
+      "gainDb": 3.988,
+      "before": {
+        "activeRmsDbfs": -13.42410385034978,
+        "peakDbfs": 0.7033657227082978,
+        "oversampledPeakDbfs": 1.3454341413405806,
+        "samplesPerChannel": 17280,
+        "seconds": 0.39183673469387753
+      },
+      "after": {
+        "activeRmsDbfs": -14.446055199407596,
+        "peakDbfs": -1.412684154489777,
+        "oversampledPeakDbfs": -0.7678098486810202,
+        "samplesPerChannel": 17280,
+        "seconds": 0.39183673469387753
+      },
+      "originalSha256": "6710c5249078292a35b6588a48e576294a30c7a1bf856b03dc002450fd683c87",
+      "normalizedSha256": "1629997b5b9e4275d7c58822ce3f7760f17d43582e61d471d6d8e4f4387eb4b9",
+      "originalBytes": 6319,
+      "normalizedBytes": 10701
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-y.mp3",
+      "gainDb": -2.082,
+      "before": {
+        "activeRmsDbfs": -11.917660942915838,
+        "peakDbfs": 0.15759365253175062,
+        "oversampledPeakDbfs": 0.19921092733333184,
+        "samplesPerChannel": 20736,
+        "seconds": 0.47020408163265304
+      },
+      "after": {
+        "activeRmsDbfs": -14.282654138416206,
+        "peakDbfs": -2.2581339045245103,
+        "oversampledPeakDbfs": -2.2285453991063213,
+        "samplesPerChannel": 20736,
+        "seconds": 0.47020408163265304
+      },
+      "originalSha256": "ad27ac9f7c93cb60d5aa3616d5789bc2df6d123fe7530ce096d2cd66231472f2",
+      "normalizedSha256": "cbc71644743f4e3ae4b2492dc5da002ce16bad2098afa1ead35663d6111e514a",
+      "originalBytes": 7573,
+      "normalizedBytes": 12581
+    },
+    {
+      "asset": "assets/audio/phonics/lesson_audio/sounds/sound-z.mp3",
+      "gainDb": 0.404,
+      "before": {
+        "activeRmsDbfs": -13.72721123700728,
+        "peakDbfs": 0.09478479582282853,
+        "oversampledPeakDbfs": 0.6789969985133647,
+        "samplesPerChannel": 19584,
+        "seconds": 0.4440816326530612
+      },
+      "after": {
+        "activeRmsDbfs": -14.279135764603785,
+        "peakDbfs": -1.9559760818597076,
+        "oversampledPeakDbfs": -1.5207003346813022,
+        "samplesPerChannel": 19584,
+        "seconds": 0.4440816326530612
+      },
+      "originalSha256": "6467807c9d66cadc6b787ae4da91295c8f1e37367c7f4a49aa2ea51a97615b86",
+      "normalizedSha256": "b5df984c304d8b849dbaad4cdbe9cf9772017adf57c110453b650c7462c760d3",
+      "originalBytes": 7155,
+      "normalizedBytes": 11954
+    }
+  ]
+}

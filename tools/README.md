@@ -1,14 +1,19 @@
-﻿# Asset maintenance tools
+# Asset maintenance tools
 
 These tools are separate from the Android app.
 
+The Easy/Medium/Hard word-audio refresh is recorded in `game_audio_refresh_manifest.json` and `../docs/GAME_AUDIO_REFRESH.md`: 70 recordings (including the separately supplied Violin) replace their shared word files directly, with two supplied Yarn frames updated. Umbrella is excluded from every game pool; its assets remain for letter lessons.
+
 - `verify_game_apk.ps1` checks supplied game assets and retired asset exclusions in a built APK. It uses `game_assets_manifest.json` and `removed_legacy_assets.json`; keep both manifests.
-- `mascot_frames/` retains original supplied artwork for future mascot animation and launcher edits. Runtime PNG/GIF assets remain in `assets/images/`.
+- Current runtime mascots use lossless WebP/GIF files in `assets/images/`. Launcher inputs remain PNG. Unused source frame copies and design screenshots were removed after checking the app and build tools.
+- `optimize_image_assets.py` encodes lossless WebP images with Pillow and verifies every RGBA pixel before applying replacements. `image_optimization_report.json` records 317 verified encodings and size savings. Original backups/tooling in `build/` are excluded from source delivery and APKs.
+- `asset_notes/` holds font and artwork documentation outside the APK asset bundle.
+- `asset_usage_audit.json` records the evaluated runtime asset list before cleanup; `removed_unused_assets.json` records removed paths, byte counts, SHA-256 checksums and reasons. Run `flutter test test/asset_usage_audit_test.dart --dart-define=AUDIT_ASSETS=true` to generate a fresh audit after catalog changes.
 
 Run APK verification from the project root:
 
 ```powershell
-./tools/verify_game_apk.ps1 -ApkPath KidsPhonics-animated-1.0.2.apk
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/verify_game_apk.ps1
 ```
 
 Regenerate launcher icons with `dart run flutter_launcher_icons`, using the existing configuration in `pubspec.yaml`.
@@ -17,11 +22,18 @@ Eight obsolete network audio/icon generators and the old SVG icon were removed a
 
 For future human recordings, keep using `../PHONICS_RECORDING_SCRIPT.md`, `../AUDIO_REPLACEMENT_AUDIT.md`, and `../PHONICS_TEACHER_VALIDATION.md` with teacher review.
 
-The CVC and Blending lesson generators use the installed Microsoft Zira voice for offline narration. `positive_praise.ps1` shares a brighter praise style: +12% pitch and +8% rate on the congratulation, with a short pause and medium-rate spelling. This adjusts synthetic prosody; it does not clone the supplied voice examples. The 25 CVC and 40 Blending praise WAVs are bundled with the app.
+CVC and Blending now use the complete user-supplied MP3 set: 35 CVC files and 46 Blending files for 17 and 22 words respectively. See `../docs/CVC_BLENDING_REFRESH.md`, the current `../BLENDING_CVC_RECORDING_SCRIPT.md`, and `cvc_blending_refresh_manifest.json`. All 119 old lesson WAV files were removed. The 39 supplied pictures reuse their verified lossless WebP assets.
 
-Regenerate only positive praise, preserving all other recordings:
+The retired CVC/Blending voice generators and their shared SSML helper were removed. Maintain the supplied MP3 recordings directly; do not regenerate the old WAV lists or voices.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File tools/generate_cvc_narration.ps1 -PraiseOnly
-powershell -NoProfile -ExecutionPolicy Bypass -File tools/generate_blending_narration.ps1 -PraiseOnly
-```
+Game narration and spoken praise were removed at user request. Games keep their supplied word/letter recordings and ordinary sound effects.
+
+Latest verified delivery: `../releases/KidsPhonics-1.0.12-build13.apk` (release 1.0.12, build 13). Verify it using `powershell -NoProfile -ExecutionPolicy Bypass -File tools/verify_game_apk.ps1 -ApkPath releases/KidsPhonics-1.0.12-build13.apk`. Its source snapshot and verification are recorded in `release_1_0_12_source_snapshot.json`, `release_1_0_12_verification.json` and `latest_apk_verification.json`. Earlier release reports remain historical records.
+
+
+Home voice import: `import_home_voices.py` combines the four supplied intro takes, aligns spoken onsets, balances levels, and limits peaks. It also balances the four menu recordings. The five final MP3s are in `assets/audio/home/`; input copies and FFmpeg tooling stay in ignored `build/home_voice_import/` and `build/audio_tools/`. Flutter has no FFmpeg dependency. Measurements and original hashes are in `home_voice_import_report.json`. No Quick Check recordings were included in this ZIP.
+
+
+Quick Check narration: run `python tools/import_quick_check_voices.py <supplied-zip-path>` with the same FFmpeg tooling used for Home. It imports 11 real clips, corrects filename typos, balances active speech levels and checks duration and peak headroom. Only the 11 final MP3s under `assets/audio/quick_check/` are bundled; originals remain in ignored `build/quick_check_voice_import/`. See `quick_check_voice_import_report.json`.
+
+The source UI refresh is described in `../docs/QUICK_CHECK_UI_REFRESH.md`. The version 1.0.10 build 11 report records the earlier supplied choice sheets. The current version uses drawn colorful Quick Check buttons and adds the Sound Match orb described in `../docs/SOUND_MATCH_UI.md`. The refreshed asset audit includes 677 required files with no unused candidates; all 677 were verified against the version 1.0.12 build 13 APK.

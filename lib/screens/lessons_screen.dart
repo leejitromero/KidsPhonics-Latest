@@ -2,7 +2,6 @@ import '../widgets/button_sound.dart';
 import '../theme/kids_ui.dart';
 
 import 'dart:math' as math;
-import '../widgets/mascot_guide.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
@@ -32,7 +31,7 @@ class _LessonsScreenState extends State<LessonsScreen> {
           letters.any((l) => p.getLetterStatus(l) != LearningStatus.notStarted);
       return _LessonTile(
           imageAsset:
-              'assets/images/lesson_logos/${vowels ? 'vowel_sounds' : 'letter_sounds'}.png',
+              'assets/images/lesson_logos/${vowels ? 'vowel_sounds' : 'letter_sounds'}.webp',
           accent: vowels ? const Color(0xFF167769) : const Color(0xFF7052CA),
           title: title,
           description: description,
@@ -51,7 +50,7 @@ class _LessonsScreenState extends State<LessonsScreen> {
       _LessonTile(
         title: 'Letter Recognition',
         description: 'See and hear A–Z.',
-        imageAsset: 'assets/images/lesson_logos/letter_recognition.png',
+        imageAsset: 'assets/images/lesson_logos/letter_recognition.webp',
         accent: const Color(0xFF087F86),
         onPressed: () =>
             LearnerNavigation.open(context, const LetterRecognitionScreen()),
@@ -63,7 +62,7 @@ class _LessonsScreenState extends State<LessonsScreen> {
       _LessonTile(
         title: 'CVC Words',
         description: 'Blend three sounds into a word.',
-        imageAsset: 'assets/images/lesson_logos/cvc_words.png',
+        imageAsset: 'assets/images/lesson_logos/cvc_words.webp',
         accent: const Color(0xFFB45731),
         onPressed: () =>
             LearnerNavigation.open(context, const CvcWordsScreen()),
@@ -71,36 +70,26 @@ class _LessonsScreenState extends State<LessonsScreen> {
       _LessonTile(
         title: 'Blending Sounds',
         description: 'Build a word. Blend the sounds.',
-        imageAsset: 'assets/images/lesson_logos/blending_sounds.png',
+        imageAsset: 'assets/images/lesson_logos/blending_sounds.webp',
         accent: const Color(0xFF087F86),
         onPressed: () =>
             LearnerNavigation.open(context, const BlendingSoundsScreen()),
       ),
     ];
     return LessonsMenuPage(
-      child: Column(children: [
-        const MascotGuide(
-          compact: true,
-          mascot: LearningMascot.wigloo,
-          message: 'Pick a lesson!',
-        ),
-        const SizedBox(height: 8),
-        Expanded(child: LayoutBuilder(builder: (context, box) {
-          final scale = MediaQuery.textScalerOf(context).scale(14) / 14;
-          final rows = (lessons.length / 2).ceil();
-          final height = math.max(
-              190.0 * scale,
-              math.min(
-                  220.0 * scale, (box.maxHeight - 10 * (rows - 1)) / rows));
-          return GridView.count(
-              padding: EdgeInsets.zero,
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              mainAxisExtent: height,
-              children: lessons);
-        })),
-      ]),
+      child: LayoutBuilder(builder: (context, box) {
+        final scale = MediaQuery.textScalerOf(context).scale(14) / 14;
+        final rows = (lessons.length / 2).ceil();
+        final height = math.max(190.0 * scale,
+            math.min(220.0 * scale, (box.maxHeight - 10 * (rows - 1)) / rows));
+        return GridView.count(
+            padding: EdgeInsets.zero,
+            crossAxisCount: 2,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            mainAxisExtent: height,
+            children: lessons);
+      }),
     );
   }
 }

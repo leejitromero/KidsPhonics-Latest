@@ -1,5 +1,7 @@
 import 'answer_choice_button.dart';
 import 'game_design.dart';
+import 'game_leave_dialog.dart';
+import 'cloud_page_route.dart';
 import 'game_theme_background.dart';
 import 'game_difficulty_dialog.dart';
 import 'lesson_control_button.dart';
@@ -17,7 +19,11 @@ import 'learning_progress_widgets.dart';
 import 'adventure_background.dart';
 import 'mascot_guide.dart';
 import 'game_tutorial.dart';
+import 'game_mascot_coach.dart';
+import 'completion_celebration.dart';
+import '../controllers/game_narration_controller.dart';
 import 'floating_choice.dart';
+import 'quick_choice_art.dart';
 
 class LearnerActivityCard extends StatelessWidget {
   const LearnerActivityCard(
@@ -298,12 +304,41 @@ Future<Difficulty?> chooseGameDifficulty(
 class LearnerNavigation {
   static final Set<Object> _opening = {};
   static Future<void> open(BuildContext context, Widget page,
-      {bool replace = false}) async {
+      {bool replace = false,
+      bool cloudTransition = false,
+      bool endParentSession = false}) async {
     final navigator = Navigator.of(context);
     final Object source = context;
     if (!_opening.add(source)) return;
     try {
-      final route = MaterialPageRoute<void>(builder: (_) => page);
+      Route<void> route = MaterialPageRoute<void>(builder: (_) => page);
+      if (cloudTransition) {
+        final images = cloudTransitionImages(context);
+        final reduced = MediaQuery.disableAnimationsOf(context);
+        var ready = false;
+        if (!reduced) {
+          ready = await prepareCloudTransition(context, images);
+        }
+        if (!context.mounted ||
+            !navigator.mounted ||
+            ModalRoute.isCurrentOf(context) == false) {
+          return;
+        }
+        if (MediaQuery.disableAnimationsOf(context)) {
+          route = PageRouteBuilder<void>(
+              pageBuilder: (_, __, ___) => page,
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero);
+        } else if (ready) {
+          route = CloudPageRoute<void>(page: page, frames: images);
+        }
+      }
+      // A learner activity must count toward the daily limit, including when
+      // a parent launches it. Clear authentication immediately before pushing
+      // so rebuilding the Parent PIN screen cannot cancel cloud preparation.
+      if (endParentSession) {
+        context.read<AppProvider>().parentAuth.endSession();
+      }
       if (replace) {
         await navigator.pushReplacement(route);
       } else {
@@ -533,7 +568,9 @@ class GameAnswerButton extends StatelessWidget {
       this.compact = false,
       this.showLabel = true,
       this.accent,
+      this.colorIndex,
       this.buttonKey});
+  final int? colorIndex;
   final Color? accent;
   final String label;
   final VoidCallback? onPressed;
@@ -551,6 +588,38 @@ class GameAnswerButton extends StatelessWidget {
       );
 
   Widget _button(BuildContext context) {
+    if (colorIndex != null) {
+      return Semantics(
+          selected: selected,
+          label: result == null
+              ? label
+              : '$label, ${result! ? 'Correct' : 'Try again'}',
+          child: ElevatedButton(
+              key: buttonKey,
+              onPressed: withButtonSound(onPressed),
+              style: quickColorButtonStyle(
+                  index: colorIndex!,
+                  radius: 22,
+                  selected: selected,
+                  padding: const EdgeInsets.all(4),
+                  minimumSize: const Size(48, 48)),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                        child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(label,
+                                style: const TextStyle(
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.w900)))),
+                    if (result != null)
+                      Icon(
+                          result! ? Icons.star_rounded : Icons.favorite_rounded,
+                          size: 18,
+                          color: const Color(0xFFFFE478)),
+                  ])));
+    }
     final grid =
         context.dependOnInheritedWidgetOfExactType<_FramedChoiceStyle>();
     final button = Semantics(
@@ -675,7 +744,17 @@ class AudioButton extends StatefulWidget {
       this.icon = Icons.volume_up,
       this.compact = false,
       this.lessonArt = false,
+      this.controlBuilder,
+      this.semanticLabel,
+      this.onPlayed,
       this.enabled = true});
+  final VoidCallback? onPlayed;
+
+  /// Allows a game to share one playback operation across an illustration and
+  /// its labelled control, including the same busy and unavailable states.
+  final Widget Function(BuildContext, VoidCallback?, bool, String)?
+      controlBuilder;
+  final String? semanticLabel;
   final String phrase, label;
   final Color? color;
   final IconData icon;
@@ -686,19 +765,48 @@ class AudioButton extends StatefulWidget {
   State<AudioButton> createState() => _AudioButtonState();
 }
 
-class _AudioButtonState extends State<AudioButton> {
+class _AudioButtonState extends State<AudioButton> with WidgetsBindingObserver {
   bool _playing = false;
   bool _heard = false;
   int _attempt = 0;
   AppProvider? _provider;
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  void _cancelPlayback() {
+    if (!_playing) return;
+    _attempt++;
+    _playing = false;
+    _message = null;
+    unawaited(_provider?.phonicsAudio.stop());
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _provider = context.read<AppProvider>();
+    if (widget.controlBuilder != null &&
+        (ModalRoute.isCurrentOf(context) == false ||
+            !_provider!.voiceEnabled)) {
+      _cancelPlayback();
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (widget.controlBuilder != null &&
+        state != AppLifecycleState.resumed &&
+        _playing) {
+      setState(_cancelPlayback);
+    }
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     if (_playing) unawaited(_provider?.phonicsAudio.stop());
     super.dispose();
   }
@@ -713,11 +821,16 @@ class _AudioButtonState extends State<AudioButton> {
       _heard = false;
       _message = null;
     }
+    if (widget.controlBuilder != null && !widget.enabled) _cancelPlayback();
   }
 
   String? _message;
   Future<void> _play() async {
-    if (_playing) return;
+    if (_playing ||
+        !widget.enabled ||
+        !context.read<AppProvider>().voiceEnabled) {
+      return;
+    }
     final attempt = ++_attempt;
     final p = context.read<AppProvider>();
     setState(() {
@@ -733,11 +846,13 @@ class _AudioButtonState extends State<AudioButton> {
       _heard = success;
       if (!success) _message = 'Audio unavailable. Please try again.';
     });
+    if (success) widget.onPlayed?.call();
   }
 
   @override
   Widget build(BuildContext context) {
-    final enabled = widget.enabled && context.watch<AppProvider>().voiceEnabled;
+    final voiceEnabled = context.watch<AppProvider>().voiceEnabled;
+    final enabled = widget.enabled && voiceEnabled;
     final available = PhonicsAudioService.assetForPhrase(widget.phrase) != null;
     final label = _playing
         ? 'Listening…'
@@ -752,88 +867,95 @@ class _AudioButtonState extends State<AudioButton> {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       Semantics(
           liveRegion: true,
-          label: '$label: ${widget.phrase}',
-          child: GameDesign.active(context) &&
-                  !widget.compact &&
-                  !widget.lessonArt
-              ? ForestAudioButton(
-                  label: label,
-                  icon: icon,
-                  onPressed: !enabled || _playing || !available ? null : _play)
-              : widget.lessonArt
-                  ? SizedBox(
-                      width: 150,
-                      child: LessonControlButton(
-                          label: label,
-                          icon: icon,
-                          art: LessonButtonArt.sound,
-                          onPressed: !enabled || _playing || !available
-                              ? null
-                              : _play))
-                  : widget.compact
+          label: widget.semanticLabel ?? '$label: ${widget.phrase}',
+          child: widget.controlBuilder != null
+              ? widget.controlBuilder!(
+                  context,
+                  !enabled || _playing || !available ? null : _play,
+                  _playing,
+                  label)
+              : GameDesign.active(context) &&
+                      !widget.compact &&
+                      !widget.lessonArt
+                  ? ForestAudioButton(
+                      label: label,
+                      icon: icon,
+                      onPressed:
+                          !enabled || _playing || !available ? null : _play)
+                  : widget.lessonArt
                       ? SizedBox(
-                          width: double.infinity,
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor:
-                                  widget.color ?? const Color(0xFF087F86),
-                              foregroundColor: Colors.white,
-                              disabledBackgroundColor:
-                                  _playing ? const Color(0xFFFFDF88) : null,
-                              disabledForegroundColor:
-                                  _playing ? const Color(0xFF49315D) : null,
-                              side: BorderSide.none,
-                              minimumSize: const Size(0, 64),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 4, vertical: 8),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16)),
-                            ),
-                            onPressed: withButtonSound(
-                                !enabled || _playing || !available
-                                    ? null
-                                    : _play),
-                            child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(icon, size: 22),
-                                  const SizedBox(height: 4),
-                                  Text(label,
-                                      style: const TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w900)),
-                                ]),
-                          ),
-                        )
-                      : OutlinedButton.icon(
-                          style: OutlinedButton.styleFrom(
-                            backgroundColor:
-                                widget.color ?? const Color(0xFF087F86),
-                            foregroundColor: Colors.white,
-                            disabledBackgroundColor:
-                                _playing ? const Color(0xFFFFDF88) : null,
-                            disabledForegroundColor:
-                                _playing ? const Color(0xFF49315D) : null,
-                            side: BorderSide.none,
-                            minimumSize: const Size(96, 48),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 18, vertical: 10),
-                            textStyle: const TextStyle(
-                                fontWeight: FontWeight.w900, fontSize: 16),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            elevation: 3,
-                            shadowColor:
-                                (widget.color ?? const Color(0xFF087F86))
-                                    .withValues(alpha: .35),
-                          ),
-                          onPressed: withButtonSound(
-                              !enabled || _playing || !available
+                          width: 150,
+                          child: LessonControlButton(
+                              label: label,
+                              icon: icon,
+                              art: LessonButtonArt.sound,
+                              onPressed: !enabled || _playing || !available
                                   ? null
-                                  : _play),
-                          icon: Icon(icon),
-                          label: Text(label))),
-      if (!enabled)
+                                  : _play))
+                      : widget.compact
+                          ? SizedBox(
+                              width: double.infinity,
+                              child: OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  backgroundColor:
+                                      widget.color ?? const Color(0xFF087F86),
+                                  foregroundColor: Colors.white,
+                                  disabledBackgroundColor:
+                                      _playing ? const Color(0xFFFFDF88) : null,
+                                  disabledForegroundColor:
+                                      _playing ? const Color(0xFF49315D) : null,
+                                  side: BorderSide.none,
+                                  minimumSize: const Size(0, 64),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4, vertical: 8),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16)),
+                                ),
+                                onPressed: withButtonSound(
+                                    !enabled || _playing || !available
+                                        ? null
+                                        : _play),
+                                child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(icon, size: 22),
+                                      const SizedBox(height: 4),
+                                      Text(label,
+                                          style: const TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w900)),
+                                    ]),
+                              ),
+                            )
+                          : OutlinedButton.icon(
+                              style: OutlinedButton.styleFrom(
+                                backgroundColor:
+                                    widget.color ?? const Color(0xFF087F86),
+                                foregroundColor: Colors.white,
+                                disabledBackgroundColor:
+                                    _playing ? const Color(0xFFFFDF88) : null,
+                                disabledForegroundColor:
+                                    _playing ? const Color(0xFF49315D) : null,
+                                side: BorderSide.none,
+                                minimumSize: const Size(96, 48),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 18, vertical: 10),
+                                textStyle: const TextStyle(
+                                    fontWeight: FontWeight.w900, fontSize: 16),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                elevation: 3,
+                                shadowColor:
+                                    (widget.color ?? const Color(0xFF087F86))
+                                        .withValues(alpha: .35),
+                              ),
+                              onPressed: withButtonSound(
+                                  !enabled || _playing || !available
+                                      ? null
+                                      : _play),
+                              icon: Icon(icon),
+                              label: Text(label))),
+      if (!voiceEnabled)
         const Text('Audio is turned off.', style: TextStyle(fontSize: 16)),
       if (!available || _message != null)
         Text(_message ?? 'Audio unavailable.',
@@ -873,145 +995,160 @@ class _GameResultDialogState extends State<GameResultDialog> {
   }
 
   @override
-  Widget build(BuildContext context) => Theme(
-      data: KidsUi.theme,
-      child: PopScope(
-        canPop: false,
-        child: AlertDialog(
-          constraints: const BoxConstraints(maxWidth: 360),
-          insetPadding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-          titlePadding: EdgeInsets.zero,
-          contentPadding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-          actionsPadding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
-          clipBehavior: Clip.antiAlias,
-          backgroundColor: const Color(0xFFF8F3FF),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
-              side: const BorderSide(color: Color(0xFFD7C8F3), width: 1.5)),
-          title: Container(
-              padding: const EdgeInsets.all(14),
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [Color(0xFF7052CA), Color(0xFF398EAA)])),
-              child: Column(mainAxisSize: MainAxisSize.min, children: [
-                const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.auto_awesome_rounded,
-                          color: Color(0xFFFFDF88), size: 22),
-                      SizedBox(width: 8),
-                      Flexible(
-                          child: Text('Round complete!',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w900))),
-                    ]),
+  Widget build(BuildContext context) => CompletionCelebration(
+      child: Theme(
+          data: KidsUi.theme,
+          child: PopScope(
+            canPop: false,
+            child: AlertDialog(
+              constraints: const BoxConstraints(maxWidth: 360),
+              insetPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+              titlePadding: EdgeInsets.zero,
+              contentPadding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+              actionsPadding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+              clipBehavior: Clip.antiAlias,
+              backgroundColor: const Color(0xFFF8F3FF),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                  side: const BorderSide(color: Color(0xFFD7C8F3), width: 1.5)),
+              title: Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [Color(0xFF7052CA), Color(0xFF398EAA)])),
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
+                    const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.auto_awesome_rounded,
+                              color: Color(0xFFFFDF88), size: 22),
+                          SizedBox(width: 8),
+                          Flexible(
+                              child: Text('Round complete!',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w900))),
+                        ]),
+                    const SizedBox(height: 8),
+                    Image.asset(GameMascotCoach.mascotAsset,
+                        width: 64,
+                        height: 64,
+                        fit: BoxFit.contain,
+                        cacheWidth: 192,
+                        excludeFromSemantics: true),
+                    const SizedBox(height: 4),
+                    Text(
+                        widget.attempts > 0 &&
+                                widget.correct / widget.attempts >= .8
+                            ? 'Amazing work!'
+                            : 'Every try helps you grow!',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white)),
+                  ])),
+              content: SingleChildScrollView(
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
+                Text('Score: $_score / $_total',
+                    style: const TextStyle(
+                        fontSize: 23, fontWeight: FontWeight.w900)),
                 const SizedBox(height: 8),
-                const MascotPortrait(mascot: LearningMascot.zoplet, size: 64),
-                const SizedBox(height: 4),
+                LinearProgressIndicator(
+                    value: _total == 0 ? 0 : (_score / _total).clamp(0.0, 1.0),
+                    minHeight: 7,
+                    borderRadius: BorderRadius.circular(6),
+                    color: const Color(0xFF398EAA),
+                    backgroundColor: const Color(0xFFE3DAF3)),
+                const SizedBox(height: 6),
                 Text(
-                    widget.attempts > 0 &&
-                            widget.correct / widget.attempts >= .8
-                        ? 'Amazing work!'
-                        : 'Every try helps you grow!',
+                    'Activity Accuracy: ${widget.attempts == 0 ? 'No attempts yet' : '${(widget.correct / widget.attempts * 100).round()}%'}',
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white)),
+                        fontSize: 14, fontWeight: FontWeight.w700)),
+                Text(
+                    'Attempts: ${widget.attempts} • Wrong attempts: ${widget.attempts - widget.correct}\nAccuracy includes retries.',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 12, color: KidsUi.muted)),
+                const SizedBox(height: 10),
+                Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                            colors: [Color(0xFFFFEEC6), Color(0xFFFFE2AC)]),
+                        border: Border.all(color: const Color(0xFFF0D18A)),
+                        borderRadius: BorderRadius.circular(16)),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.stars_rounded,
+                              color: Color(0xFF99600E), size: 28),
+                          const SizedBox(width: 10),
+                          Flexible(
+                              child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                Text('XP Earned: +${widget.earnedXp}',
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w800)),
+                                Text('Stars Earned: +${widget.earnedStars}',
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w800)),
+                              ])),
+                        ])),
+                const SizedBox(height: 8),
+                const Text('Play again or take a little break.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 13, color: KidsUi.muted)),
               ])),
-          content: SingleChildScrollView(
-              child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Text('Score: $_score / $_total',
-                style:
-                    const TextStyle(fontSize: 23, fontWeight: FontWeight.w900)),
-            const SizedBox(height: 8),
-            LinearProgressIndicator(
-                value: _total == 0 ? 0 : (_score / _total).clamp(0.0, 1.0),
-                minHeight: 7,
-                borderRadius: BorderRadius.circular(6),
-                color: const Color(0xFF398EAA),
-                backgroundColor: const Color(0xFFE3DAF3)),
-            const SizedBox(height: 6),
-            Text(
-                'Activity Accuracy: ${widget.attempts == 0 ? 'No attempts yet' : '${(widget.correct / widget.attempts * 100).round()}%'}',
-                textAlign: TextAlign.center,
-                style:
-                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-            Text(
-                'Attempts: ${widget.attempts} • Wrong attempts: ${widget.attempts - widget.correct}\nAccuracy includes retries.',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: KidsUi.muted)),
-            const SizedBox(height: 10),
-            Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                        colors: [Color(0xFFFFEEC6), Color(0xFFFFE2AC)]),
-                    border: Border.all(color: const Color(0xFFF0D18A)),
-                    borderRadius: BorderRadius.circular(16)),
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  const Icon(Icons.stars_rounded,
-                      color: Color(0xFF99600E), size: 28),
-                  const SizedBox(width: 10),
-                  Flexible(
-                      child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    Text('XP Earned: +${widget.earnedXp}',
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w800)),
-                    Text('Stars Earned: +${widget.earnedStars}',
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w800)),
-                  ])),
-                ])),
-            const SizedBox(height: 8),
-            const Text('Play again or take a little break.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 13, color: KidsUi.muted)),
-          ])),
-          actions: [
-            Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(0, 48),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              textStyle: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w800),
-                              backgroundColor: const Color(0xFF7052CA),
-                              foregroundColor: Colors.white),
-                          onPressed: withButtonSound(
-                              _used ? null : () => _act(widget.onAgain)),
-                          child: const Text('Play Again'))),
-                  const SizedBox(height: 6),
-                  SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                              minimumSize: const Size(0, 48),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              textStyle: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.w800)),
-                          onPressed: withButtonSound(
-                              _used ? null : () => _act(widget.onBack)),
-                          child: Text(widget.backLabel == 'Back to Games'
-                              ? 'Choose Next Game'
-                              : widget.backLabel))),
-                ])
-          ],
-        ),
-      ));
+              actions: [
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  minimumSize: const Size(0, 48),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 8),
+                                  textStyle: const TextStyle(
+                                      fontFamily: 'Nunito',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w800),
+                                  backgroundColor: const Color(0xFF7052CA),
+                                  foregroundColor: Colors.white),
+                              onPressed: withButtonSound(
+                                  _used ? null : () => _act(widget.onAgain)),
+                              child: const Text('Play Again'))),
+                      const SizedBox(height: 6),
+                      SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                  minimumSize: const Size(0, 48),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 8),
+                                  textStyle: const TextStyle(
+                                      fontFamily: 'Nunito',
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w800)),
+                              onPressed: withButtonSound(
+                                  _used ? null : () => _act(widget.onBack)),
+                              child: Text(widget.backLabel == 'Back to Games'
+                                  ? 'Choose Next Game'
+                                  : widget.backLabel))),
+                    ])
+              ],
+            ),
+          )));
 }
 
 class GameLives extends StatelessWidget {
@@ -1053,7 +1190,11 @@ class GameScaffold extends StatefulWidget {
       this.compactGuide = false,
       this.fitViewport = false,
       this.showHeader = false,
+      this.narration,
+      this.narrationEnabled = true,
       this.onLeave});
+  final GameNarrationController? narration;
+  final bool narrationEnabled;
   final bool compactGuide;
   final bool fitViewport;
   final bool showHeader;
@@ -1080,21 +1221,9 @@ class _GameScaffoldState extends State<GameScaffold> {
     final leave = !widget.hasProgress ||
         await showDialog<bool>(
                 context: context,
+                barrierColor: const Color(0xB8253040),
                 builder: (ctx) => Theme(
-                    data: KidsUi.theme,
-                    child: AlertDialog(
-                        title: const Text('Leave this game?'),
-                        content: const Text('Your current round will end.'),
-                        actions: [
-                          TextButton(
-                              onPressed: withButtonSound(
-                                  () => Navigator.pop(ctx, false)),
-                              child: const Text('Cancel')),
-                          TextButton(
-                              onPressed: withButtonSound(
-                                  () => Navigator.pop(ctx, true)),
-                              child: const Text('Leave')),
-                        ]))) ==
+                    data: KidsUi.theme, child: const GameLeaveDialog())) ==
             true;
     if (!mounted) return;
     if (leave) {
@@ -1115,10 +1244,12 @@ class _GameScaffoldState extends State<GameScaffold> {
   Widget build(BuildContext context) =>
       widget.showHeader ? _body(context) : GameDesign(child: _body(context));
 
-  Widget _body(BuildContext context) => widget.tutorial == null
+  GameTutorial? get _tutorial =>
+      widget.tutorial ?? GameTutorial.forTitle(widget.title);
+  Widget _body(BuildContext context) => _tutorial == null
       ? _page(context, null)
       : GameTutorialHost(
-          tutorial: widget.tutorial!,
+          tutorial: _tutorial!,
           canOpen: widget.canOpenTutorial,
           builder: _page);
 
@@ -1166,10 +1297,16 @@ class _GameScaffoldState extends State<GameScaffold> {
                 ]),
                 const SizedBox(height: 8),
                 widget.instructionPanel ??
-                    (widget.showHeader
-                        ? Text(widget.instructions,
-                            style: const TextStyle(fontSize: 14))
-                        : GameInstruction(text: widget.instructions)),
+                    (widget.narration != null
+                        ? GameMascotCoach(
+                            title: widget.title,
+                            instructions: widget.instructions,
+                            controller: widget.narration!,
+                            enabled: widget.narrationEnabled)
+                        : widget.showHeader
+                            ? Text(widget.instructions,
+                                style: const TextStyle(fontSize: 14))
+                            : GameInstruction(text: widget.instructions)),
                 const SizedBox(height: 12),
                 if (widget.fitViewport)
                   Expanded(child: widget.child)
@@ -1183,6 +1320,40 @@ class _GameScaffoldState extends State<GameScaffold> {
 /// Tracks per-play rewards and answers without changing reward formulas.
 mixin GameSessionUi<T extends StatefulWidget> on State<T> {
   AppProvider? _audioProvider;
+
+  /// Keep task feedback visible until the learner can interact with the game.
+  bool get canAdvanceGameFeedback {
+    if (!mounted || resultOpen || ModalRoute.isCurrentOf(context) == false) {
+      return false;
+    }
+    final lifecycle = WidgetsBinding.instance.lifecycleState;
+    if (lifecycle != null && lifecycle != AppLifecycleState.resumed) {
+      return false;
+    }
+    final provider = _audioProvider;
+    return provider != null &&
+        provider.gameAccess &&
+        !provider.timeLimitReached;
+  }
+
+  late final gameNarration = GameNarrationController(play: (phrase) async {
+    final provider = _audioProvider;
+    if (provider == null || !provider.voiceEnabled) return false;
+    return provider.phonicsAudio.playInstruction(phrase);
+  }, stop: () async {
+    await _audioProvider?.phonicsAudio.stop();
+  });
+
+  Future<void> playGameCorrect() async {
+    gameNarration.cancel();
+    await context.read<AppProvider>().audio.playCorrect();
+  }
+
+  Future<void> playGameWrong() {
+    gameNarration.cancel();
+    return context.read<AppProvider>().audio.playWrong();
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -1191,6 +1362,7 @@ mixin GameSessionUi<T extends StatefulWidget> on State<T> {
 
   @override
   void dispose() {
+    gameNarration.dispose();
     unawaited(_audioProvider?.phonicsAudio.stop());
     unawaited(_audioProvider?.audio.stop());
     super.dispose();
@@ -1225,6 +1397,7 @@ mixin GameSessionUi<T extends StatefulWidget> on State<T> {
   }
 
   void clearGameLedger() {
+    gameNarration.resetRound();
     earnedXp = 0;
     earnedStars = 0;
     scoredAttempts = 0;

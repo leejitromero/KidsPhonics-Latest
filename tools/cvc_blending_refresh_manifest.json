@@ -1,0 +1,1463 @@
+{
+  "date": "2026-10-08",
+  "status": "Applied and verified: 35 CVC, Blending and asset-audit tests passed; 119 obsolete WAV files removed.",
+  "cvcWords": 17,
+  "blendingWords": 22,
+  "recordings": [
+    {
+      "source": "new cvc and blending\\cvc word\\cvc intro.mp3",
+      "target": "assets/audio/cvc_lesson/intro.mp3",
+      "sha256": "baf32f847f9b7c2534e8930d9c7f00f781e34ecafb35e83d89fe8b62e89a92dc",
+      "bytes": 55808,
+      "seconds": 2.4293877551020406,
+      "peak": 0.5783035755157471
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\blending intro.mp3",
+      "target": "assets/audio/blending_lesson/intro.mp3",
+      "sha256": "6442f687b32bc3e827e331714a70361579fe0b7389a45dcbe84957dd56b40c3c",
+      "bytes": 87991,
+      "seconds": 4.440816326530612,
+      "peak": 0.7359466552734375
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\try another spot.mp3",
+      "target": "assets/audio/blending_lesson/try-another.mp3",
+      "sha256": "2eb044068be6cb6fa35d563da5f131918bb8a73d9ee4c7791e171a87dd3817de",
+      "bytes": 48284,
+      "seconds": 1.9591836734693877,
+      "peak": 0.8255006074905396
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word\\cat.mp3",
+      "target": "assets/audio/cvc_lesson/word-cat.mp3",
+      "sha256": "876782b9e0a6eb887be5c9b3acde661c9fd1a2a602e76c499b5d622d79267247",
+      "bytes": 35328,
+      "seconds": 1.1493877551020408,
+      "peak": 0.9233527183532715
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word praise cvc\\cat.mp3",
+      "target": "assets/audio/cvc_lesson/praise-cat.mp3",
+      "sha256": "52de0f9a34293168a402fdb7fc616d4440afaef1017ab39fceba46a1e3972ec4",
+      "bytes": 93006,
+      "seconds": 4.7542857142857144,
+      "peak": 0.7306020259857178
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word\\bat.mp3",
+      "target": "assets/audio/cvc_lesson/word-bat.mp3",
+      "sha256": "6e70985409cacc249a87ea77eb1d3fac578688537f2b8441edb24986f66de0d7",
+      "bytes": 36582,
+      "seconds": 1.2277551020408164,
+      "peak": 0.7789194583892822
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word praise cvc\\bat.mp3",
+      "target": "assets/audio/cvc_lesson/praise-bat.mp3",
+      "sha256": "4c26a45a6d70ae64b5989b94685aca31d164ca06ffa8bb59a210d3bbe6753f4d",
+      "bytes": 96768,
+      "seconds": 4.989387755102041,
+      "peak": 0.7818506956100464
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word\\hat.mp3",
+      "target": "assets/audio/cvc_lesson/word-hat.mp3",
+      "sha256": "0fbbb7e6dd5fd8add169e976230992a736584e9f15f4f0e37e761b69f8028b2d",
+      "bytes": 36582,
+      "seconds": 1.2277551020408164,
+      "peak": 0.9234310984611511
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word praise cvc\\hat.mp3",
+      "target": "assets/audio/cvc_lesson/praise-hat.mp3",
+      "sha256": "970751d6930bd44668dcf4954b37e4b91a56e5664159faf329a323f4a923595d",
+      "bytes": 93006,
+      "seconds": 4.7542857142857144,
+      "peak": 0.7732908725738525
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word\\map.mp3",
+      "target": "assets/audio/cvc_lesson/word-map.mp3",
+      "sha256": "f1e96737e1157a12e6a4e463404ac934421ddb83c9d905234a64e7f81b543d48",
+      "bytes": 35328,
+      "seconds": 1.1493877551020408,
+      "peak": 0.8249108791351318
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word praise cvc\\map.mp3",
+      "target": "assets/audio/cvc_lesson/praise-map.mp3",
+      "sha256": "44977e305a72681f4d4ffb92f2f0a78158235cc854df8604a9971d1f99189403",
+      "bytes": 94260,
+      "seconds": 4.83265306122449,
+      "peak": 0.7652842998504639
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word\\fan.mp3",
+      "target": "assets/audio/cvc_lesson/word-fan.mp3",
+      "sha256": "c56f95a4ef723b28a01bcce2d56d3c98667826133bd5b888ba8c7ded9ac21d87",
+      "bytes": 34074,
+      "seconds": 1.0710204081632653,
+      "peak": 0.8021649122238159
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word praise cvc\\fan.mp3",
+      "target": "assets/audio/cvc_lesson/praise-fan.mp3",
+      "sha256": "11c81bc03c024b2dae2b6293adb19ede945b0f7d4ff1fa58fd53738468ee0673",
+      "bytes": 94260,
+      "seconds": 4.83265306122449,
+      "peak": 0.6444792151451111
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word\\bag.mp3",
+      "target": "assets/audio/cvc_lesson/word-bag.mp3",
+      "sha256": "9bdd7aee088cf73be29d9b31ae776a93e595838b83cdef9d668329f0405a135a",
+      "bytes": 34074,
+      "seconds": 1.0710204081632653,
+      "peak": 0.9024767279624939
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word praise cvc\\bag.mp3",
+      "target": "assets/audio/cvc_lesson/praise-bag.mp3",
+      "sha256": "14a0577be22df596213e8dff4ce25a444a31988036da0f12903d71f37feb404b",
+      "bytes": 99275,
+      "seconds": 5.146122448979592,
+      "peak": 0.8518485426902771
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word\\bed.mp3",
+      "target": "assets/audio/cvc_lesson/word-bed.mp3",
+      "sha256": "24b8eb945c47b3d0ffe2d4e5e6f15e4c46f81aa8e54265b8a4afd453c4cef196",
+      "bytes": 36582,
+      "seconds": 1.2277551020408164,
+      "peak": 0.8755417466163635
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word praise cvc\\bed.mp3",
+      "target": "assets/audio/cvc_lesson/praise-bed.mp3",
+      "sha256": "5894f095e8e5d1f0c071ce7da35bfa8e8c402085e1b76eb8a62cef0cb9a59f3b",
+      "bytes": 100947,
+      "seconds": 5.250612244897959,
+      "peak": 0.7905199527740479
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word\\hen.mp3",
+      "target": "assets/audio/cvc_lesson/word-hen.mp3",
+      "sha256": "555d1cbbf6801ac71f4b9914c427f27bee7bf90466b161daec11d597feda1a5c",
+      "bytes": 31566,
+      "seconds": 0.9142857142857143,
+      "peak": 0.8214254379272461
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word praise cvc\\hen.mp3",
+      "target": "assets/audio/cvc_lesson/praise-hen.mp3",
+      "sha256": "37015fd67358094c78802232ccc5c6330b6af20c99c5ea74e210da9a7d610bd8",
+      "bytes": 93006,
+      "seconds": 4.7542857142857144,
+      "peak": 0.7175166606903076
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word\\pen.mp3",
+      "target": "assets/audio/cvc_lesson/word-pen.mp3",
+      "sha256": "5347395e3f18f233b79a5d5749f08eaef1a52becad0caed699f25967ed5c45b8",
+      "bytes": 32820,
+      "seconds": 0.9926530612244898,
+      "peak": 0.7812967300415039
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word praise cvc\\pen.mp3",
+      "target": "assets/audio/cvc_lesson/praise-pen.mp3",
+      "sha256": "3cb0228fb2209a5a0822005d122b0986480452277010eed3e9149325c4b1083a",
+      "bytes": 93006,
+      "seconds": 4.7542857142857144,
+      "peak": 0.6740718483924866
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word\\net.mp3",
+      "target": "assets/audio/cvc_lesson/word-net.mp3",
+      "sha256": "a410f9ef024e98fe32bcf7a9330a0d8d14c5c1ee1757c570629a8c362506bd80",
+      "bytes": 32820,
+      "seconds": 0.9926530612244898,
+      "peak": 0.7659672498703003
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word praise cvc\\net.mp3",
+      "target": "assets/audio/cvc_lesson/praise-net.mp3",
+      "sha256": "67cf6afe144b3bc8f50e9207e91f90060fa0f9fb2f55ba60ed91aca7884ee24f",
+      "bytes": 91752,
+      "seconds": 4.675918367346939,
+      "peak": 0.6942644119262695
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word\\red.mp3",
+      "target": "assets/audio/cvc_lesson/word-red.mp3",
+      "sha256": "b6261203b53279495fdb14beea0af3b9a9090479af161407ebcd40800e108c5d",
+      "bytes": 32820,
+      "seconds": 0.9926530612244898,
+      "peak": 0.8569300174713135
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word praise cvc\\red.mp3",
+      "target": "assets/audio/cvc_lesson/praise-red.mp3",
+      "sha256": "4cf08e134079081a7c72df110635ac164e4650520ca3b0399c0678c3d0d8cac0",
+      "bytes": 94260,
+      "seconds": 4.83265306122449,
+      "peak": 0.8651878237724304
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word\\pig.mp3",
+      "target": "assets/audio/cvc_lesson/word-pig.mp3",
+      "sha256": "d297711273e24d0b7a1bc47de6b896a61491dfb16ba173ae542381744ff83f30",
+      "bytes": 32820,
+      "seconds": 0.9926530612244898,
+      "peak": 0.74836266040802
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word praise cvc\\pig.mp3",
+      "target": "assets/audio/cvc_lesson/praise-pig.mp3",
+      "sha256": "7fdc04ce934bfd6336cffc3e77e6e7b5856212715fb77dcceae239988e755dfe",
+      "bytes": 96768,
+      "seconds": 4.989387755102041,
+      "peak": 0.7229576110839844
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word\\pin.mp3",
+      "target": "assets/audio/cvc_lesson/word-pin.mp3",
+      "sha256": "0f649ebc74a518e1e0c745ea27801d2005a6e2f5e7b6d58defc8398124928fd8",
+      "bytes": 36582,
+      "seconds": 1.2277551020408164,
+      "peak": 0.6653603315353394
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word praise cvc\\pin.mp3",
+      "target": "assets/audio/cvc_lesson/praise-pin.mp3",
+      "sha256": "0e0c4fcf379109432ec40600871ba9131ce01806c1c77268acc60457a67d6036",
+      "bytes": 93006,
+      "seconds": 4.7542857142857144,
+      "peak": 0.7553175687789917
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word\\dog.mp3",
+      "target": "assets/audio/cvc_lesson/word-dog.mp3",
+      "sha256": "1139cd26788ec4d405a1dc4921b0f519ddbeded5ed997ae973db40768955e1b4",
+      "bytes": 34074,
+      "seconds": 1.0710204081632653,
+      "peak": 0.9010389447212219
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word praise cvc\\dog.mp3",
+      "target": "assets/audio/cvc_lesson/praise-dog.mp3",
+      "sha256": "971329cf2d9e274223f3b42b8eb1da32bf52b5ffeb4505de0c9c6f14e2ec3107",
+      "bytes": 96768,
+      "seconds": 4.989387755102041,
+      "peak": 0.8155240416526794
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word\\pot.mp3",
+      "target": "assets/audio/cvc_lesson/word-pot.mp3",
+      "sha256": "ac0513610288d1df81afdc1550147d37e8ab556d7cef361969a88b008c7d4f48",
+      "bytes": 36582,
+      "seconds": 1.2277551020408164,
+      "peak": 0.8567510843276978
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word praise cvc\\pot.mp3",
+      "target": "assets/audio/cvc_lesson/praise-pot.mp3",
+      "sha256": "461652d904b223bbb9d3fffc0a8d674abec73ef595730874ef0be279b0bc0a53",
+      "bytes": 96768,
+      "seconds": 4.989387755102041,
+      "peak": 0.7960875034332275
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word\\rug.mp3",
+      "target": "assets/audio/cvc_lesson/word-rug.mp3",
+      "sha256": "91da3138093850f83321ed3fd857f28c99efcd0a23d11c3a60fdc853fd952b8c",
+      "bytes": 36582,
+      "seconds": 1.2277551020408164,
+      "peak": 0.9529186487197876
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word praise cvc\\rug.mp3",
+      "target": "assets/audio/cvc_lesson/praise-rug.mp3",
+      "sha256": "6c143f6eff415d888c54b39356b578f4b6de9fb8fe7a0d90f5520119ccc66793",
+      "bytes": 91752,
+      "seconds": 4.675918367346939,
+      "peak": 0.8499597311019897
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word\\run.mp3",
+      "target": "assets/audio/cvc_lesson/word-run.mp3",
+      "sha256": "5e10b2adea205136ee9c95489521816bb850446779ea5f75436937989b0f48d1",
+      "bytes": 42015,
+      "seconds": 1.5673469387755101,
+      "peak": 0.8759311437606812
+    },
+    {
+      "source": "new cvc and blending\\cvc word\\word praise cvc\\run.mp3",
+      "target": "assets/audio/cvc_lesson/praise-run.mp3",
+      "sha256": "05b3ee5d4866a02775b1248026091bd97be91f49b1197d3ccd9bc1c473009f51",
+      "bytes": 96768,
+      "seconds": 4.989387755102041,
+      "peak": 0.9014996290206909
+    },
+    {
+      "source": "word-only\\sun.mp3",
+      "target": "assets/audio/blending_lesson/word-sun.mp3",
+      "sha256": "d4246b16cdad0a49703348316352b9f587e1d4d99fb4b6f07ab40f76ce1fe99c",
+      "bytes": 35328,
+      "seconds": 1.1493877551020408,
+      "peak": 0.7039225697517395
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\sun.mp3",
+      "target": "assets/audio/blending_lesson/praise-sun.mp3",
+      "sha256": "e583d5a3550d0e506d01aa53e13f7cc757ed9c66f4ae35bfd251a3d821998fcf",
+      "bytes": 85483,
+      "seconds": 4.284081632653061,
+      "peak": 0.8614416122436523
+    },
+    {
+      "source": "word-only\\cup.mp3",
+      "target": "assets/audio/blending_lesson/word-cup.mp3",
+      "sha256": "aa2fd1a80298c94dafd378981accaf15f7f4b59e15b6ec048d8a30528fa9c220",
+      "bytes": 32820,
+      "seconds": 0.9926530612244898,
+      "peak": 0.9073925018310547
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\cup.mp3",
+      "target": "assets/audio/blending_lesson/praise-cup.mp3",
+      "sha256": "cd5961b52840d40971fd8c63677acdb59c6a1f12c79df5820dcfcc6853dd6486",
+      "bytes": 87991,
+      "seconds": 4.440816326530612,
+      "peak": 0.8066080808639526
+    },
+    {
+      "source": "word-only\\bus.mp3",
+      "target": "assets/audio/blending_lesson/word-bus.mp3",
+      "sha256": "fa97267693161ac3b37686445de2558cb8cad2a0c7ef7ade2e384e391d18094c",
+      "bytes": 34074,
+      "seconds": 1.0710204081632653,
+      "peak": 0.9281391501426697
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\bus.mp3",
+      "target": "assets/audio/blending_lesson/praise-bus.mp3",
+      "sha256": "aa313ba7a1aec4674cfba9c300a2012880a7b3037f59373c2b4814b73222e011",
+      "bytes": 84229,
+      "seconds": 4.2057142857142855,
+      "peak": 0.9484564661979675
+    },
+    {
+      "source": "word-only\\log.mp3",
+      "target": "assets/audio/blending_lesson/word-log.mp3",
+      "sha256": "337239f5f15dcdc26a7cc52683e92fe196456d27ccb19875669d0a9f68e40e73",
+      "bytes": 34074,
+      "seconds": 1.0710204081632653,
+      "peak": 0.9003527164459229
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\log.mp3",
+      "target": "assets/audio/blending_lesson/praise-log.mp3",
+      "sha256": "400ab8de45d142483b27b470df8a408e805f25a4aab94196e5bdf9ba4ae5e149",
+      "bytes": 87991,
+      "seconds": 4.440816326530612,
+      "peak": 0.9164096117019653
+    },
+    {
+      "source": "word-only\\cap.mp3",
+      "target": "assets/audio/blending_lesson/word-cap.mp3",
+      "sha256": "ff24782f4cd596e7b683cdb6eb81c305cf2bfb4499ae34d34518114acf8345ed",
+      "bytes": 34074,
+      "seconds": 1.0710204081632653,
+      "peak": 0.8236240744590759
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\cap.mp3",
+      "target": "assets/audio/blending_lesson/praise-cap.mp3",
+      "sha256": "7e5b267d2277421675c6602bca636493018568a31d42193d929bab82ff25c761",
+      "bytes": 86737,
+      "seconds": 4.362448979591837,
+      "peak": 0.8498832583427429
+    },
+    {
+      "source": "word-only\\van.mp3",
+      "target": "assets/audio/blending_lesson/word-van.mp3",
+      "sha256": "fd7f7a8ea1e9b3cc082d2d1b956ffd528c1ca7d0c8db3c86279dc302dd336ee6",
+      "bytes": 37835,
+      "seconds": 1.3061224489795917,
+      "peak": 0.6771144866943359
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\van.mp3",
+      "target": "assets/audio/blending_lesson/praise-van.mp3",
+      "sha256": "9a99332b6a066124a373d7cc63d28a7902b134a4ccf9015b3d622f813413f76a",
+      "bytes": 85483,
+      "seconds": 4.284081632653061,
+      "peak": 0.6744288802146912
+    },
+    {
+      "source": "word-only\\pan.mp3",
+      "target": "assets/audio/blending_lesson/word-pan.mp3",
+      "sha256": "ddc27ce3674be8e6f93cd587c5e67ed9ceb0a5b9f0ce13c5316c0dbe30c28027",
+      "bytes": 37835,
+      "seconds": 1.3061224489795917,
+      "peak": 0.6084545850753784
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\pan.mp3",
+      "target": "assets/audio/blending_lesson/praise-pan.mp3",
+      "sha256": "e87464f3d849395be882240e753a9450a39c1bb4115aef6a11c5156de8062e20",
+      "bytes": 85483,
+      "seconds": 4.284081632653061,
+      "peak": 0.7435052394866943
+    },
+    {
+      "source": "word-only\\ten.mp3",
+      "target": "assets/audio/blending_lesson/word-ten.mp3",
+      "sha256": "71dff7b7cd1ee19c436fb42723dc672fe9627b46f3acf91858ea4637d22899b3",
+      "bytes": 32820,
+      "seconds": 0.9926530612244898,
+      "peak": 0.8352797031402588
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\ten.mp3",
+      "target": "assets/audio/blending_lesson/praise-ten.mp3",
+      "sha256": "57e97f80d9c44ad9fc9b934ee7a865f68e4c73ab0a8dd71738f69b651ecebbe6",
+      "bytes": 85483,
+      "seconds": 4.284081632653061,
+      "peak": 0.7561917304992676
+    },
+    {
+      "source": "word-only\\leg.mp3",
+      "target": "assets/audio/blending_lesson/word-leg.mp3",
+      "sha256": "367d24f5e03e0a97f4e132173e08b68f8e7b4bdf70543e0addb00fbd7dc18212",
+      "bytes": 35328,
+      "seconds": 1.1493877551020408,
+      "peak": 0.9000167846679688
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\leg.mp3",
+      "target": "assets/audio/blending_lesson/praise-leg.mp3",
+      "sha256": "d95b1fa8c723cff270b38184ba1848f04fb4a5fa5c8dad4e3d6f9eaa84e64404",
+      "bytes": 82975,
+      "seconds": 4.12734693877551,
+      "peak": 0.8449414372444153
+    },
+    {
+      "source": "word-only\\jet.mp3",
+      "target": "assets/audio/blending_lesson/word-jet.mp3",
+      "sha256": "2333fc858dd65f1e35fe8727b20b88a8f8165324e422a627b9e9cc2205804809",
+      "bytes": 34074,
+      "seconds": 1.0710204081632653,
+      "peak": 0.7509496808052063
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\jet.mp3",
+      "target": "assets/audio/blending_lesson/praise-jet.mp3",
+      "sha256": "d2c9a232528ad26c74f5139ffb99cda8aab8b56d12d8f99922d6b744a7d3bcb0",
+      "bytes": 85483,
+      "seconds": 4.284081632653061,
+      "peak": 0.8306028842926025
+    },
+    {
+      "source": "word-only\\web.mp3",
+      "target": "assets/audio/blending_lesson/word-web.mp3",
+      "sha256": "99314944c40f7bd6f9e18149a90ca9a0bf76f788d6b0b119ba0a465c5a07db5e",
+      "bytes": 32820,
+      "seconds": 0.9926530612244898,
+      "peak": 0.9023709893226624
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\web.mp3",
+      "target": "assets/audio/blending_lesson/praise-web.mp3",
+      "sha256": "2e4a14f36608c5c63342e758f81aa0cf8bc4d70079560421bf6719905b62e240",
+      "bytes": 91752,
+      "seconds": 4.675918367346939,
+      "peak": 0.8489704132080078
+    },
+    {
+      "source": "word-only\\lip.mp3",
+      "target": "assets/audio/blending_lesson/word-lip.mp3",
+      "sha256": "4e316afd3134dbc3f340a79f111c3d3a1c2c9c1b860a6e4325658c6982206675",
+      "bytes": 31566,
+      "seconds": 0.9142857142857143,
+      "peak": 0.8642085790634155
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\lip.mp3",
+      "target": "assets/audio/blending_lesson/praise-lip.mp3",
+      "sha256": "459ceef065819a2fd0eb7c68b53490bff1ccfddaa54e1ada4ce1954285c55090",
+      "bytes": 90498,
+      "seconds": 4.597551020408163,
+      "peak": 0.7151877284049988
+    },
+    {
+      "source": "word-only\\dig.mp3",
+      "target": "assets/audio/blending_lesson/word-dig.mp3",
+      "sha256": "60ff64732ed84fde9fb02264a665d6f95dfb0da1477f810dd9253e1e6f84544b",
+      "bytes": 35328,
+      "seconds": 1.1493877551020408,
+      "peak": 0.7754220962524414
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\dig.mp3",
+      "target": "assets/audio/blending_lesson/praise-dig.mp3",
+      "sha256": "f65dc2d441daf7f4bfe9f6ba444f1c0bcc6a2cb9a1fbafb7a740b0c2223664a8",
+      "bytes": 95514,
+      "seconds": 4.911020408163266,
+      "peak": 0.7344745397567749
+    },
+    {
+      "source": "word-only\\box.mp3",
+      "target": "assets/audio/blending_lesson/word-box.mp3",
+      "sha256": "8b0fd7de733c2f8a2bd70c103f12e2d64360ea349c300d08de18303ddb35705b",
+      "bytes": 32820,
+      "seconds": 0.9926530612244898,
+      "peak": 0.8830757141113281
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\box.mp3",
+      "target": "assets/audio/blending_lesson/praise-box.mp3",
+      "sha256": "34573621fd10386f6ca93d299da0ea019b68831cc60701c3f50914c77304d122",
+      "bytes": 84229,
+      "seconds": 4.2057142857142855,
+      "peak": 0.7876631021499634
+    },
+    {
+      "source": "word-only\\mop.mp3",
+      "target": "assets/audio/blending_lesson/word-mop.mp3",
+      "sha256": "de7d61e8bd2c2c0061c93ad160be47758f8989f907a73493443b66b661be8284",
+      "bytes": 32820,
+      "seconds": 0.9926530612244898,
+      "peak": 0.7998188734054565
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\mop.mp3",
+      "target": "assets/audio/blending_lesson/praise-mop.mp3",
+      "sha256": "7e941d19c35f8d389326b58316121028a6dfc5ccc1bb3d98dbbd7e754cd21748",
+      "bytes": 87991,
+      "seconds": 4.440816326530612,
+      "peak": 0.9025532007217407
+    },
+    {
+      "source": "word-only\\mug.mp3",
+      "target": "assets/audio/blending_lesson/word-mug.mp3",
+      "sha256": "d4129240aff5cb094035db89153506e641decb01905c21a295c32e21ed4b76f2",
+      "bytes": 32820,
+      "seconds": 0.9926530612244898,
+      "peak": 0.8794161677360535
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\mug.mp3",
+      "target": "assets/audio/blending_lesson/praise-mug.mp3",
+      "sha256": "333f404a9066eb9b82fd641c837d872d258067fa5b9df58222e419b6bef1eb71",
+      "bytes": 85483,
+      "seconds": 4.284081632653061,
+      "peak": 0.9261316657066345
+    },
+    {
+      "source": "word-only\\nut.mp3",
+      "target": "assets/audio/blending_lesson/word-nut.mp3",
+      "sha256": "550737ea8aa7e9d763a5271a894641fd784d888fe53634c670ed1eb94f54217a",
+      "bytes": 32820,
+      "seconds": 0.9926530612244898,
+      "peak": 0.7615447044372559
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\nut.mp3",
+      "target": "assets/audio/blending_lesson/praise-nut.mp3",
+      "sha256": "7b8b8daf0da2640618de2a12f6eb6eb771a2ceb74e65733d9f06fcefe973f906",
+      "bytes": 81721,
+      "seconds": 4.048979591836734,
+      "peak": 0.8288018703460693
+    },
+    {
+      "source": "word-only\\hut.mp3",
+      "target": "assets/audio/blending_lesson/word-hut.mp3",
+      "sha256": "aaea3fcb56eda4ed390d30875ab90db359ed7b7538f2fa19ae0e6b0b79c5922d",
+      "bytes": 35328,
+      "seconds": 1.1493877551020408,
+      "peak": 0.8920641541481018
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\hut.mp3",
+      "target": "assets/audio/blending_lesson/praise-hut.mp3",
+      "sha256": "3ddf43cd0c5f898a7d5ec5573fea208e3a21c7365a831c3fea9a2776cd13de01",
+      "bytes": 84229,
+      "seconds": 4.2057142857142855,
+      "peak": 0.9057432413101196
+    },
+    {
+      "source": "word-only\\bug.mp3",
+      "target": "assets/audio/blending_lesson/word-bug.mp3",
+      "sha256": "d6a2c1b4787881dda02433e9c513d6c43577e767e691b2a11a2716e4608be9f3",
+      "bytes": 34074,
+      "seconds": 1.0710204081632653,
+      "peak": 0.8618912696838379
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\bug.mp3",
+      "target": "assets/audio/blending_lesson/praise-bug.mp3",
+      "sha256": "8c8ff27e1917097065ba46df4b0cb52e05e282fd88c4bafc1e61c6f27f39877a",
+      "bytes": 84229,
+      "seconds": 4.2057142857142855,
+      "peak": 0.8685355186462402
+    },
+    {
+      "source": "word-only\\sit.mp3",
+      "target": "assets/audio/blending_lesson/word-sit.mp3",
+      "sha256": "e89263317b0fba66a47a40617aed81c3beb08776e0b385aff978c0c64cbae4b4",
+      "bytes": 32820,
+      "seconds": 0.9926530612244898,
+      "peak": 0.6611071825027466
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\sit.mp3",
+      "target": "assets/audio/blending_lesson/praise-sit.mp3",
+      "sha256": "2c74140cc9728877a25dfc117299021665a8d820e33a68e99e34f99409086a56",
+      "bytes": 87991,
+      "seconds": 4.440816326530612,
+      "peak": 0.7242465019226074
+    },
+    {
+      "source": "word-only\\top.mp3",
+      "target": "assets/audio/blending_lesson/word-top.mp3",
+      "sha256": "532b17c8ce96c9ad900fc655233c882c77a65a0dd10d1c05f5eb0c10b5bf4405",
+      "bytes": 32820,
+      "seconds": 0.9926530612244898,
+      "peak": 0.895532488822937
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\top.mp3",
+      "target": "assets/audio/blending_lesson/praise-top.mp3",
+      "sha256": "63a3882db3c872a577b0e0090bd029d3303f04737098461f312ed6fef4066480",
+      "bytes": 80467,
+      "seconds": 3.9706122448979593,
+      "peak": 0.899899423122406
+    },
+    {
+      "source": "word-only\\wig.mp3",
+      "target": "assets/audio/blending_lesson/word-wig.mp3",
+      "sha256": "ee250093165a56bedda612060b19e01758c9d0deb1ef17806a14c8456c26452f",
+      "bytes": 34074,
+      "seconds": 1.0710204081632653,
+      "peak": 0.7055832147598267
+    },
+    {
+      "source": "new cvc and blending\\blending sound\\word praise\\wig.mp3",
+      "target": "assets/audio/blending_lesson/praise-wig.mp3",
+      "sha256": "cff9e425dab7d0f710059e184e5524d93b8da7d71ace01f42699304983117308",
+      "bytes": 99275,
+      "seconds": 5.146122448979592,
+      "peak": 0.737918496131897
+    }
+  ],
+  "previousAudio": [
+    {
+      "path": "assets/audio/cvc_lesson/intro.wav",
+      "bytes": 145230,
+      "sha256": "156E9CBB4EFE72410ACBD33E4FD8F485243A5E8CAD20C82B8805DE272C3C889E"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-bat.wav",
+      "bytes": 208590,
+      "sha256": "0F34A1A113E7DDF79DAB60AC3E9A0A5947A8939AC786F787E01FAE1152B0D9E1"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-bed.wav",
+      "bytes": 163662,
+      "sha256": "934E4CDD7F472086E170E7C2F0277DA0525D18D31B1E6A65B8D2CCDD65781C04"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-bug.wav",
+      "bytes": 318404,
+      "sha256": "D5C365ED0D33F23E782289E67263DFFA5ABCEB9892CE1703E5800379EBCEF2A1"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-bus.wav",
+      "bytes": 179790,
+      "sha256": "0BA3D26839EFD9CA8AD2D1374EC70E6820B59AAC0B7538CA14C83068D4E3DDD2"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-cat.wav",
+      "bytes": 202830,
+      "sha256": "AC0D2E340BF31634BDDE13BA3449A3F571717C9A4E7B9D7D4A2D16BEBF72316D"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-cup.wav",
+      "bytes": 179790,
+      "sha256": "3272616E48B238015DB1455A9D5396D362DC7809210E779E44C439573FADC7F4"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-dog.wav",
+      "bytes": 208590,
+      "sha256": "10E0A02DA08C8630336B5F42774475D3706840A348E55B006E66A3BEAFD4C7B3"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-fan.wav",
+      "bytes": 200526,
+      "sha256": "4F617BCFC76D84256200F1EBEE282714512747D0253159370F5A482250337741"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-fin.wav",
+      "bytes": 200526,
+      "sha256": "B9A1042D5DB97B3BCD7A865C1DF81D28A58075FE6639D3D98754853A15869546"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-fox.wav",
+      "bytes": 227022,
+      "sha256": "FD8604EC11B3F00FAD31D4D7AA9798030573A29E457A870BD823EDBE0C1CEDCA"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-hat.wav",
+      "bytes": 218958,
+      "sha256": "6107FBCE652B4C5B57AE44F50E20F72980F4F607AA4B53B5E5475D864C950ADA"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-hen.wav",
+      "bytes": 240846,
+      "sha256": "A1EF880EFF7A8F58A18B7B32F350E7A3CC76F9A85688399E1C9D2EA9EA4B02ED"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-hop.wav",
+      "bytes": 317300,
+      "sha256": "E1668D5B08639F8262AF888F3D5D11CDAC3F383FFA77BFA08AD6CBB227EBAD49"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-log.wav",
+      "bytes": 229326,
+      "sha256": "1B9704F89720428998BA0403718BE75F212BAAE473C8D3CC24E0A83D4492C564"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-map.wav",
+      "bytes": 224718,
+      "sha256": "5CF4B502FF3DA09C1C10DD60510E6BADFFBBDCF69B71874823E65E9702E06454"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-net.wav",
+      "bytes": 174030,
+      "sha256": "653FE444CFD512770D64E8CAA89C0101012449CFBC297F42F91A74EB3A40C249"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-pen.wav",
+      "bytes": 203982,
+      "sha256": "8A70AA98B2128BB9478869B61D30123BCF52CF2716647C8D4085598742E44848"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-pet.wav",
+      "bytes": 317296,
+      "sha256": "958DFF11212DB4C206DE32B044A0F89816F90D42EA56AE0C038DB89163FED389"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-pig.wav",
+      "bytes": 221262,
+      "sha256": "277D556C1333021F9B428FC6234F0B20173C9AC2BCEB781BE1AE6960A2700554"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-pin.wav",
+      "bytes": 321264,
+      "sha256": "83ACD9838B7AD4AFFBC573D4253A5FFA0477382428EE59572C552C741B9D424E"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-run.wav",
+      "bytes": 315974,
+      "sha256": "9C044503234D438016E24D0B11A1598C0696A47CE5EF4640C15AC3BA65964A3F"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-sit.wav",
+      "bytes": 317960,
+      "sha256": "3814FF7C332B5BBBF72995D8AF39B905D2586E4986528E1BEC3B3D80B28ED1B6"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-sun.wav",
+      "bytes": 324352,
+      "sha256": "4775E743B06F381118BE1B8CB9D2FACBE34B0C052C02A33FE80655725852368A"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-top.wav",
+      "bytes": 317960,
+      "sha256": "0BECA061B0C5FFB84F4818483ABD75E3B9C3731EB59F0976C77B03F38EADA280"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/praise-wig.wav",
+      "bytes": 322142,
+      "sha256": "BFF94042BA2C91AA8665340B605812B90D87F9C4295C887AE135EC278536B561"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-bat.wav",
+      "bytes": 26574,
+      "sha256": "53594A94B62B4873C0F43BCECEA355D47528CB200BB0FC6E011D70A988FA40F6"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-bed.wav",
+      "bytes": 40398,
+      "sha256": "F23C29503F37A8447D682358F15CFA05AAB62EB43ACA06C4ED94FAF56975F2EF"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-bug.wav",
+      "bytes": 63966,
+      "sha256": "FA8E4286A902FC6911B1B388583535979BDA9673EABA27DB8A9481251D254E48"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-bus.wav",
+      "bytes": 42702,
+      "sha256": "28118934FDCBA17743C6079F12837686E5EAFDEB2C213114C4821052E5C763D2"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-cat.wav",
+      "bytes": 59552,
+      "sha256": "97135177228801CCBB042908F9530F6AEE89E5A63FA40F083CC2823B5F58B9B4"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-cup.wav",
+      "bytes": 32334,
+      "sha256": "6DA00AF18D88650D29CDBDB18E65EB12B9C8FE4C97FD914E917AF858449FBE74"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-dog.wav",
+      "bytes": 34638,
+      "sha256": "B9ECC9A75FBF165FDF7C65ED251ECD389BA9B104AAC910237AD1FCE7C5B7083B"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-fan.wav",
+      "bytes": 45006,
+      "sha256": "A34172AAA5F5AA75227A24A4CD0D6473CFE58A3F2DB38EC181700A08E47F6A47"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-fin.wav",
+      "bytes": 36942,
+      "sha256": "3CACF0D60A27CFFF451C312B7203AE3108E23CE367B9C3B8AF7A0A3DFCC6DE31"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-fox.wav",
+      "bytes": 34638,
+      "sha256": "FA94E3568773C17B3ED5A98D7A49168AE8BECFA265F9732EDD20B7E957F6BFA6"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-hat.wav",
+      "bytes": 36942,
+      "sha256": "16F38EC5670D139EE92B8B6EDA409137A6987E68F4669EC838FD45945AC41A07"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-hen.wav",
+      "bytes": 40398,
+      "sha256": "EA9AB60EFF635EA286844D3305D248ECB3CCC1B5024082B8DEA700584912223A"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-hop.wav",
+      "bytes": 61760,
+      "sha256": "4FD51F30DD3E5C67AE48CCE1B03977628DA1BBF7ADBD059B734C8E9244CEE85E"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-log.wav",
+      "bytes": 42702,
+      "sha256": "0F0D3FB0DB77509479F3C1A13799990054DE7A0B8AA8F24B4EE7088ABB018B1D"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-map.wav",
+      "bytes": 42702,
+      "sha256": "F6C241EA0E1210EE3D3CB77E2E547C43C9CFD72C5F9DF5E31D67C65DF4D1648A"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-net.wav",
+      "bytes": 42702,
+      "sha256": "5D84DADC60C751AF7065E7CCC3A3C22BCA236EA44C66671B8A45DB49243646ED"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-pen.wav",
+      "bytes": 42702,
+      "sha256": "4386CB1BF0ED48941FA453370C23C4A24AA6623ADC9ACEB4971752B2512F502D"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-pet.wav",
+      "bytes": 58892,
+      "sha256": "173A8F3D4430E1BD8F52E50B4987F402858B101874C77185B06F7FC91FBA1149"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-pig.wav",
+      "bytes": 45006,
+      "sha256": "863D65A915AC624B8851C00C650A4669E4D49B76BE552742083D83BE62FE6CF8"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-pin.wav",
+      "bytes": 62420,
+      "sha256": "13FDE6DFAB386AD5056E6BCCF1B2B29E7F43ABD977981FB579F447D13BB61EB0"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-run.wav",
+      "bytes": 62200,
+      "sha256": "7D6DB9EF7C9F3D2A62824F48246CB8771C52A94FBBEA1258FC45921C7B423229"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-sit.wav",
+      "bytes": 60656,
+      "sha256": "2CF5CDD99E072F553D63596D0DD0E9231D532A109734EFC6BD1CE3CD231009CB"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-sun.wav",
+      "bytes": 63964,
+      "sha256": "04DAC1AD6074E7F1A4716B1CF0D602D330618A3868EAA4EFC155A81B5F84A81E"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-top.wav",
+      "bytes": 62202,
+      "sha256": "852CB6EA00C1211A02FA90CED99840FA4F8652A8E1C41DAF3A1395D013ACE510"
+    },
+    {
+      "path": "assets/audio/cvc_lesson/word-wig.wav",
+      "bytes": 59114,
+      "sha256": "855246832860FC8897DC6FD32BC3AF0E24BFCD650302CFEB91183DED2C8078F2"
+    },
+    {
+      "path": "assets/audio/blending_lesson/intro.wav",
+      "bytes": 165966,
+      "sha256": "081B2BBD2584B804EB394320EE85341E3F59173EE9670D49DBA1DDB37AB87366"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-bag.wav",
+      "bytes": 231630,
+      "sha256": "C55BC05609AEDECA88E1FE887718AD2E724FA17A443E5D15161FFC1A7A13B1DC"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-bed.wav",
+      "bytes": 121038,
+      "sha256": "95463A76CC43000687BDA35D8EF03CC86685542DF01062556F5913341D82CD83"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-big.wav",
+      "bytes": 254684,
+      "sha256": "41793D69D8F866291FA55BB2F02D2ED3856ACB26F1DEC4A10FFCF917AC44EB73"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-box.wav",
+      "bytes": 176334,
+      "sha256": "50AC4B4559901014982FA6CDBC003FF7545DD478C20B034A4AAD039753C601DC"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-bus.wav",
+      "bytes": 184398,
+      "sha256": "6B8141B5B61D684A8E716C9FE1BDEC700BB396DC2B4075D6F3C6F5EEE6C81C51"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-cap.wav",
+      "bytes": 261298,
+      "sha256": "5B6890A20C58243D0769513915DB85D9359B6CF3F8427AA9CA79A71C6F16EF7B"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-cat.wav",
+      "bytes": 103758,
+      "sha256": "DA913E0345A5EEC1409338E0BC1572297F9D7BE78E3BE0E9CE92540FB1A2E12C"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-cot.wav",
+      "bytes": 259532,
+      "sha256": "0E444C4E1A57D184935A6204778C0D65A27BE10EB5EE645A75797ECE707A7FC6"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-cup.wav",
+      "bytes": 165966,
+      "sha256": "EB9FB49EC6B0A7F75F94B6EF946A9C3684F250AFCEC8080F9B00599A17779881"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-dig.wav",
+      "bytes": 150990,
+      "sha256": "A9EFB0FA7C1C2CD99740BD884210F53C63ED1078FFDCF5C006CA5E6080358861"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-dog.wav",
+      "bytes": 110670,
+      "sha256": "78DCDD499C89A1926C8B844872937EA0319C95F3E86889EED69C7C0223B66A02"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-fin.wav",
+      "bytes": 165966,
+      "sha256": "FE7BBB412940011C75491B4327796D5E5F7884B4A1B4C0811D31040CDE026583"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-fox.wav",
+      "bytes": 229326,
+      "sha256": "3E2659FBAD5B2E3A91729E081C69B2B560BAEE1E92E0CA4E92D2762B9D3F5D2A"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-hat.wav",
+      "bytes": 130254,
+      "sha256": "B0BAE220C98A82F2C230B9ADE312D3AC284D2430AEA53F7EDB03583B390E5BC0"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-hen.wav",
+      "bytes": 208590,
+      "sha256": "662C7F2CC72AE15E8A07864819F7365D7D42FBE99915EAD10201B367071958CE"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-hot.wav",
+      "bytes": 256888,
+      "sha256": "414FE3000D8B55C27106201C5A13AF1DE70F2B8C37310FA4EB95E24FD7F96F68"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-hug.wav",
+      "bytes": 261962,
+      "sha256": "2D03EB2C2C6806E1A2E14E80F34E7F4FE0DAD092BEBDDBE85CA55473085A3C4A"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-hut.wav",
+      "bytes": 256886,
+      "sha256": "3CFDB1962F7BBED01172A50D20FC8E0AC02C801943103CC090816E078060A31B"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-jet.wav",
+      "bytes": 167118,
+      "sha256": "43A4B236B970382080B854677E1C6D88D2D3D0B34B4C37700F7AEB60A9DEAF7D"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-kid.wav",
+      "bytes": 255122,
+      "sha256": "CEE2D8E6913B77D33617BC36F060FDA33A30BA301CAD9EE718E526140DA9AB3A"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-leg.wav",
+      "bytes": 182094,
+      "sha256": "561F1CCC626B97A6DAB527B613B4605974F6BAB6ABC5EA2E7FB2C8F9EC765F09"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-lip.wav",
+      "bytes": 252922,
+      "sha256": "A597E54F7CDBF642E1C46A95AF7CA949D80835B63C591BC0717D7450E89BCABD"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-log.wav",
+      "bytes": 169422,
+      "sha256": "96D91766482535B54E80EE32E22056D29B323F8AE2AD28468B771B23D4A08460"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-map.wav",
+      "bytes": 159054,
+      "sha256": "C2C08A5762C1C5BC1C5D1FE6FB45EFF4B476118548335EFD015CEDCB511A6661"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-mop.wav",
+      "bytes": 140622,
+      "sha256": "09BA9D00997CE7362E609F36E96696A54AD2A63330AAC0FC6EC9FE7DEBF129D0"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-mug.wav",
+      "bytes": 163662,
+      "sha256": "8F4127E6F18F0D48377DB84A9BE2788A53CA2E2FDE4D0CDC85E0EF92038B2448"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-nut.wav",
+      "bytes": 182094,
+      "sha256": "1506070069DBB446325D77B9FA60DAC378A5BA49D923B0488CFA44D927400193"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-pan.wav",
+      "bytes": 153294,
+      "sha256": "7BBA5EB88693A397B47EFFE5FDC805C5C2032C1C0C71D6A57F272763C540A35A"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-pen.wav",
+      "bytes": 147534,
+      "sha256": "77EE577E195747D671355134BDD41F0009375E4C380677D78DEFCC5BCFC21D63"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-pig.wav",
+      "bytes": 118734,
+      "sha256": "961DE4FE5EF19D01BECA4F6C3FE51081EE8A85026419E9E40FB4B270612BC912"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-pot.wav",
+      "bytes": 157902,
+      "sha256": "99786E29B482E9FEC62CD42E9008E900B75ED3F7FCCB158C5786F1652147414A"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-pup.wav",
+      "bytes": 257768,
+      "sha256": "593592845F1FD53BEE2D734C63B8027BCAA5FF7B75839DC177A4DB7EB88E1E00"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-ram.wav",
+      "bytes": 261958,
+      "sha256": "DB61286B1B6B18D7D1233E8DDB7B82E62C2A444FD8D0C112A97E8FB0EE7D4CD4"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-red.wav",
+      "bytes": 167118,
+      "sha256": "B0DCB8E0C72D25AFA7254397A3D3E98E34A872A9FA11F16FC5D18ECED0B0C832"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-rib.wav",
+      "bytes": 250272,
+      "sha256": "6C990C6C18F8EFF9F74E1F21D86B5998451BF330A5BBEB1D5A599DD99C229AB8"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-rug.wav",
+      "bytes": 155598,
+      "sha256": "A0CC3ECE7815C63DF7E399553F835EC515868600251424C0AC147A9A5857F55A"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-sun.wav",
+      "bytes": 122190,
+      "sha256": "D4C6427BA6BDF4CF85DB377DC9A0F1DC6688B76FCB25B8E98710848E588425A7"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-ten.wav",
+      "bytes": 182094,
+      "sha256": "E53B477987561524B57A674D495D51C562C52752E2ABC2E01AE52763A874FE29"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-van.wav",
+      "bytes": 184398,
+      "sha256": "5F647AD684403A702B6D28B0D4F237CB50CFB802873D1B5B60A355C28B64EC2F"
+    },
+    {
+      "path": "assets/audio/blending_lesson/praise-web.wav",
+      "bytes": 176334,
+      "sha256": "B6A8C3A269B6F60C0AF41BD20C2510EEE3B28FF0CAD3E4DEE73F9A63BD2C4C14"
+    },
+    {
+      "path": "assets/audio/blending_lesson/try-another.wav",
+      "bytes": 63438,
+      "sha256": "13A8EF99404C772D6CB1C7C8E2CF32FD142A1600FEB99E0DA8A743D3A376D41B"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-bag.wav",
+      "bytes": 63966,
+      "sha256": "6ECC390A5A4762B269C2A39B9F6A7744702E0BBC7DE3CCD6E7BDD8C3CD38472D"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-big.wav",
+      "bytes": 62420,
+      "sha256": "02469A21B6102FAD576F8565DAEAAF2CF57B5AE0E48A8FD670A93536C7372065"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-box.wav",
+      "bytes": 66832,
+      "sha256": "1BF4E2326DD6D6BB5A8EF185621CB8D40863FA109A3D963E0C4C8175F8E55E0C"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-cap.wav",
+      "bytes": 62420,
+      "sha256": "61753F8F539970B7E3FE80123C3352FDB182F46C587E9D43384DA7D12C42A498"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-cot.wav",
+      "bytes": 59552,
+      "sha256": "B49230EAFD8E026276E397DB45836EFE90C030AFEDA2DF8A0243CC5B2D9E1185"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-dig.wav",
+      "bytes": 62640,
+      "sha256": "7218FB04C0F9E23D26894AF1D1B02E2DC92038783944F17EC6E7A13A1C4D3C09"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-hot.wav",
+      "bytes": 58892,
+      "sha256": "F6B88A80E0F1F82A375BE57DDDC551710EDB9C9DA3AC4C1CD6E4484A9CD07D79"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-hug.wav",
+      "bytes": 63966,
+      "sha256": "3825C41AB6990E35C53E2FB1C22B3FE8C4D4568066E41500F9D2E24DD2901E0E"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-hut.wav",
+      "bytes": 58452,
+      "sha256": "146A1C9F2C301557861506EB2D93C9009C23F61CAD79D4C72A4124470423A0F5"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-jet.wav",
+      "bytes": 59332,
+      "sha256": "BCA0F72167C238D3C91D52B3F815D8EED1D7A5234B9A998B89C6F9E3A5609A04"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-kid.wav",
+      "bytes": 59114,
+      "sha256": "0F280A77B0E47BD0C3720D3DEDCB6C695415A6BC00E6F761BB16E2C460335BB0"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-leg.wav",
+      "bytes": 61540,
+      "sha256": "C81ECAFD0AC7B48335DF79C1093B4F93B8C9D9BCBA78CA89CA366A92A4636C28"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-lip.wav",
+      "bytes": 59114,
+      "sha256": "C7DED7DCFEB62DFF0107AB9C7AFC41F7EE10F41BF86B6A0891678735C3B5A54F"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-mop.wav",
+      "bytes": 62640,
+      "sha256": "F5B76796166261458F735F719878E374751C66A7855CE531D90B3DCE0E2A9BF8"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-mug.wav",
+      "bytes": 63744,
+      "sha256": "FD8460EE42A4CCC5DAC98562D5BF0FAD19DDFB072B81806E7A48752B37E43BBB"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-nut.wav",
+      "bytes": 58892,
+      "sha256": "7EA09416C62D319CC710E8C85DF524470B80B8B0BEBC5D0AC57DC56C5C8628E2"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-pan.wav",
+      "bytes": 63302,
+      "sha256": "E3B361C00585997801BEFDD713F865484102B8C814E8B11B4ED7043BD285F31C"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-pot.wav",
+      "bytes": 59552,
+      "sha256": "155F8BE70BE4AAFB1686EBF3F83CE7987F0E25E1D32D0191EF36D7CD52540542"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-pup.wav",
+      "bytes": 61318,
+      "sha256": "5919DF233886BB9B635225D635FC91F504496286C0E5312EB7E75E9983290FAD"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-ram.wav",
+      "bytes": 64846,
+      "sha256": "B906B41FD21C6C859DBA343FAA0DA025FB0E67326AB670231EF366495A3162C7"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-red.wav",
+      "bytes": 59114,
+      "sha256": "D832F69FFD786B29B988818E19769A84F49BDAAC13DF32F789EA87CFF96471AB"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-rib.wav",
+      "bytes": 58892,
+      "sha256": "036F5CD9264A1FE0AF8656036A3184270F3627AC97EA963429D3907B5528E41D"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-rug.wav",
+      "bytes": 65066,
+      "sha256": "B86F722BC173B6088C3E330E7C33CDE41C19C10A479068BABC464A68D893DE12"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-ten.wav",
+      "bytes": 61760,
+      "sha256": "040C8E7C01A69F6522BCAD8CB18C884ECF9C1149B3CCB6DDBA804E80F08AFDB3"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-van.wav",
+      "bytes": 63966,
+      "sha256": "2264344E27DB1FB03D90AB2FDE1361B43BF37BBA688C9F611A1BAE09230861DD"
+    },
+    {
+      "path": "assets/audio/blending_lesson/word-web.wav",
+      "bytes": 61538,
+      "sha256": "72BD6C857544FD1491F504A3A548FEAF0FF7F70E84E4F1509CC7850CD34E03DA"
+    }
+  ],
+  "backupDirectory": "build/cvc_blending_refresh_20261008/before_activation",
+  "audioBytesBefore": 16873190,
+  "audioBytesAfter": 5063779,
+  "sourceArchives": [
+    {
+      "filename": "source.zip",
+      "sha256": "a61febba36a7556a65a19f7fbfa4999d1bffaf94ff4eae0be4c6a4a62d2326f9"
+    },
+    {
+      "filename": "word-only.zip",
+      "sha256": "1d0b43d63470f96758293d01eec757c3805cde8526410a3cbd132a73a6b622e0"
+    }
+  ],
+  "images": [
+    {
+      "word": "CAT",
+      "path": "assets/images/cvc_blending/cat.webp",
+      "sha256": "cb52559398b9cba2347947121b6f075e54529bc73e8453a979a0f5ccf759470c"
+    },
+    {
+      "word": "BAT",
+      "path": "assets/images/cvc_blending/bat.webp",
+      "sha256": "ecfe84fbb5332de5c777f3f1aef8b29006766777f2ba068c59545dc16a98814e"
+    },
+    {
+      "word": "HAT",
+      "path": "assets/images/cvc_blending/hat.webp",
+      "sha256": "e26127418ee2812e9a31fa5952958411065d3554911a2aa3cdbb7783e5bff924"
+    },
+    {
+      "word": "MAP",
+      "path": "assets/images/cvc_blending/map.webp",
+      "sha256": "3293dd67d6c2601b711252ea61ad802d04c8aa4d44dc2d5eead37635b9c8f4ca"
+    },
+    {
+      "word": "FAN",
+      "path": "assets/images/cvc_blending/fan.webp",
+      "sha256": "7775915250e00f76e352f65ac46f8a9a1f94f28ce17e0806e426e6ae1ff90bba"
+    },
+    {
+      "word": "BAG",
+      "path": "assets/images/cvc_blending/bag.webp",
+      "sha256": "d4edbf51de9b3d8e9b600d7403745d5ab739889da54ddef790b6315278cf0b22"
+    },
+    {
+      "word": "BED",
+      "path": "assets/images/cvc_blending/bed.webp",
+      "sha256": "081fd7cfdfccf09f89168054aba5cc083b72a52e898a41ab47b2275558b9de71"
+    },
+    {
+      "word": "HEN",
+      "path": "assets/images/cvc_blending/hen.webp",
+      "sha256": "562996f15aa299c79e7662114ee85c0306bce05b9ab36b64f42d9dcad7a87b8a"
+    },
+    {
+      "word": "PEN",
+      "path": "assets/images/cvc_blending/pen.webp",
+      "sha256": "8abb8244c6775d264ff9fd61e334bf04b1180cee6a6e98cabc113a50207dc1a7"
+    },
+    {
+      "word": "NET",
+      "path": "assets/images/cvc_blending/net.webp",
+      "sha256": "04301b5a5923eac457308a31d3cbda026c138bd6a28b97b2c11bcb32934a56cb"
+    },
+    {
+      "word": "RED",
+      "path": "assets/images/cvc_blending/red.webp",
+      "sha256": "ce6ebeeebb6cd2a79ab695881b704c4fc9b3d82276e03ec922d6c5a7fdb51c22"
+    },
+    {
+      "word": "PIG",
+      "path": "assets/images/cvc_blending/pig.webp",
+      "sha256": "bbe98a0044c5d262fef3e35a9e695cfc93bd36b127920bff92b30133d2bd3afe"
+    },
+    {
+      "word": "PIN",
+      "path": "assets/images/cvc_blending/pin.webp",
+      "sha256": "6027e87cfe8f97c023c1f51302c19b9a46a39e80af4bb2b40db5e5884d2de5ab"
+    },
+    {
+      "word": "DOG",
+      "path": "assets/images/cvc_blending/dog.webp",
+      "sha256": "235ac376165d2a004710f8918bc565cd80d90f2200c035c262e7872b0db6f4ce"
+    },
+    {
+      "word": "POT",
+      "path": "assets/images/cvc_blending/pot.webp",
+      "sha256": "11bfa09d2ddc5a56a344725c02ba7187dc1ae655badc1593cd9152040b37a3d7"
+    },
+    {
+      "word": "RUG",
+      "path": "assets/images/cvc_blending/rug.webp",
+      "sha256": "3bb7f646099a513747784f7572c38b9dfa24bcd0797d16e2b1ead35b86b842b8"
+    },
+    {
+      "word": "RUN",
+      "path": "assets/images/cvc_blending/run.webp",
+      "sha256": "69a582945bacc8c148a05b1d5fe7174bfbd1013699c8ba7f9a38ac068ed0a7ee"
+    },
+    {
+      "word": "SUN",
+      "path": "assets/images/cvc_blending/sun.webp",
+      "sha256": "46815f0907e7b829ca2db118015cb5fa904fe4a677733fda139a3c459e67214c"
+    },
+    {
+      "word": "CUP",
+      "path": "assets/images/cvc_blending/cup.webp",
+      "sha256": "994f11cee19d8b348d8b7da3e3ed1290d284738ac36a96c5c6395accb5c9366d"
+    },
+    {
+      "word": "BUS",
+      "path": "assets/images/cvc_blending/bus.webp",
+      "sha256": "bbacfd2bc5e483d0f3554fea34339cc10ab7cb3120803c72d6acf3e7b08dee77"
+    },
+    {
+      "word": "LOG",
+      "path": "assets/images/cvc_blending/log.webp",
+      "sha256": "c600627b8d62e14d73484680b8ccb3985ad63647b0e849d7d419ea672fbf734c"
+    },
+    {
+      "word": "CAP",
+      "path": "assets/images/cvc_blending/cap.webp",
+      "sha256": "ea593263757c0f8398e65eeb71263830ac89e8a760233bfeeaac1d8163412e2b"
+    },
+    {
+      "word": "VAN",
+      "path": "assets/images/cvc_blending/van.webp",
+      "sha256": "39abddcaa6af2cc2968e998fa46db501c312d2841cb41f70f8b1ec69a4c9dd90"
+    },
+    {
+      "word": "PAN",
+      "path": "assets/images/cvc_blending/pan.webp",
+      "sha256": "07a2c541ddc5c3f713526c7621eabeb98f563910f3970664ff686fdf83023a1c"
+    },
+    {
+      "word": "TEN",
+      "path": "assets/images/cvc_blending/ten.webp",
+      "sha256": "f1aee41e17f75343a5ea4093a8e6696293587519d8e9592f5360ff6e0e500453"
+    },
+    {
+      "word": "LEG",
+      "path": "assets/images/cvc_blending/leg.webp",
+      "sha256": "0d07c84ff41dd47dff9bd252f6b27cd814583c53a1af7afa29e871eb24fe06da"
+    },
+    {
+      "word": "JET",
+      "path": "assets/images/cvc_blending/jet.webp",
+      "sha256": "751343f3382d18f0b17970e757012eebee445036b54b83e562eef7f7a853d852"
+    },
+    {
+      "word": "WEB",
+      "path": "assets/images/cvc_blending/web.webp",
+      "sha256": "a1ba1a16350af9558688886790883718271af0ba62070576c022a7186ad20126"
+    },
+    {
+      "word": "LIP",
+      "path": "assets/images/cvc_blending/lip.webp",
+      "sha256": "529bf6268be276f1cca5e653bc66998539cc5cf3ad748902a7780abdca5fa29a"
+    },
+    {
+      "word": "DIG",
+      "path": "assets/images/cvc_blending/dig.webp",
+      "sha256": "0ecf629385348aca0e394732d7934103a369bf03dba0f3c00fdd9426ceb18015"
+    },
+    {
+      "word": "BOX",
+      "path": "assets/images/cvc_blending/box.webp",
+      "sha256": "c8055c822c3885a5f74bea3c16fb97f6e6a4e84e4452ba7d30437467fe5ad1a0"
+    },
+    {
+      "word": "MOP",
+      "path": "assets/images/cvc_blending/mop.webp",
+      "sha256": "86e680eadb808a0eba262ce7ea1e795dd71df8b4ba0a95ee6987e07ee3a388f6"
+    },
+    {
+      "word": "MUG",
+      "path": "assets/images/cvc_blending/mug.webp",
+      "sha256": "62451e558f73cb07723b5664cb3ac55daa833f03f072c2ba7715ae14f7d5b5ff"
+    },
+    {
+      "word": "NUT",
+      "path": "assets/images/cvc_blending/nut.webp",
+      "sha256": "89742e271f79687d96d73fcb64638e1b1c6b0225454579d54acce7fef8bb358e"
+    },
+    {
+      "word": "HUT",
+      "path": "assets/images/cvc_blending/hut.webp",
+      "sha256": "9da5dd27f036aed4d4d4a6d8d06ecde37fa21be30655ff9ed8b828d47af0e133"
+    },
+    {
+      "word": "BUG",
+      "path": "assets/images/cvc_blending/bug.webp",
+      "sha256": "8a2f243260a8d46d9a667ea0a701cff66496b998f7c5b6bcfd2052812d00cae2"
+    },
+    {
+      "word": "SIT",
+      "path": "assets/images/cvc_blending/sit.webp",
+      "sha256": "50b7cbc3624e1506f5ddef3d0c593691801e746e0356ec78e810177f780cd944"
+    },
+    {
+      "word": "TOP",
+      "path": "assets/images/cvc_blending/top.webp",
+      "sha256": "19c5e6415828f6db24e5880be3a8f06da389eadedb7f9c41bb3358726e2b00f4"
+    },
+    {
+      "word": "WIG",
+      "path": "assets/images/cvc_blending/wig.webp",
+      "sha256": "70ef25c363ff8a8cb57ab944f5c4d2c882f472ce9f3917736217db67a5b753a2"
+    }
+  ]
+}

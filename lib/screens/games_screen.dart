@@ -68,11 +68,11 @@ class _GamesScreenState extends State<GamesScreen> {
           String Function(Difficulty) detail) =>
       GameZoneCard(
           imageAsset: title == 'Rhyming Words'
-              ? 'assets/images/lesson_logos/rhyming_words.png'
+              ? 'assets/images/lesson_logos/rhyming_words.webp'
               : 'assets/images/game_logos/${switch (title) {
                   'Speak & Recognize' => 'speak_and_recognize',
                   _ => title.toLowerCase().replaceAll(' ', '_'),
-                }}.png',
+                }}.webp',
           accent: switch (title) {
             'Flappy Letters' || 'Speak & Recognize' => const Color(0xFFFF408F),
             'Sound Match' || 'Missing Vowel' => const Color(0xFF00ABED),
@@ -85,7 +85,7 @@ class _GamesScreenState extends State<GamesScreen> {
           onPressed: _opening ? null : () => _play(title, builder, detail));
   @override
   Widget build(BuildContext context) {
-    if (!context.watch<AppProvider>().gameAccess) {
+    if (!context.select<AppProvider, bool>((p) => p.gameAccess)) {
       return _zonePage(child: const Text('Games are turned off by a parent.'));
     }
     return _zonePage(
@@ -109,7 +109,7 @@ class _GamesScreenState extends State<GamesScreen> {
             Icons.hearing,
             (d) => SoundMatchScreen(difficulty: d),
             (d) =>
-                '${soundRoundsForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} rounds · ${soundRoundsForDifficulty(d).first.options.length} choices'),
+                '${soundRoundsForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} rounds · 3 choices'),
         _card(
             'Memory Flip',
             'Match pairs.',
@@ -167,14 +167,14 @@ class _GamesScreenState extends State<GamesScreen> {
             Icons.shuffle_rounded,
             (d) => RumbledWordsScreen(difficulty: d),
             (d) =>
-                '${rumbledWordsFor(d).length.clamp(0, GameSessionOrder.roundLength(d))} words · 1 hint per word'),
+                '${rumbledWordsFor(d).length.clamp(0, GameSessionOrder.roundLength(d))} words · ${rumbledWordLengthLabel(d)} · 1 hint per word'),
         _card(
             'Rhyming Words',
             'Find words that rhyme.',
             Icons.music_note_rounded,
             (d) => RhymingWordsScreen(difficulty: d),
             (d) =>
-                '${rhymeRoundsForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} words'),
+                '${GameSessionOrder.roundLength(d)} jars · 3 rhymes per jar'),
       ]),
     ]));
   }

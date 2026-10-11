@@ -1,0 +1,46 @@
+[
+  {
+    "source": "C:\\Users\\leeji\\KidsPhonicsProject\\screen animations\\cloud animation1.png",
+    "asset": "assets/images/new_ui/cloud-transition-1.webp",
+    "width": 941,
+    "height": 1672,
+    "sourceBytes": 849081,
+    "assetBytes": 483976,
+    "transparentPercent": 57.57,
+    "rgbaSHA256": "996e37f9a99f8d110416a8256e2b198e31302de1e7bee19f335306003a6133ad",
+    "pixelsIdentical": true
+  },
+  {
+    "source": "C:\\Users\\leeji\\KidsPhonicsProject\\screen animations\\cloud animation2.png",
+    "asset": "assets/images/new_ui/cloud-transition-2.webp",
+    "width": 941,
+    "height": 1672,
+    "sourceBytes": 1154422,
+    "assetBytes": 633300,
+    "transparentPercent": 43.76,
+    "rgbaSHA256": "c40ec5978d5744d676331e5e18463a325bbea07545e3a9b72ffdf89d48e03428",
+    "pixelsIdentical": true
+  },
+  {
+    "source": "C:\\Users\\leeji\\KidsPhonicsProject\\screen animations\\cloud animation3.png",
+    "asset": "assets/images/new_ui/cloud-transition-3.webp",
+    "width": 941,
+    "height": 1672,
+    "sourceBytes": 1531507,
+    "assetBytes": 874674,
+    "transparentPercent": 25.32,
+    "rgbaSHA256": "3afc10d0e75b8fea7d7c256199418388aae6ef5cefd5b26e93f1649c6ef43f28",
+    "pixelsIdentical": true
+  },
+  {
+    "source": "C:\\Users\\leeji\\KidsPhonicsProject\\screen animations\\cloud animation4.png",
+    "asset": "assets/images/new_ui/cloud-transition-4.webp",
+    "width": 941,
+    "height": 1672,
+    "sourceBytes": 1879227,
+    "assetBytes": 1052812,
+    "transparentPercent": 5.28,
+    "rgbaSHA256": "0b9f04436b4fdfb40177dc9286c1a059d0e221a7b77e7e7431ce4176130e7143",
+    "pixelsIdentical": true
+  }
+]

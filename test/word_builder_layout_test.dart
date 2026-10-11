@@ -18,6 +18,8 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       mockProgressAudio();
       final p = await mount(t, WordBuilderScreen(difficulty: difficulty));
+      await t.runAsync(() => p.toggleVoice());
+      await t.pump();
       expect(find.byType(Scrollable), findsNothing);
       final word =
           t.widget<AudioButton>(find.byType(AudioButton)).phrase.toUpperCase();

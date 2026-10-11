@@ -49,7 +49,7 @@ void main() {
   }
   for (final scenario in ['new', 'practice', 'mastered']) {
     testWidgets(
-        'Home shows progress without a duplicate practice button for $scenario',
+        'Home keeps earlier $scenario progress separate from new adventures',
         (tester) async {
       mockProgressAudio();
       tester.binding.platformDispatcher.accessibilityFeaturesTestValue =
@@ -82,14 +82,15 @@ void main() {
       await tester.pumpWidget(ChangeNotifierProvider.value(
           value: p, child: const MaterialApp(home: HomeScreen())));
       await tester.pumpAndSettle();
-      final target = scenario == 'new' ? 'A' : 'B';
+      const target = 'A';
       expect(find.byKey(const ValueKey('continue-learning')), findsNothing);
       expect(find.text('Continue Learning'), findsNothing);
       expect(find.text('Explore Lessons'), findsNothing);
-      if (scenario != 'mastered') {
-        expect(
-            find.text('Your next little step: Letter $target'), findsOneWidget);
-      }
+      expect(find.text('Practice Letter $target'), findsOneWidget);
+      expect(find.text('Start Quick Check'), findsOneWidget);
+      expect(
+          find.byKey(const ValueKey('home-start-adventure')), findsOneWidget);
+      expect(p.overallMasteredCount, 0);
       await tester.pumpWidget(const SizedBox());
       p.dispose();
     });

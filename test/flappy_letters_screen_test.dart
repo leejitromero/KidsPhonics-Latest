@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kidsphonics/providers/app_provider.dart';
 import 'package:kidsphonics/screens/flappy_letters_screen.dart';
+import 'package:kidsphonics/widgets/flappy_bird_sprite.dart';
 import 'package:kidsphonics/widgets/learner_widgets.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 
@@ -38,12 +40,31 @@ void main() {
     expect(playArea.top, 0);
     expect(playArea.bottom, 844);
     expect(tester.widget<GameLives>(find.byType(GameLives)).lives, 3);
+    int birdFrame() =>
+        tester.widget<FlappyBirdSprite>(find.byType(FlappyBirdSprite)).frame;
+    expect(birdFrame(), 0);
     await tester.tap(find.text('Start flying'));
     await tester.pump();
     expect(find.text('Ready to fly?'), findsNothing);
+    expect(birdFrame(), 1);
+    await tester.pump(const Duration(milliseconds: 80));
+    expect(birdFrame(), 2);
+    await tester.pump(const Duration(milliseconds: 70));
+    expect(birdFrame(), 3);
+    await tester.tapAt(playArea.center);
+    await tester.pump();
+    expect(birdFrame(), 1, reason: 'Each tap restarts the wing stroke.');
+    await tester.pump(const Duration(milliseconds: 80));
+    expect(birdFrame(), 2);
+    await tester.sendKeyEvent(LogicalKeyboardKey.space);
+    await tester.pump();
+    expect(birdFrame(), 1, reason: 'Keyboard flaps animate too.');
+    await tester.pump(const Duration(milliseconds: 350));
+    expect(birdFrame(), 0);
     await tester.tap(find.byTooltip('Pause'));
     await tester.pump();
     expect(find.text('Taking a little break'), findsOneWidget);
+    expect(birdFrame(), 0);
     await tester.pump(const Duration(seconds: 2));
     expect(find.text('Taking a little break'), findsOneWidget);
     await tester.tap(find.text('Resume'));

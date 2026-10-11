@@ -1,5 +1,5 @@
-import '../widgets/button_sound.dart';
 import '../data/game_session_order.dart';
+import 'dart:async';
 import '../widgets/word_game_layout.dart';
 // lib/screens/phonics_quiz_screen.dart
 import 'package:flutter/material.dart';
@@ -24,6 +24,7 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
   int _qIndex = 0;
   String? _selected;
   bool _answered = false;
+  Timer? _feedbackTimer;
 
   late List<String> _shuffledOpts;
 
@@ -47,24 +48,57 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
   QuizQuestion get _q => _questions[_qIndex];
 
   void _pick(String letter) async {
-    if (_answered) return;
+    if (_answered || resultOpen) return;
     final isCorrect = letter == _q.correctLetter;
     setState(() {
       _selected = letter;
       _answered = true;
     });
 
-    final provider = context.read<AppProvider>();
     recordGameAnswer(correct: isCorrect);
     if (isCorrect) {
-      provider.audio.playCorrect();
       awardGameXp((5 * widget.difficulty.xpMultiplier).round());
       awardGameStar();
-      await Future.delayed(const Duration(milliseconds: 700));
-    } else {
-      provider.audio.playWrong();
-      await Future.delayed(const Duration(milliseconds: 700));
     }
+    gameNarration.cancel();
+    final sound = gameNarration.letterSound(letter);
+    final request = gameNarration.generation;
+    await sound;
+    if (!mounted || resultOpen) return;
+    // Finish the chosen phoneme before answer effects or praise can replace it.
+    if (request == gameNarration.generation) {
+      if (isCorrect) {
+        playGameCorrect();
+      } else {
+        playGameWrong();
+      }
+    }
+    _feedbackTimer = Timer(Duration(milliseconds: isCorrect ? 1500 : 700),
+        () => _finishFeedback(isCorrect));
+  }
+
+  void _finishFeedback(bool correct) {
+    if (!mounted || resultOpen) return;
+    // Preserve the task during dialogs, backgrounding and the time-limit screen.
+    if (!canAdvanceGameFeedback) {
+      _feedbackTimer = Timer(
+          const Duration(milliseconds: 250), () => _finishFeedback(correct));
+      return;
+    }
+    if (correct) {
+      _nextQuestion();
+    } else {
+      setState(() {
+        _selected = null;
+        _answered = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _feedbackTimer?.cancel();
+    super.dispose();
   }
 
   void _nextQuestion() {
@@ -108,6 +142,7 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
 
   @override
   Widget build(BuildContext context) => GameScaffold(
+        narration: gameNarration,
         fitViewport: true,
         answerResult: _selected == null ? null : _selected == _q.correctLetter,
         title: 'Phonics Quiz',
@@ -118,11 +153,7 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
         total: _questions.length,
         child: WordGameLayout(word: _q.word, children: [
           const SizedBox(height: 4),
-          Text(_q.question,
-              textAlign: TextAlign.center,
-              style:
-                  const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          AudioButton(phrase: _q.voiceHint),
+          AudioButton(phrase: _q.voiceHint, enabled: !_answered && !resultOpen),
           const SizedBox(height: 8),
           WordChoiceGrid(
               children: _shuffledOpts
@@ -138,10 +169,6 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
                   .toList()),
           if (_selected != null)
             GameFeedback(correct: _selected == _q.correctLetter),
-          if (_answered)
-            ElevatedButton(
-                onPressed: withButtonSound(resultOpen ? null : _nextQuestion),
-                child: const Text('Next')),
         ]),
       );
 }

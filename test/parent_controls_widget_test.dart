@@ -59,9 +59,10 @@ void main() {
     });
     await tester.pump();
     expect(p.parentAuth.isAuthenticated, isTrue);
-    await tester.scrollUntilVisible(find.text('Child Learning Summary'), 250,
+    await tester.scrollUntilVisible(find.text('This Week at a Glance'), 250,
         scrollable: find.byType(Scrollable).first);
-    expect(find.text('Child Learning Summary'), findsOneWidget);
+    expect(find.text('This Week at a Glance'), findsOneWidget);
+    expect(find.text('Child Learning Summary'), findsNothing);
     expect(p.parentAuth.isAuthenticated, isTrue);
     await finish(tester, p);
   });

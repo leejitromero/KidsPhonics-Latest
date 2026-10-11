@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,8 +23,12 @@ void main() {
     expect(gameFrames, hasLength(4));
     for (final asset in gameFrames) {
       final bytes = await rootBundle.load(asset);
-      expect(bytes.getUint32(16), 941);
-      expect(bytes.getUint32(20), 1672);
+      final codec = await ui.instantiateImageCodec(bytes.buffer.asUint8List());
+      final frame = await codec.getNextFrame();
+      expect(frame.image.width, 941);
+      expect(frame.image.height, 1672);
+      frame.image.dispose();
+      codec.dispose();
     }
   });
   for (final size in [

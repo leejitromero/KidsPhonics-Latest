@@ -1,0 +1,196 @@
+import 'dart:io';
+import 'dart:ui' as ui;
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:kidsphonics/data/letter_data.dart';
+import 'package:kidsphonics/models/letter_adventure.dart';
+import 'package:kidsphonics/providers/app_provider.dart';
+import 'package:kidsphonics/screens/letter_mastery_check_screen.dart';
+import 'package:kidsphonics/widgets/quick_check_design.dart';
+import 'learning_progress_test.dart' show mockProgressAudio;
+import 'letter_mastery_check_test.dart'
+    show AdventureTestAudio, press, hear, flushAdventure;
+
+void main() {
+  testWidgets(
+      'Back leaves intro directly and confirms before discarding a task',
+      (t) async {
+    mockProgressAudio();
+    SharedPreferences.setMockInitialValues({});
+    t.platformDispatcher.accessibilityFeaturesTestValue =
+        const FakeAccessibilityFeatures(disableAnimations: true);
+    addTearDown(t.platformDispatcher.clearAccessibilityFeaturesTestValue);
+    late AppProvider p;
+    await t.runAsync(() async {
+      p = AppProvider();
+      await p.ready;
+    });
+    final audio = AdventureTestAudio();
+    await t.pumpWidget(ChangeNotifierProvider.value(
+        value: p,
+        child: MaterialApp(
+          home: Builder(
+              builder: (context) => Scaffold(
+                  body: Center(
+                      child: FilledButton(
+                          onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                  builder: (_) => LetterMasteryCheckScreen(
+                                      letter: letterContent('A'),
+                                      audio: audio))),
+                          child: const Text('Open check'))))),
+        )));
+    await press(t, find.text('Open check'));
+    await t.pumpAndSettle();
+    await press(t, find.byTooltip('Back'));
+    await t.pumpAndSettle();
+    expect(find.text('Open check'), findsOneWidget);
+    expect(find.byKey(const ValueKey('game-leave-dialog')), findsNothing);
+    await press(t, find.text('Open check'));
+    await t.pumpAndSettle();
+    await press(t, find.byKey(const ValueKey('start-adventure')));
+    await press(t, find.byTooltip('Back'));
+    await t.pumpAndSettle();
+    expect(find.byKey(const ValueKey('game-leave-dialog')), findsOneWidget);
+    await press(t, find.byKey(const ValueKey('leave-cancel')));
+    await t.pumpAndSettle();
+    expect(find.byType(QuickProgress), findsOneWidget);
+    await press(t, find.byTooltip('Back'));
+    await t.pumpAndSettle();
+    await press(t, find.byKey(const ValueKey('leave-confirm')));
+    await t.pumpAndSettle();
+    expect(find.text('Open check'), findsOneWidget);
+    expect(p.adventureProgress('A').completed, 0);
+    expect(t.takeException(), isNull);
+    await t.pumpWidget(const SizedBox());
+    p.dispose();
+  });
+  for (final scenario in [
+    (size: const Size(320, 568), scale: 1.0),
+    (size: const Size(390, 844), scale: 1.0),
+    (size: const Size(800, 600), scale: 1.0),
+    (size: const Size(320, 568), scale: 1.8),
+  ]) {
+    testWidgets(
+        'illustrated quick check fits ${scenario.size}, text ${scenario.scale}',
+        (t) async {
+      mockProgressAudio();
+      SharedPreferences.setMockInitialValues({});
+      await t.binding.setSurfaceSize(scenario.size);
+      t.platformDispatcher.accessibilityFeaturesTestValue =
+          const FakeAccessibilityFeatures(disableAnimations: true);
+      addTearDown(() {
+        t.binding.setSurfaceSize(null);
+        t.platformDispatcher.clearAccessibilityFeaturesTestValue();
+      });
+      late AppProvider p;
+      await t.runAsync(() async {
+        p = AppProvider();
+        await p.ready;
+        await (FontLoader('Nunito')
+              ..addFont(rootBundle.load('assets/fonts/Nunito-Regular.ttf'))
+              ..addFont(rootBundle.load('assets/fonts/Nunito-Black.ttf')))
+            .load();
+        await (FontLoader('MaterialIcons')
+              ..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf')))
+            .load();
+      });
+      final audio = AdventureTestAudio();
+      final boundary = GlobalKey();
+      await t.pumpWidget(ChangeNotifierProvider.value(
+          value: p,
+          child: RepaintBoundary(
+              key: boundary,
+              child: MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  builder: (context, child) => MediaQuery(
+                      data: MediaQuery.of(context).copyWith(
+                          textScaler: TextScaler.linear(scenario.scale)),
+                      child: child!),
+                  home: LetterMasteryCheckScreen(
+                      letter: letterContent('C'), audio: audio)))));
+      await t.pump();
+      Future<void> capture(String name) async {
+        expect(t.takeException(), isNull);
+        if (!const bool.fromEnvironment('CAPTURE_UI') ||
+            scenario.size.width != 390) {
+          return;
+        }
+        await t.drag(find.byType(SingleChildScrollView), const Offset(0, 2000));
+        await t.pumpAndSettle();
+        await t.runAsync(() async {
+          await Future.wait(t
+              .widgetList<Image>(find.byType(Image))
+              .map((w) => precacheImage(w.image, boundary.currentContext!)));
+        });
+        await t.pumpAndSettle();
+        await t.runAsync(() async {
+          final image = await (boundary.currentContext!.findRenderObject()
+                  as RenderRepaintBoundary)
+              .toImage(pixelRatio: 2);
+          final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
+          final file = File('build/ui_previews/quick_check/$name.png');
+          await file.parent.create(recursive: true);
+          await file.writeAsBytes(bytes!.buffer.asUint8List());
+          image.dispose();
+        });
+      }
+
+      await capture('intro');
+      await press(t, find.byKey(const ValueKey('start-adventure')));
+      expect(t.widget<QuickProgress>(find.byType(QuickProgress)).completed, 0);
+      await capture('matching');
+      // Wrong answers still count as answered; stars do not expose correctness.
+      final wrong = t
+          .widgetList<ElevatedButton>(find.byType(ElevatedButton))
+          .firstWhere((w) =>
+              w.key is ValueKey<String> &&
+              w.key != const ValueKey('adventure-option-c'));
+      await press(t, find.byKey(wrong.key!));
+      expect(t.widget<QuickProgress>(find.byType(QuickProgress)).completed, 1);
+      await press(t, find.text('Next Challenge'));
+      await capture('sounds');
+      await hear(t, audio, 'lesson-sound-C');
+      await press(t, find.byKey(const ValueKey('adventure-option-C')));
+      await press(t, find.text('Next Challenge'));
+      await capture('spelling');
+      await hear(t, audio, adventureWordKey('Cat'));
+      await press(t, find.byKey(const ValueKey('adventure-option-C')));
+      await press(t, find.text('Next Challenge'));
+      await capture('pictures');
+      // The speaker inside a picture card previews audio without choosing it
+      // or unlocking the answer before the requested sound has been heard.
+      await hear(t, audio, adventureWordKey('Cow'));
+      expect(t.widget<QuickProgress>(find.byType(QuickProgress)).completed, 3);
+      expect(
+          t
+              .widget<ElevatedButton>(
+                  find.byKey(const ValueKey('adventure-option-Cow')))
+              .onPressed,
+          isNull);
+      await hear(t, audio, 'lesson-sound-C');
+      await press(t, find.byKey(const ValueKey('adventure-option-Cow')));
+      await press(t, find.text('Next Challenge'));
+      await capture('hunt');
+      expect(t.widget<QuickProgress>(find.byType(QuickProgress)).completed, 4);
+      for (var i = 0; i < 12; i++) {
+        final button = t.widget<FilledButton>(find.byKey(ValueKey('hunt-$i')));
+        if ((button.child! as Text).data!.toUpperCase() == 'C') {
+          await press(t, find.byKey(ValueKey('hunt-$i')));
+        }
+      }
+      expect(t.widget<QuickProgress>(find.byType(QuickProgress)).completed, 5);
+      await press(t, find.text('See Result'));
+      expect(find.text('Score: 4 / 5'), findsOneWidget);
+      await capture('result');
+      expect(t.takeException(), isNull);
+      await t.pumpWidget(const SizedBox());
+      await flushAdventure(t);
+      p.dispose();
+    });
+  }
+}

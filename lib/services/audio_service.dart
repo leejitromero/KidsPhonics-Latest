@@ -74,7 +74,7 @@ class AudioService {
       if (!isCurrent()) return;
       await _tapPlayer.stop();
       if (!isCurrent()) return;
-      await _tapPlayer.play(AssetSource('audio/button_click.wav'));
+      await _tapPlayer.play(AssetSource('audio/button_click.wav'), volume: .3);
       if (!isCurrent()) await _tapPlayer.stop();
     }).catchError((Object _) {
       // An unavailable audio device must never prevent a button action.

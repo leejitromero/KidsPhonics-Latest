@@ -36,7 +36,7 @@ class TrickyLettersScreen extends StatelessWidget {
             border: Border.all(color: const Color(0xFFC0E1F0)),
           ),
           child: Row(children: [
-            Image.asset('assets/images/lesson_logos/tricky_letters.png',
+            Image.asset('assets/images/lesson_logos/tricky_letters.webp',
                 width: 64, height: 64, cacheWidth: 192),
             const SizedBox(width: 10),
             Expanded(

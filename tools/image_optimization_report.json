@@ -1,0 +1,2546 @@
+{
+  "codec": "lossless WebP",
+  "count": 317,
+  "originalBytes": 339656287,
+  "optimizedBytes": 230208642,
+  "savedBytes": 109447645,
+  "allPixelsIdentical": true,
+  "images": [
+    {
+      "original": "assets/images/answer_choices/frame-1.png",
+      "optimized": "assets/images/answer_choices/frame-1.webp",
+      "originalBytes": 954228,
+      "optimizedBytes": 635516,
+      "rgbaSHA256": "f8d830621c4027dc9301a7f30f60143c4c567c457592a9bb1ea235d49da52704",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/answer_choices/frame-2.png",
+      "optimized": "assets/images/answer_choices/frame-2.webp",
+      "originalBytes": 863551,
+      "optimizedBytes": 554952,
+      "rgbaSHA256": "2c828cec2cff297cc053a6579a475455ad26b0296710898d5fe2a8abf594ba64",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/answer_choices/frame-3.png",
+      "optimized": "assets/images/answer_choices/frame-3.webp",
+      "originalBytes": 889416,
+      "optimizedBytes": 574714,
+      "rgbaSHA256": "c0da70ecfd0dad3e8c2144f042546a0b3b71208f5282cde7e5c11556f7ff2b3a",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/answer_choices/frame-4.png",
+      "optimized": "assets/images/answer_choices/frame-4.webp",
+      "originalBytes": 952548,
+      "optimizedBytes": 610916,
+      "rgbaSHA256": "630ee76a5e11fd3fab05d7703a609b6a506fd424b4eb6d9734a86837acc64ba1",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/button_designs/next_button_1.png",
+      "optimized": "assets/images/button_designs/next_button_1.webp",
+      "originalBytes": 885119,
+      "optimizedBytes": 580768,
+      "rgbaSHA256": "61726934fa81a694f33235362964c15d6481371680b7cf29420b7f9952b8907b",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/button_designs/next_button_2.png",
+      "optimized": "assets/images/button_designs/next_button_2.webp",
+      "originalBytes": 888257,
+      "optimizedBytes": 596338,
+      "rgbaSHA256": "03c78dcadbafa01eb89e02c84995abb3f03c5f6f3d492c8fe422dec403768f93",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/button_designs/next_button_3.png",
+      "optimized": "assets/images/button_designs/next_button_3.webp",
+      "originalBytes": 824931,
+      "optimizedBytes": 531424,
+      "rgbaSHA256": "fd5fd29ceb52f42e521c9f7c084a7c6585ec853cf26876b9c86b583b2aeb3a09",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/button_designs/previous_button_1.png",
+      "optimized": "assets/images/button_designs/previous_button_1.webp",
+      "originalBytes": 888064,
+      "optimizedBytes": 599818,
+      "rgbaSHA256": "b953a12c47b662f2a168dfcee9cbbda39fa91897191a36e524217fcee8185895",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/button_designs/previous_button_2.png",
+      "optimized": "assets/images/button_designs/previous_button_2.webp",
+      "originalBytes": 914378,
+      "optimizedBytes": 605566,
+      "rgbaSHA256": "dd16340690b14a613be1546348362e997e1e7ad169eb5f674eadd275e60b23b0",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/button_designs/sound_button_1.png",
+      "optimized": "assets/images/button_designs/sound_button_1.webp",
+      "originalBytes": 1021835,
+      "optimizedBytes": 656358,
+      "rgbaSHA256": "262ff8ed5808395ac54e1cd3e91cbc14f669453e09c34ef7d1b017709b0bc8dd",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/button_designs/sound_button_2.png",
+      "optimized": "assets/images/button_designs/sound_button_2.webp",
+      "originalBytes": 990641,
+      "optimizedBytes": 644500,
+      "rgbaSHA256": "4ef5faa95fb983138f472b6f4c0f742fb58597d6f87c9823d1232065c048715e",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/button_designs/sound_button_3.png",
+      "optimized": "assets/images/button_designs/sound_button_3.webp",
+      "originalBytes": 1078519,
+      "optimizedBytes": 704866,
+      "rgbaSHA256": "42dfd6d2534d8646b8ab9ab1f5286992cb7cfbff99802ebdd238c1257ce75732",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/bag.png",
+      "optimized": "assets/images/cvc_blending/bag.webp",
+      "originalBytes": 1452175,
+      "optimizedBytes": 1022994,
+      "rgbaSHA256": "bc8c382e5c6bfa64d6f5e9bde07c05d2132ac36f1bfee3e0a29860e9c9fc8caf",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/bat.png",
+      "optimized": "assets/images/cvc_blending/bat.webp",
+      "originalBytes": 1226095,
+      "optimizedBytes": 774250,
+      "rgbaSHA256": "214b296b0a187a908c9d1a349e1fe24a04b1fde6693084a8f51ffc3ed646f397",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/bed.png",
+      "optimized": "assets/images/cvc_blending/bed.webp",
+      "originalBytes": 1042054,
+      "optimizedBytes": 711408,
+      "rgbaSHA256": "c7cfa7597a767375bd1d662e4ab61472a7be132d70043f1b30bc0dcaf32c3140",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/box.png",
+      "optimized": "assets/images/cvc_blending/box.webp",
+      "originalBytes": 965205,
+      "optimizedBytes": 624124,
+      "rgbaSHA256": "c93dd0d8370ac2b1892269e443c72a75b70b6cda2c9b943e9532c805ae13994b",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/bug.png",
+      "optimized": "assets/images/cvc_blending/bug.webp",
+      "originalBytes": 1028365,
+      "optimizedBytes": 668488,
+      "rgbaSHA256": "68eb1ecd3a829232af73b7dc61e25eae8d6a6b2c91d0005ef3df9b0c3ee2306e",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/bus.png",
+      "optimized": "assets/images/cvc_blending/bus.webp",
+      "originalBytes": 1224001,
+      "optimizedBytes": 866048,
+      "rgbaSHA256": "d43f28ea40def436ad96c238754cce186a1a6dbf44aef265bbef067988f1bc9f",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/cap.png",
+      "optimized": "assets/images/cvc_blending/cap.webp",
+      "originalBytes": 907436,
+      "optimizedBytes": 582486,
+      "rgbaSHA256": "26dbff485ec3f5b4a60ea9901a7f354af5ca4d5471ffe9e6adf10b9b133511a5",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/cat.png",
+      "optimized": "assets/images/cvc_blending/cat.webp",
+      "originalBytes": 1535676,
+      "optimizedBytes": 1039912,
+      "rgbaSHA256": "ed1428e552ecaf811df821401c83a67e5a8528bb702a2fa5f8db4fadedcc4f01",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/cup.png",
+      "optimized": "assets/images/cvc_blending/cup.webp",
+      "originalBytes": 821426,
+      "optimizedBytes": 533598,
+      "rgbaSHA256": "135430b438f220ccd69ff3ba5993839700aaef744608eaeab0b8e4c709a5ef67",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/dig.png",
+      "optimized": "assets/images/cvc_blending/dig.webp",
+      "originalBytes": 891911,
+      "optimizedBytes": 602708,
+      "rgbaSHA256": "91a5673aba7ec03ff9f2bcd11db3b3fabeef21b6fe6e86e09162676cc3aa1b8d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/dog.png",
+      "optimized": "assets/images/cvc_blending/dog.webp",
+      "originalBytes": 1442799,
+      "optimizedBytes": 966500,
+      "rgbaSHA256": "fc379d8e726683ccb6c921c3ad54d94d324f6bd03d89a835590105d5f1b0f50a",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/fan.png",
+      "optimized": "assets/images/cvc_blending/fan.webp",
+      "originalBytes": 1232632,
+      "optimizedBytes": 864594,
+      "rgbaSHA256": "58223db42b7f22484efb64c2312431dde57b38fe0850312117bb88292e3334c2",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/hat.png",
+      "optimized": "assets/images/cvc_blending/hat.webp",
+      "originalBytes": 840815,
+      "optimizedBytes": 554340,
+      "rgbaSHA256": "9efcc487ee96251281f0d0005af6ad55ca07db7362386c5609be2a02c36b27d6",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/hen.png",
+      "optimized": "assets/images/cvc_blending/hen.webp",
+      "originalBytes": 1113559,
+      "optimizedBytes": 757762,
+      "rgbaSHA256": "7f8f2fa9d1a472cd29225abca1723caf9778660eaa3c32fc000dce01ddbdc9b1",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/hut.png",
+      "optimized": "assets/images/cvc_blending/hut.webp",
+      "originalBytes": 1602677,
+      "optimizedBytes": 1105220,
+      "rgbaSHA256": "0510c3e0afc52aca466385a0a9c7bf24821ede87be11be91d701f8c382fb4820",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/jet.png",
+      "optimized": "assets/images/cvc_blending/jet.webp",
+      "originalBytes": 858707,
+      "optimizedBytes": 593832,
+      "rgbaSHA256": "8d80d8004b5465ef2f919198204d7e42d6ff0c058a2bd4dbeb6db45e81d7eb24",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/leg.png",
+      "optimized": "assets/images/cvc_blending/leg.webp",
+      "originalBytes": 297478,
+      "optimizedBytes": 188450,
+      "rgbaSHA256": "e7c7da2ce27f115f521b9aff38b3b3b351d9ed29fbd95a6df6cd6321e7ac5185",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/lip.png",
+      "optimized": "assets/images/cvc_blending/lip.webp",
+      "originalBytes": 326195,
+      "optimizedBytes": 214552,
+      "rgbaSHA256": "fb7541a9a8b6a99bc1801de65407037ae92b0c582e0b3fd162c641fd80314b22",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/log.png",
+      "optimized": "assets/images/cvc_blending/log.webp",
+      "originalBytes": 475898,
+      "optimizedBytes": 329318,
+      "rgbaSHA256": "193f9e537c78d8200b4f26e2e3b1fe21481e78c13d6428aadb5c43cea97af495",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/map.png",
+      "optimized": "assets/images/cvc_blending/map.webp",
+      "originalBytes": 1233569,
+      "optimizedBytes": 883278,
+      "rgbaSHA256": "b47e0c803150cf3ec0a79a0806c87112fdbcb2501a867bdcf0713c9f7a5bcc1c",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/mop.png",
+      "optimized": "assets/images/cvc_blending/mop.webp",
+      "originalBytes": 329723,
+      "optimizedBytes": 214138,
+      "rgbaSHA256": "d1ef7c2b5d4a65743570a14a44caac7fcd89228a47e644c963d6f36f9c337851",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/mug.png",
+      "optimized": "assets/images/cvc_blending/mug.webp",
+      "originalBytes": 373211,
+      "optimizedBytes": 251306,
+      "rgbaSHA256": "f1cdd5129e390a87ffd807cec8d0ea440c54e8b587a6ef9ef0e4976d954a2c4b",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/net.png",
+      "optimized": "assets/images/cvc_blending/net.webp",
+      "originalBytes": 933556,
+      "optimizedBytes": 626766,
+      "rgbaSHA256": "f911b8975f728ffb415c07f2c55079f16bce88712500d435df633a7d35681603",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/nut.png",
+      "optimized": "assets/images/cvc_blending/nut.webp",
+      "originalBytes": 446861,
+      "optimizedBytes": 295458,
+      "rgbaSHA256": "5fb9ff821f83b3d3be332e00c5ae17641c0ccb4061b2b68527a9ab0405c00156",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/pan.png",
+      "optimized": "assets/images/cvc_blending/pan.webp",
+      "originalBytes": 420870,
+      "optimizedBytes": 269152,
+      "rgbaSHA256": "174fcd969bb432abe52fefe2255bebd53fcd949c01a7a3fe55f329caa4c3dfc2",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/pen.png",
+      "optimized": "assets/images/cvc_blending/pen.webp",
+      "originalBytes": 552378,
+      "optimizedBytes": 353734,
+      "rgbaSHA256": "af6be91449f6343e6366c0d566953aa4999ce62b023eab7dad0002a2a752a315",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/pig.png",
+      "optimized": "assets/images/cvc_blending/pig.webp",
+      "originalBytes": 467197,
+      "optimizedBytes": 297010,
+      "rgbaSHA256": "2f92274e7c41f5fbbee7f53fd8493f0efb32f75a6fdd054f95211d19bef20c65",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/pin.png",
+      "optimized": "assets/images/cvc_blending/pin.webp",
+      "originalBytes": 301797,
+      "optimizedBytes": 188866,
+      "rgbaSHA256": "a9fca4e581b797a63e1870a923e6a03073212dfe64bf0cfce9bddd75ac42bf9d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/pot.png",
+      "optimized": "assets/images/cvc_blending/pot.webp",
+      "originalBytes": 406472,
+      "optimizedBytes": 272900,
+      "rgbaSHA256": "bf02aa15a83fe20586b94f441136792e996d3e27d4aaae575c3b8c50f946cee1",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/red.png",
+      "optimized": "assets/images/cvc_blending/red.webp",
+      "originalBytes": 712138,
+      "optimizedBytes": 441578,
+      "rgbaSHA256": "e0bbac11611349c81e8e3224c5bfa0d91b9237d7aa97f7b2351f3b1d7bd9703c",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/rug.png",
+      "optimized": "assets/images/cvc_blending/rug.webp",
+      "originalBytes": 544341,
+      "optimizedBytes": 391240,
+      "rgbaSHA256": "99602126f7a1e03144b5caf0f5406ed3d8ce42a24baeea6facfb91cae114bc32",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/run.png",
+      "optimized": "assets/images/cvc_blending/run.webp",
+      "originalBytes": 960111,
+      "optimizedBytes": 626784,
+      "rgbaSHA256": "6c577c20b9f03b76084eec7d336877a0d58a1bdfaad17e382b8fbc81debf85b2",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/sit.png",
+      "optimized": "assets/images/cvc_blending/sit.webp",
+      "originalBytes": 1237612,
+      "optimizedBytes": 836712,
+      "rgbaSHA256": "e2998be007f4a9fc196a0782f0541e3b3b49cb42b4a9789869094b567727a4d1",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/sun.png",
+      "optimized": "assets/images/cvc_blending/sun.webp",
+      "originalBytes": 1223314,
+      "optimizedBytes": 792454,
+      "rgbaSHA256": "371c9dabc325a3a9d92893c90032e15c271a01cac29cfc16f7a740c2b33fca66",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/ten.png",
+      "optimized": "assets/images/cvc_blending/ten.webp",
+      "originalBytes": 1207082,
+      "optimizedBytes": 821988,
+      "rgbaSHA256": "659d4302ae25a050cc633da3f731fbad71e02001fc6a69898645ffa7d6cd8ada",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/top.png",
+      "optimized": "assets/images/cvc_blending/top.webp",
+      "originalBytes": 1008857,
+      "optimizedBytes": 668402,
+      "rgbaSHA256": "17b410b19856a787e11bf375d6408a4097b28093cc2bf66aeb53b7d663f237e1",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/van.png",
+      "optimized": "assets/images/cvc_blending/van.webp",
+      "originalBytes": 487156,
+      "optimizedBytes": 331334,
+      "rgbaSHA256": "31cd6a6dabea8d9fb35174f8a4ca0411a9bb7ba856ccabcbe33b49ff512cc398",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/web.png",
+      "optimized": "assets/images/cvc_blending/web.webp",
+      "originalBytes": 473487,
+      "optimizedBytes": 325108,
+      "rgbaSHA256": "447da7eb63d70c642c52673789226285e03ef3a7db5f43c09b631c0a79cd7036",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/cvc_blending/wig.png",
+      "optimized": "assets/images/cvc_blending/wig.webp",
+      "originalBytes": 465756,
+      "optimizedBytes": 307244,
+      "rgbaSHA256": "86aee235a6b76715fd46fcdaf914123b9528c6e7c02da4374e4be9208cd6ae65",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_logos/alphabet_order.png",
+      "optimized": "assets/images/game_logos/alphabet_order.webp",
+      "originalBytes": 1115823,
+      "optimizedBytes": 789874,
+      "rgbaSHA256": "90665b437a64e9c28207514e92bda82a116ec8f616406f3cb3ef29be54e940f8",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_logos/flappy_letters.png",
+      "optimized": "assets/images/game_logos/flappy_letters.webp",
+      "originalBytes": 1198443,
+      "optimizedBytes": 839398,
+      "rgbaSHA256": "bafd4e5b6b6fda88f7bf6086728b71750269e11de235b7dbd6b662bb47ef0bd2",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_logos/memory_flip.png",
+      "optimized": "assets/images/game_logos/memory_flip.webp",
+      "originalBytes": 1122026,
+      "optimizedBytes": 776250,
+      "rgbaSHA256": "2b9eb253e3b0ba3321308ff8733f6645288cb1403048423017f0ca8a5da7d251",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_logos/missing_vowel.png",
+      "optimized": "assets/images/game_logos/missing_vowel.webp",
+      "originalBytes": 1261993,
+      "optimizedBytes": 897072,
+      "rgbaSHA256": "ac647c3cba61f22d8bf42abf9982fe10083e918e76d5d144d4f5775f22d27c62",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_logos/phonics_quiz.png",
+      "optimized": "assets/images/game_logos/phonics_quiz.webp",
+      "originalBytes": 1203494,
+      "optimizedBytes": 826230,
+      "rgbaSHA256": "856a9a9317db4fc74492ef94c730ff02a1784215667410fc606b68f7a15448a9",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_logos/picture_match.png",
+      "optimized": "assets/images/game_logos/picture_match.webp",
+      "originalBytes": 1162905,
+      "optimizedBytes": 816324,
+      "rgbaSHA256": "0650b790a2cfe8d4b65e3a9c3544acd1234352de990bcbcacfef67d61e853cab",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_logos/rumbled_words.png",
+      "optimized": "assets/images/game_logos/rumbled_words.webp",
+      "originalBytes": 1723483,
+      "optimizedBytes": 1250806,
+      "rgbaSHA256": "15ea870065891683cb12a28b763739ab80f350a9dfce7e8e050d087b326eb368",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_logos/sound_match.png",
+      "optimized": "assets/images/game_logos/sound_match.webp",
+      "originalBytes": 1325560,
+      "optimizedBytes": 932380,
+      "rgbaSHA256": "af19bfb1301dbb178dcc0b9169d163912ff65aea3a4604e2b1c8b9c5b561f62d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_logos/speak_and_recognize.png",
+      "optimized": "assets/images/game_logos/speak_and_recognize.webp",
+      "originalBytes": 1297474,
+      "optimizedBytes": 901024,
+      "rgbaSHA256": "45c8f709aa15323693ebfb64af80248b901293b688a4ebc4be72bd6ec531c048",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_logos/word_builder.png",
+      "optimized": "assets/images/game_logos/word_builder.webp",
+      "originalBytes": 1323684,
+      "optimizedBytes": 923264,
+      "rgbaSHA256": "8925ebf678d1977b1453f0515dc1a0459f94372bb08968652b18864ace7efefa",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/airplane-0.png",
+      "optimized": "assets/images/game_words/airplane-0.webp",
+      "originalBytes": 1132745,
+      "optimizedBytes": 758880,
+      "rgbaSHA256": "76bbf1a9ae6b80e1bb80432a23d231b44dc7c3d2b0de39b2b4a5c8aca754877b",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/airplane-1.png",
+      "optimized": "assets/images/game_words/airplane-1.webp",
+      "originalBytes": 1190954,
+      "optimizedBytes": 794474,
+      "rgbaSHA256": "444da1179be11a2ce40596ed5193e224f1c4102594ccf9f9694eb51249d2b5c8",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/apple-0.png",
+      "optimized": "assets/images/game_words/apple-0.webp",
+      "originalBytes": 1149835,
+      "optimizedBytes": 763706,
+      "rgbaSHA256": "2911a9f95779d8b8b4cd18cb524af9e88a5e6000641e936db9439bea5e1c536a",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/apple-1.png",
+      "optimized": "assets/images/game_words/apple-1.webp",
+      "originalBytes": 1133221,
+      "optimizedBytes": 749972,
+      "rgbaSHA256": "34c8e978f74fc9836aa164ec8e87268d2122c6df08c88c80243fc1c9c014f7f0",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/axe-0.png",
+      "optimized": "assets/images/game_words/axe-0.webp",
+      "originalBytes": 941638,
+      "optimizedBytes": 599774,
+      "rgbaSHA256": "60fb9d37b9de38d053ea23d6f70297b7512be2688f1c7c32ff04be0c4505ca4e",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/bag-0.png",
+      "optimized": "assets/images/game_words/bag-0.webp",
+      "originalBytes": 1132787,
+      "optimizedBytes": 785000,
+      "rgbaSHA256": "9efcab7462e696a6de6fc2db2758cb67d696b2ef8a904593e8ab4137ab6e3eb6",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/bag-1.png",
+      "optimized": "assets/images/game_words/bag-1.webp",
+      "originalBytes": 1150270,
+      "optimizedBytes": 769986,
+      "rgbaSHA256": "04c7683beec70bf47bf92f161577a1b77e405fd65f44a0cb75f41f7746b8a3ff",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/book-0.png",
+      "optimized": "assets/images/game_words/book-0.webp",
+      "originalBytes": 923491,
+      "optimizedBytes": 621398,
+      "rgbaSHA256": "139a80c568932b250baea15a469db0549264d9155adb335dacfdbbccc0d241ca",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/book-1.png",
+      "optimized": "assets/images/game_words/book-1.webp",
+      "originalBytes": 953187,
+      "optimizedBytes": 634002,
+      "rgbaSHA256": "d15dd7deef4d858ed0cb2c34fdeba2491a25835d868ea31e7c57990e30c41197",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/bottle-0.png",
+      "optimized": "assets/images/game_words/bottle-0.webp",
+      "originalBytes": 784984,
+      "optimizedBytes": 536048,
+      "rgbaSHA256": "72b8a0706f9f0b23fcc5a76d6e0d997e2a5e92f8948105d393bed01e57e37ff4",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/bottle-1.png",
+      "optimized": "assets/images/game_words/bottle-1.webp",
+      "originalBytes": 773148,
+      "optimizedBytes": 529196,
+      "rgbaSHA256": "7ff1df827f52614c945534bbccf60e5e424f9dab5843e453bc190ac0280b30ae",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/chicken-0.png",
+      "optimized": "assets/images/game_words/chicken-0.webp",
+      "originalBytes": 921174,
+      "optimizedBytes": 599926,
+      "rgbaSHA256": "1c264a8cc3e86405e4097cd01362f254d796f333ae1f90f14bad53f39f10825c",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/chicken-1.png",
+      "optimized": "assets/images/game_words/chicken-1.webp",
+      "originalBytes": 905475,
+      "optimizedBytes": 586014,
+      "rgbaSHA256": "5de258393a5fa5dcc5c4600a20f4d3039fe23f58d7154cdd714095637b5eb79d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/corn-0.png",
+      "optimized": "assets/images/game_words/corn-0.webp",
+      "originalBytes": 1067432,
+      "optimizedBytes": 728180,
+      "rgbaSHA256": "d94eaf320301a72036002d60ca5706b091a93ad198105b72c30af5dc164d22ad",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/corn-1.png",
+      "optimized": "assets/images/game_words/corn-1.webp",
+      "originalBytes": 1067031,
+      "optimizedBytes": 721928,
+      "rgbaSHA256": "7c220395ddd9621451f23444945f84e6782170cf08ed9880d8655af6f3a538e4",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/cow-0.png",
+      "optimized": "assets/images/game_words/cow-0.webp",
+      "originalBytes": 975054,
+      "optimizedBytes": 610746,
+      "rgbaSHA256": "f43c9e975f383430ec1c52359d7fb919e741da9524073951251aba655e0fbbfb",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/cow-1.png",
+      "optimized": "assets/images/game_words/cow-1.webp",
+      "originalBytes": 968510,
+      "optimizedBytes": 609060,
+      "rgbaSHA256": "a075c23d95931bcbb0b500de5bf3cd10026ca8b5bca03751408fdcbabdb8553b",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/dog-0.png",
+      "optimized": "assets/images/game_words/dog-0.webp",
+      "originalBytes": 1159542,
+      "optimizedBytes": 746516,
+      "rgbaSHA256": "3ae19304f40bc6f0cd5b1054df884178a1fb3cf3e2a8347db35525fba80fbc78",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/dog-1.png",
+      "optimized": "assets/images/game_words/dog-1.webp",
+      "originalBytes": 1100745,
+      "optimizedBytes": 709730,
+      "rgbaSHA256": "8a46054eb169d30cdbb8c7fe8898f1919b553bf0ff81962729efb9137a048b17",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/donkey-0.png",
+      "optimized": "assets/images/game_words/donkey-0.webp",
+      "originalBytes": 912153,
+      "optimizedBytes": 549410,
+      "rgbaSHA256": "9ab8a7dc7a303fcb0cf1722663670ab400fbd1375986a097d35ea3a9ff744ce4",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/donkey-1.png",
+      "optimized": "assets/images/game_words/donkey-1.webp",
+      "originalBytes": 1035729,
+      "optimizedBytes": 627244,
+      "rgbaSHA256": "b0ce2292e3b9aa78fcf9d68cc2d762682af84306b2c0edeef9cb319e1f3f4335",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/door-0.png",
+      "optimized": "assets/images/game_words/door-0.webp",
+      "originalBytes": 1153403,
+      "optimizedBytes": 779296,
+      "rgbaSHA256": "d8a2470495db6ac14d09013e093c9d1e006dc06bdcf82a4481c20b3b6e0417b0",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/door-1.png",
+      "optimized": "assets/images/game_words/door-1.webp",
+      "originalBytes": 1106885,
+      "optimizedBytes": 749840,
+      "rgbaSHA256": "c0c63acad6ace19a6241af6e0a5003583829acc79c35203396664845e2c405e3",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/ear-0.png",
+      "optimized": "assets/images/game_words/ear-0.webp",
+      "originalBytes": 737847,
+      "optimizedBytes": 457458,
+      "rgbaSHA256": "42da1690faa80086790d8bd2a56fd276c92515d069936752917fe8bba704f8cc",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/ear-1.png",
+      "optimized": "assets/images/game_words/ear-1.webp",
+      "originalBytes": 748854,
+      "optimizedBytes": 466356,
+      "rgbaSHA256": "b95d2f9d65280e5ff4656219a1a6f3ad8a34583903ed3a0585f50d7e74261ed7",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/eggplant-0.png",
+      "optimized": "assets/images/game_words/eggplant-0.webp",
+      "originalBytes": 840823,
+      "optimizedBytes": 519732,
+      "rgbaSHA256": "01873b659e0e9beb11e3e1e1fed88daca4aa292270396827261cb99ab91f6788",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/eggplant-1.png",
+      "optimized": "assets/images/game_words/eggplant-1.webp",
+      "originalBytes": 736619,
+      "optimizedBytes": 460756,
+      "rgbaSHA256": "f7bb43a50944922c9b4f8d7c895631d9091fbdb22ae0e919266327aeee56825f",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/elephant-0.png",
+      "optimized": "assets/images/game_words/elephant-0.webp",
+      "originalBytes": 1147023,
+      "optimizedBytes": 721938,
+      "rgbaSHA256": "325d00138e17630c686f0aa63780fa041971e8aa52b6a2108c5096ba8e145ec4",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/elephant-1.png",
+      "optimized": "assets/images/game_words/elephant-1.webp",
+      "originalBytes": 1152032,
+      "optimizedBytes": 724048,
+      "rgbaSHA256": "1e7f292ad394dd60c53b1eaa787c025fb60482ebd6899015f4af6c0a561c505f",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/fairy-0.png",
+      "optimized": "assets/images/game_words/fairy-0.webp",
+      "originalBytes": 1230225,
+      "optimizedBytes": 865132,
+      "rgbaSHA256": "c5d8e050b11fb70714989acc79818f3e8471b7eed83e1d46fbf28fd34468fa13",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/fairy-1.png",
+      "optimized": "assets/images/game_words/fairy-1.webp",
+      "originalBytes": 1192160,
+      "optimizedBytes": 839560,
+      "rgbaSHA256": "5b563838818a220f364e8847748a7ba0a73221d7841c58cb9c7f937883a3761a",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/fan-0.png",
+      "optimized": "assets/images/game_words/fan-0.webp",
+      "originalBytes": 1292958,
+      "optimizedBytes": 913068,
+      "rgbaSHA256": "a90f49c10c6f2d421bec5ac5e5ef8fd5c2ac50c2b24b84c42b157eebc61debc3",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/fan-1.png",
+      "optimized": "assets/images/game_words/fan-1.webp",
+      "originalBytes": 1322251,
+      "optimizedBytes": 928038,
+      "rgbaSHA256": "11e2034288c31e95fb2180679c2809c9ac9c3c83d8ffb4b5cb7b764d9015dfc3",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/frog-0.png",
+      "optimized": "assets/images/game_words/frog-0.webp",
+      "originalBytes": 808899,
+      "optimizedBytes": 539668,
+      "rgbaSHA256": "257307cf1c97172419e9bd3c41bfe5cd2dcca1d498e016b9d9faeeb990a1066d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/frog-1.png",
+      "optimized": "assets/images/game_words/frog-1.webp",
+      "originalBytes": 809719,
+      "optimizedBytes": 538632,
+      "rgbaSHA256": "c15b217f688600fbc60ee985d81f0178ce722a309ef1042bbcf66a05b673ef6c",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/goat-0.png",
+      "optimized": "assets/images/game_words/goat-0.webp",
+      "originalBytes": 1052276,
+      "optimizedBytes": 678234,
+      "rgbaSHA256": "aedc5c896100c9d52bcbfb0eac8d7a71272fd2e3fa7484663b2ac0109e490075",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/goat-1.png",
+      "optimized": "assets/images/game_words/goat-1.webp",
+      "originalBytes": 1067248,
+      "optimizedBytes": 692742,
+      "rgbaSHA256": "b1f28cb67b4acc7b0a5f41edbe148227dc67361bd57e7e34fb83d63dcf65f1ec",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/gorilla-0.png",
+      "optimized": "assets/images/game_words/gorilla-0.webp",
+      "originalBytes": 1042390,
+      "optimizedBytes": 639634,
+      "rgbaSHA256": "0c3e5dff2b1f6a11f531e9460bd7241eaabedfb8cf9fe7466e100936ece01090",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/gorilla-1.png",
+      "optimized": "assets/images/game_words/gorilla-1.webp",
+      "originalBytes": 1035905,
+      "optimizedBytes": 633732,
+      "rgbaSHA256": "b39c67fd996c7385e8f6148894d6dcdeebbe9359b342bd27a19034f456454a5d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/grapes-0.png",
+      "optimized": "assets/images/game_words/grapes-0.webp",
+      "originalBytes": 1046917,
+      "optimizedBytes": 685742,
+      "rgbaSHA256": "e88a023b6168538c52bfd1471ca9dd03ed30b6bc279c8a09b0fceb8ed043969d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/grapes-1.png",
+      "optimized": "assets/images/game_words/grapes-1.webp",
+      "originalBytes": 1043813,
+      "optimizedBytes": 679066,
+      "rgbaSHA256": "6c80a8e7ee4d988e17d212a6625422370763466885bcad9678d5efccbad1e3f8",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/hand-0.png",
+      "optimized": "assets/images/game_words/hand-0.webp",
+      "originalBytes": 957849,
+      "optimizedBytes": 639780,
+      "rgbaSHA256": "dc3876c4d4166ded3275cb268080b56514cfbc30060b69a32abc76346b7596f2",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/hand-1.png",
+      "optimized": "assets/images/game_words/hand-1.webp",
+      "originalBytes": 1065611,
+      "optimizedBytes": 720824,
+      "rgbaSHA256": "9bc3af6562ef82255c5c9c56e0d045a1f10534c8c699017168caafdeb3f8eb12",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/heart-0.png",
+      "optimized": "assets/images/game_words/heart-0.webp",
+      "originalBytes": 889500,
+      "optimizedBytes": 564562,
+      "rgbaSHA256": "6fdbaf1374d7a905a6b63fc876ae04ff02302e3e96f5a6416e02cca7d90212df",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/heart-1.png",
+      "optimized": "assets/images/game_words/heart-1.webp",
+      "originalBytes": 904010,
+      "optimizedBytes": 574306,
+      "rgbaSHA256": "ed0a9a14671dd29718ecc012fb4535ea7310849ab10d77d75a53ad9f196da1ff",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/house-0.png",
+      "optimized": "assets/images/game_words/house-0.webp",
+      "originalBytes": 1167260,
+      "optimizedBytes": 769958,
+      "rgbaSHA256": "44324cfa3c603d77a6e3ee19140ce6cd5c1c07c39776058211e0a88d79676c1d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/house-1.png",
+      "optimized": "assets/images/game_words/house-1.webp",
+      "originalBytes": 1175396,
+      "optimizedBytes": 778604,
+      "rgbaSHA256": "dbdc16c0a89ef3abe7bc185df1c1898a7328ca9f6c95fd3bf3fb9b6b1b944fb8",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/ice-0.png",
+      "optimized": "assets/images/game_words/ice-0.webp",
+      "originalBytes": 1133698,
+      "optimizedBytes": 784942,
+      "rgbaSHA256": "d76c557af972607a00df69130e6a9a2b004dcbbaca543842b023c8c1fd29cad5",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/ice-1.png",
+      "optimized": "assets/images/game_words/ice-1.webp",
+      "originalBytes": 1092456,
+      "optimizedBytes": 759792,
+      "rgbaSHA256": "fc7ac6a2f4abdaa8353fcdba37b04915d16243f1d3454c03b39d4f6e010f14d9",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/ice_cream-0.png",
+      "optimized": "assets/images/game_words/ice_cream-0.webp",
+      "originalBytes": 994612,
+      "optimizedBytes": 657862,
+      "rgbaSHA256": "a0e04c1280b55da52e9eb707b7274298769fd0f6f5cd21186c72e5e341beed72",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/ice_cream-1.png",
+      "optimized": "assets/images/game_words/ice_cream-1.webp",
+      "originalBytes": 998773,
+      "optimizedBytes": 657486,
+      "rgbaSHA256": "4270fefa7b276f66f49a3932951f2b37cdbb97e0799efaf3a3d8906994518acf",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/island-0.png",
+      "optimized": "assets/images/game_words/island-0.webp",
+      "originalBytes": 1126868,
+      "optimizedBytes": 813788,
+      "rgbaSHA256": "8d50f27216e5446ed8951db50cc0d164f031f8be43cd6992cb69ac1f52e49827",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/island-1.png",
+      "optimized": "assets/images/game_words/island-1.webp",
+      "originalBytes": 1113212,
+      "optimizedBytes": 800432,
+      "rgbaSHA256": "cb34c0e4e51080cc72a5d050c0cb0f441a181634a3f9ce77f3797a059c8f9684",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/jacket-0.png",
+      "optimized": "assets/images/game_words/jacket-0.webp",
+      "originalBytes": 1247718,
+      "optimizedBytes": 848164,
+      "rgbaSHA256": "84849b884f88521b7e580ac1f724d1eb77f7e4889d8e8883e79f59cd1369a8bb",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/jacket-1.png",
+      "optimized": "assets/images/game_words/jacket-1.webp",
+      "originalBytes": 1260393,
+      "optimizedBytes": 872542,
+      "rgbaSHA256": "e792b898ce4f70fd51febc07175b55df22fa2cdb59ea60c1c9717be3c1042c45",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/jar-0.png",
+      "optimized": "assets/images/game_words/jar-0.webp",
+      "originalBytes": 1194692,
+      "optimizedBytes": 808440,
+      "rgbaSHA256": "e6aa6237cb9bcf84d29fca592b9d36b9b863e9c99171c5bdc4a52fa2001df6e4",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/jar-1.png",
+      "optimized": "assets/images/game_words/jar-1.webp",
+      "originalBytes": 1213457,
+      "optimizedBytes": 819254,
+      "rgbaSHA256": "0f1c9148eb7f2834440815d343c9ddabda6e30092eb0ebad7155ff35ca24789b",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/jellyfish-0.png",
+      "optimized": "assets/images/game_words/jellyfish-0.webp",
+      "originalBytes": 1355098,
+      "optimizedBytes": 906532,
+      "rgbaSHA256": "944e4ecc9bc8337f9bec5cf0002f294db13bf6a611b639580a9dca11160b3843",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/jellyfish-1.png",
+      "optimized": "assets/images/game_words/jellyfish-1.webp",
+      "originalBytes": 1314073,
+      "optimizedBytes": 873486,
+      "rgbaSHA256": "9f0c37eb5092e0bc2db876e61c7a9fb1824d8f7d666ca67da90d7e6b4737427c",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/kangaroo-0.png",
+      "optimized": "assets/images/game_words/kangaroo-0.webp",
+      "originalBytes": 816352,
+      "optimizedBytes": 522188,
+      "rgbaSHA256": "f57e23bcf052d0f8b6a4b409b552e13b61d201e383621e69d268c20e18283e38",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/kangaroo-1.png",
+      "optimized": "assets/images/game_words/kangaroo-1.webp",
+      "originalBytes": 824944,
+      "optimizedBytes": 530958,
+      "rgbaSHA256": "28a03220e203afba56a06cfc67f2d855759a3c58f7e9fc28e662365b82669a0d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/key-0.png",
+      "optimized": "assets/images/game_words/key-0.webp",
+      "originalBytes": 894380,
+      "optimizedBytes": 617564,
+      "rgbaSHA256": "cd90ce3c22da56d35dd21a8614c9f2c5baf2e2b2a09a576fb266ecefa22ff84c",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/key-1.png",
+      "optimized": "assets/images/game_words/key-1.webp",
+      "originalBytes": 846943,
+      "optimizedBytes": 577660,
+      "rgbaSHA256": "bd48be700fd5e277c842730a92955d4ad95edc996c90f5ea6bb47d94f737c7de",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/king-0.png",
+      "optimized": "assets/images/game_words/king-0.webp",
+      "originalBytes": 1136812,
+      "optimizedBytes": 773720,
+      "rgbaSHA256": "7a8f086d21a65a01aa790562fc18fec424287817105d38217331404678a2de87",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/king-1.png",
+      "optimized": "assets/images/game_words/king-1.webp",
+      "originalBytes": 1176124,
+      "optimizedBytes": 809822,
+      "rgbaSHA256": "a77ccc9fa66220c0b3bc7626945b08b52c6ed952e4f24f419a7f1fbd1908f015",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/lamb-0.png",
+      "optimized": "assets/images/game_words/lamb-0.webp",
+      "originalBytes": 921952,
+      "optimizedBytes": 592284,
+      "rgbaSHA256": "721684c278437a6e12bddb8ab995d006dcbb03d227e38855b1e3f91b918fad05",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/lamb-1.png",
+      "optimized": "assets/images/game_words/lamb-1.webp",
+      "originalBytes": 881980,
+      "optimizedBytes": 573030,
+      "rgbaSHA256": "3ede7993b184bde3ec6e0d92a80a89bad76d7b9028087a586ce7985c7f5daff0",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/lips-0.png",
+      "optimized": "assets/images/game_words/lips-0.webp",
+      "originalBytes": 739274,
+      "optimizedBytes": 466252,
+      "rgbaSHA256": "f66c05a6954f3bb6446f119032b41c628ee0e9f03f8cbdea8d4055b781fd23cf",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/lips-1.png",
+      "optimized": "assets/images/game_words/lips-1.webp",
+      "originalBytes": 804781,
+      "optimizedBytes": 514688,
+      "rgbaSHA256": "ffb64644db612c033dbadd9bb9f27e90296ff9e28fa38349aef27a23b3dd52c5",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/lollipop-0.png",
+      "optimized": "assets/images/game_words/lollipop-0.webp",
+      "originalBytes": 1010748,
+      "optimizedBytes": 677368,
+      "rgbaSHA256": "2dd61664b1ac3fddce1ef72722a27dad743dad25664066ef81e2f14595af5abe",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/lollipop-1.png",
+      "optimized": "assets/images/game_words/lollipop-1.webp",
+      "originalBytes": 995212,
+      "optimizedBytes": 651642,
+      "rgbaSHA256": "bf72a3dce6e8b05bd95214f8826bf61bf0aa96f832cac5f776c87429d4626b0d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/mango-0.png",
+      "optimized": "assets/images/game_words/mango-0.webp",
+      "originalBytes": 1078377,
+      "optimizedBytes": 721244,
+      "rgbaSHA256": "78e0585d0cd9316aa1fa9c6af0b31b6e912b458127d21103ba8a1502d97e5384",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/mango-1.png",
+      "optimized": "assets/images/game_words/mango-1.webp",
+      "originalBytes": 1049005,
+      "optimizedBytes": 691244,
+      "rgbaSHA256": "6e2510d2575e8de14c66df3205fbbf70f2a8527917f60b9a06a6b0da3fd0a224",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/monkey-0.png",
+      "optimized": "assets/images/game_words/monkey-0.webp",
+      "originalBytes": 993176,
+      "optimizedBytes": 637696,
+      "rgbaSHA256": "625f4778c636e7a2ac2756a341008df2c2af5c7b5c3e782a98d15d1a6606eebf",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/moon-0.png",
+      "optimized": "assets/images/game_words/moon-0.webp",
+      "originalBytes": 1090646,
+      "optimizedBytes": 698666,
+      "rgbaSHA256": "1d7f873993e38467afc3346725813adaeb4a663ca5ceec711142b7c45440d95b",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/moon-1.png",
+      "optimized": "assets/images/game_words/moon-1.webp",
+      "originalBytes": 1069237,
+      "optimizedBytes": 671854,
+      "rgbaSHA256": "251c682a445849765920c5d9f0f8a5e3cb621012e43a2de2bd9c8dab385e7394",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/nest-0.png",
+      "optimized": "assets/images/game_words/nest-0.webp",
+      "originalBytes": 1558396,
+      "optimizedBytes": 1061738,
+      "rgbaSHA256": "e71f26d59711fe3ab709d6e1885b32c5dbe0d1f08a9e9b5f39dd13cde3cd8f33",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/nest-1.png",
+      "optimized": "assets/images/game_words/nest-1.webp",
+      "originalBytes": 1561153,
+      "optimizedBytes": 1058882,
+      "rgbaSHA256": "c6574895ab88983d041e1e8107a3ed5dd9917acf4c6007a85a4fa79882d6d77a",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/net-0.png",
+      "optimized": "assets/images/game_words/net-0.webp",
+      "originalBytes": 1014863,
+      "optimizedBytes": 723676,
+      "rgbaSHA256": "d4b519a0ebf7d0681b1bcc1e8e750203b77999036add50ee71203f191be0eede",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/net-1.png",
+      "optimized": "assets/images/game_words/net-1.webp",
+      "originalBytes": 959092,
+      "optimizedBytes": 651008,
+      "rgbaSHA256": "293923a70750ef741a0b7ff28a9262045690d54185641fe65e17570ab386cad5",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/notebook-0.png",
+      "optimized": "assets/images/game_words/notebook-0.webp",
+      "originalBytes": 1118424,
+      "optimizedBytes": 771416,
+      "rgbaSHA256": "49e2a1857b77e7bcd26e187b1448fee7dc40bea575a327145608a3a7b463c9cd",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/notebook-1.png",
+      "optimized": "assets/images/game_words/notebook-1.webp",
+      "originalBytes": 1136343,
+      "optimizedBytes": 784424,
+      "rgbaSHA256": "42164587ab61eccb8710246d2c1d8157ec7716d6c1ccffc32243915e05e4d921",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/octopus-0.png",
+      "optimized": "assets/images/game_words/octopus-0.webp",
+      "originalBytes": 1020301,
+      "optimizedBytes": 667068,
+      "rgbaSHA256": "f0bf6673392302f072b74ddc272befaeef17ec2a3f91a28e4d44f70fd45912cf",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/onion-0.png",
+      "optimized": "assets/images/game_words/onion-0.webp",
+      "originalBytes": 1078870,
+      "optimizedBytes": 693326,
+      "rgbaSHA256": "efb8822cc919bdf1d96b48486b88cfae4e4dd3e2d7c92dae4b0d1dc408437d20",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/onion-1.png",
+      "optimized": "assets/images/game_words/onion-1.webp",
+      "originalBytes": 1079006,
+      "optimizedBytes": 696046,
+      "rgbaSHA256": "e4949670beac77b4576299b6ebdbc4c7ec3fa06cbebed9b329fb294e72de5e57",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/orange-0.png",
+      "optimized": "assets/images/game_words/orange-0.webp",
+      "originalBytes": 1035356,
+      "optimizedBytes": 702846,
+      "rgbaSHA256": "5c9820fcbc52ef71efa965b18bd4683185c3a7f486ffb0cbf6596c7704fc68a0",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/pen-0.png",
+      "optimized": "assets/images/game_words/pen-0.webp",
+      "originalBytes": 647542,
+      "optimizedBytes": 428040,
+      "rgbaSHA256": "8e477381380088dd457639eaaa54f7f12ae9ede5a74ea84a4520ba1df21b5d63",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/pen-1.png",
+      "optimized": "assets/images/game_words/pen-1.webp",
+      "originalBytes": 612502,
+      "optimizedBytes": 405094,
+      "rgbaSHA256": "17bb3a49a253bac09f02d9fe7833b93c955e0cce5edfe992e5e1f77169a6864d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/plate-0.png",
+      "optimized": "assets/images/game_words/plate-0.webp",
+      "originalBytes": 924156,
+      "optimizedBytes": 586496,
+      "rgbaSHA256": "9b2a704e360ca25a14f7e047347c980eeb5ff03a44c0b2f9915967735eb4c7ce",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/plate-1.png",
+      "optimized": "assets/images/game_words/plate-1.webp",
+      "originalBytes": 949916,
+      "optimizedBytes": 594586,
+      "rgbaSHA256": "206e0bc393f80f7582414c3591644350472baec297993e3ba8e769b8899657aa",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/potato-0.png",
+      "optimized": "assets/images/game_words/potato-0.webp",
+      "originalBytes": 976607,
+      "optimizedBytes": 627168,
+      "rgbaSHA256": "f390977a6563d4108537e6f9b11d76718f3c8085c0f446d54f6444564d91a968",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/potato-1.png",
+      "optimized": "assets/images/game_words/potato-1.webp",
+      "originalBytes": 997254,
+      "optimizedBytes": 634744,
+      "rgbaSHA256": "339083ffba874e82978a28808efaf5726349506a3bf07c380ac1f4fbe01b6183",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/quack-0.png",
+      "optimized": "assets/images/game_words/quack-0.webp",
+      "originalBytes": 815417,
+      "optimizedBytes": 548192,
+      "rgbaSHA256": "1340ba5a84a74f71b9d91642ddf98e0c449e6a1dd08b215e52382b62a01a2b10",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/quack-1.png",
+      "optimized": "assets/images/game_words/quack-1.webp",
+      "originalBytes": 788952,
+      "optimizedBytes": 532290,
+      "rgbaSHA256": "1525989d102aec4dd11ac816a95069c81aff55b94dbb27b0353c516c64d5f484",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/queen-0.png",
+      "optimized": "assets/images/game_words/queen-0.webp",
+      "originalBytes": 945545,
+      "optimizedBytes": 650534,
+      "rgbaSHA256": "92407033a06cac76cf11bdd262ab3609dcfcc7af7c29d125fd56e581f284a48f",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/queen-1.png",
+      "optimized": "assets/images/game_words/queen-1.webp",
+      "originalBytes": 907789,
+      "optimizedBytes": 617690,
+      "rgbaSHA256": "6add2a98323f1632e3e78057e3b10e92a3f9f056e229b8b7afb1b7c1890e1bdd",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/quill-0.png",
+      "optimized": "assets/images/game_words/quill-0.webp",
+      "originalBytes": 780846,
+      "optimizedBytes": 492648,
+      "rgbaSHA256": "f1aa3ef42db301cf5d1addaddf5c8f0d9fdc4e7b9ba5d105294f3b6e4b055796",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/quill-1.png",
+      "optimized": "assets/images/game_words/quill-1.webp",
+      "originalBytes": 889027,
+      "optimizedBytes": 575898,
+      "rgbaSHA256": "de4dc8a511a92be97f691f22d935e59c505b925ddfa9c7bb1a42b80d43d5abc5",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/rabbit-0.png",
+      "optimized": "assets/images/game_words/rabbit-0.webp",
+      "originalBytes": 795624,
+      "optimizedBytes": 486210,
+      "rgbaSHA256": "cc616eae3c628f9d1f5055fc0127041eccdbd13b2d46fc9f3441b9e64dc77283",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/rabbit-1.png",
+      "optimized": "assets/images/game_words/rabbit-1.webp",
+      "originalBytes": 828653,
+      "optimizedBytes": 501824,
+      "rgbaSHA256": "84b8f9f3c868d78e0f36f64f38053fbf508edb7c5b416c557f6fa315da6c07c8",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/rooster-0.png",
+      "optimized": "assets/images/game_words/rooster-0.webp",
+      "originalBytes": 1169020,
+      "optimizedBytes": 786596,
+      "rgbaSHA256": "b3e78208960148430c8614ad58c8d9e0061564ba0213292a26467f4c0e9cdc44",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/rooster-1.png",
+      "optimized": "assets/images/game_words/rooster-1.webp",
+      "originalBytes": 1146725,
+      "optimizedBytes": 786418,
+      "rgbaSHA256": "f61a33d55a104c0277e6366b12b8261724490041c87f39c162c656faa4683043",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/rose-0.png",
+      "optimized": "assets/images/game_words/rose-0.webp",
+      "originalBytes": 1084556,
+      "optimizedBytes": 721244,
+      "rgbaSHA256": "fe808d178284aef3b598fccc241c2f8ee2d151eb476c5b34c2e729f5f96c61b2",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/rose-1.png",
+      "optimized": "assets/images/game_words/rose-1.webp",
+      "originalBytes": 1078260,
+      "optimizedBytes": 720554,
+      "rgbaSHA256": "5b7eaa3149e07a6afcad578745694796bb6c8ee71769bb4497a3cc98626c8190",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/sheep-0.png",
+      "optimized": "assets/images/game_words/sheep-0.webp",
+      "originalBytes": 921772,
+      "optimizedBytes": 584888,
+      "rgbaSHA256": "f6994d008b930ba09f7a64c26dbf1e3db6d5fd7f4df41602879849d7579c234d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/sheep-1.png",
+      "optimized": "assets/images/game_words/sheep-1.webp",
+      "originalBytes": 933495,
+      "optimizedBytes": 588450,
+      "rgbaSHA256": "b73ed1fba87bd696d4374ce13744db226bb23aa93ccfb827b39e77508f2fdd05",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/spoon-0.png",
+      "optimized": "assets/images/game_words/spoon-0.webp",
+      "originalBytes": 655812,
+      "optimizedBytes": 390824,
+      "rgbaSHA256": "17c53ad76f8232cc3f78c5f3c48146d91582f9a80913af6bc2a4f1f44039c1bb",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/spoon-1.png",
+      "optimized": "assets/images/game_words/spoon-1.webp",
+      "originalBytes": 673979,
+      "optimizedBytes": 394360,
+      "rgbaSHA256": "31ad0199f2d2a6a0c21a253ee3b7fd874f22fc60e3cac4ce346e413fe4db6a83",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/star-0.png",
+      "optimized": "assets/images/game_words/star-0.webp",
+      "originalBytes": 867236,
+      "optimizedBytes": 573446,
+      "rgbaSHA256": "dc5b3bfa44f2989949abae5eda74ee930589b49febd9031cc79ced7b1fe14e7c",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/star-1.png",
+      "optimized": "assets/images/game_words/star-1.webp",
+      "originalBytes": 873428,
+      "optimizedBytes": 565978,
+      "rgbaSHA256": "a19e7597f922f750c9b0a9ad5e20650a4815850e61f914ece553c7e88b3b9f33",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/tiger-0.png",
+      "optimized": "assets/images/game_words/tiger-0.webp",
+      "originalBytes": 1226202,
+      "optimizedBytes": 855996,
+      "rgbaSHA256": "42a54c735fafcf16304de1a50e257a17578201718ef9604caeb23a089e271b26",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/tiger-1.png",
+      "optimized": "assets/images/game_words/tiger-1.webp",
+      "originalBytes": 1215289,
+      "optimizedBytes": 847896,
+      "rgbaSHA256": "63aa564b950cb1e9048c31ced64506a0c1855e4ae2aa71d7c51c24bbda964764",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/train-0.png",
+      "optimized": "assets/images/game_words/train-0.webp",
+      "originalBytes": 1316804,
+      "optimizedBytes": 913964,
+      "rgbaSHA256": "c050bdd8bf693fca6b91ff3ed44c327a5a2d62319ea9e60c0f916dad75b3b05b",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/train-1.png",
+      "optimized": "assets/images/game_words/train-1.webp",
+      "originalBytes": 1328391,
+      "optimizedBytes": 953848,
+      "rgbaSHA256": "ed3699b6550e6a9156cba153f95d0297860f627dae0f87fd31f96690deb2e15e",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/tub-0.png",
+      "optimized": "assets/images/game_words/tub-0.webp",
+      "originalBytes": 1070336,
+      "optimizedBytes": 698230,
+      "rgbaSHA256": "bc1d7b0079c355eb071ab5847d38b5db61224a9ecba4b77dd936810c64ae8776",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/tub-1.png",
+      "optimized": "assets/images/game_words/tub-1.webp",
+      "originalBytes": 1092407,
+      "optimizedBytes": 705572,
+      "rgbaSHA256": "46322e94322d1caf5d24c45ec6fc0b4bad12f37edf3693cd5ee7c6267606d89f",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/umbrella-0.png",
+      "optimized": "assets/images/game_words/umbrella-0.webp",
+      "originalBytes": 1207094,
+      "optimizedBytes": 839006,
+      "rgbaSHA256": "a41a90857e9a9e05bb0f419503d4ec5d7ab91967f9cbb1298b0ee0d18478f653",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/umbrella-1.png",
+      "optimized": "assets/images/game_words/umbrella-1.webp",
+      "originalBytes": 1047646,
+      "optimizedBytes": 708346,
+      "rgbaSHA256": "31a64452f736875d538d51a0beb195cf3248708cd5690fac498b6d2b9e0e3588",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/unicorn-0.png",
+      "optimized": "assets/images/game_words/unicorn-0.webp",
+      "originalBytes": 1171024,
+      "optimizedBytes": 801988,
+      "rgbaSHA256": "f56348f893bda8a173a421dfb529194937c950d660a520231503cc89d38d5a23",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/unicorn-1.png",
+      "optimized": "assets/images/game_words/unicorn-1.webp",
+      "originalBytes": 1173664,
+      "optimizedBytes": 798876,
+      "rgbaSHA256": "909fef95f28b05793630a6591e4fff050f5ea5bc9d8611b7b02164751fa73a8f",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/uniform-0.png",
+      "optimized": "assets/images/game_words/uniform-0.webp",
+      "originalBytes": 1025732,
+      "optimizedBytes": 650530,
+      "rgbaSHA256": "b52dd055fb3e1630812c6139976cfa8ad56608a7a1dc662f485abb58333aa387",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/uniform-1.png",
+      "optimized": "assets/images/game_words/uniform-1.webp",
+      "originalBytes": 1033699,
+      "optimizedBytes": 648888,
+      "rgbaSHA256": "4bd2e7e12d3b2ef7bfcf54f8f2365925e2469296e1ca2ef61dd6ea551b61faf9",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/vacuum-0.png",
+      "optimized": "assets/images/game_words/vacuum-0.webp",
+      "originalBytes": 1024791,
+      "optimizedBytes": 650366,
+      "rgbaSHA256": "bdf90d60a11600a8888ab1a076885eed88b9e3d727e598c5ac062d5ce79282ff",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/vacuum-1.png",
+      "optimized": "assets/images/game_words/vacuum-1.webp",
+      "originalBytes": 1035656,
+      "optimizedBytes": 654554,
+      "rgbaSHA256": "c04967d8d141410eada8c96c6ddab5b1e19bd6b24b3f68d7ced0885a9a890aef",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/vase-0.png",
+      "optimized": "assets/images/game_words/vase-0.webp",
+      "originalBytes": 1000702,
+      "optimizedBytes": 705352,
+      "rgbaSHA256": "cc1659fd77db2cfd7a742d70195c757bfb329bd24a587f6024d7100c28412446",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/vase-1.png",
+      "optimized": "assets/images/game_words/vase-1.webp",
+      "originalBytes": 1012859,
+      "optimizedBytes": 714016,
+      "rgbaSHA256": "a50596fece00b7d986e178d0db0b1f6b9b37bdb0869726a047f955cb9e7d94c5",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/violin-0.png",
+      "optimized": "assets/images/game_words/violin-0.webp",
+      "originalBytes": 846800,
+      "optimizedBytes": 587264,
+      "rgbaSHA256": "cd5d138d96f57db7fa443841f6f77f10b27200ab9c95778221c874168145a07f",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/violin-1.png",
+      "optimized": "assets/images/game_words/violin-1.webp",
+      "originalBytes": 838343,
+      "optimizedBytes": 581694,
+      "rgbaSHA256": "da0867655bfcf6796eb8f45cf0af68af2d017bec2f9784111923882dfd2c5c10",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/web-0.png",
+      "optimized": "assets/images/game_words/web-0.webp",
+      "originalBytes": 1355975,
+      "optimizedBytes": 883080,
+      "rgbaSHA256": "b3c48b39c03421fcc26ba708359a7728d4abed219a266a4c003e06050b28a7c3",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/web-1.png",
+      "optimized": "assets/images/game_words/web-1.webp",
+      "originalBytes": 1293028,
+      "optimizedBytes": 877472,
+      "rgbaSHA256": "05e475c7d71025c4e4485494cbbe26b88e3b10702ce0380c1708519d2142b981",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/whale-0.png",
+      "optimized": "assets/images/game_words/whale-0.webp",
+      "originalBytes": 1052760,
+      "optimizedBytes": 710696,
+      "rgbaSHA256": "b245d57678de3e9d12d6a90fc0f5976463f921f42cfc74588fcf5177dc29fcdc",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/whale-1.png",
+      "optimized": "assets/images/game_words/whale-1.webp",
+      "originalBytes": 1080883,
+      "optimizedBytes": 730164,
+      "rgbaSHA256": "1edd6c1b0123ede3eca26ea2b80e0f7148992ecec839b46e106c002be383e76f",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/wolf-0.png",
+      "optimized": "assets/images/game_words/wolf-0.webp",
+      "originalBytes": 1149772,
+      "optimizedBytes": 687916,
+      "rgbaSHA256": "38ffcd4c0a02840f92e8671c7ae81367d6d0dae5dd7e245277d44db12c58157a",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/wolf-1.png",
+      "optimized": "assets/images/game_words/wolf-1.webp",
+      "originalBytes": 1283309,
+      "optimizedBytes": 777640,
+      "rgbaSHA256": "2d13b7766e2e5afe65a036aba7df394f3ed3e8993a9712bd69f1abbfff724b5e",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/yarn-0.png",
+      "optimized": "assets/images/game_words/yarn-0.webp",
+      "originalBytes": 1499232,
+      "optimizedBytes": 1033656,
+      "rgbaSHA256": "936f08e57e51c4cabb7b90496f5c2c703f8b3d1616f8a2ddc1ae8e02e68503a8",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/yarn-1.png",
+      "optimized": "assets/images/game_words/yarn-1.webp",
+      "originalBytes": 1440323,
+      "optimizedBytes": 977334,
+      "rgbaSHA256": "33c76a79edfbb4f5b53abadf3e768ec476c43f096b4f5890536440dbec3180d2",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/yogurt-0.png",
+      "optimized": "assets/images/game_words/yogurt-0.webp",
+      "originalBytes": 890815,
+      "optimizedBytes": 572810,
+      "rgbaSHA256": "2273ac86a0c003be9aa7e205670ea794730d7d963edf1c188060020f50a8669d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/game_words/yogurt-1.png",
+      "optimized": "assets/images/game_words/yogurt-1.webp",
+      "originalBytes": 911567,
+      "optimizedBytes": 580062,
+      "rgbaSHA256": "a6c2bf14ceeed487fc85291f13698b1c1c12d489d11dc21ae9db24fda0ff72cc",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/home_mascots/airplane.png",
+      "optimized": "assets/images/home_mascots/airplane.webp",
+      "originalBytes": 1764802,
+      "optimizedBytes": 1300188,
+      "rgbaSHA256": "fcc54a71dc078f001b398ffd7ae11be98545b74130e64e80d70a203ad1510a99",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/home_mascots/games.png",
+      "optimized": "assets/images/home_mascots/games.webp",
+      "originalBytes": 1801374,
+      "optimizedBytes": 1301196,
+      "rgbaSHA256": "7b3b4c3592de31f19cf1d513a899ace4afcbea0ef2a982d793fa034de8324b18",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/home_mascots/home_logo.png",
+      "optimized": "assets/images/home_mascots/home_logo.webp",
+      "originalBytes": 1381763,
+      "optimizedBytes": 1039654,
+      "rgbaSHA256": "9042650d5fb71c5c2e3e865738767ee8b28e268f9d65362e57997828f11aa5e1",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/home_mascots/lessons.png",
+      "optimized": "assets/images/home_mascots/lessons.webp",
+      "originalBytes": 1656053,
+      "optimizedBytes": 1165560,
+      "rgbaSHA256": "e8143a1f17c7cdc002683b7328c8dfe3ad2bec45678142b7aecc8e98792ae188",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/home_mascots/parents.png",
+      "optimized": "assets/images/home_mascots/parents.webp",
+      "originalBytes": 1994939,
+      "optimizedBytes": 1421110,
+      "rgbaSHA256": "1916357b25aea109b31c0e81832a7fdfb3e1eda97d6874aaa31580a85fca9fda",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/home_mascots/progress.png",
+      "optimized": "assets/images/home_mascots/progress.webp",
+      "originalBytes": 1620997,
+      "optimizedBytes": 1114630,
+      "rgbaSHA256": "43e3698174ab7f7214fcdb81a233206e9527117a034f5b423eef6af1cb330f24",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/ant_A.png",
+      "optimized": "assets/images/lesson_frames/ant_A.webp",
+      "originalBytes": 1021153,
+      "optimizedBytes": 684960,
+      "rgbaSHA256": "caed429a0011c3572eff0ce1fb80b882ae58243454d215e73ad8d9132eccfbd6",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/ant_A1.png",
+      "optimized": "assets/images/lesson_frames/ant_A1.webp",
+      "originalBytes": 1028715,
+      "optimizedBytes": 694210,
+      "rgbaSHA256": "d55fff29e527a2002413456738f978675241bae66de5ff9c5ef59e1943d8b8e9",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/ant_A2.png",
+      "optimized": "assets/images/lesson_frames/ant_A2.webp",
+      "originalBytes": 1030559,
+      "optimizedBytes": 690528,
+      "rgbaSHA256": "95d364a99a0d647f47e19e2b6f8305cf0d67d6eccdb73635a64756fe05bee8d6",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/ball_B.png",
+      "optimized": "assets/images/lesson_frames/ball_B.webp",
+      "originalBytes": 917622,
+      "optimizedBytes": 587752,
+      "rgbaSHA256": "0c2098ede317e708c9ff60858f306376038751b3e944d901143a281d78211b9e",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/ball_B1.png",
+      "optimized": "assets/images/lesson_frames/ball_B1.webp",
+      "originalBytes": 947028,
+      "optimizedBytes": 603470,
+      "rgbaSHA256": "f3462038e6756e6d823ab3c04ec217426d28be87e433a722d488b5d963587520",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/ball_B2.png",
+      "optimized": "assets/images/lesson_frames/ball_B2.webp",
+      "originalBytes": 939636,
+      "optimizedBytes": 601150,
+      "rgbaSHA256": "67205b0d07e6e68b9c1762f6be4b7380d5a4b2eb48d9550bb70a2fcc8e508bd2",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/cat_C.png",
+      "optimized": "assets/images/lesson_frames/cat_C.webp",
+      "originalBytes": 1012375,
+      "optimizedBytes": 672988,
+      "rgbaSHA256": "0d92ca2e36f8916c53039db58d7ba26ae64bedbf93034f67cfb0fbd2e808cecc",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/cat_C1.png",
+      "optimized": "assets/images/lesson_frames/cat_C1.webp",
+      "originalBytes": 1010018,
+      "optimizedBytes": 671254,
+      "rgbaSHA256": "3a10758b00cba60fa986aa903fe3faeaab66f0fbc5045a9a525829feadfe4d3d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/cat_C2.png",
+      "optimized": "assets/images/lesson_frames/cat_C2.webp",
+      "originalBytes": 1031942,
+      "optimizedBytes": 682344,
+      "rgbaSHA256": "2864929c5f006edb0957d9574c1de78fc52b2c261fa86489f10f405c4f1bf4f9",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/drum_D.png",
+      "optimized": "assets/images/lesson_frames/drum_D.webp",
+      "originalBytes": 1320804,
+      "optimizedBytes": 901606,
+      "rgbaSHA256": "a3603b0c7444dd6b4aaac8c1e13061a29e60a284222738182d3f623800ea0894",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/drum_D1.png",
+      "optimized": "assets/images/lesson_frames/drum_D1.webp",
+      "originalBytes": 1298382,
+      "optimizedBytes": 885900,
+      "rgbaSHA256": "229a94fae67c5544bc8eaff73e98a391d92b9c4827f768bcb1392d736819ec6e",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/drum_D2.png",
+      "optimized": "assets/images/lesson_frames/drum_D2.webp",
+      "originalBytes": 1328951,
+      "optimizedBytes": 908028,
+      "rgbaSHA256": "aed12dd9f88be7bcb8798fce5d96ac650a29cd408cc3cd2237d287207a388780",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/egg_E.png",
+      "optimized": "assets/images/lesson_frames/egg_E.webp",
+      "originalBytes": 1181682,
+      "optimizedBytes": 779972,
+      "rgbaSHA256": "9913fcbb0441e3b564a2aa9c10390812709754da585f64a884ad907204dcffb3",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/egg_E1.png",
+      "optimized": "assets/images/lesson_frames/egg_E1.webp",
+      "originalBytes": 1167622,
+      "optimizedBytes": 776070,
+      "rgbaSHA256": "6ce235824e48eb3d4a7ca9d7a12ef2376d3d8e139310e73a9f199959c2d0e0ee",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/egg_E2.png",
+      "optimized": "assets/images/lesson_frames/egg_E2.webp",
+      "originalBytes": 1144672,
+      "optimizedBytes": 751976,
+      "rgbaSHA256": "50e691884890cd8a558203e28e68b8c08181ff571fc2d1cfab1c3cb24abe7e79",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/fish_F.png",
+      "optimized": "assets/images/lesson_frames/fish_F.webp",
+      "originalBytes": 1141571,
+      "optimizedBytes": 760380,
+      "rgbaSHA256": "0bb38364460e448ec4c30805fe49f052467b5c2c350bccf3f5cd387489a2fd53",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/fish_F1.png",
+      "optimized": "assets/images/lesson_frames/fish_F1.webp",
+      "originalBytes": 1142445,
+      "optimizedBytes": 772894,
+      "rgbaSHA256": "4742a22ac32a036035b1f9c8c760c58c2423cf8a496d64e61b8dfa91fb392184",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/fish_F2.png",
+      "optimized": "assets/images/lesson_frames/fish_F2.webp",
+      "originalBytes": 1119057,
+      "optimizedBytes": 741032,
+      "rgbaSHA256": "584740d2995a34333e73a9e9721b7c296a0d6017da9826fae325de0ca1da3ae7",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/giraffe_G.png",
+      "optimized": "assets/images/lesson_frames/giraffe_G.webp",
+      "originalBytes": 954836,
+      "optimizedBytes": 632990,
+      "rgbaSHA256": "38cbb8d25ff8e81c69c7efaef350d7bd081afa2e6a971af6db2b48ea86e6fa60",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/giraffe_G1.png",
+      "optimized": "assets/images/lesson_frames/giraffe_G1.webp",
+      "originalBytes": 753488,
+      "optimizedBytes": 498012,
+      "rgbaSHA256": "5554305e45dc19ca95c8c32d3f671487a0c3c91f417ec177f73dd9bce8be2075",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/giraffe_G2.png",
+      "optimized": "assets/images/lesson_frames/giraffe_G2.webp",
+      "originalBytes": 893472,
+      "optimizedBytes": 585530,
+      "rgbaSHA256": "b8c3db933957169f26ae47bc3da7626cb4407a74ecceda44512fa4b67d9f9fb7",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/hat_H.png",
+      "optimized": "assets/images/lesson_frames/hat_H.webp",
+      "originalBytes": 709949,
+      "optimizedBytes": 451876,
+      "rgbaSHA256": "66cb5220eb062d481e8e66d10397e57bbc6cb8bf3373d6685c8ed780ff4cb338",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/hat_H1.png",
+      "optimized": "assets/images/lesson_frames/hat_H1.webp",
+      "originalBytes": 695284,
+      "optimizedBytes": 452694,
+      "rgbaSHA256": "02b8a12dbc1e035b953d5c8dd548da1e585e7c90e2b1296a439108a927c1a43a",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/hat_H2.png",
+      "optimized": "assets/images/lesson_frames/hat_H2.webp",
+      "originalBytes": 659535,
+      "optimizedBytes": 416560,
+      "rgbaSHA256": "5aaf356b4b0cef22bd8cb2c2b2fee8afed3246319434fb2295f13e528047abad",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/igloo_I.png",
+      "optimized": "assets/images/lesson_frames/igloo_I.webp",
+      "originalBytes": 769659,
+      "optimizedBytes": 491960,
+      "rgbaSHA256": "e9eaaafa32be886e29ccd2c5d7310616eee1a199f6c61f233a2c2ffdbb277a89",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/igloo_I1.png",
+      "optimized": "assets/images/lesson_frames/igloo_I1.webp",
+      "originalBytes": 833909,
+      "optimizedBytes": 559524,
+      "rgbaSHA256": "80bb4bcbc86cd0acfdb198ac86ab91eb9d5d9b217eb36e69aaf9f5b3ad3f5614",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/igloo_I2.png",
+      "optimized": "assets/images/lesson_frames/igloo_I2.webp",
+      "originalBytes": 890913,
+      "optimizedBytes": 576452,
+      "rgbaSHA256": "fc4f8b3d80ca0706c12e5c24b9039ab94ef4a1c907b817315d094080eb168d6a",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/juice_J.png",
+      "optimized": "assets/images/lesson_frames/juice_J.webp",
+      "originalBytes": 1173416,
+      "optimizedBytes": 806604,
+      "rgbaSHA256": "9c2b4e793ed4f8057f2dff43ffd11522bc42401209cb9c18ea1108b136924409",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/juice_J1.png",
+      "optimized": "assets/images/lesson_frames/juice_J1.webp",
+      "originalBytes": 1170943,
+      "optimizedBytes": 813736,
+      "rgbaSHA256": "aaf23f7ef4c824e04e71cc4f576cf2959dfa1b8253cb8fb17c66f3904ee7941d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/juice_J2.png",
+      "optimized": "assets/images/lesson_frames/juice_J2.webp",
+      "originalBytes": 1146489,
+      "optimizedBytes": 794454,
+      "rgbaSHA256": "b7d3cf9afdc8a0024244e79a069a32f792600ad97da9f13a14ecc69f460ed00c",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/kite_K.png",
+      "optimized": "assets/images/lesson_frames/kite_K.webp",
+      "originalBytes": 1265890,
+      "optimizedBytes": 845170,
+      "rgbaSHA256": "7271ba5f43770f9d8e6f2f02870523a63f58b4313b3f8624b8002c59193e8c93",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/kite_K1.png",
+      "optimized": "assets/images/lesson_frames/kite_K1.webp",
+      "originalBytes": 1290166,
+      "optimizedBytes": 864046,
+      "rgbaSHA256": "413ec1aae0beb0cfb4597741d8d7735d923e4f724a73e1f52a18f4e429126654",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/kite_K2.png",
+      "optimized": "assets/images/lesson_frames/kite_K2.webp",
+      "originalBytes": 1411662,
+      "optimizedBytes": 967648,
+      "rgbaSHA256": "021696f6df73f4ae39244be053d5f0d2aaa580b3c5b3aafe5617b728b93c9110",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/lion_L.png",
+      "optimized": "assets/images/lesson_frames/lion_L.webp",
+      "originalBytes": 1371282,
+      "optimizedBytes": 933150,
+      "rgbaSHA256": "e94bdaeb5295e57cb37d302764612220e5abc26fd9d22a0f724b34cd6b58568d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/lion_L1.png",
+      "optimized": "assets/images/lesson_frames/lion_L1.webp",
+      "originalBytes": 1390486,
+      "optimizedBytes": 948090,
+      "rgbaSHA256": "7136298ccdb34aa9ccf9ca1079240355f5b4ce6b849baeaa73515df4b288d74b",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/lion_L2.png",
+      "optimized": "assets/images/lesson_frames/lion_L2.webp",
+      "originalBytes": 1320782,
+      "optimizedBytes": 891502,
+      "rgbaSHA256": "3bfe2a48fb26638f3a32f7f850135e3dfc833d137ef53ec1b2102a821c0fa9a5",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/penguin_P.png",
+      "optimized": "assets/images/lesson_frames/penguin_P.webp",
+      "originalBytes": 1188571,
+      "optimizedBytes": 770818,
+      "rgbaSHA256": "d52e1943aa9e08deef03da79ea64d7e565b117aa4ccd03b333247e7493c8fdf7",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/penguin_P1.png",
+      "optimized": "assets/images/lesson_frames/penguin_P1.webp",
+      "originalBytes": 1195888,
+      "optimizedBytes": 768328,
+      "rgbaSHA256": "7844814522a413c7e8215958f85c2ba91c32d013f3a116af9a62b034e8d4e8e2",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/penguin_P2.png",
+      "optimized": "assets/images/lesson_frames/penguin_P2.webp",
+      "originalBytes": 1152743,
+      "optimizedBytes": 741738,
+      "rgbaSHA256": "6e4ef12fc0d286439c0e8eb72058c96ac98e4f25bafe9f14c5b24ff00d44a797",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/sun_S.png",
+      "optimized": "assets/images/lesson_frames/sun_S.webp",
+      "originalBytes": 1032416,
+      "optimizedBytes": 687598,
+      "rgbaSHA256": "ae08d5c1ff477b69b14d62a3613e54fb7867a82403daf2ba0bcca5e468423406",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/sun_S1.png",
+      "optimized": "assets/images/lesson_frames/sun_S1.webp",
+      "originalBytes": 1009363,
+      "optimizedBytes": 675514,
+      "rgbaSHA256": "b87b6d06c64f920e8deaf8bd1e5c6961f37a55b18b586e77609c299d371078f3",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/sun_S2.png",
+      "optimized": "assets/images/lesson_frames/sun_S2.webp",
+      "originalBytes": 1041643,
+      "optimizedBytes": 702106,
+      "rgbaSHA256": "90391114e48d2efedade2105f19e0039a5912551df10a493b618141f14959b94",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/turtle_T.png",
+      "optimized": "assets/images/lesson_frames/turtle_T.webp",
+      "originalBytes": 999148,
+      "optimizedBytes": 681182,
+      "rgbaSHA256": "ecdb3ca72b3659632e6859b8c09dbbb566cb391494347faf711acabe91d26e82",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/turtle_T1.png",
+      "optimized": "assets/images/lesson_frames/turtle_T1.webp",
+      "originalBytes": 1023084,
+      "optimizedBytes": 702830,
+      "rgbaSHA256": "3bd6aa0d7f8670292a7c74b5cc4214dd25c14f2381ac099763b9a64e310a3605",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/turtle_T2.png",
+      "optimized": "assets/images/lesson_frames/turtle_T2.webp",
+      "originalBytes": 1023478,
+      "optimizedBytes": 700408,
+      "rgbaSHA256": "864ecf0ab2a3257fa68ba73f7ebf63b1a9b09f955a441011e3f871a8edf6009f",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/van_V.png",
+      "optimized": "assets/images/lesson_frames/van_V.webp",
+      "originalBytes": 1048669,
+      "optimizedBytes": 711218,
+      "rgbaSHA256": "f3b195a57881fd385dce5a92cae9b3b70e3ac147bc12ed787c36c6f1a174593d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/van_V1.png",
+      "optimized": "assets/images/lesson_frames/van_V1.webp",
+      "originalBytes": 1077147,
+      "optimizedBytes": 722450,
+      "rgbaSHA256": "e69973d7695fc9684b05e7424a24cb3bb271a8e94150e41882735ff24fc741fd",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/van_V2.png",
+      "optimized": "assets/images/lesson_frames/van_V2.webp",
+      "originalBytes": 1080342,
+      "optimizedBytes": 723156,
+      "rgbaSHA256": "5923619846133e6dad2527b569f4fc89d52908859da16ecdbc2dd45c557d57d2",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/xylophone_X.png",
+      "optimized": "assets/images/lesson_frames/xylophone_X.webp",
+      "originalBytes": 960858,
+      "optimizedBytes": 639030,
+      "rgbaSHA256": "69256cc78d89d994f4e163ef6f8e769e899bfec53fb66e2c80814c40452cb097",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/xylophone_X1.png",
+      "optimized": "assets/images/lesson_frames/xylophone_X1.webp",
+      "originalBytes": 1004953,
+      "optimizedBytes": 666212,
+      "rgbaSHA256": "fdc3a82ea021348439ba225b0d0b31836ca8731f6e56daf441c72be09b683f74",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/xylophone_X2.png",
+      "optimized": "assets/images/lesson_frames/xylophone_X2.webp",
+      "originalBytes": 1004984,
+      "optimizedBytes": 665870,
+      "rgbaSHA256": "5b465dc55ab67753eb21f23c77f570837781353f9b2a56f3a95cc6a6d371241f",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/yoyo_Y.png",
+      "optimized": "assets/images/lesson_frames/yoyo_Y.webp",
+      "originalBytes": 891507,
+      "optimizedBytes": 610210,
+      "rgbaSHA256": "344df049290bb5e8274366d0a6574b3c0f968082b7c0ac51a2e8a50678f13bad",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/yoyo_Y1.png",
+      "optimized": "assets/images/lesson_frames/yoyo_Y1.webp",
+      "originalBytes": 896020,
+      "optimizedBytes": 612686,
+      "rgbaSHA256": "24adab9b1406fef4a6ec78b31744b283a141b6337b44cf7a2298569a7afa0529",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/yoyo_Y2.png",
+      "optimized": "assets/images/lesson_frames/yoyo_Y2.webp",
+      "originalBytes": 883636,
+      "optimizedBytes": 603670,
+      "rgbaSHA256": "9bf39cd0339ff3af4fd661684dd52eae9a911b14af2362b0b28fa4eb2da4a5c0",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/zebra_Z.png",
+      "optimized": "assets/images/lesson_frames/zebra_Z.webp",
+      "originalBytes": 1287205,
+      "optimizedBytes": 834666,
+      "rgbaSHA256": "41732f43f76a282c9c6194cd3094936259d15c5748f04f26b67a3fac7e4fcd9c",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/zebra_Z1.png",
+      "optimized": "assets/images/lesson_frames/zebra_Z1.webp",
+      "originalBytes": 1303287,
+      "optimizedBytes": 839682,
+      "rgbaSHA256": "2aaae7e89c8a993850f40d09d3a58580f395cb707eed5b734bb6e634366cad50",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_frames/zebra_Z2.png",
+      "optimized": "assets/images/lesson_frames/zebra_Z2.webp",
+      "originalBytes": 1384224,
+      "optimizedBytes": 903596,
+      "rgbaSHA256": "3c4087025d1e70322006b7803130f13f93f5fc9332e286d219b308c4a63b5699",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_logos/blending_sounds.png",
+      "optimized": "assets/images/lesson_logos/blending_sounds.webp",
+      "originalBytes": 1156582,
+      "optimizedBytes": 792304,
+      "rgbaSHA256": "b585550da38bdf2b0312e7edb70c471c3635b60171b1d3ebdb9d2e40092e46cb",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_logos/cvc_words.png",
+      "optimized": "assets/images/lesson_logos/cvc_words.webp",
+      "originalBytes": 1258411,
+      "optimizedBytes": 850156,
+      "rgbaSHA256": "03e943a98afe79fb6ab68f30a2104c5565d8552be7ce6d88e99f7c902b539913",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_logos/letter_recognition.png",
+      "optimized": "assets/images/lesson_logos/letter_recognition.webp",
+      "originalBytes": 966591,
+      "optimizedBytes": 628774,
+      "rgbaSHA256": "7a67fef52c0214f5afb72a7e4883665704aa04d0e0cbaae5da42f99a4ebbbee9",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_logos/letter_sounds.png",
+      "optimized": "assets/images/lesson_logos/letter_sounds.webp",
+      "originalBytes": 968002,
+      "optimizedBytes": 627244,
+      "rgbaSHA256": "5e47ef6bd039a4f499386dec04756d16854386fbab9f8eb57e25579a76151710",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_logos/rhyming_words.png",
+      "optimized": "assets/images/lesson_logos/rhyming_words.webp",
+      "originalBytes": 1504062,
+      "optimizedBytes": 1043794,
+      "rgbaSHA256": "c989375de774b731301855dc4814df0c7b8aa315c8b49b5fb74aeea349475a6c",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_logos/tricky_letters.png",
+      "optimized": "assets/images/lesson_logos/tricky_letters.webp",
+      "originalBytes": 1256093,
+      "optimizedBytes": 881902,
+      "rgbaSHA256": "b5144f29a690ec57da2034c9566759746ee7ee927a552c775d4b527ec4254cd0",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/lesson_logos/vowel_sounds.png",
+      "optimized": "assets/images/lesson_logos/vowel_sounds.webp",
+      "originalBytes": 1132103,
+      "optimizedBytes": 751894,
+      "rgbaSHA256": "6d0ecae230ae8e1c4bbe438f34df4f74ce960b0d39856e876a68fb91dd460a87",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/a.png",
+      "optimized": "assets/images/letters/a.webp",
+      "originalBytes": 929091,
+      "optimizedBytes": 579750,
+      "rgbaSHA256": "fdc8dd09161e137ceca63f0aaf49f81d388cc2df04b693820e892191e02dca5f",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/b.png",
+      "optimized": "assets/images/letters/b.webp",
+      "originalBytes": 963894,
+      "optimizedBytes": 612956,
+      "rgbaSHA256": "7e9b61ade43a3527031a782ea44e0eafb1f8ca2cbcd7cb50ee461a5711322a4a",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/c.png",
+      "optimized": "assets/images/letters/c.webp",
+      "originalBytes": 881326,
+      "optimizedBytes": 562144,
+      "rgbaSHA256": "d568db84f0fdd5213f6ad5cd4e33ce4b99570f485988c3817fb58e9b5f3a2702",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/d.png",
+      "optimized": "assets/images/letters/d.webp",
+      "originalBytes": 1046224,
+      "optimizedBytes": 675448,
+      "rgbaSHA256": "feabfac50d23d9cf7e157980581c82f5ed94e2e0a23d2d1fbbe439ee849e4059",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/e.png",
+      "optimized": "assets/images/letters/e.webp",
+      "originalBytes": 913903,
+      "optimizedBytes": 573814,
+      "rgbaSHA256": "c8102e8dc89e5b1f4d986128d9a5fc30064185c4478e0bfe2ec96f7f3a4386f8",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/f.png",
+      "optimized": "assets/images/letters/f.webp",
+      "originalBytes": 765330,
+      "optimizedBytes": 480812,
+      "rgbaSHA256": "0469a0679194956ddb1b5ccbad485b9189c9f0372c2299fe9eadbd25d45f1767",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/g.png",
+      "optimized": "assets/images/letters/g.webp",
+      "originalBytes": 979657,
+      "optimizedBytes": 624440,
+      "rgbaSHA256": "9014462af683ecfdc0a41f691b51be497ce9fbaaaa92ae1a530b8cad70225ce7",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/h.png",
+      "optimized": "assets/images/letters/h.webp",
+      "originalBytes": 933169,
+      "optimizedBytes": 598852,
+      "rgbaSHA256": "2f486e6c3abf9d605702700937872021f003e113b9b30e6b17de22d261f1605d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/i.png",
+      "optimized": "assets/images/letters/i.webp",
+      "originalBytes": 677922,
+      "optimizedBytes": 419968,
+      "rgbaSHA256": "cadd14f3a4f36e76cce19bfcdec3df251884d326b531e962c4a1419d0cc5d820",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/j.png",
+      "optimized": "assets/images/letters/j.webp",
+      "originalBytes": 775032,
+      "optimizedBytes": 483692,
+      "rgbaSHA256": "eb6ec006fb827049d46d9550774eb512e3b9f36636bccb9f5d4bcafb07a7e695",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/k.png",
+      "optimized": "assets/images/letters/k.webp",
+      "originalBytes": 1054563,
+      "optimizedBytes": 669932,
+      "rgbaSHA256": "93977c294bfb6f3ed15b71d7287f25edb945a6ca1064fe894416ac32253191be",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/l.png",
+      "optimized": "assets/images/letters/l.webp",
+      "originalBytes": 742119,
+      "optimizedBytes": 470538,
+      "rgbaSHA256": "44abf43d76abc9b2b806586200edf0f65aeeab5a9af38b8d57496490fcc970de",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/m.png",
+      "optimized": "assets/images/letters/m.webp",
+      "originalBytes": 1200147,
+      "optimizedBytes": 816306,
+      "rgbaSHA256": "5aad2aecdbacaaf8dbb6aaaae793f2714fbf9aadf46e79b32f5718a29b727316",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/n.png",
+      "optimized": "assets/images/letters/n.webp",
+      "originalBytes": 1128946,
+      "optimizedBytes": 752170,
+      "rgbaSHA256": "dbeb762931480f3bd2aaa6321c1289c0df66387c592e2675a3e612c446171461",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/o.png",
+      "optimized": "assets/images/letters/o.webp",
+      "originalBytes": 1112466,
+      "optimizedBytes": 707194,
+      "rgbaSHA256": "7f0551a581249129d9e6aef7751db756a48ccc1a965a89f328db6452dbfb4264",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/p.png",
+      "optimized": "assets/images/letters/p.webp",
+      "originalBytes": 913858,
+      "optimizedBytes": 583282,
+      "rgbaSHA256": "f7b3dcabec5a4efb5b504867fdc75cf95b71a4261d1abef2508b74aace33b532",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/q.png",
+      "optimized": "assets/images/letters/q.webp",
+      "originalBytes": 1071221,
+      "optimizedBytes": 686232,
+      "rgbaSHA256": "073e9118d191912368fc72f953ca366d8d062abffe974eea3c43e5784bd92771",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/r.png",
+      "optimized": "assets/images/letters/r.webp",
+      "originalBytes": 1063273,
+      "optimizedBytes": 676086,
+      "rgbaSHA256": "972bc2687fff7a03b799d509445e279d51f87537c710300032c9b3c0d64dcb93",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/s.png",
+      "optimized": "assets/images/letters/s.webp",
+      "originalBytes": 1015213,
+      "optimizedBytes": 643514,
+      "rgbaSHA256": "ee732ab487de278a007f2ebf047f4a8fc027473ac696a105b98b43a9a55f3eab",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/t.png",
+      "optimized": "assets/images/letters/t.webp",
+      "originalBytes": 782166,
+      "optimizedBytes": 490092,
+      "rgbaSHA256": "f5de80ca8b404130dc91977306e7ee31c24c55102fa2a8b473100dc984c7c216",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/u.png",
+      "optimized": "assets/images/letters/u.webp",
+      "originalBytes": 1026306,
+      "optimizedBytes": 666764,
+      "rgbaSHA256": "f09e33b308cfedfc17009b302498ba48846025466cb9821c2c399517abae4c16",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/v.png",
+      "optimized": "assets/images/letters/v.webp",
+      "originalBytes": 954474,
+      "optimizedBytes": 609564,
+      "rgbaSHA256": "7ce63d658dd80523f6a34670f6728fea4a03c79f5f496eff967bd18909ba374e",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/w.png",
+      "optimized": "assets/images/letters/w.webp",
+      "originalBytes": 1055361,
+      "optimizedBytes": 691694,
+      "rgbaSHA256": "52d2ae0feda72d639948d04ed28b62b15acda7136035ea429580d7273fe46ac5",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/x.png",
+      "optimized": "assets/images/letters/x.webp",
+      "originalBytes": 1154349,
+      "optimizedBytes": 739176,
+      "rgbaSHA256": "632ecc80ac3b4cc100d3b9def139f2665c81a616e244b7385833f94bbb51d539",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/y.png",
+      "optimized": "assets/images/letters/y.webp",
+      "originalBytes": 873140,
+      "optimizedBytes": 550676,
+      "rgbaSHA256": "f9255812047d962a97b83ebf070533b9f6bd7ec596484375a0736b071f50a434",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/letters/z.png",
+      "optimized": "assets/images/letters/z.webp",
+      "originalBytes": 1041255,
+      "optimizedBytes": 648070,
+      "rgbaSHA256": "43b055f283b44969f03e028baf4e0809312671bfe53b10e654caf24452a7113e",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/mascot_boopli.png",
+      "optimized": "assets/images/mascot_boopli.webp",
+      "originalBytes": 1679855,
+      "optimizedBytes": 1266958,
+      "rgbaSHA256": "bb2410a5522d9f131e353833a2302e28fcb4c1fe04c42b173920914048cd9f91",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/mascot_jitjit.png",
+      "optimized": "assets/images/mascot_jitjit.webp",
+      "originalBytes": 260120,
+      "optimizedBytes": 187074,
+      "rgbaSHA256": "3b94c06a72875fd8d76217ad66fe86a75353b14c4caee9ced95d92074ce9db48",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/mascot_wigloo.png",
+      "optimized": "assets/images/mascot_wigloo.webp",
+      "originalBytes": 1697794,
+      "optimizedBytes": 1265758,
+      "rgbaSHA256": "e41477557fa78959d64412f64d775d341cd0e58f5e44f769dd0d1ada58c6ddbe",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/mascot_zoplet.png",
+      "optimized": "assets/images/mascot_zoplet.webp",
+      "originalBytes": 248785,
+      "optimizedBytes": 177380,
+      "rgbaSHA256": "bb664a332411b4a07e964abb18abc2cd45249b84176325b084978d49ad80a474",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/new_ui/flappy_bird_frames.png",
+      "optimized": "assets/images/new_ui/flappy_bird_frames.webp",
+      "originalBytes": 911652,
+      "optimizedBytes": 670214,
+      "rgbaSHA256": "ff36a3004381fe821a5630598c26aabb871446f1ac77dc7baf38e40868976efd",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/new_ui/frame_pink.png",
+      "optimized": "assets/images/new_ui/frame_pink.webp",
+      "originalBytes": 991573,
+      "optimizedBytes": 639342,
+      "rgbaSHA256": "e2c9a835d2c7912e1d24e8ac0f5f5d62faa18f79f3e504a7afe684c5fd958be4",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/new_ui/game_mascot.png",
+      "optimized": "assets/images/new_ui/game_mascot.webp",
+      "originalBytes": 1366960,
+      "optimizedBytes": 917018,
+      "rgbaSHA256": "3fdc2c4b6729c9aff4e7419059cfd54ae30352968e14e2a73bf283d38ad1cb52",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/new_ui/lessons_banner.png",
+      "optimized": "assets/images/new_ui/lessons_banner.webp",
+      "originalBytes": 1716389,
+      "optimizedBytes": 1248400,
+      "rgbaSHA256": "feed333a34142276db9becaa3b8bbaf5468f53141a911b59c29388e8cf62587d",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/new_ui/parent_garden.png",
+      "optimized": "assets/images/new_ui/parent_garden.webp",
+      "originalBytes": 1793415,
+      "optimizedBytes": 1337450,
+      "rgbaSHA256": "85ead7074532892edd513523ee276e90329384f9d4fbb430e79508e7eb568c4e",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/screen_frames/background/bg-1.png",
+      "optimized": "assets/images/screen_frames/background/bg-1.webp",
+      "originalBytes": 1396691,
+      "optimizedBytes": 1024668,
+      "rgbaSHA256": "10d7af561ad04d2d36c1b765f97a9565a936f32ee411f51a141ed9ddd2d085dc",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/screen_frames/background/bg-2.png",
+      "optimized": "assets/images/screen_frames/background/bg-2.webp",
+      "originalBytes": 1461875,
+      "optimizedBytes": 1123560,
+      "rgbaSHA256": "8dbc68fd63be23a360fb14e7cf3471fcc63a880c023625a17a513621066e5173",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/screen_frames/background/bg-3.png",
+      "optimized": "assets/images/screen_frames/background/bg-3.webp",
+      "originalBytes": 1485004,
+      "optimizedBytes": 1140518,
+      "rgbaSHA256": "98ab63ed364c5fcb29541e719e9ae3706dfd9c262d47845f234d05bea7fc9926",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/screen_frames/background/bg-4.png",
+      "optimized": "assets/images/screen_frames/background/bg-4.webp",
+      "originalBytes": 1495874,
+      "optimizedBytes": 1110986,
+      "rgbaSHA256": "235b6bbc24cf1a159f72cc0e2e2a3249a172b227caabec9a64303b03768846d2",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/screen_frames/background/bg-5.png",
+      "optimized": "assets/images/screen_frames/background/bg-5.webp",
+      "originalBytes": 1498106,
+      "optimizedBytes": 1110296,
+      "rgbaSHA256": "febae8ea00ac3176011094a48df74d080f4427c1be58463d876e042db1bb3166",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/screen_frames/games/g1.png",
+      "optimized": "assets/images/screen_frames/games/g1.webp",
+      "originalBytes": 2084802,
+      "optimizedBytes": 1722894,
+      "rgbaSHA256": "fffa2e1f948b3bbc2bc5249acc73913df6b8ce9621fd267bc9142a4c75497d17",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/screen_frames/games/g2.png",
+      "optimized": "assets/images/screen_frames/games/g2.webp",
+      "originalBytes": 2076948,
+      "optimizedBytes": 1725208,
+      "rgbaSHA256": "f315709b5bc8b65a4e5f375a6a143aaf01ac9913af93dc429eb169a4da79264f",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/screen_frames/games/g3.png",
+      "optimized": "assets/images/screen_frames/games/g3.webp",
+      "originalBytes": 2108553,
+      "optimizedBytes": 1751068,
+      "rgbaSHA256": "fec906a6619c329efbe3433d2be288d57fe72c31ab3705a0f202e22220997851",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/screen_frames/games/g4.png",
+      "optimized": "assets/images/screen_frames/games/g4.webp",
+      "originalBytes": 2098346,
+      "optimizedBytes": 1718806,
+      "rgbaSHA256": "1c91a16ba8f1999a2caec9ef062ed8e2b1dcd017d8b459f30622dce5d2820f21",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/screen_frames/lessons/leson1.png",
+      "optimized": "assets/images/screen_frames/lessons/leson1.webp",
+      "originalBytes": 2206897,
+      "optimizedBytes": 1825384,
+      "rgbaSHA256": "bf9af38deef4a0d1368c260164180819264d84c5ab37d75e2809914437bfe4eb",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/screen_frames/lessons/leson2.png",
+      "optimized": "assets/images/screen_frames/lessons/leson2.webp",
+      "originalBytes": 2217188,
+      "optimizedBytes": 1827360,
+      "rgbaSHA256": "12533009cc212dbb8e9d65dbd512301b82e04bfb80671a8ca588b6ece6b61032",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/screen_frames/lessons/leson3.png",
+      "optimized": "assets/images/screen_frames/lessons/leson3.webp",
+      "originalBytes": 2229137,
+      "optimizedBytes": 1841404,
+      "rgbaSHA256": "9e900b2b02fcbd7c3dd83d19aa2ea9c90eba89224af9d648c42ac5caec8d41a5",
+      "pixelsIdentical": true
+    },
+    {
+      "original": "assets/images/screen_frames/lessons/leson4.png",
+      "optimized": "assets/images/screen_frames/lessons/leson4.webp",
+      "originalBytes": 2248630,
+      "optimizedBytes": 1867136,
+      "rgbaSHA256": "5cf05288a599be50b2c5aac7abc1169b01809e0c99b271234206125171476e58",
+      "pixelsIdentical": true
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 # NEW UI design references
 
-The 13 original PNG mockups from `NEW UI.zip` are preserved in `new_ui/`.
-They are design references, not runtime screenshots or executable instructions.
-They are deliberately outside the Flutter asset bundle.
+The unused local copies of the 13 original PNG mockups from `NEW UI.zip` were
+removed during cleanup. The implementation mapping below is retained for
+reference. Current runtime artwork remains bundled with the app.
 
 User clarification: **apply the new designs without the large header/banner**.
 Back, Help and Pause remain usable. The existing questions, difficulties,
@@ -27,7 +27,7 @@ audio, rewards, timers, parent PIN and progress persistence remain live.
 Common components live in `lib/widgets/game_design.dart`. They are scoped to
 games so lesson controls keep their own appearance. Existing game word
 illustrations, menu logos and animated backgrounds are reused. The new runtime
-assets are documented in `assets/images/new_ui/README.md`.
+assets are documented in `tools/asset_notes/images/new_ui/README.md`.
 
 Mockup examples are not hardcoded game data. In particular, the pictured rhyme
 choices for NEST do not provide a correct rhyme; the app retains its validated

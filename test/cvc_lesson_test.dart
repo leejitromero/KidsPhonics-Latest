@@ -158,13 +158,15 @@ void main() {
     lesson.dispose();
   });
 
-  test('all 25 document words have bundled narration, phonemes and a picture',
+  test('all 17 supplied words have bundled narration, phonemes and a picture',
       () async {
-    expect(cvcLessonWords, hasLength(25));
-    expect(cvcLessonWords.map((w) => w.word).toSet(), hasLength(25));
-    for (final vowel in ['A', 'E', 'I', 'O', 'U']) {
-      expect(cvcLessonWords.where((w) => w.vowel == vowel), hasLength(5));
+    expect(cvcLessonWords, hasLength(17));
+    expect(cvcLessonWords.map((w) => w.word).toSet(), hasLength(17));
+    for (final entry in {'A': 6, 'E': 5, 'I': 2, 'O': 2, 'U': 2}.entries) {
+      expect(cvcLessonWords.where((w) => w.vowel == entry.key),
+          hasLength(entry.value));
     }
+    expect(cvcLessonWords.first.praise, 'Cat! Nice work! C-A-T makes cat!');
     for (final word in cvcLessonWords) {
       expect(word.word,
           matches(RegExp(r'^[B-DF-HJ-NP-TV-Z][AEIOU][B-DF-HJ-NP-TV-Z]$')));
@@ -187,17 +189,11 @@ void main() {
         expect(asset, isNotNull);
         final data = await rootBundle.load('assets/$asset');
         expect(data.lengthInBytes, greaterThan(44));
-        if (asset!.endsWith('.wav')) {
-          expect(String.fromCharCodes(data.buffer.asUint8List(0, 4)), 'RIFF');
-        }
+        expect(asset, endsWith('.mp3'));
       }
     }
-    expect(
-        Directory('assets/audio/cvc_lesson')
-            .listSync()
-            .whereType<File>()
-            .where((f) => f.path.endsWith('.wav')),
-        hasLength(51));
+    expect(Directory('assets/audio/cvc_lesson').listSync().whereType<File>(),
+        hasLength(35));
   });
 
   Finder control(String label) => find.widgetWithText(OutlinedButton, label);
@@ -298,7 +294,7 @@ void main() {
     await t.tap(control('Previous'));
     await t.pump();
     expect(
-        t.widget<CvcWordPicture>(find.byType(CvcWordPicture)).word.word, 'BUG');
+        t.widget<CvcWordPicture>(find.byType(CvcWordPicture)).word.word, 'RUG');
     expect(p.xp, 0);
     expect(p.stars, 0);
     expect(p.journeyScore('cvc'), isNull);

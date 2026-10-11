@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/learning_progress.dart';
 import 'parent_auth_service.dart';
+import 'preference_write_queue.dart';
 
 /// One foreground clock for the whole application, independent of routes.
 class ScreenTimeService extends ChangeNotifier {
@@ -10,6 +12,13 @@ class ScreenTimeService extends ChangeNotifier {
       {DateTime Function()? now, int Function()? elapsedMilliseconds})
       : _now = now ?? DateTime.now {
     _watch.start();
+    try {
+      final saved = _prefs.get('screenTimeStateV1');
+      final value = jsonDecode(saved is String ? saved : '{}');
+      if (value is Map<String, dynamic>) _snapshot = value;
+    } on FormatException {
+      // Fall back to the existing keys for old or damaged snapshots.
+    }
     _elapsed = elapsedMilliseconds ?? () => _watch.elapsedMilliseconds;
     _date = _read<String>('screenTimeDateV2', '');
     _usedMs = _read<int>('screenTimeUsedSecondsV2', 0).clamp(0, 86400) * 1000;
@@ -37,15 +46,18 @@ class ScreenTimeService extends ChangeNotifier {
   bool _parent = false;
   int? _last;
   int _lastSave = 0;
-  Future<void> _pending = Future.value();
+  final _saveQueue = PreferenceWriteQueue();
+  bool get hasUnsavedChanges => _saveQueue.lastError != null;
+  Map<String, dynamic> _snapshot = {};
   final _warningStream = StreamController<int>.broadcast();
   Stream<int> get warnings => _warningStream.stream;
   T _read<T>(String key, T fallback) {
-    final value = _prefs.get(key);
+    final value = _snapshot.containsKey(key) ? _snapshot[key] : _prefs.get(key);
     return value is T ? value : fallback;
   }
 
   bool get isLimitEnabled => _enabled;
+  String get dateKey => _date;
   int get dailyLimitMinutes => _limit;
   int get usedSecondsToday => _usedMs ~/ 1000;
   int get extraSecondsToday => _extra;
@@ -71,6 +83,7 @@ class ScreenTimeService extends ChangeNotifier {
 
   void tick() {
     if (_disposed) return;
+    final before = (usedSecondsToday, _date, isLimitReached);
     final elapsed = _elapsed();
     final previous = _last;
     final oldDate = _date;
@@ -106,7 +119,7 @@ class ScreenTimeService extends ChangeNotifier {
         (elapsed - _lastSave >= 10000 || isLimitReached)) {
       unawaited(save());
     }
-    _changed();
+    if (before != (usedSecondsToday, _date, isLimitReached)) _changed();
   }
 
   int _savedUsedMs = -1;
@@ -170,9 +183,9 @@ class ScreenTimeService extends ChangeNotifier {
     _changed();
   }
 
-  Future<void> save() {
+  Future<void> save() async {
     _lastSave = _elapsed();
-    _savedUsedMs = _usedMs;
+    final savedUsage = _usedMs;
     final values = <String, Object>{
       'screenTimeDateV2': _date,
       'screenTimeUsedSecondsV2': usedSecondsToday,
@@ -182,19 +195,14 @@ class ScreenTimeService extends ChangeNotifier {
       'limitBypassDateV1': _bypass,
       'screenTimeWarningsV2': _warnings,
     };
-    _pending = _pending.then((_) async {
-      // Write date last so a partial day-reset cannot attach yesterday's usage to today.
-      for (final entry
-          in values.entries.where((e) => e.key != 'screenTimeDateV2')) {
-        final value = entry.value;
-        if (value is int) await _prefs.setInt(entry.key, value);
-        if (value is bool) await _prefs.setBool(entry.key, value);
-        if (value is String) await _prefs.setString(entry.key, value);
-      }
-      await _prefs.setString(
-          'screenTimeDateV2', values['screenTimeDateV2']! as String);
+    final errorBefore = hasUnsavedChanges;
+    final saved = await _saveQueue.save(_prefs, {
+      'screenTimeStateV1': jsonEncode(values),
+      ...Map.of(values)..remove('screenTimeDateV2'),
+      'screenTimeDateV2': _date,
     });
-    return _pending;
+    if (saved) _savedUsedMs = savedUsage;
+    if (errorBefore != hasUnsavedChanges) _changed();
   }
 
   void _changed() {

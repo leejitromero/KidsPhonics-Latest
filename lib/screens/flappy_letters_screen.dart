@@ -1,5 +1,4 @@
 import '../widgets/game_theme_background.dart';
-import '../widgets/button_sound.dart';
 import '../widgets/game_design.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -8,9 +7,12 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../models/difficulty.dart';
 import '../models/flappy_letters_game.dart';
+import '../widgets/flappy_bird_sprite.dart';
+import '../widgets/flappy_letters_design.dart';
+import '../widgets/completion_celebration.dart';
+import '../controllers/game_narration_controller.dart';
 import '../providers/app_provider.dart';
 import '../widgets/game_tutorial.dart';
-import '../widgets/learner_widgets.dart';
 
 class FlappyLettersScreen extends StatefulWidget {
   const FlappyLettersScreen({super.key, this.difficulty = Difficulty.easy});
@@ -24,10 +26,27 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
   late FlappyLettersGame _game;
   late Ticker _ticker;
   late AppProvider _provider;
+  int _narrationSync = 0;
+  late final _narration = GameNarrationController(
+      play: (phrase) async {
+        if (!_provider.voiceEnabled) return false;
+        return _provider.phonicsAudio.playInstruction(phrase);
+      },
+      stop: () => _provider.phonicsAudio.stop());
   final _focus = FocusNode();
   Duration? _last;
   String? _letter;
   double _successGlow = 0;
+  static const _birdSize = 72.0;
+  static const _flapFrames = [1, 2, 3, 2, 0];
+  static const _frameSeconds = .065;
+  double _flapElapsed = _frameSeconds * _flapFrames.length;
+
+  int get _birdFrame => _game.state == FlightState.flying
+      ? _flapFrames[(_flapElapsed / _frameSeconds)
+          .floor()
+          .clamp(0, _flapFrames.length - 1)]
+      : 0;
 
   @override
   void initState() {
@@ -40,7 +59,18 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _provider = context.read<AppProvider>();
+    _provider = context.watch<AppProvider>();
+    final request = ++_narrationSync;
+    final active = (ModalRoute.isCurrentOf(context) ?? true) &&
+        _game.state != FlightState.paused &&
+        (WidgetsBinding.instance.lifecycleState == null ||
+            WidgetsBinding.instance.lifecycleState ==
+                AppLifecycleState.resumed);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || request != _narrationSync) return;
+      _narration.updateEnvironment(
+          enabled: _provider.voiceEnabled, active: active);
+    });
   }
 
   void _tick(Duration elapsed) {
@@ -55,16 +85,19 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
     }
     final previousLives = _game.lives;
     setState(() {
+      _flapElapsed =
+          (_flapElapsed + dt).clamp(0, _frameSeconds * _flapFrames.length);
       _successGlow = (_successGlow - dt).clamp(0, .7);
       for (final letter in _game.advance(dt)) {
         _successGlow = .7;
         _letter = letter;
         if (_provider.voiceEnabled) {
-          unawaited(_provider.phonicsAudio.tryPlay('lesson-letter-$letter'));
+          unawaited(_narration.letterName(letter));
         }
       }
     });
     if (_game.lives < previousLives) {
+      _narration.cancel();
       unawaited(_provider.phonicsAudio.stop());
       unawaited(_provider.audio.playWrong());
     }
@@ -77,6 +110,8 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
   void _pause() {
     if (!mounted) return;
     setState(_game.pause);
+    _narration.updateEnvironment(
+        enabled: _provider.voiceEnabled, active: false);
     unawaited(_provider.phonicsAudio.stop());
     unawaited(_provider.audio.stop());
   }
@@ -91,7 +126,11 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
     if (_game.state != FlightState.ready && _game.state != FlightState.flying) {
       return;
     }
-    setState(_game.flap);
+    setState(() {
+      _game.flap();
+      _flapElapsed = 0;
+    });
+    _narration.updateEnvironment(enabled: _provider.voiceEnabled, active: true);
     unawaited(_provider.audio.playFlap());
     _focus.requestFocus();
   }
@@ -103,7 +142,9 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
       _game = FlappyLettersGame(widget.difficulty);
       _letter = null;
       _successGlow = 0;
+      _flapElapsed = _frameSeconds * _flapFrames.length;
     });
+    _narration.resetRound();
     _focus.requestFocus();
   }
 
@@ -112,6 +153,7 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
     WidgetsBinding.instance.removeObserver(this);
     _ticker.dispose();
     _focus.dispose();
+    _narration.dispose();
     unawaited(_provider.phonicsAudio.stop());
     unawaited(_provider.audio.stop());
     super.dispose();
@@ -136,93 +178,77 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
             }
             return KeyEventResult.ignored;
           },
-          child: Stack(fit: StackFit.expand, children: [
-            Semantics(
-              button: true,
-              label: 'Flap. Tap to fly through the letter pipes.',
-              child: GestureDetector(
-                key: const ValueKey('flight-play-area'),
-                behavior: HitTestBehavior.opaque,
-                onTapDown: (_) => _flap(),
-                child: LayoutBuilder(
-                    builder: (_, box) => Stack(children: [
-                          Positioned.fill(
-                            child: FittedBox(
-                              fit: BoxFit.fill,
-                              child: SizedBox(
-                                width: FlappyLettersGame.width,
-                                height: FlappyLettersGame.height,
-                                child: CustomPaint(
-                                    painter: _CoursePainter(
-                                        _game, _successGlow > 0)),
+          child: CompletionCelebration(
+              enabled: _game.state == FlightState.won,
+              child: Stack(fit: StackFit.expand, children: [
+                Semantics(
+                  button: true,
+                  label: 'Flap. Tap to fly through the letter pipes.',
+                  child: GestureDetector(
+                    key: const ValueKey('flight-play-area'),
+                    behavior: HitTestBehavior.opaque,
+                    onTapDown: (_) => _flap(),
+                    child: LayoutBuilder(
+                        builder: (_, box) => Stack(children: [
+                              Positioned.fill(
+                                child: FittedBox(
+                                  fit: BoxFit.fill,
+                                  child: SizedBox(
+                                    width: FlappyLettersGame.width,
+                                    height: FlappyLettersGame.height,
+                                    child: CustomPaint(
+                                        painter: _CoursePainter(
+                                            _game, _successGlow > 0)),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          Positioned(
-                            left: (FlappyLettersGame.birdX - 28) *
-                                box.maxWidth /
-                                FlappyLettersGame.width,
-                            top: _game.y *
-                                    box.maxHeight /
-                                    FlappyLettersGame.height -
-                                28 * box.maxWidth / FlappyLettersGame.width,
-                            child: IgnorePointer(
-                                child: Image.asset(
-                              'assets/images/new_ui/flappy_bird.png',
-                              width:
-                                  56 * box.maxWidth / FlappyLettersGame.width,
-                              height:
-                                  56 * box.maxWidth / FlappyLettersGame.width,
-                            )),
-                          ),
-                        ])),
-              ),
-            ),
-            if (_game.state != FlightState.flying) SafeArea(child: _overlay()),
-            SafeArea(
-                child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ForestIconButton(
-                              tooltip: 'Back',
-                              onPressed: () => Navigator.maybePop(context),
-                              icon: Icons.arrow_back_rounded),
-                          const SizedBox(width: 6),
-                          Expanded(
-                              child: IgnorePointer(
-                                  child: ForestPanel(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 6),
-                            child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                      '${widget.difficulty.label}  •  ${_game.passed} / 26 letters'
-                                      '${_letter == null ? '' : '  •  Great! $_letter'}',
-                                      style: const TextStyle(
-                                          color: Color(0xFF2F245D),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w800)),
-                                  GameLives(lives: _game.lives),
-                                ]),
-                          ))),
-                          const SizedBox(width: 6),
-                          ForestIconButton(
-                              tooltip: 'How to Play',
-                              onPressed: onHelp,
-                              purple: true,
-                              icon: Icons.help_outline_rounded),
-                          const SizedBox(width: 4),
-                          ForestIconButton(
-                              tooltip: 'Pause',
-                              onPressed: _game.state == FlightState.flying
-                                  ? _pause
-                                  : null,
-                              icon: Icons.pause_rounded),
-                        ]))),
-          ]),
+                              Positioned(
+                                left:
+                                    (FlappyLettersGame.birdX - _birdSize / 2) *
+                                        box.maxWidth /
+                                        FlappyLettersGame.width,
+                                top: _game.y *
+                                        box.maxHeight /
+                                        FlappyLettersGame.height -
+                                    _birdSize /
+                                        2 *
+                                        box.maxWidth /
+                                        FlappyLettersGame.width,
+                                child: Opacity(
+                                    opacity: _game.state == FlightState.flying
+                                        ? 1
+                                        : 0,
+                                    child: IgnorePointer(
+                                        child: FlappyBirdSprite(
+                                      frame: _birdFrame,
+                                      tilt: _game.state == FlightState.flying
+                                          ? (_game.velocity / 900)
+                                              .clamp(-.28, .45)
+                                          : 0,
+                                      size: _birdSize *
+                                          box.maxWidth /
+                                          FlappyLettersGame.width,
+                                    ))),
+                              ),
+                            ])),
+                  ),
+                ),
+                SafeArea(
+                  child: Column(children: [
+                    FlappyStatusBar(
+                        difficulty: widget.difficulty,
+                        passed: _game.passed,
+                        lives: _game.lives,
+                        letter: _letter,
+                        onBack: () => Navigator.maybePop(context),
+                        onHelp: onHelp,
+                        onPause:
+                            _game.state == FlightState.flying ? _pause : null),
+                    if (_game.state != FlightState.flying)
+                      Expanded(child: _overlay()),
+                  ]),
+                ),
+              ])),
         ),
       ));
   Widget _overlay() {
@@ -235,61 +261,46 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
       _ => 'Nice flying! Try again!',
     };
     return ColoredBox(
-      color: const Color(0x442F245D),
-      child: Center(
-          child: Card(
-        margin: const EdgeInsets.all(28),
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Icon(
-                state == FlightState.won
-                    ? Icons.emoji_events_rounded
-                    : Icons.flight_rounded,
-                size: 48,
-                color: const Color(0xFF7052CA)),
-            const SizedBox(height: 12),
-            Text(title,
-                textAlign: TextAlign.center,
-                style:
-                    const TextStyle(fontSize: 25, fontWeight: FontWeight.w800)),
-            const SizedBox(height: 12),
-            Text(
-                state == FlightState.ready
-                    ? 'Tap to fly. Space / ↑ on a keyboard.\nYou have 3 lives. Pass 26 pipes!'
-                    : '${_game.passed} of 26 letters cleared',
-                textAlign: TextAlign.center),
-            const SizedBox(height: 20),
-            FilledButton(
-              onPressed: withButtonSound(() {
-                if (state == FlightState.ready) {
-                  _flap();
-                } else if (state == FlightState.hit) {
-                  setState(() {
-                    _game.continueFlight();
-                    _letter = null;
-                    _successGlow = 0;
-                  });
-                  _flap();
-                } else if (state == FlightState.paused) {
-                  setState(_game.resume);
-                  _focus.requestFocus();
-                } else {
-                  _restart();
-                }
-              }),
-              child: Text(state == FlightState.ready
-                  ? 'Start flying'
-                  : state == FlightState.paused
-                      ? 'Resume'
-                      : state == FlightState.hit
-                          ? 'Continue'
-                          : 'Play again'),
-            ),
-          ]),
-        ),
-      )),
+      color: state == FlightState.ready
+          ? Colors.transparent
+          : const Color(0x222F245D),
+      child: FlappyFlightPanel(
+        title: title,
+        detail: state == FlightState.ready
+            ? 'Tap to fly. Space / Up on a keyboard.\nYou have 3 lives. Pass 26 pipes!'
+            : '${_game.passed} of 26 letters cleared',
+        buttonLabel: switch (state) {
+          FlightState.ready => 'Start flying',
+          FlightState.paused => 'Resume',
+          FlightState.hit => 'Continue',
+          _ => 'Play again',
+        },
+        celebrate: state == FlightState.won,
+        onPressed: _overlayAction,
+      ),
     );
+  }
+
+  void _overlayAction() {
+    final state = _game.state;
+    if (state == FlightState.flying) return;
+    if (state == FlightState.ready) {
+      _flap();
+    } else if (state == FlightState.hit) {
+      setState(() {
+        _game.continueFlight();
+        _letter = null;
+        _successGlow = 0;
+      });
+      _flap();
+    } else if (state == FlightState.paused) {
+      setState(_game.resume);
+      _narration.updateEnvironment(
+          enabled: _provider.voiceEnabled, active: true);
+      _focus.requestFocus();
+    } else {
+      _restart();
+    }
   }
 }
 
