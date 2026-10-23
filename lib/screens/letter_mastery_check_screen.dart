@@ -281,13 +281,30 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
     _narrate(_instructionKey);
   }
 
-  Widget _listen(String key, String label) => QuickAudioButton(
-        key: ValueKey('listen-$key'),
-        label: label,
-        index: label == 'Hear word' ? 1 : 0,
-        playing: _playingKey == key,
-        onPressed: _playing || _saving || !_active ? null : () => _play(key),
-      );
+  Widget _listen(String key, String label) => Center(
+      child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 260),
+          child: FilledButton(
+            key: ValueKey('listen-$key'),
+            style: quickColorButtonStyle(
+                index: label == 'Hear word' ? 1 : 0,
+                radius: 100,
+                minimumSize: const Size(48, 48),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4)),
+            onPressed:
+                _playing || _saving || !_active ? null : () => _play(key),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Icon(
+                  _playingKey == key
+                      ? Icons.graphic_eq_rounded
+                      : Icons.volume_up_rounded,
+                  size: 26),
+              const SizedBox(width: 4),
+              Flexible(
+                  child: FittedBox(fit: BoxFit.scaleDown, child: Text(label))),
+            ]),
+          )));
   Widget _listenIcon(String key, String label,
           {int index = 0, bool embedded = false}) =>
       QuickAudioButton(
@@ -316,11 +333,11 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
                   disabledForegroundColor: const Color(0xFFFFF9E9),
                   shadowColor: Colors.transparent,
                   surfaceTintColor: Colors.transparent,
-                  minimumSize: const Size(48, 68),
+                  minimumSize: const Size(48, 48),
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24)),
-                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 16))
+                  padding: const EdgeInsets.all(6))
               .copyWith(
                   backgroundBuilder: embedded
                       ? (_, __, content) => content ?? const SizedBox.shrink()
@@ -330,17 +347,39 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
                           pressed: states.contains(WidgetState.pressed),
                           focused: states.contains(WidgetState.focused),
                           child: content ?? const SizedBox.shrink())),
-          child: child ??
-              Text(value,
-                  style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900)));
-  Widget _grid(List<Widget> children, {int columns = 2}) => LayoutBuilder(
-      builder: (_, box) => Wrap(spacing: 10, runSpacing: 10, children: [
-            for (final child in children)
-              SizedBox(
-                  width: (box.maxWidth - (columns - 1) * 10) / columns,
-                  child: child)
-          ]));
-  Widget _letter(String letter) => QuickLetter(letter: letter);
+          child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child:
+                  child ?? Text(value, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900))));
+  Widget _grid(List<Widget> children,
+      {int columns = 2, double rowHeight = 76, double maxWidth = 340}) {
+    final rows = (children.length / columns).ceil();
+    return Center(
+        child: ConstrainedBox(
+            constraints: BoxConstraints(
+                maxWidth: maxWidth,
+                maxHeight: rows * rowHeight + (rows - 1) * 8),
+            child: Column(children: [
+              for (var row = 0; row < rows; row++) ...[
+                if (row > 0) const SizedBox(height: 8),
+                Expanded(
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                      for (var column = 0; column < columns; column++) ...[
+                        if (column > 0) const SizedBox(width: 8),
+                        Expanded(
+                            child: row * columns + column < children.length
+                                ? children[row * columns + column]
+                                : const SizedBox()),
+                      ],
+                    ])),
+              ],
+            ])));
+  }
+
+  Widget _letter(String letter) =>
+      FittedBox(fit: BoxFit.scaleDown, child: QuickLetter(letter: letter));
 
   Widget _picture(String word, double size) => ExcludeSemantics(
       // The supplied zebra lesson art includes a large Z. Use an unlabelled
@@ -353,166 +392,236 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
           : Image.asset(adventurePicture(word), height: size));
 
   Widget _task(double height) {
+    // Keep the activity together instead of stretching choices to fill a tablet
+    // or a tall phone. Short screens can still use all the available height.
+    final preferredHeight = switch (_skill) {
+      AdventureSkill.matching => 320.0,
+      AdventureSkill.sound => 300.0,
+      AdventureSkill.spelling => 320.0,
+      AdventureSkill.soundPicture => 320.0,
+      AdventureSkill.hunt => 260.0,
+    };
+    return Center(
+        child: SizedBox(
+            height: height.clamp(0.0, preferredHeight),
+            child: _taskContent(height.clamp(0.0, preferredHeight))));
+  }
+
+  Widget _taskContent(double height) {
     final c = _session.content;
-    final pictureSize = (height * .16).clamp(60.0, 112.0);
+    final pictureSize = (height * .35).clamp(48.0, 140.0);
     switch (_skill) {
       case AdventureSkill.matching:
-        return Column(mainAxisSize: MainAxisSize.min, children: [
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            _letter(c.letter),
-            const SizedBox(width: 20),
-            DragTarget<String>(
-                onWillAcceptWithDetails: (_) => _canAnswer,
-                onAcceptWithDetails: (details) => _submit(
-                    details.data, details.data == c.letter.toLowerCase()),
-                builder: (_, candidates, __) => AnimatedContainer(
-                    key: const ValueKey('lowercase-drop'),
-                    duration: const Duration(milliseconds: 150),
-                    width: 108,
-                    height: 105,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: candidates.isEmpty
-                            ? Colors.white
-                            : Colors.amber.shade100,
-                        border: Border.all(
-                            color: const Color(0xFF7052CA), width: 3),
-                        borderRadius: BorderRadius.circular(18)),
-                    child: QuickLetter(letter: _picked ?? '?', size: 64))),
-          ]),
-          const SizedBox(height: 16),
-          _grid([
-            for (final value in _session.matchOptions)
-              Draggable<String>(
-                  data: value,
-                  maxSimultaneousDrags: _canAnswer ? 1 : 0,
-                  feedback: Material(
-                      color: Colors.transparent, child: _letter(value)),
-                  childWhenDragging:
-                      Opacity(opacity: .25, child: _letter(value)),
-                  child: _choice(value, value == c.letter.toLowerCase(),
-                      artIndex: _session.matchOptions.indexOf(value)))
-          ], columns: 2),
+        return Column(children: [
+          Expanded(
+              flex: 2,
+              child: Center(
+                  child: ConstrainedBox(
+                      constraints:
+                          const BoxConstraints(maxWidth: 280, maxHeight: 120),
+                      child: Row(children: [
+                        Expanded(child: _letter(c.letter)),
+                        const SizedBox(width: 12),
+                        Expanded(
+                            child: Center(
+                                child: AspectRatio(
+                                    aspectRatio: 1,
+                                    child: DragTarget<String>(
+                                        onWillAcceptWithDetails: (_) =>
+                                            _canAnswer,
+                                        onAcceptWithDetails: (details) =>
+                                            _submit(
+                                                details.data,
+                                                details.data ==
+                                                    c.letter.toLowerCase()),
+                                        builder: (_, candidates, __) => AnimatedContainer(
+                                            key: const ValueKey(
+                                                'lowercase-drop'),
+                                            duration: const Duration(
+                                                milliseconds: 150),
+                                            alignment: Alignment.center,
+                                            padding: const EdgeInsets.all(6),
+                                            decoration: BoxDecoration(
+                                                color: candidates.isEmpty
+                                                    ? Colors.white
+                                                    : Colors.amber.shade100,
+                                                border: Border.all(
+                                                    color: const Color(0xFF7052CA),
+                                                    width: 3),
+                                                borderRadius: BorderRadius.circular(18)),
+                                            child: _letter(_picked ?? '?')))))),
+                      ])))),
+          const SizedBox(height: 6),
+          Expanded(
+              flex: 3,
+              child: _grid([
+                for (final value in _session.matchOptions)
+                  Draggable<String>(
+                      data: value,
+                      maxSimultaneousDrags: _canAnswer ? 1 : 0,
+                      feedback: Material(
+                          color: Colors.transparent,
+                          child: QuickLetter(letter: value)),
+                      childWhenDragging:
+                          Opacity(opacity: .25, child: _letter(value)),
+                      child: SizedBox.expand(
+                          child: _choice(value, value == c.letter.toLowerCase(),
+                              artIndex: _session.matchOptions.indexOf(value))))
+              ])),
         ]);
       case AdventureSkill.sound:
-        return Column(mainAxisSize: MainAxisSize.min, children: [
-          QuickLetter(letter: c.letter == 'Q' ? 'Qu' : c.letter, size: 110),
-          const SizedBox(height: 14),
-          _grid([
-            for (var i = 0; i < _session.soundOptions.length; i++)
-              QuickChoiceArt(
-                  index: i,
-                  selected: _picked == _session.soundOptions[i],
-                  child: Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 4, 4, 8),
-                      child: Row(children: [
-                        _listenIcon('lesson-sound-${_session.soundOptions[i]}',
-                            'Listen to sound ${i + 1}',
-                            index: i, embedded: true),
-                        Expanded(
-                            child: _choice(_session.soundOptions[i],
-                                _session.soundOptions[i] == c.letter,
-                                embedded: true,
-                                enabled: _heard.contains(
-                                    'lesson-sound-${_session.soundOptions[i]}'),
-                                child: const Text('Choose',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w900)))),
-                      ])))
-          ]),
+        return Column(children: [
+          Expanded(flex: 2, child: _letter(c.letter == 'Q' ? 'Qu' : c.letter)),
+          const SizedBox(height: 6),
+          Expanded(
+              flex: 3,
+              child: _grid([
+                for (var i = 0; i < _session.soundOptions.length; i++)
+                  QuickChoiceArt(
+                      index: i,
+                      selected: _picked == _session.soundOptions[i],
+                      child: Padding(
+                          padding: const EdgeInsets.all(3),
+                          child: Row(children: [
+                            _listenIcon(
+                                'lesson-sound-${_session.soundOptions[i]}',
+                                'Listen to sound ${i + 1}',
+                                index: i,
+                                embedded: true),
+                            Expanded(
+                                child: SizedBox.expand(
+                                    child: _choice(_session.soundOptions[i],
+                                        _session.soundOptions[i] == c.letter,
+                                        embedded: true,
+                                        enabled: _heard.contains(
+                                            'lesson-sound-${_session.soundOptions[i]}'),
+                                        child: const Text('Choose',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight:
+                                                    FontWeight.w900))))),
+                          ])))
+              ])),
         ]);
       case AdventureSkill.spelling:
         final key = adventureWordKey(c.word);
-        return Column(mainAxisSize: MainAxisSize.min, children: [
-          _picture(c.word, pictureSize * 1.3),
-          AnimatedSwitcher(
-              duration: MediaQuery.disableAnimationsOf(context)
-                  ? Duration.zero
-                  : const Duration(milliseconds: 350),
-              transitionBuilder: (child, animation) => SlideTransition(
-                  position: Tween(begin: const Offset(0, -.3), end: Offset.zero)
-                      .animate(animation),
-                  child: FadeTransition(opacity: animation, child: child)),
-              child: QuickGlassPanel(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
-                  child: Text(
-                      _reviewCorrect ? c.word.toUpperCase() : c.maskedWord,
-                      key: ValueKey(_reviewCorrect),
-                      style: const TextStyle(
-                          fontSize: 36, fontWeight: FontWeight.w900)))),
-          _listen(key, 'Hear word'),
-          const SizedBox(height: 10),
-          _grid([
-            for (final value in _session.spellingOptions)
-              _choice(value, value == c.letter,
-                  enabled: _heard.contains(key),
-                  artIndex: _session.spellingOptions.indexOf(value))
-          ], columns: 2),
+        return Column(children: [
+          Expanded(
+              flex: 2,
+              child: Row(children: [
+                Expanded(
+                    child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: _picture(c.word, pictureSize))),
+                const SizedBox(width: 8),
+                Expanded(
+                    child: Column(children: [
+                  Expanded(
+                      child: AnimatedSwitcher(
+                          duration: MediaQuery.disableAnimationsOf(context)
+                              ? Duration.zero
+                              : const Duration(milliseconds: 350),
+                          transitionBuilder: (child, animation) => SlideTransition(
+                              position:
+                                  Tween(begin: const Offset(0, -.3), end: Offset.zero)
+                                      .animate(animation),
+                              child: FadeTransition(
+                                  opacity: animation, child: child)),
+                          child: QuickGlassPanel(
+                              key: ValueKey(_reviewCorrect),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 3),
+                              child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child:
+                                      Text(_reviewCorrect ? c.word.toUpperCase() : c.maskedWord,
+                                          style: const TextStyle(
+                                              fontSize: 36,
+                                              fontWeight: FontWeight.w900)))))),
+                  const SizedBox(height: 4),
+                  SizedBox(height: 48, child: _listen(key, 'Hear word')),
+                ])),
+              ])),
+          const SizedBox(height: 6),
+          Expanded(
+              flex: 3,
+              child: _grid([
+                for (final value in _session.spellingOptions)
+                  _choice(value, value == c.letter,
+                      enabled: _heard.contains(key),
+                      artIndex: _session.spellingOptions.indexOf(value))
+              ])),
         ]);
       case AdventureSkill.soundPicture:
-        return Column(mainAxisSize: MainAxisSize.min, children: [
-          _listen(c.soundKey, 'Hear sound'),
-          const SizedBox(height: 12),
-          _grid([
+        return Column(children: [
+          SizedBox(height: 48, child: _listen(c.soundKey, 'Hear sound')),
+          const SizedBox(height: 6),
+          Expanded(
+              child: _grid([
             for (var i = 0; i < _session.pictureOptions.length; i++)
               QuickChoiceArt(
                   index: i,
                   selected: _picked == _session.pictureOptions[i],
-                  child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    SizedBox(
-                        width: double.infinity,
-                        child: _choice(_session.pictureOptions[i],
-                            _session.pictureOptions[i] == c.pictureWord,
-                            enabled: _heard.contains(c.soundKey),
-                            embedded: true,
-                            child: Semantics(
-                                label: 'Choose picture ${i + 1}',
-                                child: _picture(
-                                    _session.pictureOptions[i], pictureSize)))),
-                    Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: _listenIcon(
-                            adventureWordKey(_session.pictureOptions[i]),
-                            'Hear picture ${i + 1}',
-                            index: i,
-                            embedded: true)),
+                  child: Row(children: [
+                    Expanded(
+                        child: SizedBox.expand(
+                            child: _choice(_session.pictureOptions[i],
+                                _session.pictureOptions[i] == c.pictureWord,
+                                enabled: _heard.contains(c.soundKey),
+                                embedded: true,
+                                child: Semantics(
+                                    label: 'Choose picture ${i + 1}',
+                                    child: _picture(_session.pictureOptions[i],
+                                        pictureSize))))),
+                    _listenIcon(adventureWordKey(_session.pictureOptions[i]),
+                        'Hear picture ${i + 1}',
+                        index: i, embedded: true),
                   ]))
-          ]),
+          ], rowHeight: 112, maxWidth: 360)),
         ]);
       case AdventureSkill.hunt:
         final found = _review ? _reviewHunted : _session.hunted;
-        return Column(mainAxisSize: MainAxisSize.min, children: [
-          _letter('${c.letter} ${c.letter.toLowerCase()}'),
-          QuickGlassPanel(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-              child: Text('${found.length} / 4 found',
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w900, fontSize: 17))),
-          const SizedBox(height: 8),
-          _grid([
-            for (var i = 0; i < _session.huntLetters.length; i++)
-              FilledButton(
-                  key: ValueKey('hunt-$i'),
-                  onPressed:
-                      _canAnswer && !found.contains(i) ? () => _hunt(i) : null,
-                  style: quickColorButtonStyle(
-                      index: found.contains(i)
-                          ? 2
-                          : _wrongHunt.contains(i)
-                              ? 1
-                              : i,
-                      selected: found.contains(i),
-                      radius: 18,
-                      padding: const EdgeInsets.fromLTRB(0, 8, 0, 12),
-                      minimumSize: const Size(48, 58)),
-                  child: Text(_session.huntLetters[i],
-                      style: const TextStyle(
-                          color: Color(0xFFFFF9E9),
-                          fontSize: 26,
-                          fontWeight: FontWeight.w900)))
-          ], columns: 4),
+        return Column(children: [
+          Expanded(
+              child: Row(children: [
+            Expanded(child: _letter('${c.letter} ${c.letter.toLowerCase()}')),
+            const SizedBox(width: 8),
+            Flexible(
+                child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: QuickGlassPanel(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        child: Text('${found.length} / 4 found',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w900, fontSize: 15))))),
+          ])),
+          const SizedBox(height: 6),
+          Expanded(
+              flex: 4,
+              child: _grid([
+                for (var i = 0; i < _session.huntLetters.length; i++)
+                  FilledButton(
+                      key: ValueKey('hunt-$i'),
+                      onPressed: _canAnswer && !found.contains(i)
+                          ? () => _hunt(i)
+                          : null,
+                      style: quickColorButtonStyle(
+                          index: found.contains(i)
+                              ? 2
+                              : _wrongHunt.contains(i)
+                                  ? 1
+                                  : i,
+                          selected: found.contains(i),
+                          radius: 18,
+                          padding: const EdgeInsets.all(2),
+                          minimumSize: const Size(48, 48)),
+                      child: Text(_session.huntLetters[i],
+                          style: const TextStyle(
+                              color: Color(0xFFFFF9E9),
+                              fontSize: 24,
+                              fontWeight: FontWeight.w900)))
+              ], columns: 4, rowHeight: 56, maxWidth: 320)),
         ]);
     }
   }
@@ -546,20 +655,23 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
             ? FilledButton.icon(
                 onPressed: _startReview,
                 icon: const Icon(Icons.favorite_rounded),
-                label: const Text('Practice these skills'))
+                label: const FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text('Practice these skills')))
             : passed && next != null
                 ? FilledButton.icon(
                     onPressed: () => LearnerNavigation.open(context,
                         LetterMasteryCheckScreen(letter: letterContent(next)),
                         replace: true, cloudTransition: true),
                     icon: const Icon(Icons.arrow_forward_rounded),
-                    label: Text('Continue to Letter $next'))
+                    label: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text('Continue to Letter $next')))
                 : null,
         actions: [
           if (passed && answers.contains(false))
-            TextButton(
-                onPressed: _startReview,
-                child: const Text('Practice these skills')),
+            _resultAction(
+                Icons.favorite_rounded, 'Practice these skills', _startReview),
           _resultAction(Icons.refresh_rounded, 'Try Again', _restart),
           _resultAction(
               Icons.menu_book_rounded,
@@ -568,32 +680,36 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
                   LetterIntroductionScreen(letter: _session.content.letter))),
           _resultAction(Icons.bar_chart_rounded, 'View My Progress',
               () => LearnerNavigation.open(context, const ProgressScreen())),
-          TextButton.icon(
-              onPressed: () => Navigator.of(context).popUntil((r) => r.isFirst),
-              icon: const Icon(Icons.home_rounded),
-              label: const Text('Back to Home')),
+          _resultAction(Icons.home_rounded, 'Back to Home',
+              () => Navigator.of(context).popUntil((r) => r.isFirst)),
         ]);
   }
 
   Widget _resultAction(IconData icon, String label, VoidCallback onPressed) =>
-      SizedBox(
-          width: MediaQuery.textScalerOf(context).scale(1) > 1.3 ? 150 : 90,
-          child: TextButton(
-              onPressed: onPressed,
-              style: TextButton.styleFrom(
-                  backgroundColor: const Color(0xFFE8D9FF),
-                  foregroundColor: quickPurple,
-                  padding: const EdgeInsets.all(6),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(22))),
-              child: Column(mainAxisSize: MainAxisSize.min, children: [
-                Icon(icon, size: 24),
-                const SizedBox(height: 3),
-                Text(label,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        fontSize: 12, fontWeight: FontWeight.w900)),
-              ])));
+      TextButton(
+          onPressed: onPressed,
+          style: TextButton.styleFrom(
+              backgroundColor: const Color(0xFFE8D9FF),
+              foregroundColor: quickPurple,
+              minimumSize: const Size(48, 48),
+              padding: const EdgeInsets.all(4),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(22))),
+          child: Row(children: [
+            Icon(icon, size: 20),
+            const SizedBox(width: 3),
+            Expanded(
+                child: LayoutBuilder(
+                    builder: (_, box) => FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: SizedBox(
+                            width: box.maxWidth,
+                            child: Text(label,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w900)))))),
+          ]));
 
   Widget? _instructionReplay() =>
       adventureNarrationAssets.containsKey(_instructionKey)
@@ -612,110 +728,122 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
   Widget build(BuildContext context) => QuickCheckPage(
         hasProgress: !_intro && !_result,
         onLeave: _cancelAudio,
-        builder: (context, size) => ConstrainedBox(
-            constraints: BoxConstraints(
-                minHeight: (size.height - 92).clamp(0, double.infinity)),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (!_result) ...[
-                    if (!_intro) ...[
-                      QuickProgress(
-                          current: _step + 1,
-                          completed: _session.firstAnswers
-                              .where((a) => a != null)
-                              .length),
-                      const SizedBox(height: 10),
-                    ],
-                    QuickInstruction(
+        builder: (context, size) {
+          if (_result) {
+            return CompletionCelebration(
+                enabled:
+                    AdventurePolicy.passes(_session.firstAnswers.cast<bool>()),
+                child: _results());
+          }
+          final compact = size.height < 500;
+          final gap = compact ? 4.0 : 10.0;
+          final instructionHeight = compact ? 64.0 : 80.0;
+          return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (_intro)
+                  QuickGlassPanel(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 6),
+                      child: Column(children: [
+                        FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                                'Take five little steps with Letter ${_session.content.letter}!',
+                                style: const TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w900))),
+                        _progressStars(),
+                      ]))
+                else
+                  QuickProgress(
+                      compact: compact,
+                      current: _step + 1,
+                      completed:
+                          _session.firstAnswers.where((a) => a != null).length,
+                      trailing: _progressStars(size: compact ? 18 : 22)),
+                SizedBox(height: gap),
+                SizedBox(
+                    height: instructionHeight,
+                    child: QuickInstruction(
                         text: adventureInstructions[_instructionKey]!,
                         intro: _intro,
-                        replay: _instructionReplay()),
-                    const SizedBox(height: 14),
-                  ],
-                  if (_intro) ...[
-                    QuickWoodSign(
-                        label: 'Letter ${_session.content.letter} Adventure!'),
-                    const SizedBox(height: 14),
-                    Center(
-                        child: Image.asset(
-                            'assets/images/letters/${_session.content.letter.toLowerCase()}.webp',
-                            height: (size.height * .24).clamp(88, 190),
-                            excludeFromSemantics: true)),
-                    const SizedBox(height: 12),
-                    QuickGlassPanel(
-                        child: Column(children: [
-                      Text(
-                          'Take five little steps with Letter ${_session.content.letter}!',
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.w900)),
-                      const SizedBox(height: 6),
-                      _progressStars(),
-                    ])),
-                    const SizedBox(height: 14),
-                    FilledButton.icon(
-                        key: const ValueKey('start-adventure'),
-                        onPressed: !_active || _playing
-                            ? null
-                            : () {
-                                setState(() => _intro = false);
-                                _narrate(_instructionKey);
-                              },
-                        icon: const Icon(Icons.play_arrow_rounded),
-                        label: const Text('Start Adventure')),
-                  ] else if (_result) ...[
-                    CompletionCelebration(
-                        enabled: AdventurePolicy.passes(
-                            _session.firstAnswers.cast<bool>()),
-                        child: _results()),
-                  ] else ...[
-                    QuickWoodSign(label: _skill.label),
-                    const SizedBox(height: 8),
-                    _progressStars(),
-                    if (_review)
-                      Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: QuickGlassPanel(
-                              child: Text(
-                                  'Guided practice - Score stays ${_session.score}/5',
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w900)))),
-                    const SizedBox(height: 16),
-                    _task(size.height),
-                    const SizedBox(height: 12),
-                    if (_error != null)
-                      QuickGlassPanel(
-                          child: Text(_error!, textAlign: TextAlign.center)),
+                        replay: _instructionReplay())),
+                SizedBox(height: gap),
+                SizedBox(
+                    height: compact ? 30 : 36,
+                    child: QuickWoodSign(
+                        label: _intro
+                            ? 'Letter ${_session.content.letter} Adventure!'
+                            : _skill.label)),
+                SizedBox(height: gap),
+                if (_review) ...[
+                  _compactNotice(
+                      'Guided practice - Score stays ${_session.score}/5'),
+                  SizedBox(height: gap),
+                ],
+                Expanded(
+                    child: _intro
+                        ? Center(
+                            child: ConstrainedBox(
+                                constraints: const BoxConstraints(
+                                    maxWidth: 220, maxHeight: 220),
+                                child: Image.asset(
+                                    'assets/images/letters/${_session.content.letter.toLowerCase()}.webp',
+                                    fit: BoxFit.contain,
+                                    excludeFromSemantics: true)))
+                        : LayoutBuilder(
+                            builder: (_, task) => _task(task.maxHeight))),
+                if (_error != null || _answered || _reviewFeedback != null) ...[
+                  SizedBox(height: gap),
+                  _compactNotice([
+                    if (_error != null) _error!,
                     if (_answered || _reviewFeedback != null)
-                      Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: QuickGlassPanel(
-                              child: Text(
-                                  _reviewFeedback ??
-                                      (_review
-                                          ? 'Nice work!'
-                                          : 'Answer saved!'),
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w900)))),
-                    if (_answered)
-                      FilledButton(
-                          onPressed: _saving || _playing ? null : _next,
-                          child: Text(_saving
-                              ? 'Saving...'
-                              : _review
-                                  ? 'Continue'
-                                  : _step == 4
-                                      ? 'See Result'
-                                      : 'Next Challenge')),
-                  ],
-                ])),
+                      _reviewFeedback ??
+                          (_review ? 'Nice work!' : 'Answer saved!'),
+                  ].join(' ')),
+                ],
+                if (_intro || _answered) ...[
+                  SizedBox(height: gap),
+                  Center(
+                      child: SizedBox(
+                          width: 300,
+                          height: compact ? 48 : 52,
+                          child: _intro
+                              ? FilledButton.icon(
+                                  key: const ValueKey('start-adventure'),
+                                  onPressed: !_active || _playing
+                                      ? null
+                                      : () {
+                                          setState(() => _intro = false);
+                                          _narrate(_instructionKey);
+                                        },
+                                  icon: const Icon(Icons.play_arrow_rounded),
+                                  label: const Text('Start Adventure'))
+                              : FilledButton(
+                                  onPressed: _saving || _playing ? null : _next,
+                                  child: Text(_saving
+                                      ? 'Saving...'
+                                      : _review
+                                          ? 'Continue'
+                                          : _step == 4
+                                              ? 'See Result'
+                                              : 'Next Challenge')))),
+                ],
+              ]);
+        },
       );
 
-  Widget _progressStars() {
+  Widget _compactNotice(String text) => SizedBox(
+      height: 24,
+      child: QuickGlassPanel(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(text,
+                  style: const TextStyle(fontWeight: FontWeight.w900)))));
+
+  Widget _progressStars({double size = 32}) {
     final completed = _session.firstAnswers.where((a) => a != null).length;
     return Semantics(
         label: '$completed of 5 challenges answered',
@@ -738,7 +866,7 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
                         offset: Offset(0, -1),
                         blurRadius: 2)
                   ],
-                  size: 32)),
+                  size: size)),
         )));
   }
 }

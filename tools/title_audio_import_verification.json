@@ -1,0 +1,22 @@
+﻿[
+    {
+        "file":  "kidsphonics_intro_01.mp3",
+        "sha256":  "D88B1325328E1D81F4AE535AED2518845691C2265A78F9F1F3AEE27E85362FBA",
+        "matchesOriginal":  true
+    },
+    {
+        "file":  "kidsphonics_intro_02.mp3",
+        "sha256":  "49E410D3D61C4632E2A7CA108848FA8D077A9444558D3A2149400401A22219D1",
+        "matchesOriginal":  true
+    },
+    {
+        "file":  "kidsphonics_intro_03.mp3",
+        "sha256":  "A6792E9E0F971953941256914F53C1F899BBA8F2FE054B63FAC3BB1029E0D2F4",
+        "matchesOriginal":  true
+    },
+    {
+        "file":  "kidsphonics_intro_04.mp3",
+        "sha256":  "411B409F3EC792AB3C855E65AD9601570814B2BDC7D7501909AEFC7952B27C49",
+        "matchesOriginal":  true
+    }
+]

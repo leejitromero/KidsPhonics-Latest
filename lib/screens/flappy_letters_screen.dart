@@ -9,6 +9,7 @@ import '../models/difficulty.dart';
 import '../models/flappy_letters_game.dart';
 import '../widgets/flappy_bird_sprite.dart';
 import '../widgets/flappy_letters_design.dart';
+import '../widgets/game_instruction_guide.dart';
 import '../widgets/completion_celebration.dart';
 import '../controllers/game_narration_controller.dart';
 import '../providers/app_provider.dart';
@@ -244,6 +245,11 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
                         onHelp: onHelp,
                         onPause:
                             _game.state == FlightState.flying ? _pause : null),
+                    if (_game.state == FlightState.ready)
+                      const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12),
+                          child: GameInstructionGuide(
+                              gameTitle: 'Flappy Letters')),
                     if (_game.state != FlightState.flying)
                       Expanded(child: _overlay()),
                   ]),

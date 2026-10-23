@@ -1,0 +1,46 @@
+﻿{
+    "reviewDate":  "2026-10-11",
+    "timezone":  "Asia/Manila",
+    "verifiedUtc":  "2026-10-11T08:42:28.7260077Z",
+    "scope":  "Home screen only",
+    "staticAnalysis":  "No issues found",
+    "focusedTestsPassed":  83,
+    "existingReviewedRuntimeFilesUnchanged":  true,
+    "assetCopiesVerifiedAgainstSuppliedFiles":  true,
+    "requiredAssets":  681,
+    "unusedAssetCandidates":  0,
+    "mediumPortraitScrollExtent":  0,
+    "layouts":  [
+                    "320x568",
+                    "390x844",
+                    "430x932",
+                    "800x600",
+                    "320x568 with 2x text",
+                    "390x844 with system insets"
+                ],
+    "categoryVisitMilliseconds":  1050,
+    "existingCategoryRoutesPreserved":  true,
+    "savedProgressRestoredAfterRemount":  true,
+    "sourceSHA256":  {
+                         "lib/screens/home_screen.dart":  "001012fce5001d59fbecb7e809c41bb76e24d46d46521d80ad76d29da0160bba",
+                         "lib/data/home_village.dart":  "cc5d4d2d35312b5b28bf2b7233864ef3ac8d55f6fe2bc1d893fc1f537093f3c0",
+                         "lib/widgets/category_house.dart":  "6262bba2c9c715507124141766a1a01357cca37306d32eb673d45ecee332120e",
+                         "lib/widgets/home_village_menu.dart":  "9dc10fb1b5f660a4a479b67184e3ec06c76136a6a175fe3a4a9336f968bd1cc4",
+                         "lib/widgets/home_village_footer.dart":  "ab24dee58855195c972887753641f2cde29047147f0cbaa1ce11a1210a6075a3",
+                         "pubspec.yaml":  "a1d1b3fa024c30a92d226a4e6fe2abbef064c74a6c1f0995cdbba8783249e788",
+                         "assets/images/home_village/progress.png":  "06580f7ef792b02bd0abae6cb21ae89e3ca9b8038f749b87c428833ebb3115e9",
+                         "assets/images/home_village/parents.png":  "374790eb196793e9344648d03250f30570245b40b6dd1411decde052b37047d6",
+                         "assets/images/home_village/lessons.png":  "292a010173993ea18fddc73213197989d31f138da727e557800bde35adb4dc32",
+                         "assets/images/home_village/games.png":  "c0497b5e9d847245afebac7920d2412246f9431378d7190c8dbe50764adfc950"
+                     },
+    "logs":  {
+                 "analysis":  "build/home_village_analysis.log",
+                 "tests":  "build/home_village_final_tests.log"
+             },
+    "previews":  [
+                     "build/ui_previews/home_village_390.png",
+                     "build/ui_previews/home_village_lessons_welcome.png"
+                 ],
+    "apkRebuilt":  false,
+    "physicalDeviceTested":  false
+}

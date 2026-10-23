@@ -5,6 +5,8 @@ import '../services/parent_auth_service.dart';
 import '../services/screen_time_service.dart';
 import '../services/preference_write_queue.dart';
 import '../models/learning_progress.dart';
+import '../models/word_lesson_progress.dart';
+import '../models/progress_badge.dart';
 import '../models/letter_adventure.dart';
 import '../models/weekly_learning_summary.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +24,28 @@ class AppProvider extends ChangeNotifier {
   double _musicVolume = .12;
   bool get musicEnabled => _musicEnabled;
   double get musicVolume => _musicVolume;
+  double _textSizeMultiplier = 1;
+  bool _reducedAnimations = false;
+  double get textSizeMultiplier => _textSizeMultiplier;
+  bool get reducedAnimations => _reducedAnimations;
+
+  Future<void> setTextSizeMultiplier(double value) async {
+    await ready;
+    if (!isReady || !value.isFinite) return;
+    final next = value.clamp(1.0, 1.3).toDouble();
+    if (_textSizeMultiplier == next) return;
+    _textSizeMultiplier = next;
+    _changed();
+    await _savePrefs();
+  }
+
+  Future<void> setReducedAnimations(bool enabled) async {
+    await ready;
+    if (!isReady || _reducedAnimations == enabled) return;
+    _reducedAnimations = enabled;
+    _changed();
+    await _savePrefs();
+  }
 
   Future<void> toggleMusic() async {
     await ready;
@@ -39,6 +63,44 @@ class AppProvider extends ChangeNotifier {
   }
 
   bool _gameAccess = true;
+
+  String _studentCharacter = 'boy';
+  String _studentName = '';
+  String get studentCharacter => _studentCharacter;
+  String get studentName => _studentName;
+  bool _welcomeCompleted = false;
+  bool get welcomeCompleted => _welcomeCompleted;
+
+  Future<bool> completeWelcome(String character, String name) async {
+    if (name.trim().isEmpty) return false;
+    await ready;
+    if (!isReady) return false;
+    final previous = _welcomeCompleted;
+    _welcomeCompleted = true;
+    try {
+      await setStudentCharacter(character, name);
+      if (!hasUnsavedChanges) return true;
+    } catch (_) {
+      _welcomeCompleted = previous;
+      _changed();
+      rethrow;
+    }
+    _welcomeCompleted = previous;
+    _changed();
+    return false;
+  }
+
+  Future<void> setStudentCharacter(String character, String name) async {
+    if (character != 'boy' && character != 'girl') {
+      throw ArgumentError.value(character, 'character');
+    }
+    await ready;
+    if (!isReady) return;
+    _studentCharacter = character;
+    _studentName = name.trim().characters.take(24).toString();
+    _changed();
+    await _savePrefs();
+  }
 
   bool _rhymingWordsDone = false;
   final Map<String, int> _journeyScores = {};
@@ -61,7 +123,37 @@ class AppProvider extends ChangeNotifier {
   int _streak = 0;
   int _stars = 0;
   final Map<String, LetterProgress> _letterProgress = {};
+  final Map<WordLesson, WordLessonProgress> _wordLessons = {};
+
+  WordLessonProgress wordLessonProgress(WordLesson lesson) =>
+      _wordLessons[lesson] ?? const WordLessonProgress();
+
+  Future<void> startWordLesson(WordLesson lesson) async {
+    await ready;
+    if (!isReady || wordLessonProgress(lesson).started) return;
+    _wordLessons[lesson] = const WordLessonProgress(started: true);
+    _changed();
+    await _savePrefs();
+  }
+
+  /// Idempotent per-word completion; replaying never duplicates progress/rewards.
+  Future<void> completeWordLessonWord(WordLesson lesson, String word) async {
+    if (!lesson.words.contains(word)) {
+      throw ArgumentError.value(word, 'word', 'Unknown lesson word');
+    }
+    await ready;
+    if (!isReady) return;
+    final previous = wordLessonProgress(lesson);
+    if (previous.completed.contains(word)) return;
+    _wordLessons[lesson] = WordLessonProgress(
+        started: true,
+        completed: Set.unmodifiable({...previous.completed, word}));
+    _changed();
+    await _savePrefs();
+  }
+
   final Map<String, AdventureProgress> _adventures = {};
+  String? _recommendedAdventureLetter;
   AdventureProgress adventureProgress(String letter) =>
       _adventures[letter] ?? const AdventureProgress();
   int get overallMasteredCount =>
@@ -100,8 +192,76 @@ class AppProvider extends ChangeNotifier {
   int get quickCheckVowelsMastered => quickCheckLetters
       .where((p) => 'AEIOU'.contains(p.letter) && p.mastered)
       .length;
-  static const adventureMilestones = [1, 5, 10, 15, 20, 26];
+  static const adventureMilestones = [1, 5, 13, 26];
+
+  int get exploredLetterCount => quickCheckLetters
+      .where((letter) => letter.status != LearningStatus.notStarted)
+      .length;
+  int get exploredSoundCount =>
+      allLetterProgress.where((letter) => letter.soundListens > 0).length;
+
+  /// Distinct lesson types with actual listening or completed word practice.
+  /// Opening a lesson or completing a game does not inflate this number.
+  int get practicedLessonCount => [
+        allLetterProgress.any((letter) => letter.nameListens > 0),
+        exploredSoundCount > 0,
+        allLetterProgress.any((letter) =>
+            'AEIOU'.contains(letter.letter) && letter.soundListens > 0),
+        allLetterProgress.any((letter) => letter.wordListens > 0),
+        wordLessonProgress(WordLesson.cvc).completed.isNotEmpty,
+        wordLessonProgress(WordLesson.blending).completed.isNotEmpty,
+      ].where((practiced) => practiced).length;
+
+  List<ProgressBadge> get progressBadges => [
+        ProgressBadge(
+            id: 'First Mastery',
+            title: 'First Letter Mastery',
+            description: 'Master 1 letter in Quick Check.',
+            current: overallMasteredCount,
+            target: 1),
+        ProgressBadge(
+            id: 'Vowel Star',
+            title: 'Vowel Star',
+            description: 'Master all 5 vowels in Quick Check.',
+            current: quickCheckVowelsMastered,
+            target: 5),
+        ProgressBadge(
+            id: 'CVC Explorer',
+            title: 'CVC Explorer',
+            description: 'Practice 5 different CVC words.',
+            current: wordLessonProgress(WordLesson.cvc).completed.length,
+            target: 5),
+        ProgressBadge(
+            id: 'Blending Champion',
+            title: 'Blending Champion',
+            description: 'Complete your first blending word puzzle.',
+            current: wordLessonProgress(WordLesson.blending).completed.length,
+            target: 1),
+        ProgressBadge(
+            id: '3-Day Streak',
+            title: '3-Day Streak',
+            description:
+                'Answer questions or practice speaking on 3 consecutive days.',
+            current: bestLearningStreak,
+            target: 3),
+        for (final (target, title) in [
+          (5, '5 Letters Mastered'),
+          (13, 'Halfway There'),
+          (26, 'Alphabet Master')
+        ])
+          ProgressBadge(
+              id: title,
+              title: title,
+              description: 'Master $target letters in Quick Check.',
+              current: overallMasteredCount,
+              target: target,
+              milestone: true),
+      ];
   String? get recommendedAdventureLetter {
+    // Keep a child's current target through retries and unrelated activities.
+    // Only the existing AdventurePolicy mastery decision advances it.
+    final current = _recommendedAdventureLetter;
+    if (current != null && !adventureProgress(current).mastered) return current;
     final pending = adventureContents
         .map((c) => c.letter)
         .where((letter) => !adventureProgress(letter).mastered)
@@ -128,6 +288,7 @@ class AppProvider extends ChangeNotifier {
     await ready;
     final previous = adventureProgress(letter);
     if (previous.sessionId == sessionId) return (xp: 0, stars: 0);
+    _recommendedAdventureLetter ??= recommendedAdventureLetter;
     final score = answers.where((v) => v).length;
     final newMastery = !previous.mastered && AdventurePolicy.passes(answers);
     final xp = (previous.completed == 0 ? 5 : 0) + (newMastery ? 25 : 0);
@@ -140,6 +301,7 @@ class AppProvider extends ChangeNotifier {
             (newMastery ? _now().toIso8601String() : null),
         lastAnswers: List.unmodifiable(answers),
         sessionId: sessionId);
+    _recommendedAdventureLetter = recommendedAdventureLetter;
     for (final correct in answers) {
       _recordAnswer(correct);
     }
@@ -261,7 +423,9 @@ class AppProvider extends ChangeNotifier {
 
   // Retains an earned streak badge using actual stored learning days, without
   // adding a duplicate persisted flag or re-awarding anything on rebuild.
-  bool get hasThreeDayLearningStreak {
+  bool get hasThreeDayLearningStreak => bestLearningStreak >= 3;
+
+  int get bestLearningStreak {
     final dates = _dailyActivity.entries
         .where(
             (e) => e.value.questionsAnswered > 0 || e.value.speechAttempts > 0)
@@ -271,15 +435,15 @@ class AppProvider extends ChangeNotifier {
         .toSet()
         .toList()
       ..sort();
-    var run = 0;
+    var run = 0, best = 0;
     int? previous;
     for (final date in dates) {
       if (date > calendarDay(today)) continue;
       run = previous != null && date == previous + 1 ? run + 1 : 1;
-      if (run >= 3) return true;
+      if (run > best) best = run;
       previous = date;
     }
-    return false;
+    return best;
   }
 
   List<LearningAchievement> get learningAchievements => [
@@ -299,18 +463,8 @@ class AppProvider extends ChangeNotifier {
   int get unlockedAchievementCount =>
       learningAchievements.where((a) => a.unlocked).length;
   List<LearningAchievement> get quickCheckAchievements => [
-        LearningAchievement('First Mastery', 'Mastered your first letter',
-            overallMasteredCount >= 1),
-        LearningAchievement('5 Letters Mastered', 'Mastered 5 letters',
-            overallMasteredCount >= 5),
-        LearningAchievement(
-            'Halfway There', 'Mastered 13 letters', overallMasteredCount >= 13),
-        LearningAchievement('Alphabet Master', 'Mastered all 26 letters',
-            overallMasteredCount >= 26),
-        LearningAchievement(
-            '3-Day Streak',
-            'Answered questions on 3 consecutive days',
-            hasThreeDayLearningStreak),
+        for (final badge in progressBadges)
+          LearningAchievement(badge.id, badge.description, badge.earned),
       ];
   double? get overallActivityAccuracy {
     final attempts =
@@ -570,7 +724,9 @@ class AppProvider extends ChangeNotifier {
     _streak = 0;
     _stars = 0;
     _letterProgress.clear();
+    _wordLessons.clear();
     _adventures.clear();
+    _recommendedAdventureLetter = null;
     _journeyScores.clear();
     _dailyActivity.clear();
     _lastPracticeDate = null;
@@ -608,17 +764,38 @@ class AppProvider extends ChangeNotifier {
     _voiceEnabled = setting('voice', true);
     _sfxEnabled = setting('sfx', true);
     _musicEnabled = setting('musicEnabled', true);
+    final textSize = read('textSizeMultiplierV1');
+    _textSizeMultiplier = textSize is num && textSize.isFinite
+        ? textSize.toDouble().clamp(1.0, 1.3)
+        : 1;
+    _reducedAnimations = setting('reducedAnimationsV1', false);
     final volume = read('musicVolume');
     _musicVolume =
         volume is num && volume.isFinite ? volume.toDouble().clamp(0, .4) : .12;
     _gameAccess = setting('gameAccess', true);
+    _studentCharacter =
+        setting('studentCharacter', 'boy') == 'girl' ? 'girl' : 'boy';
+    _studentName = setting('studentName', '').characters.take(24).toString();
+    _welcomeCompleted = setting('welcomeCompletedV1', _studentName.isNotEmpty);
 
     _rhymingWordsDone = setting('rhymingDone', false);
+    final wordLessons = _decodeMap(read('wordLessonProgressV1'));
+    for (final lesson in WordLesson.values) {
+      _wordLessons[lesson] =
+          WordLessonProgress.fromJson(wordLessons[lesson.name], lesson);
+    }
     for (final entry in _decodeMap(read('letterAdventuresV1')).entries) {
       if (RegExp(r'^[A-Z]$').hasMatch(entry.key) && entry.value is Map) {
         _adventures[entry.key] = AdventureProgress.fromJson(entry.value as Map);
       }
     }
+    final recommendation = read('recommendedAdventureLetterV1');
+    if (recommendation is String &&
+        RegExp(r'^[A-Z]$').hasMatch(recommendation)) {
+      _recommendedAdventureLetter = recommendation;
+    }
+    // Existing saves migrate using their current recommendation ranking.
+    _recommendedAdventureLetter = recommendedAdventureLetter;
     for (final entry in _decodeMap(read('journeyScoresV1')).entries) {
       if (entry.value is int && entry.value >= 0 && entry.value <= 100) {
         _journeyScores[entry.key] = entry.value as int;
@@ -685,9 +862,18 @@ class AppProvider extends ChangeNotifier {
       'sfx': _sfxEnabled,
       'musicEnabled': _musicEnabled,
       'musicVolume': _musicVolume,
+      'textSizeMultiplierV1': _textSizeMultiplier,
+      'reducedAnimationsV1': _reducedAnimations,
       'gameAccess': _gameAccess,
+      'studentCharacter': _studentCharacter,
+      'studentName': _studentName,
+      'welcomeCompletedV1': _welcomeCompleted,
       'rhymingDone': _rhymingWordsDone,
       'journeyScoresV1': jsonEncode(_journeyScores),
+      'wordLessonProgressV1': jsonEncode({
+        for (final entry in _wordLessons.entries)
+          entry.key.name: entry.value.toJson(),
+      }),
       'xp': _xp,
       'stars': _stars,
       'streakV2': streak,
@@ -699,6 +885,7 @@ class AppProvider extends ChangeNotifier {
     final snapshot = <String, Object?>{
       ...values,
       'lastPracticeDateV1': _lastPracticeDate,
+      'recommendedAdventureLetterV1': recommendedAdventureLetter,
     };
     final prefs = await SharedPreferences.getInstance();
     // Commit one authoritative snapshot before mirroring legacy keys.

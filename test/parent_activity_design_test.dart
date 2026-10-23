@@ -27,6 +27,9 @@ void main() {
 
   Future<AppProvider> open(WidgetTester t,
       {bool empty = false, GlobalKey? boundary}) async {
+    t.platformDispatcher.accessibilityFeaturesTestValue =
+        const FakeAccessibilityFeatures(disableAnimations: true);
+    addTearDown(t.platformDispatcher.clearAccessibilityFeaturesTestValue);
     SharedPreferences.setMockInitialValues({
       'xp': empty ? 0 : 950,
       'stars': empty ? 0 : 94,
@@ -141,7 +144,7 @@ void main() {
     await t.pumpAndSettle();
     expect(find.text('950'), findsOneWidget);
     expect(find.text('94'), findsOneWidget);
-    expect(find.text('1 / 5 Achievements'), findsOneWidget);
+    expect(find.text('1 / 8 Achievements'), findsOneWidget);
     await t.tap(find.text('View All'));
     await t.pumpAndSettle();
     expect(find.text('3-Day Streak · Unlocked'), findsOneWidget);

@@ -11,7 +11,7 @@ import 'package:kidsphonics/models/learning_progress.dart';
 import 'package:kidsphonics/providers/app_provider.dart';
 import 'package:kidsphonics/screens/progress_screen.dart';
 import 'package:kidsphonics/widgets/parent_garden_overview.dart';
-import 'package:kidsphonics/widgets/mastery_illustration.dart';
+import 'package:kidsphonics/widgets/progress_reference_design.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 
 void main() {
@@ -99,12 +99,12 @@ void main() {
                 value: p, child: MaterialApp(home: screen))));
         await t.pumpAndSettle();
         if (screen is ProgressScreen) {
-          final panel =
-              t.widget<MasteryIllustration>(find.byType(MasteryIllustration));
-          expect(panel.mastered, 1);
-          expect(panel.completed, 1);
+          final panel = t.widget<ProgressSkillRow>(
+              find.byKey(const ValueKey('journey-skill-letters')));
+          expect(panel.current, 1);
+          expect(p.adventureAssessments, 1);
         } else {
-          expect(find.byType(MasteryIllustration), findsNothing);
+          expect(find.byType(ProgressSkillRow), findsNothing);
           expect(find.text('Child Learning Summary'), findsNothing);
           expect(find.text('Letter Status A–Z'), findsNothing);
           expect(find.text('This Week at a Glance'), findsOneWidget);
@@ -169,10 +169,11 @@ void main() {
           expect(find.byType(ProgressScreen), findsOneWidget);
           expect(
               t
-                  .widget<MasteryIllustration>(find.byType(MasteryIllustration))
-                  .mastered,
+                  .widget<ProgressSkillRow>(
+                      find.byKey(const ValueKey('journey-skill-letters')))
+                  .current,
               1);
-          await t.pageBack();
+          Navigator.of(t.element(find.byType(ProgressScreen))).pop();
           await t.pumpAndSettle();
         }
         expect(t.takeException(), isNull);

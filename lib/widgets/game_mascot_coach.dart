@@ -10,11 +10,13 @@ class GameMascotCoach extends StatefulWidget {
       required this.title,
       required this.instructions,
       required this.controller,
+      this.child,
       this.enabled = true});
   static const mascotAsset = 'assets/images/new_ui/game_mascot.webp';
   final String title, instructions;
   final GameNarrationController controller;
   final bool enabled;
+  final Widget? child;
   @override
   State<GameMascotCoach> createState() => _GameMascotCoachState();
 }
@@ -80,7 +82,9 @@ class _GameMascotCoachState extends State<GameMascotCoach>
   }
 
   @override
-  Widget build(BuildContext context) => AnimatedBuilder(
+  Widget build(BuildContext context) =>
+      widget.child ??
+      AnimatedBuilder(
         animation: widget.controller,
         builder: (_, __) => Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),

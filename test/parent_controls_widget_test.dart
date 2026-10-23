@@ -49,11 +49,15 @@ void main() {
     expect(find.text('Daily Time Limit'), findsNothing);
     await tester.enterText(find.byType(TextField).at(0), '2580');
     await tester.enterText(find.byType(TextField).at(1), '2581');
+    await tester.ensureVisible(find.text('Set PIN'));
+    await tester.pump();
     await tester.tap(find.text('Set PIN'));
     await tester.pump();
     expect(find.text('PINs do not match.'), findsOneWidget);
     await tester.enterText(find.byType(TextField).at(0), '2580');
     await tester.enterText(find.byType(TextField).at(1), '2580');
+    await tester.ensureVisible(find.text('Set PIN'));
+    await tester.pump();
     await tester.runAsync(() async {
       await tester.tap(find.text('Set PIN'));
     });
@@ -119,10 +123,14 @@ void main() {
     await tester.runAsync(() => p.parentAuth.setup('2580', '2580'));
     await tester.pumpWidget(app(p, const ParentScreen()));
     await tester.pump();
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
     await tester.pump(const Duration(seconds: 61));
     expect(p.parentAuth.isAuthenticated, isFalse);
     expect(p.screenTime.usedSecondsToday, 0);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
     await tester.pump();
     expect(find.text('Parent Access'), findsOneWidget);

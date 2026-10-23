@@ -1,0 +1,77 @@
+﻿{
+    "method":  "Original RGB pixels with antialiased silhouette alpha masks",
+    "source":  "output/banner_tittle_source.png",
+    "sourceSha256":  "2401F794EFB78B418A12F1CFCA6E605C5AE172A4444DAECF96A756D85FD2E0EC",
+    "assets":  [
+                   {
+                       "asset":  "assets/images/home_banner/logo.png",
+                       "sourceRect":  [
+                                          112,
+                                          0,
+                                          1350,
+                                          585
+                                      ],
+                       "sha256":  "F053E22DCDCE6CEFBC2610DAE0579694762AF996BF38ABC3920952525D2193FE"
+                   },
+                   {
+                       "asset":  "assets/images/home_banner/panel.png",
+                       "sourceRect":  [
+                                          143,
+                                          529,
+                                          1235,
+                                          333
+                                      ],
+                       "sha256":  "33F5B6F7EDFCE7EDB1DC119232A62D7EB0062FF89DA6331F9FF8F0EECAEA42BB"
+                   },
+                   {
+                       "asset":  "assets/images/home_banner/trophy.png",
+                       "sourceRect":  [
+                                          290,
+                                          872,
+                                          156,
+                                          128
+                                      ],
+                       "sha256":  "64F3791CAF3E7FEEAE4CB6C5F42825180A7402B8FC89EF5262ED0D6F065215E8"
+                   },
+                   {
+                       "asset":  "assets/images/home_banner/xp.png",
+                       "sourceRect":  [
+                                          470,
+                                          867,
+                                          106,
+                                          145
+                                      ],
+                       "sha256":  "3F557AFA0BCF0C39C38ED71B8490D89F47C2A534B91F3E35B8BB387349954C5D"
+                   },
+                   {
+                       "asset":  "assets/images/home_banner/star.png",
+                       "sourceRect":  [
+                                          604,
+                                          867,
+                                          143,
+                                          136
+                                      ],
+                       "sha256":  "2CE9C03CA2BDA9E991209381FFEDE07C88A5698800EDC8C3FA348084DDCA5F7B"
+                   },
+                   {
+                       "asset":  "assets/images/home_banner/fire.png",
+                       "sourceRect":  [
+                                          780,
+                                          856,
+                                          131,
+                                          146
+                                      ],
+                       "sha256":  "993A2FEEAC42C9B24F2480D9F786F94CBB1553BFF0EF3E7F60D81E3A1EC8CFB2"
+                   },
+                   {
+                       "asset":  "assets/images/home_banner/flower.png",
+                       "sourceRect":  [
+                                          936,
+                                          889,
+                                          114,
+                                          108
+                                      ],
+                       "sha256":  "CB4020C9FEB51D1527A4BAA38FA5670105D57F2FA33558FEB2FE2BC562999B44"
+                   }
+               ]
+}

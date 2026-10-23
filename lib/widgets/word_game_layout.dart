@@ -3,12 +3,20 @@ import 'game_word_picture.dart';
 
 /// Shared picture and control sizing for the word games, within the viewport.
 class WordGameLayout extends StatelessWidget {
-  const WordGameLayout({super.key, required this.word, required this.children});
+  const WordGameLayout(
+      {super.key,
+      required this.word,
+      required this.children,
+      this.pictureExtent});
   final String word;
   final List<Widget> children;
+
+  /// Lets a word-building board reserve room for its larger interactive tiles.
+  final double? pictureExtent;
   @override
   Widget build(BuildContext context) => LayoutBuilder(builder: (_, box) {
-        final imageSize = (box.maxHeight * .38).clamp(130.0, 220.0);
+        final imageSize =
+            pictureExtent ?? (box.maxHeight * .38).clamp(130.0, 220.0);
         return Column(children: [
           Container(
               height: imageSize,

@@ -8,6 +8,8 @@ import '../data/rhyming_jar_data.dart';
 import '../models/difficulty.dart';
 import '../providers/app_provider.dart';
 import '../widgets/learner_widgets.dart';
+import '../widgets/game_instruction_guide.dart';
+import '../widgets/rhyming_words_design.dart';
 
 class RhymingWordsScreen extends StatefulWidget {
   const RhymingWordsScreen({super.key, this.difficulty = Difficulty.medium});
@@ -32,7 +34,7 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
   int _index = 0, _speechRequest = 0;
   bool _foreground = true, _manualPause = false, _muted = false;
   bool _active = false, _voice = true, _started = false;
-  bool _speechBusy = false, _unavailable = false;
+  bool _speechBusy = false;
   Offset _flightStart = Offset.zero;
   String? _highlight;
   List<RhymingFamily> _newSession() => GameSessionOrder.next(
@@ -138,16 +140,12 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
     if (key == null) return;
     final request = ++_speechRequest;
     _speechBusy = true;
-    _unavailable = false;
     setState(() {});
-    bool played = true;
     if (_voice) {
-      played =
-          await context.read<AppProvider>().phonicsAudio.playInstruction(key);
+      await context.read<AppProvider>().phonicsAudio.playInstruction(key);
     }
     if (!mounted || !_active || request != _speechRequest) return;
     _speechBusy = false;
-    _unavailable = !played;
     _jar.setPhase(switch (phase) {
       JarPhase.intro => JarPhase.target,
       JarPhase.target => JarPhase.choosing,
@@ -186,7 +184,7 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
     _speechBusy = true;
     _highlight = word;
     setState(() {});
-    final played = await context
+    await context
         .read<AppProvider>()
         .phonicsAudio
         .playInstruction(rhymeWordKey(word));
@@ -194,7 +192,6 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
     setState(() {
       _speechBusy = false;
       _highlight = null;
-      _unavailable = !played;
     });
   }
 
@@ -257,6 +254,10 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
         current: _index + 1,
         total: _rounds.length,
         progressLabel: 'Jar',
+        roundHeader: RhymingRoundHeader(
+            difficulty: widget.difficulty,
+            current: _index + 1,
+            total: _rounds.length),
         fitViewport: true,
         hasProgress: scoredAttempts > 0 && !resultOpen,
         canOpenTutorial: () => !_speechBusy && _jar.phase == JarPhase.choosing,
@@ -264,49 +265,72 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
           _manualPause = true;
           _sync();
         },
-        instructionPanel: Row(children: [
-          Expanded(
-              child: Text(
-                  _unavailable
-                      ? 'Recording unavailable. You can keep playing.'
-                      : _speechBusy
-                          ? 'Listen carefully…'
-                          : _jar.phase == JarPhase.ready
-                              ? 'These words rhyme!'
-                              : 'Find three rhymes for ${_jar.family.target}!',
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w800))),
-          IconButton(
-              tooltip: _manualPause ? 'Resume' : 'Pause',
-              onPressed: () {
-                _manualPause = !_manualPause;
-                _sync();
-              },
-              icon: Icon(_manualPause ? Icons.play_arrow : Icons.pause)),
-          IconButton(
-              tooltip: _muted ? 'Unmute' : 'Mute',
-              onPressed: () {
-                _muted = !_muted;
-                _sync();
-              },
-              icon: Icon(_muted ? Icons.volume_off : Icons.volume_up)),
-        ]),
+        instructionPanel: LayoutBuilder(builder: (_, bounds) {
+          final controls = Row(mainAxisSize: MainAxisSize.min, children: [
+            RhymingControlButton(
+                label: _manualPause ? 'Resume' : 'Pause',
+                purple: true,
+                onPressed: () {
+                  _manualPause = !_manualPause;
+                  _sync();
+                },
+                icon: _manualPause
+                    ? Icons.play_arrow_rounded
+                    : Icons.pause_rounded),
+            const SizedBox(width: 8),
+            RhymingControlButton(
+                label: _muted ? 'Unmute' : 'Mute',
+                onPressed: () {
+                  setState(() => _muted = !_muted);
+                  _sync();
+                },
+                icon: _muted
+                    ? Icons.volume_off_rounded
+                    : Icons.volume_up_rounded),
+          ]);
+          const guide =
+              GameInstructionGuide(gameTitle: 'Rhyming Words', autoPlay: false);
+          // A full-width guide keeps the supplied recording's complete script
+          // legible on narrow phones; the controls have their own 48px targets.
+          return bounds.maxWidth < 340
+              ? Column(children: [
+                  guide,
+                  const SizedBox(height: 6),
+                  Align(alignment: Alignment.centerRight, child: controls)
+                ])
+              : Row(children: [
+                  const Expanded(child: guide),
+                  const SizedBox(width: 8),
+                  controls
+                ]);
+        }),
         child: LayoutBuilder(builder: (context, constraints) {
           final size = constraints.biggest;
           final centered = [JarPhase.centering, JarPhase.reveal, JarPhase.ready]
               .contains(_jar.phase);
           final revealed =
               [JarPhase.reveal, JarPhase.ready].contains(_jar.phase);
-          final jarHeight = math.min(size.height * .30, 160.0);
+          final jarHeight = math.min(
+              math.max(size.height * .30, RhymingTargetPanels.height),
+              math.min(190.0, size.width * .46 / .96));
           final startRect = Rect.fromLTWH(0, 0, jarHeight * .96, jarHeight);
           final endHeight = math.min(size.height * .48, 290.0);
           final endRect = Rect.fromLTWH((size.width - endHeight * .96) / 2,
               size.height * .06, endHeight * .96, endHeight);
-          final columns = widget.difficulty == Difficulty.hard ? 3 : 2;
+          final top = math.max(jarHeight, RhymingTargetPanels.height + 6) + 10;
+          var columns = widget.difficulty == Difficulty.hard ? 3 : 2;
+          if ((size.height - top) / (_choices.length / columns).ceil() < 60) {
+            columns = 3;
+          }
           final rows = (_choices.length / columns).ceil();
-          final top = jarHeight + 10;
           final slotWidth = size.width / columns;
           final slotHeight = (size.height - top - 4) / rows;
+          double choiceLeft(int index) {
+            final row = index ~/ columns;
+            final count = math.min(columns, _choices.length - row * columns);
+            return (index % columns + (columns - count) / 2) * slotWidth;
+          }
+
           return AnimatedBuilder(
               animation: Listenable.merge([_motion, _float]),
               builder: (context, _) {
@@ -323,26 +347,26 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
                         left: startRect.right + 8,
                         right: 0,
                         top: 8,
-                        child: Column(children: [
-                          Text(_jar.family.target,
-                              key: const ValueKey('rhyme-target'),
-                              style: const TextStyle(
-                                  fontSize: 30, fontWeight: FontWeight.w900)),
-                          Text('${_jar.collected.length} / 3 rhymes'),
-                          IconButton(
-                              tooltip: 'Hear target word',
-                              onPressed: _jar.canPick && !_speechBusy
-                                  ? () => _replayWord(_jar.family.target)
-                                  : null,
-                              icon: const Icon(Icons.volume_up_rounded)),
-                        ])),
+                        child: Align(
+                            alignment: Alignment.topRight,
+                            child: ConstrainedBox(
+                                constraints:
+                                    const BoxConstraints(maxWidth: 280),
+                                child: RhymingTargetPanels(
+                                    word: _jar.family.target,
+                                    collected: _jar.collected.length,
+                                    onHear: _jar.canPick &&
+                                            !_speechBusy &&
+                                            _voice
+                                        ? () => _replayWord(_jar.family.target)
+                                        : null)))),
                   if (!centered)
                     for (var i = 0; i < _choices.length; i++)
                       if (!_jar.collected.contains(_choices[i]) &&
                           !(_jar.phase == JarPhase.collecting &&
                               _jar.picked == _choices[i]))
                         Positioned(
-                            left: (i % columns) * slotWidth + 3,
+                            left: choiceLeft(i) + 3,
                             top: top + (i ~/ columns) * slotHeight + 3,
                             width: slotWidth - 6,
                             height: slotHeight - 6,
@@ -360,7 +384,7 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
                                 child: _cloud(
                                     _choices[i],
                                     () => _pick(_choices[i],
-                                        Offset((i % columns + .5) * slotWidth, top + (i ~/ columns + .5) * slotHeight))))),
+                                        Offset(choiceLeft(i) + slotWidth / 2, top + (i ~/ columns + .5) * slotHeight))))),
                   if (_jar.phase == JarPhase.collecting)
                     Positioned(
                         left:
@@ -423,17 +447,10 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
                                     : 'Next Jar')),
                         ])),
                   if (!_active && !resultOpen)
-                    Positioned.fill(
-                        child: ColoredBox(
-                            color: const Color(0x9923355B),
-                            child: Center(
-                                child: FilledButton.icon(
-                                    onPressed: () {
-                                      _manualPause = false;
-                                      _sync();
-                                    },
-                                    icon: const Icon(Icons.play_arrow),
-                                    label: const Text('Resume'))))),
+                    Positioned.fill(child: RhymingPauseOverlay(onResume: () {
+                      _manualPause = false;
+                      _sync();
+                    })),
                 ]);
               });
         }),
@@ -456,12 +473,12 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
                     child: Text(word,
                         key: ValueKey('rhyme-choice-$word'),
                         style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 28,
                             fontWeight: FontWeight.w900,
                             color: _jar.phase == JarPhase.wrong &&
                                     _jar.picked == word
                                 ? const Color(0xFFC34662)
-                                : const Color(0xFF164B78))))),
+                                : const Color(0xFF102254))))),
           ])));
   Widget _jarPicture() => LayoutBuilder(
       builder: (context, box) => Stack(children: [

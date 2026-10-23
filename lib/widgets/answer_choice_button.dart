@@ -11,6 +11,7 @@ class AnswerChoiceButton extends StatelessWidget {
       this.variant = 0,
       this.result,
       this.selected = false,
+      this.leaves = true,
       this.buttonKey});
 
   final Widget child;
@@ -18,6 +19,7 @@ class AnswerChoiceButton extends StatelessWidget {
   final int variant;
   final bool? result;
   final bool selected;
+  final bool leaves;
   final Key? buttonKey;
 
   @override
@@ -28,7 +30,9 @@ class AnswerChoiceButton extends StatelessWidget {
           if (GameDesign.active(context))
             IgnorePointer(
                 child: ForestTile(
-                    variant: variant, child: const SizedBox.expand()))
+                    variant: variant,
+                    leaves: leaves,
+                    child: const SizedBox.expand()))
           else
             IgnorePointer(
                 child: ClipRect(

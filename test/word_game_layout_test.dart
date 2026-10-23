@@ -34,8 +34,13 @@ void main() {
       expect(find.byType(Scrollable), findsNothing);
       final picture = t.getSize(find.byType(GameWordPicture));
       pictureSize ??= picture;
-      expect(picture, pictureSize);
-      expect(picture.width, greaterThanOrEqualTo(200));
+      if (page is RumbledWordsScreen) {
+        // Spelling reserves more room for its paired answer and letter boards.
+        expect(picture.width, greaterThanOrEqualTo(64));
+      } else {
+        expect(picture, pictureSize);
+        expect(picture.width, greaterThanOrEqualTo(200));
+      }
       for (final grid in find.byType(WordChoiceGrid).evaluate()) {
         final rect = t.getRect(find.byWidget(grid.widget));
         expect(rect.bottom, lessThanOrEqualTo(844));

@@ -1,0 +1,38 @@
+﻿[
+    {
+        "phase":  "morning",
+        "source":  "assets/images/home_classroom/morning.png",
+        "sourceWidth":  1024,
+        "sourceHeight":  1536,
+        "export":  "output/home_classroom/8k/morning-8k.png",
+        "width":  5120,
+        "height":  7680,
+        "method":  "High-quality bicubic upscale; original composition preserved",
+        "sourceSha256":  "2ECE0982A9657D277B989FCDE86CD2C6DB74934625066EBD89FCF4B89B171C04",
+        "exportSha256":  "2379BE443BB7A76D3699AB0A049C3D8B80B9CD014BD506C36DCF6E5E106722FB"
+    },
+    {
+        "phase":  "sunset",
+        "source":  "assets/images/home_classroom/sunset.png",
+        "sourceWidth":  1024,
+        "sourceHeight":  1536,
+        "export":  "output/home_classroom/8k/sunset-8k.png",
+        "width":  5120,
+        "height":  7680,
+        "method":  "High-quality bicubic upscale; original composition preserved",
+        "sourceSha256":  "6DFE0EEA3002A1F5445EA1F5A64138E14D6BC6F55714B0158CACEE2B3F87667E",
+        "exportSha256":  "92B105ABAC13FDD514197911D78D7955E4750756E68FF964D243D6BDA79EFB55"
+    },
+    {
+        "phase":  "night",
+        "source":  "assets/images/home_classroom/night.png",
+        "sourceWidth":  1024,
+        "sourceHeight":  1536,
+        "export":  "output/home_classroom/8k/night-8k.png",
+        "width":  5120,
+        "height":  7680,
+        "method":  "High-quality bicubic upscale; original composition preserved",
+        "sourceSha256":  "45030644D37C844D1B1FB61BAD684DD682942D9DDCD80BA06B509510DA076D01",
+        "exportSha256":  "76FED0B466A0BC1F2CDA45F178D88B69FE73B6D331A3B8AA5C410CFCC3D8B3A1"
+    }
+]

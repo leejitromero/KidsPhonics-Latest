@@ -1,0 +1,4102 @@
+[
+  {
+    "path": "android/.gitignore",
+    "sha256": "B027C9DE1011765C015E5819BF857C0D75BFCD0886FB01721C091159012E50F1"
+  },
+  {
+    "path": "android/app/build.gradle.kts",
+    "sha256": "8575A290608675DED32323FA59F468144AF0706E0106D3422C6328CDC5F6470F"
+  },
+  {
+    "path": "android/app/src/debug/AndroidManifest.xml",
+    "sha256": "30B0832ED8B92DFBD6AE2ABFA939CCF26333D37600056B1572BD4A397A18A74B"
+  },
+  {
+    "path": "android/app/src/main/AndroidManifest.xml",
+    "sha256": "160D21E23A74B2FE5F0001F4BC0E56F2D343E732FA94D500E9F2F1401E067B5C"
+  },
+  {
+    "path": "android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java",
+    "sha256": "E5CC2B294B0C401FFB52B8C27518D03D8D503ACCB7F301BB2253D5FC72F5C914"
+  },
+  {
+    "path": "android/app/src/main/kotlin/com/example/kidsphonics/MainActivity.kt",
+    "sha256": "BBF672E7C6D30B646A02D778A6BA5D21D45CE4857226182E6488EDF10009F239"
+  },
+  {
+    "path": "android/app/src/main/res/drawable-hdpi/ic_launcher_foreground.png",
+    "sha256": "839D6547BD83A74171CA96DE9C39B61BF4FD64E13CE112459CF0F6A95E6B050C"
+  },
+  {
+    "path": "android/app/src/main/res/drawable-mdpi/ic_launcher_foreground.png",
+    "sha256": "858467807CEFDAE8AB4FC6D3F3A01F9EE1FFA621F2382FEEB3CBA0BB553C3E36"
+  },
+  {
+    "path": "android/app/src/main/res/drawable-v21/launch_background.xml",
+    "sha256": "7CA6D5CEC2169C5A98661A119DB23A6F3399C8FEF2256FF04F3A642831282478"
+  },
+  {
+    "path": "android/app/src/main/res/drawable-xhdpi/ic_launcher_foreground.png",
+    "sha256": "B66826CC85DB8CD09501D5F2B1E4901999B249261F311C6CCA3F59D6229CECD1"
+  },
+  {
+    "path": "android/app/src/main/res/drawable-xxhdpi/ic_launcher_foreground.png",
+    "sha256": "FECF384CE32EF37730E8AA373382A0BBCC3B1BDFC072CB651D93FA320F22FA5A"
+  },
+  {
+    "path": "android/app/src/main/res/drawable-xxxhdpi/ic_launcher_foreground.png",
+    "sha256": "9CCDFCEE93044F7ACF3A41F183C5993D099916008B049390BC558B6DABDFDF0D"
+  },
+  {
+    "path": "android/app/src/main/res/drawable/launch_background.xml",
+    "sha256": "94433756FE10005DDD6FC55CC5C0B1E9F3C10B66A08CEAC795ECE6713D34E28A"
+  },
+  {
+    "path": "android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+    "sha256": "1DCB0F0E98E27DACC1746899DB2F1271340A52A6E3BF2AC1B032869EAE5BDEC1"
+  },
+  {
+    "path": "android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+    "sha256": "F6C81B4F4D3405B44B02B0A942CBD3E068512B5EB88CC61256DC9432A16A1E45"
+  },
+  {
+    "path": "android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+    "sha256": "37493C4E4C158C46DDD27CF43F4EC15484F1B2D08DDD1CC14515E0577E7CD565"
+  },
+  {
+    "path": "android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+    "sha256": "B15F1EF01057721D7665B9548C0CD4DA37D40E400AF69246ABC18E47256F1971"
+  },
+  {
+    "path": "android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+    "sha256": "FD4B18C3EA12185E6A5D6CAE865899413850AB7B85E786BEAC617D77A6D75B0B"
+  },
+  {
+    "path": "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+    "sha256": "7F3F72939D3D80AC2B10CF0F333CBF3007B9C58D8FD5BBEB44CB5ABF99C2CA7F"
+  },
+  {
+    "path": "android/app/src/main/res/values-night/styles.xml",
+    "sha256": "8C5BAD5152F217E837519F9C15211D19F39BD45F5F67FAF6DD81CB4B299E518F"
+  },
+  {
+    "path": "android/app/src/main/res/values/colors.xml",
+    "sha256": "45D2F045774D1E04276E8F7E1357583417E3BED1D35572EF5DA5CC08DE7873EB"
+  },
+  {
+    "path": "android/app/src/main/res/values/styles.xml",
+    "sha256": "937D7C82F539C72EB94FD3A3773F29B3D3FEF1997213C92CB632298CEDF4BDA9"
+  },
+  {
+    "path": "android/app/src/profile/AndroidManifest.xml",
+    "sha256": "30B0832ED8B92DFBD6AE2ABFA939CCF26333D37600056B1572BD4A397A18A74B"
+  },
+  {
+    "path": "android/build.gradle.kts",
+    "sha256": "6A26DBA2CB8DFBA1E74F540B0D17A89D96C1301D3C3BFDA14348BED257FDDCBA"
+  },
+  {
+    "path": "android/gradle.properties",
+    "sha256": "5539CF5F17C53900A72CF0065E450F0A8BA5B929DD2B364724C1296D0285D9DC"
+  },
+  {
+    "path": "android/gradle/wrapper/gradle-wrapper.jar",
+    "sha256": "16CAEAF66D57A0D1D2087FEF6A97EFA62DE8DA69AFA5B908F40DB35AFC4342DA"
+  },
+  {
+    "path": "android/gradle/wrapper/gradle-wrapper.properties",
+    "sha256": "297C9E63B6FA6E7E8B221900FA1787C1A0E38869D8957DA66389FD0F6B00F78E"
+  },
+  {
+    "path": "android/gradlew",
+    "sha256": "EC56C02543666D92D9AC5AE7FCC48F88CE4DE0DEB8B7F9B39928CA46F68C1B2B"
+  },
+  {
+    "path": "android/gradlew.bat",
+    "sha256": "C13C6E91B9A517783976DE213D46398C661EA9E17651376D7301E839EAEDCC62"
+  },
+  {
+    "path": "android/settings.gradle.kts",
+    "sha256": "A9B5756048F668D4EBF355116678FD334CD5F2169B7D4518AD19B8DF14D3AF36"
+  },
+  {
+    "path": "assets/audio/backgroundtheme.mp3",
+    "sha256": "69338B3FB88118F510075B881A813B7BCC6F77F8E6A63DADC4B3E634ECC694FD"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-box.mp3",
+    "sha256": "34573621FD10386F6CA93D299DA0EA019B68831CC60701C3F50914C77304D122"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-bug.mp3",
+    "sha256": "8C8FF27E1917097065BA46DF4B0CB52E05E282FD88C4BAFC1E61C6F27F39877A"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-bus.mp3",
+    "sha256": "AA313BA7A1AEC4674CFBA9C300A2012880A7B3037F59373C2B4814B73222E011"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-cap.mp3",
+    "sha256": "7E5B267D2277421675C6602BCA636493018568A31D42193D929BAB82FF25C761"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-cup.mp3",
+    "sha256": "CD5961B52840D40971FD8C63677ACDB59C6A1F12C79DF5820DCFCC6853DD6486"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-dig.mp3",
+    "sha256": "F65DC2D441DAF7F4BFE9F6BA444F1C0BCC6A2CB9A1FBAFB7A740B0C2223664A8"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-hut.mp3",
+    "sha256": "3DDF43CD0C5F898A7D5EC5573FEA208E3A21C7365A831C3FEA9A2776CD13DE01"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-jet.mp3",
+    "sha256": "D2C9A232528AD26C74F5139FFB99CDA8AAB8B56D12D8F99922D6B744A7D3BCB0"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-leg.mp3",
+    "sha256": "D95B1FA8C723CFF270B38184BA1848F04FB4A5FA5C8DAD4E3D6F9EAA84E64404"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-lip.mp3",
+    "sha256": "459CEEF065819A2FD0EB7C68B53490BFF1CCFDDAA54E1ADA4CE1954285C55090"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-log.mp3",
+    "sha256": "400AB8DE45D142483B27B470DF8A408E805F25A4AAB94196E5BDF9BA4AE5E149"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-mop.mp3",
+    "sha256": "7E941D19C35F8D389326B58316121028A6DFC5CCC1BB3D98DBBD7E754CD21748"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-mug.mp3",
+    "sha256": "333F404A9066EB9B82FD641C837D872D258067FA5B9DF58222E419B6BEF1EB71"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-nut.mp3",
+    "sha256": "7B8B8DAF0DA2640618DE2A12F6EB6EB771A2CEB74E65733D9F06FCEFE973F906"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-pan.mp3",
+    "sha256": "E87464F3D849395BE882240E753A9450A39C1BB4115AEF6A11C5156DE8062E20"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-sit.mp3",
+    "sha256": "2C74140CC9728877A25DFC117299021665A8D820E33A68E99E34F99409086A56"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-sun.mp3",
+    "sha256": "E583D5A3550D0E506D01AA53E13F7CC757ED9C66F4AE35BFD251A3D821998FCF"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-ten.mp3",
+    "sha256": "57E97F80D9C44AD9FC9B934EE7A865F68E4C73AB0A8DD71738F69B651ECEBBE6"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-top.mp3",
+    "sha256": "63A3882DB3C872A577B0E0090BD029D3303F04737098461F312ED6FEF4066480"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-van.mp3",
+    "sha256": "9A99332B6A066124A373D7CC63D28A7902B134A4CCF9015B3D622F813413F76A"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-web.mp3",
+    "sha256": "2E4A14F36608C5C63342E758F81AA0CF8BC4D70079560421BF6719905B62E240"
+  },
+  {
+    "path": "assets/audio/blending_lesson/praise-wig.mp3",
+    "sha256": "CFF9E425DAB7D0F710059E184E5524D93B8DA7D71ACE01F42699304983117308"
+  },
+  {
+    "path": "assets/audio/blending_lesson/try-another.mp3",
+    "sha256": "2EB044068BE6CB6FA35D563DA5F131918BB8A73D9EE4C7791E171A87DD3817DE"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-box.mp3",
+    "sha256": "8B0FD7DE733C2F8A2BD70C103F12E2D64360EA349C300D08DE18303DDB35705B"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-bug.mp3",
+    "sha256": "D6A2C1B4787881DDA02433E9C513D6C43577E767E691B2A11A2716E4608BE9F3"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-bus.mp3",
+    "sha256": "FA97267693161AC3B37686445DE2558CB8CAD2A0C7EF7ADE2E384E391D18094C"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-cap.mp3",
+    "sha256": "FF24782F4CD596E7B683CDB6EB81C305CF2BFB4499AE34D34518114ACF8345ED"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-cup.mp3",
+    "sha256": "AA2FD1A80298C94DAFD378981ACCAF15F7F4B59E15B6EC048D8A30528FA9C220"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-dig.mp3",
+    "sha256": "60FF64732ED84FDE9FB02264A665D6F95DFB0DA1477F810DD9253E1E6F84544B"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-hut.mp3",
+    "sha256": "AAEA3FCB56EDA4ED390D30875AB90DB359ED7B7538F2FA19AE0E6B0B79C5922D"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-jet.mp3",
+    "sha256": "2333FC858DD65F1E35FE8727B20B88A8F8165324E422A627B9E9CC2205804809"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-leg.mp3",
+    "sha256": "367D24F5E03E0A97F4E132173E08B68F8E7B4BDF70543E0ADDB00FBD7DC18212"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-lip.mp3",
+    "sha256": "4E316AFD3134DBC3F340A79F111C3D3A1C2C9C1B860A6E4325658C6982206675"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-log.mp3",
+    "sha256": "337239F5F15DCDC26A7CC52683E92FE196456D27CCB19875669D0A9F68E40E73"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-mop.mp3",
+    "sha256": "DE7D61E8BD2C2C0061C93AD160BE47758F8989F907A73493443B66B661BE8284"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-mug.mp3",
+    "sha256": "D4129240AFF5CB094035DB89153506E641DECB01905C21A295C32E21ED4B76F2"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-nut.mp3",
+    "sha256": "550737EA8AA7E9D763A5271A894641FD784D888FE53634C670ED1EB94F54217A"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-pan.mp3",
+    "sha256": "DDC27CE3674BE8E6F93CD587C5E67ED9CEB0A5B9F0CE13C5316C0DBE30C28027"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-sit.mp3",
+    "sha256": "E89263317B0FBA66A47A40617AED81C3BEB08776E0B385AFF978C0C64CBAE4B4"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-sun.mp3",
+    "sha256": "D4246B16CDAD0A49703348316352B9F587E1D4D99FB4B6F07AB40F76CE1FE99C"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-ten.mp3",
+    "sha256": "71DFF7B7CD1EE19C436FB42723DC672FE9627B46F3ACF91858EA4637D22899B3"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-top.mp3",
+    "sha256": "532B17C8CE96C9AD900FC655233C882C77A65A0DD10D1C05F5EB0C10B5BF4405"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-van.mp3",
+    "sha256": "FD7F7A8EA1E9B3CC082D2D1B956FFD528C1CA7D0C8DB3C86279DC302DD336EE6"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-web.mp3",
+    "sha256": "99314944C40F7BD6F9E18149A90CA9A0BF76F788D6B0B119BA0A465C5A07DB5E"
+  },
+  {
+    "path": "assets/audio/blending_lesson/word-wig.mp3",
+    "sha256": "EE250093165A56BEDDA612060B19E01758C9D0DEB1EF17806A14C8456C26452F"
+  },
+  {
+    "path": "assets/audio/button_click.wav",
+    "sha256": "2209C1F25AACF19083CDE9C0D4448A84DA2E5C5B8E44071690A7837BFF37FDB9"
+  },
+  {
+    "path": "assets/audio/correct.mp3",
+    "sha256": "DC11F6912E4797434DD8C1726149D5EAA5E6C10C0F6007C85116219B2A644594"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/praise-bag.mp3",
+    "sha256": "14A0577BE22DF596213E8DFF4CE25A444A31988036DA0F12903D71F37FEB404B"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/praise-bat.mp3",
+    "sha256": "4C26A45A6D70AE64B5989B94685ACA31D164CA06FFA8BB59A210D3BBE6753F4D"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/praise-bed.mp3",
+    "sha256": "5894F095E8E5D1F0C071CE7DA35BFA8E8C402085E1B76EB8A62CEF0CB9A59F3B"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/praise-cat.mp3",
+    "sha256": "52DE0F9A34293168A402FDB7FC616D4440AFAEF1017AB39FCEBA46A1E3972EC4"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/praise-dog.mp3",
+    "sha256": "971329CF2D9E274223F3B42B8EB1DA32BF52B5FFEB4505DE0C9C6F14E2EC3107"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/praise-fan.mp3",
+    "sha256": "11C81BC03C024B2DAE2B6293ADB19EDE945B0F7D4FF1FA58FD53738468EE0673"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/praise-hat.mp3",
+    "sha256": "970751D6930BD44668DCF4954B37E4B91A56E5664159FAF329A323F4A923595D"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/praise-hen.mp3",
+    "sha256": "37015FD67358094C78802232CCC5C6330B6AF20C99C5EA74E210DA9A7D610BD8"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/praise-map.mp3",
+    "sha256": "44977E305A72681F4D4FFB92F2F0A78158235CC854DF8604A9971D1F99189403"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/praise-net.mp3",
+    "sha256": "67CF6AFE144B3BC8F50E9207E91F90060FA0F9FB2F55BA60ED91ACA7884EE24F"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/praise-pen.mp3",
+    "sha256": "3CB0228FB2209A5A0822005D122B0986480452277010EED3E9149325C4B1083A"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/praise-pig.mp3",
+    "sha256": "7FDC04CE934BFD6336CFFC3E77E6E7B5856212715FB77DCCEAE239988E755DFE"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/praise-pin.mp3",
+    "sha256": "0E0C4FCF379109432EC40600871BA9131CE01806C1C77268ACC60457A67D6036"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/praise-pot.mp3",
+    "sha256": "461652D904B223BBB9D3FFFC0A8D674ABEC73EF595730874EF0BE279B0BC0A53"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/praise-red.mp3",
+    "sha256": "4CF08E134079081A7C72DF110635AC164E4650520CA3B0399C0678C3D0D8CAC0"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/praise-rug.mp3",
+    "sha256": "6C143F6EFF415D888C54B39356B578F4B6DE9FB8FE7A0D90F5520119CCC66793"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/praise-run.mp3",
+    "sha256": "05B3EE5D4866A02775B1248026091BD97BE91F49B1197D3CCD9BC1C473009F51"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/word-bag.mp3",
+    "sha256": "9BDD7AEE088CF73BE29D9B31AE776A93E595838B83CDEF9D668329F0405A135A"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/word-bat.mp3",
+    "sha256": "6E70985409CACC249A87EA77EB1D3FAC578688537F2B8441EDB24986F66DE0D7"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/word-bed.mp3",
+    "sha256": "24B8EB945C47B3D0FFE2D4E5E6F15E4C46F81AA8E54265B8A4AFD453C4CEF196"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/word-cat.mp3",
+    "sha256": "876782B9E0A6EB887BE5C9B3ACDE661C9FD1A2A602E76C499B5D622D79267247"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/word-dog.mp3",
+    "sha256": "1139CD26788EC4D405A1DC4921B0F519DDBEDED5ED997AE973DB40768955E1B4"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/word-fan.mp3",
+    "sha256": "C56F95A4EF723B28A01BCCE2D56D3C98667826133BD5B888BA8C7DED9AC21D87"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/word-hat.mp3",
+    "sha256": "0FBBB7E6DD5FD8ADD169E976230992A736584E9F15F4F0E37E761B69F8028B2D"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/word-hen.mp3",
+    "sha256": "555D1CBBF6801AC71F4B9914C427F27BEE7BF90466B161DAEC11D597FEDA1A5C"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/word-map.mp3",
+    "sha256": "F1E96737E1157A12E6A4E463404AC934421DDB83C9D905234A64E7F81B543D48"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/word-net.mp3",
+    "sha256": "A410F9EF024E98FE32BCF7A9330A0D8D14C5C1EE1757C570629A8C362506BD80"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/word-pen.mp3",
+    "sha256": "5347395E3F18F233B79A5D5749F08EAEF1A52BECAD0CAED699F25967ED5C45B8"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/word-pig.mp3",
+    "sha256": "D297711273E24D0B7A1BC47DE6B896A61491DFB16BA173AE542381744FF83F30"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/word-pin.mp3",
+    "sha256": "0F649EBC74A518E1E0C745EA27801D2005A6E2F5E7B6D58DEFC8398124928FD8"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/word-pot.mp3",
+    "sha256": "AC0513610288D1DF81AFDC1550147D37E8AB556D7CEF361969A88B008C7D4F48"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/word-red.mp3",
+    "sha256": "B6261203B53279495FDB14BEEA0AF3B9A9090479AF161407EBCD40800E108C5D"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/word-rug.mp3",
+    "sha256": "91DA3138093850F83321ED3FD857F28C99EFCD0A23D11C3A60FDC853FD952B8C"
+  },
+  {
+    "path": "assets/audio/cvc_lesson/word-run.mp3",
+    "sha256": "5E10B2ADEA205136EE9C95489521816BB850446779EA5F75436937989B0F48D1"
+  },
+  {
+    "path": "assets/audio/game_instructions/alphabet_order.mp3",
+    "sha256": "F87FEF6C8A401E4CA6FEACDE2BA9F679D48B80056152062A9A9A77B085D26843"
+  },
+  {
+    "path": "assets/audio/game_instructions/flappy_letters.mp3",
+    "sha256": "3CD78E6EED329FE7640C8A2F9ABFDE8470BEED22B98860590E56406D1A1BAA95"
+  },
+  {
+    "path": "assets/audio/game_instructions/memory_flip.mp3",
+    "sha256": "E6DC5A956DD6F1F5FA0259527AAB0F0C1CCCFC78438112AB2B264632DA31C39F"
+  },
+  {
+    "path": "assets/audio/game_instructions/missing_vowel.mp3",
+    "sha256": "9208863032B1D3E6EA332378FCF6CE243FC989E59C296C64BC24A1CBFC7F0A27"
+  },
+  {
+    "path": "assets/audio/game_instructions/phonics_quiz.mp3",
+    "sha256": "E86A49AB347C6E7B569DA7C698D5DC0113276103026546654D84820A6D18DF37"
+  },
+  {
+    "path": "assets/audio/game_instructions/picture_match.mp3",
+    "sha256": "F390ACC125BC4A6669CB5296D635431C9D5690A862EE97980086DE565E454E2F"
+  },
+  {
+    "path": "assets/audio/game_instructions/rumbled_word.mp3",
+    "sha256": "BBD8BD8F3973BD2DE63B73AAA6BC5E9403B928D565CA452D60076EA6ACB656AB"
+  },
+  {
+    "path": "assets/audio/game_instructions/sound_match.mp3",
+    "sha256": "C72F623330E9524BF549B58FAC62BF9BA942B9B64A11936F720D616A66AD31F0"
+  },
+  {
+    "path": "assets/audio/game_instructions/speak_recognize.mp3",
+    "sha256": "1869F60D90FE69E1EF65DC4AF673A67483E2759830DD2DB2334EAC1B5AE3F725"
+  },
+  {
+    "path": "assets/audio/game_instructions/world_builder.mp3",
+    "sha256": "23FBEA7ADECEFA718BD0F7C55CCF07B5C514E0EBDA0897F0A311E4252EB45B1A"
+  },
+  {
+    "path": "assets/audio/game_words/airplane.mp3",
+    "sha256": "71995F38AFCEDAC53AA57C4FB76FA14AB19C85E080C4644CFAF0270FE2DC3E17"
+  },
+  {
+    "path": "assets/audio/game_words/apple.mp3",
+    "sha256": "07D492314D06BC380D78F5BBA85B8EA49D347A0E451720E9E3757163404CCCCD"
+  },
+  {
+    "path": "assets/audio/game_words/axe.mp3",
+    "sha256": "35DA6626FCAF1452A38B854C86243F074A6AB27DBBFB4FE39A652C0503F472A3"
+  },
+  {
+    "path": "assets/audio/game_words/bag.mp3",
+    "sha256": "46F956D5F14CB6A819672074DC00860291A735B25F5666EB7FACF33431DBBF00"
+  },
+  {
+    "path": "assets/audio/game_words/book.mp3",
+    "sha256": "7BFFCD94C03CBF47C6D3A042FB4B7EA78E36C042EE5A3147D8B4AE5799E58334"
+  },
+  {
+    "path": "assets/audio/game_words/bottle.mp3",
+    "sha256": "B960EB9E356A5D8E200BB477E2CED773E78FE2EEB7ED10AB2A4DB67D3067F74E"
+  },
+  {
+    "path": "assets/audio/game_words/chicken.mp3",
+    "sha256": "9E9E75D98E575FFC8414BCA9833368D9868246A00B77E952F6FD5A32E58BE65C"
+  },
+  {
+    "path": "assets/audio/game_words/corn.mp3",
+    "sha256": "B82DC37894BCA3AA754250575170F48EC92892AB86DB02852C36DE71A2A7AEB2"
+  },
+  {
+    "path": "assets/audio/game_words/cow.mp3",
+    "sha256": "F908F9E25FF8153642BCFB413BCC31415F1B1C04DD63F6BE2851F37B6D787AAF"
+  },
+  {
+    "path": "assets/audio/game_words/dog.mp3",
+    "sha256": "EBC4FF19F7BFBE412F416C3F4BF3629B62BD8E536E34B6A436CF4BEAD83E133E"
+  },
+  {
+    "path": "assets/audio/game_words/donkey.mp3",
+    "sha256": "5622363A9FEB18DD5427F35DA5C58723D29A9418447F2385BC4758A18D24F231"
+  },
+  {
+    "path": "assets/audio/game_words/door.mp3",
+    "sha256": "7B5A1D7548BA566AB8FDCFAF1D8DA1D75BDAEEED0CEE37B48DA04AAAAF3B9012"
+  },
+  {
+    "path": "assets/audio/game_words/ear.mp3",
+    "sha256": "88BEAF27BC5A2978C0B92207AE1481BBB75C8C39517FAF57203EDED7DE04FF35"
+  },
+  {
+    "path": "assets/audio/game_words/eggplant.mp3",
+    "sha256": "5F7A16F0F0A726292A6E690F1645A1F748ABA0E8138155C1C856C829F0EAA2D2"
+  },
+  {
+    "path": "assets/audio/game_words/elephant.mp3",
+    "sha256": "56373378D73701687F88C15493112E50574FDBB47B128F98415FCBFD3BB7E42E"
+  },
+  {
+    "path": "assets/audio/game_words/fairy.mp3",
+    "sha256": "AF1C940D427E66C523C5D1D477364B849BB9107D6CB46E85B39AAFC4B6A67BB9"
+  },
+  {
+    "path": "assets/audio/game_words/fan.mp3",
+    "sha256": "A12DC23E0DB731077602D488426D17CBCA87F6DABCF637986B084B14CEB96576"
+  },
+  {
+    "path": "assets/audio/game_words/frog.mp3",
+    "sha256": "41AAFDC916902261B620E02BABA8AE42DD9917E864BD6C0F0FB6DC3B7481CC4A"
+  },
+  {
+    "path": "assets/audio/game_words/goat.mp3",
+    "sha256": "83B65CBD7C6174A427FDD24A4064549B2008DF8187E4C14E103B281A6DB931E0"
+  },
+  {
+    "path": "assets/audio/game_words/gorilla.mp3",
+    "sha256": "526E587E573678F8DCA3B4078031FA528BE8F09C9B1482E19899269180519E22"
+  },
+  {
+    "path": "assets/audio/game_words/grapes.mp3",
+    "sha256": "3345D2870C5B60A72882718FABF3B42166E03843B5539A9E90D8D4240DD5B61B"
+  },
+  {
+    "path": "assets/audio/game_words/hand.mp3",
+    "sha256": "E59BE2A1A4AB2E8250A4CFBC83D2F2B16C2CACBB8D14A486F63A78192D04E0DA"
+  },
+  {
+    "path": "assets/audio/game_words/heart.mp3",
+    "sha256": "66D858B16E544572E48D56B4FF26C0D43A9E5645E95D8E8A0E614970144B032C"
+  },
+  {
+    "path": "assets/audio/game_words/house.mp3",
+    "sha256": "AA917FC550186C145226A195CC1C95F09AE3D25EA246F8E83D38025208A378BE"
+  },
+  {
+    "path": "assets/audio/game_words/ice.mp3",
+    "sha256": "D1D81E63C2CF53A1CD962B1749720D9FD6962CF5B35899F869E6ECAC2BE6411B"
+  },
+  {
+    "path": "assets/audio/game_words/ice_cream.mp3",
+    "sha256": "3A0554F1849E3F52D8C25B2EFDA22DB847FB67602C1F495F4739E6503D64E535"
+  },
+  {
+    "path": "assets/audio/game_words/island.mp3",
+    "sha256": "D4DCF5CC8CC1B39BB4C6F107DD4468AF7BBEEE588AFED2A66D58DFAC9A1761DC"
+  },
+  {
+    "path": "assets/audio/game_words/jacket.mp3",
+    "sha256": "786DA969954DB85132844956965D3D070822788BAE4CA2DBBE4401C735A1AFE5"
+  },
+  {
+    "path": "assets/audio/game_words/jar.mp3",
+    "sha256": "0DE63CAA1E939D02820851F01D22165136BD8A2D810E8DBF393A9B569DC10200"
+  },
+  {
+    "path": "assets/audio/game_words/jellyfish.mp3",
+    "sha256": "F3112A3B032ECDF5874AABA75E4DDFC00EDE77A1F1F2135A03C4BB957AC40550"
+  },
+  {
+    "path": "assets/audio/game_words/kangaroo.mp3",
+    "sha256": "1B2E42F2943F2CCE9B6A4A5507B3257DC873CD08493E41CCC3647DB381AFEA7D"
+  },
+  {
+    "path": "assets/audio/game_words/key.mp3",
+    "sha256": "147AB96658A0BFE400EB5BFDAAF7ED39E3E3EAA6706C24B47D85A44FC47EA742"
+  },
+  {
+    "path": "assets/audio/game_words/king.mp3",
+    "sha256": "6CED41E392A9E804DF12F94DC2770B620C80419A0FD7E0A2244F910EFF054CF8"
+  },
+  {
+    "path": "assets/audio/game_words/lamb.mp3",
+    "sha256": "A0ED61ADB86B33BFC14E320C2E170B304757636266484E31E836747AC4B9816E"
+  },
+  {
+    "path": "assets/audio/game_words/lips.mp3",
+    "sha256": "17112C40F737FBB7BE694600F3479E2934747B31BAC75B5BEBF47D43A6AE2F51"
+  },
+  {
+    "path": "assets/audio/game_words/lollipop.mp3",
+    "sha256": "979065961B02BEA0CA11B7872CC4DC4F9FF51CFA62CD00B2794AA2F58DC64067"
+  },
+  {
+    "path": "assets/audio/game_words/mango.mp3",
+    "sha256": "91C91E1F13B28C60638F72240E3B2D6B26C1EC5C49774CAD6A13598C137505F1"
+  },
+  {
+    "path": "assets/audio/game_words/monkey.mp3",
+    "sha256": "DED2F84F0AC66F6E4F8FB86B23ECB7D42F0627C39345B0067F55EF16D6B064E9"
+  },
+  {
+    "path": "assets/audio/game_words/moon.mp3",
+    "sha256": "8633076CAE7B4C983F7665B5FFBD9AA945025A72947A0023AA5A31C9C9A141CD"
+  },
+  {
+    "path": "assets/audio/game_words/nest.mp3",
+    "sha256": "67FFAAF39A6E2FF61698C37E5D1C6145873AEC98888CAA5892B13F0C78C0F3A7"
+  },
+  {
+    "path": "assets/audio/game_words/net.mp3",
+    "sha256": "F41A6A1211BDC032B3B06F9F8AA4EF9A21F9D30FD8764913204D9F6C8BAD080A"
+  },
+  {
+    "path": "assets/audio/game_words/notebook.mp3",
+    "sha256": "0840C18AE52337BFCB81468EC9F7E63490ED34F4726DE5DD783210FBDD9D12FD"
+  },
+  {
+    "path": "assets/audio/game_words/octopus.mp3",
+    "sha256": "2BED9B2257471F40B33E43B4F4F3080D8D9E261DDCAF17F31A3A23C094E8522C"
+  },
+  {
+    "path": "assets/audio/game_words/onion.mp3",
+    "sha256": "C19369F05A043FE6701E08155B62667C5E4BCD56A2F73EF9699A1DEB45A1ADCE"
+  },
+  {
+    "path": "assets/audio/game_words/orange.mp3",
+    "sha256": "C438E970BC4A1DBB67163DF0B40F3D580C48F77FD9154224DE154C45BA82CB3F"
+  },
+  {
+    "path": "assets/audio/game_words/pen.mp3",
+    "sha256": "5C16A3080616E30798B1601FB7B5947BAC72FCB4E4570A0D8880012882817CE0"
+  },
+  {
+    "path": "assets/audio/game_words/plate.mp3",
+    "sha256": "771FE18AE94602A0052DBF546FFB458AC54DEF71EC04C1622E8233B59DF1FFBD"
+  },
+  {
+    "path": "assets/audio/game_words/potato.mp3",
+    "sha256": "92AF5D5F87AE1337E883564EB3B48C78B233CE60F8F02D15EE96CD8F0A628F47"
+  },
+  {
+    "path": "assets/audio/game_words/quack.mp3",
+    "sha256": "8A024E363BDF9F545CF340663EE379F40E62E97A36308FE2E8CEF2E89DC00F54"
+  },
+  {
+    "path": "assets/audio/game_words/queen.mp3",
+    "sha256": "5B8113E261DB6855423980367720F1DAF8BB199974D827C2FF16EA7A695F7C92"
+  },
+  {
+    "path": "assets/audio/game_words/quill.mp3",
+    "sha256": "6391BD042B058267E1A53D4BA4516B7FCA6A0CD238BFDD6FD44A942400B691F8"
+  },
+  {
+    "path": "assets/audio/game_words/rabbit.mp3",
+    "sha256": "D860F0D984073C177D18048EC9A566287CF1F0668545A2002FCF9ECB3683E4E5"
+  },
+  {
+    "path": "assets/audio/game_words/rooster.mp3",
+    "sha256": "7F0FE1987E2CE7562B9E8F7AC2DEB4710CC2585750B42B44F119FA5B452C8D8D"
+  },
+  {
+    "path": "assets/audio/game_words/rose.mp3",
+    "sha256": "F8E105105C07DD739DD30B382113B092A7A2E0A7E0D76A268914EA78622E3728"
+  },
+  {
+    "path": "assets/audio/game_words/sheep.mp3",
+    "sha256": "627590C10C9608738CE4C1D72B53C160E13567B2929A7B122D4B07C572CB35F3"
+  },
+  {
+    "path": "assets/audio/game_words/spoon.mp3",
+    "sha256": "8AE91877138D6004E87AF0080005B8825BE347370211AB5C1CAB0728FB692EC0"
+  },
+  {
+    "path": "assets/audio/game_words/star.mp3",
+    "sha256": "016D604ACC80779AF83DF0DDA8546F8CE753FD3AD01E18DE3D2CE57567790042"
+  },
+  {
+    "path": "assets/audio/game_words/tiger.mp3",
+    "sha256": "4D025FDAECEF1CB70E233C31289D0A0F3A70FA4A761A66B7AAC3FAD4F8C2F427"
+  },
+  {
+    "path": "assets/audio/game_words/train.mp3",
+    "sha256": "9881DC63D3CC26CE4C1C00E5F54BC5B6879548EF80F4F5481508893446E15823"
+  },
+  {
+    "path": "assets/audio/game_words/tub.mp3",
+    "sha256": "1DCC1790BB0123FADFF0B5E11DB9186C82AD6D48E8EA1609FBC40433DF6E7623"
+  },
+  {
+    "path": "assets/audio/game_words/umbrella.mp3",
+    "sha256": "E0E7917EC7BB6CB1C3F9D902E54256C59E04AD0324B14D362203C5CD92305E24"
+  },
+  {
+    "path": "assets/audio/game_words/unicorn.mp3",
+    "sha256": "084392C00745C0BEA70134F4E3A47FAED9DFD45F973F55239ED3B81C588BD03F"
+  },
+  {
+    "path": "assets/audio/game_words/uniform.mp3",
+    "sha256": "117E4A1C7D613925C4B606520D750B01A5F876F1FA75853F8B129B311EF49469"
+  },
+  {
+    "path": "assets/audio/game_words/vacuum.mp3",
+    "sha256": "C4AEACC908FAFC26D487F34343C7A570DBFC040487F048E103C7F605D8607319"
+  },
+  {
+    "path": "assets/audio/game_words/vase.mp3",
+    "sha256": "F9FB73F0A727337D3825A78EE252563B6E71078D1EDC5C802E934A13437E3BA1"
+  },
+  {
+    "path": "assets/audio/game_words/violin.mp3",
+    "sha256": "B38B9F26491D48AF7EFF7D3397933AD26D722DF13ACF0288F2239FF0182464C8"
+  },
+  {
+    "path": "assets/audio/game_words/web.mp3",
+    "sha256": "24CEF83BD2BBDE893A3210938327508501BCF041530DA800D75871DA0EFBF4A9"
+  },
+  {
+    "path": "assets/audio/game_words/whale.mp3",
+    "sha256": "3EAC833970C7AA3ED812FD168016A1412EB347D155745077C5A98766F95ADD35"
+  },
+  {
+    "path": "assets/audio/game_words/wolf.mp3",
+    "sha256": "9EDB24F9025DEA8B0E4B8B50C135244E0A3F0A791B78666F8C7B59F4E371D90C"
+  },
+  {
+    "path": "assets/audio/game_words/yarn.mp3",
+    "sha256": "6972A2026255CE098061829268F4D26337A38B7E2C210F0629CCAE1C49160EBA"
+  },
+  {
+    "path": "assets/audio/game_words/yogurt.mp3",
+    "sha256": "73EB955444C812C89329950F2CAAFABC0E8EAE808515DC9B7F821C258E391FE5"
+  },
+  {
+    "path": "assets/audio/home/games_voice.mp3",
+    "sha256": "4247248121F6A57CFC9AA5CA7B032A0BC5272CBDB2F973984798A926FFB75D2B"
+  },
+  {
+    "path": "assets/audio/home/kidsphonics_intro.mp3",
+    "sha256": "F5DAF7DFB8B8A1AC9B6FC5A41BAFE9E95E2C77FC71A5882F84BF16A803BA86A7"
+  },
+  {
+    "path": "assets/audio/home/lessons_voice.mp3",
+    "sha256": "2065C36447093B40C3686AC76EB1EA7576173071C49543765091BF81BDAF2CA8"
+  },
+  {
+    "path": "assets/audio/home/parents_voice.mp3",
+    "sha256": "DE08B14B36E321900815624640D549B6B851426148D01CCB7AA2CA3B06594DB0"
+  },
+  {
+    "path": "assets/audio/home/progress_voice.mp3",
+    "sha256": "E789F197D08FB4513ACD7D3CAB3CAA81FC2C5D8D93CF63720A4116D8D8ACD8E1"
+  },
+  {
+    "path": "assets/audio/home_intro/boy_automatic_prompt_4.mp3",
+    "sha256": "7A64F82492A2B62241AF1A5D52FE3769A866B763793BE7B1CA2D3B892FE42F35"
+  },
+  {
+    "path": "assets/audio/home_intro/boy_automatic_prompt_5.mp3",
+    "sha256": "5E04BB9F3BC83D667224A6AAFF8CAD20F2209101D9611460015DE7597A73D240"
+  },
+  {
+    "path": "assets/audio/home_intro/boy_automatic_prompt_6.mp3",
+    "sha256": "F78AF5B437312B11B932D36E78702372314E105E8A6A707D1CC90145DCF104D5"
+  },
+  {
+    "path": "assets/audio/home_intro/boy_automatic_voicefeedback.mp3",
+    "sha256": "74A7D2E5E74B9E3EF919D8A6B11623082E8290AE4ACC9DCD107444317ECC648D"
+  },
+  {
+    "path": "assets/audio/home_intro/boy_lets_learn.mp3",
+    "sha256": "FA41113A3AC570292EBBA9FF1470EF0D437402B2076D115659410D5502D93F8B"
+  },
+  {
+    "path": "assets/audio/home_intro/boy_lets_play.mp3",
+    "sha256": "4AC0B4C1CD559FB48768C3172F78411AFC67C3D8B520DCB8DCF8444D04E8886C"
+  },
+  {
+    "path": "assets/audio/home_intro/games_intro_01.mp3",
+    "sha256": "04DED5F844EB856E3E9F37CC9F1B2B41673637E355E7BFF60583EC95F945CDAE"
+  },
+  {
+    "path": "assets/audio/home_intro/games_intro_02.mp3",
+    "sha256": "D271A5359C9BDB2CE709FFA6DDFB1B8E1A9A75376C1D572B897D1495389290D9"
+  },
+  {
+    "path": "assets/audio/home_intro/games_intro_03.mp3",
+    "sha256": "9B2BF9A9F34921AC9EEAE298DA47F4DFF06C50846B8CCB1F2E0714460497819F"
+  },
+  {
+    "path": "assets/audio/home_intro/games_intro_04.mp3",
+    "sha256": "83EA921C8467A8E7D3879229117EEBD85707739996AB006F0C48C57DC93A9B26"
+  },
+  {
+    "path": "assets/audio/home_intro/games_intro_05.mp3",
+    "sha256": "3AEECAA6F31D6C402F2868A6A2BD1DE54EB748408E51AE3283DF8460F44949F5"
+  },
+  {
+    "path": "assets/audio/home_intro/girl_automatic_prompt_1.mp3",
+    "sha256": "650F312F969CFC3BE832C46D649B1F421F95B4053C1CC4B88A78C0AD6EBCCD37"
+  },
+  {
+    "path": "assets/audio/home_intro/girl_automatic_prompt_2.mp3",
+    "sha256": "2424D3F63C0905952D63D428350B0BF39ECECBC5FE5FD38D56FC795F1860A184"
+  },
+  {
+    "path": "assets/audio/home_intro/girl_automatic_prompt_3.mp3",
+    "sha256": "59EE46196B9C43A27A05B1C5D074C78A463BB7F7A8AF514C5216A0788920BAF6"
+  },
+  {
+    "path": "assets/audio/home_intro/girl_automatic_voicefeedback.mp3",
+    "sha256": "F083DA3BC0E6A7491AD62EB7DA516361B41BDDD8091412126385DDC2F215E1CD"
+  },
+  {
+    "path": "assets/audio/home_intro/girl_lets_learn.mp3",
+    "sha256": "8522409211A2EF94C7542FC8AAC565C00C88AFBB4EC756921631AE1FA26C5A7E"
+  },
+  {
+    "path": "assets/audio/home_intro/girl_lets_play.mp3",
+    "sha256": "19F0F33AC11DF4A281CB02BF4E322729DF56720A82B5F927475EAB1FD8F24C7D"
+  },
+  {
+    "path": "assets/audio/home_intro/kidsphonics_title_chorus.mp3",
+    "sha256": "2C8F30DEEF3329AEB93C4E7F34512A2B7C7E7D2467D9097E9F5F442C76D4D387"
+  },
+  {
+    "path": "assets/audio/home_intro/lessons_intro_01.mp3",
+    "sha256": "97975A8491735826F7F91044106D961BDA50A3E79E97B92ACEA2C9FF3D9C49E2"
+  },
+  {
+    "path": "assets/audio/home_intro/lessons_intro_02.mp3",
+    "sha256": "FE3EA094D7BBA9D40D141A39A7EF5ECF1B34AE21653FB8791A16A87E28AA54A4"
+  },
+  {
+    "path": "assets/audio/home_intro/lessons_intro_03.mp3",
+    "sha256": "1CA7F7457D09A82FCFA4BF41D1D2B33802CBD959C22A6D1091D39AC14D15332E"
+  },
+  {
+    "path": "assets/audio/home_intro/lessons_intro_04.mp3",
+    "sha256": "325A4F8008D2D17200AE7DDAA609C5611DE986F2D24CF1E2C825D9133AC7657E"
+  },
+  {
+    "path": "assets/audio/home_intro/lessons_intro_05.mp3",
+    "sha256": "066C435B8E594AB24E6FEA8BB2BA8D449898A5D6D4B34AC98B9B2677589F66A1"
+  },
+  {
+    "path": "assets/audio/home_intro/profile_setup_01.mp3",
+    "sha256": "DE7CA3FAE00DAC0E7F43CEA7170C11940E6314712FE0EF0491782F05C4F6DE21"
+  },
+  {
+    "path": "assets/audio/home_intro/profile_setup_02.mp3",
+    "sha256": "B3A26A9FEBD6D33439F25BD149460DC6004DE90E97BA35DE25D1E518339A75CC"
+  },
+  {
+    "path": "assets/audio/lesson_instructions/blending_sounds_1.mp3",
+    "sha256": "6644A0CF865A4B77AEDECDB411258125E1BE20832FD2693342C2FE1F3D8F4235"
+  },
+  {
+    "path": "assets/audio/lesson_instructions/blending_sounds_2.mp3",
+    "sha256": "2F4E5E66695CE18C476894CD70D86531C3CDA8F37B4FF3C792EB3259100274B0"
+  },
+  {
+    "path": "assets/audio/lesson_instructions/cvc_word_1.mp3",
+    "sha256": "2D2B44436DA8B9BB3DD4EB01519149E9462DE946253A463974CF5D248A66F4D0"
+  },
+  {
+    "path": "assets/audio/lesson_instructions/cvc_word_2.mp3",
+    "sha256": "25D252E20237B44CDE2EB2E45DF44583EA59527C0FAD1EC6FBB035968D426C6B"
+  },
+  {
+    "path": "assets/audio/lesson_instructions/letter_recognition_1.mp3",
+    "sha256": "23C76457CA7DA4321227DDDB61640B8B2271F33C3B6F041951FB9366E0F2949A"
+  },
+  {
+    "path": "assets/audio/lesson_instructions/letter_recognition_2.mp3",
+    "sha256": "3AE8E415F6ED8B8DA5369ED2EB1FDBEA01453CFD731412C3432C2060D93790DF"
+  },
+  {
+    "path": "assets/audio/lesson_instructions/letter_sounds_1.mp3",
+    "sha256": "392DE709F8E036A5F074A541C6A8D405A521B4FE5554EBBFF35FD00A3190FBA1"
+  },
+  {
+    "path": "assets/audio/lesson_instructions/letter_sounds_2.mp3",
+    "sha256": "3DA6B3AB3F478355779FB21E8726AE1115F547D83A646DDFD5CD0EA2F7A4B3BB"
+  },
+  {
+    "path": "assets/audio/lesson_instructions/short_vowel_1.mp3",
+    "sha256": "24BE07EBC8D32E2C4535DD38870009F5007F25761D330B108B4013A780A7BBC7"
+  },
+  {
+    "path": "assets/audio/lesson_instructions/short_vowel_2.mp3",
+    "sha256": "1A84F78FE8861448B048839FA3FE5454023B46BB361BB89F50855A1F43B9C4F4"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-a.mp3",
+    "sha256": "831ABC3FE09860DCB5153C3FDEFF8F39807C2A627720423BE9630D867D564B23"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-b.mp3",
+    "sha256": "E77A0AA875FE68212234A21E470AAD9E87F657E08BF46BC25EF2AE726642154E"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-c.mp3",
+    "sha256": "C146FD608F9EAEAE83C08AF350FCE33085D85853C9013036344CC640287A2486"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-d.mp3",
+    "sha256": "767EF677506A147E8D935D5D671A8855DFDB1AFD8079A8BB76DACA488190864B"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-e.mp3",
+    "sha256": "5D16680A0845155F3282D36ECDA72B17E6E92E2AA8C06538A4C8DFF51D51F649"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-f.mp3",
+    "sha256": "61AADA55F6D2C93C04E584449FC65553C955999D0E5A946EBBDAE0AB17560C70"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-g.mp3",
+    "sha256": "DD8888217E546A70C388551CB7E7CE07A391AA996148E7C2D1806643310E3B8F"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-h.mp3",
+    "sha256": "8F7B12688F3243699915EDA7F13D03DAAEC67C43321604B11C9D6056B6AA1B36"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-i.mp3",
+    "sha256": "513549782114802C2A9B679DE4A86E94523039D8C336E17A7D855AC22E88059C"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-j.mp3",
+    "sha256": "A85E8F85412F001DDD0B6226BD882B02BBF3191A920866A1D1D41DF14EBB5D12"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-k.mp3",
+    "sha256": "F97B1D72EF4F740C45C5958426F44FCDC5DC49720AC1311CD3AC46C4F8C74B19"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-l.mp3",
+    "sha256": "4BDDE39FCAAC7C6DC3F3A73932714C00593CC52954F30E703D4B4AC7C0794F36"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-m.mp3",
+    "sha256": "19317136FB1EAC9C9424D74BDA59650CD0B8CB7167E8664FD89921B7F064F4E8"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-n.mp3",
+    "sha256": "072F3235860EFA8FFC76C3F57C61462135616FB29277C239C09E86B40DC213E4"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-o.mp3",
+    "sha256": "80A545D2099DC0780352A7263A2D64604143884FDBFF86720F4FC47518BD7E78"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-p.mp3",
+    "sha256": "3098D4B386D5492BFC9BBEF58B32D15F4B625335D05FB30C2CA0EFBE197BB066"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-q.mp3",
+    "sha256": "22E588932132876917E7E39586D7C0D4FE5D349AC67078F56B619593A07E0FB6"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-r.mp3",
+    "sha256": "B2152BD2E68E5E880EBFF1F470BB6E647A47890F7A031C8B3324EC7AE3AD41BC"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-s.mp3",
+    "sha256": "CDFCBF41B2B4067F1EEF93FCFEA1A455E06FA399A536E03A8FD4BEE4A174E06C"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-t.mp3",
+    "sha256": "E15CD4BFA10391804A517D0D63686BA167FAAB54181D636BDF9931788F5FD5AC"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-u.mp3",
+    "sha256": "52A5630B6EE9FBA31472FC5766561CED677A0AE126519427C4C94A580EF3A553"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-v.mp3",
+    "sha256": "A9DCAAAA46CF235D15A0289DC1611ABD829EA5C30A73D665E0F444B41F5E4579"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-w.mp3",
+    "sha256": "4B482178A2344DCDB2669BE5DB1B8EB86121ED41A65C1BB5CBD808D26DB7C9EA"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-x.mp3",
+    "sha256": "19CF819F95F88A0912EEB5C08CEA2E20DAE323C7C3256D5ECA7BE1A90CAD7F4C"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-y.mp3",
+    "sha256": "48C9F1005857991248D9A25A100CB031830E9D46D25247AFDF4F517A0C4DE564"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/letters/letter-z.mp3",
+    "sha256": "5667AAD036B1533D427E8395FA49F036BD677877A1C4ACE7812420374635DE97"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-a.mp3",
+    "sha256": "4DB5B653CF3D11DC13573CFCBD14A167766672B7CCD0C4CB4311F8096685BF06"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-b.mp3",
+    "sha256": "D5967F265D120E1D3FC36C47D37E8123713F459C4EE1BD1310837E137B913E70"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-c.mp3",
+    "sha256": "75EADA2C74FFC71E116FE7830BA542DB3271E2EBBED05C2FA4D0C229D0471835"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-d.mp3",
+    "sha256": "591AC65C2CAD8D2543CF9EE758940E0C08A3B6C97F9C34160E718C9C82FA1A44"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-e.mp3",
+    "sha256": "FBC3E176DEB044545D1570E02B8EEBA1122AD3440309867E2B305AF13169B8C0"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-f.mp3",
+    "sha256": "C13974F7ED2258A917A51B4D27318846FB302B9420AAE14CD2F63AD3BA8E0984"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-g.mp3",
+    "sha256": "6E958BDB74DDE6BBCE7D4F3B644A68383C13643AE1EF5B813B0754E2332F0362"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-h.mp3",
+    "sha256": "9985815A8844F84A09D2DC2807D9D90D0A17D66BC7F55162975CECE934C0DFA5"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-i.mp3",
+    "sha256": "70CCE9C193436CC9D3A9DC9505F6B3441080A02874C193FA6657C5F71FAA1831"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-j.mp3",
+    "sha256": "3DBA529FF3DEFC56347468F02FD3B58EC5CA8EA11DEC1D24FA0E11DBD668C16F"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-k.mp3",
+    "sha256": "764A17CFD217081C7811E8033F34381907B471A79CB159A25D1FBD41B3154D1F"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-l.mp3",
+    "sha256": "69CCC558F06B20A2F9823B2CA45FABBD7AB3617BE7089BCC341D47B0BD5EFF55"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-m.mp3",
+    "sha256": "D86FBDB44791A071CC43BA540B711423CB92D28B86D6D70F4AB0D126EBAB628B"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-n.mp3",
+    "sha256": "30ABDE51D08471DC93039919FFB5EBBB9B5C2C0D9C886BB36B5E0797ED8266CB"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-o.mp3",
+    "sha256": "6BC52AB6D8DD5C500ABFCCDC27F56C54BC90376D3E07A6C7CD125890DB0ECE25"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-p.mp3",
+    "sha256": "6EB1C3254744FBF131C98BE5B3598D75C4FE6DB02943A529530DBC4C10D81FC5"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-q.mp3",
+    "sha256": "CF748523B91E249B07A8021DEDE9B68E61BF1911639C984B2F28E0458B908DA4"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-r.mp3",
+    "sha256": "F4AB33F055476B2E8DDBA055755B1F7A4FEC4A152AE9CCCFDB04ECB46662FBDA"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-s.mp3",
+    "sha256": "9A28084501FCBF877F9D6B502EC26C1AA11F1071472AC9658F4CD089D35FEF1E"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-t.mp3",
+    "sha256": "301C287329FC0C566322145C6FDD39D8AF3D702DB8DFC0C5C41436A43927FB19"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-u.mp3",
+    "sha256": "D87D8998355B3A990F1DD30BF86AC8E9F61B6B75755C065826DC6A82DB09E7D5"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-v.mp3",
+    "sha256": "30FDA90EE020DCFD21B951459AF577B641FCCDE2452370E3743881B50F70B2F9"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-w.mp3",
+    "sha256": "1C7C89E7C63061FE16A9E330AF00AE4A66C420E091694E1481904BA22D9EB43E"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-x.mp3",
+    "sha256": "1629997B5B9E4275D7C58822CE3F7760F17D43582E61D471D6D8E4F4387EB4B9"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-y.mp3",
+    "sha256": "CBC71644743F4E3AE4B2492DC5DA002CE16BAD2098AFA1EAD35663D6111E514A"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/sounds/sound-z.mp3",
+    "sha256": "B5DF984C304D8B849DBAAD4CDBE9CF9772017ADF57C110453B650C7462C760D3"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-ant.mp3",
+    "sha256": "49A25898128F62D683625017E3FF4CBD25727413ABD975798B3D8598F5A5F794"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-ball.mp3",
+    "sha256": "80612833D286B321498D1861351D843602576A23FF648D360EBE3A6771B37B75"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-cat.mp3",
+    "sha256": "BF08C14B53A49CAF9C6038976BD90F43FB0C440214794EED4A40DD36E7D969DA"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-drum.mp3",
+    "sha256": "0E6F7F15815777264F3295F25812CA762AB55931BA0706972931221C7FBE2513"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-egg.mp3",
+    "sha256": "337C6A2234628A3D9D67D749324DCEA6AF2A18BA70364C505359BB3A2E158230"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-fish.mp3",
+    "sha256": "3B7522B648AB89D0BEA6A3387369C770A85E080BAB42183E05F92273D4AF2D89"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-giraffe.mp3",
+    "sha256": "C596D5D43D731667FC9C3EEF98AE31E4B0BD0052A579C91DA8D3B7A159A8F0E6"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-hat.mp3",
+    "sha256": "0B064043862AFF530EE84AC106A8C37ABB484F5E30F11BAC6CCD23A165B3A916"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-igloo.mp3",
+    "sha256": "E4A4671E448071BB7D79613C225D1F6DB62F527B98DFCACD6FD085F20B7396DC"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-juice.mp3",
+    "sha256": "488491790AE8BDDD7F371FABE171B144693EC38A1786EDCD00053FCBFA61E1CC"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-kite.mp3",
+    "sha256": "9CA9E8CD9595A3F8FFC17E4F7AAFBE79606B26D6A88E2EE3457DA2879227458B"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-lion.mp3",
+    "sha256": "5905CF6A765027B64F19427C957DFA6CB28F24F0909F6D1EE27C814D036ED17B"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-penguin.mp3",
+    "sha256": "3A058A7F467300E89B944E3DA96F92382494614E072905D40254EBF86F5ED64D"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-sun.mp3",
+    "sha256": "B4598746E1DA5F52260B564F59E040D76B0D764C1523EE3EA2F72CA810601B06"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-turtle.mp3",
+    "sha256": "5D5EB03C6C61D51FAB604922E57DB1DF2EDD9B77D0BE884EC0403616B65317B0"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-van.mp3",
+    "sha256": "A60A865986456D01D9E9CCBC7943FBF2DEB41A31174F6C5F936C6EFC5D4BD5C3"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-xylophone.mp3",
+    "sha256": "58657EFC7A38FA6E9E50094B334FF0A73A992D49C379C9AA61C9C7DAE55F2E70"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-yoyo.mp3",
+    "sha256": "BE07D3DACE70A73A982C88A24BB7B96AAEC63F267709FB1A799DC5CE20A28A64"
+  },
+  {
+    "path": "assets/audio/phonics/lesson_audio/words/word-zebra.mp3",
+    "sha256": "9F4F24515F719E82C659E7A354A1B4E3E88BFBC635EA0A88AA75BDD56363C413"
+  },
+  {
+    "path": "assets/audio/phonics/rhyming_words/word_ball.mp3",
+    "sha256": "596016C657795D742A3E93C0CF62A74A73E0B6D1A1A490925CA7F49F749A7FF1"
+  },
+  {
+    "path": "assets/audio/phonics/rhyming_words/word_balloon.mp3",
+    "sha256": "122B90EB271CEED10F9C285D878DFFC7CB3A71C2BE0030EB254595B1D6D8EAB5"
+  },
+  {
+    "path": "assets/audio/phonics/rhyming_words/word_bat.mp3",
+    "sha256": "1A0D7A3B237FB398FA0DE2ED24935D58851EDC664C74A9C7911930E652A77935"
+  },
+  {
+    "path": "assets/audio/phonics/rhyming_words/word_big.mp3",
+    "sha256": "7FDE211E20BCAE7189508D2CA16A334304A4B8FD071085D67CBC10949B513404"
+  },
+  {
+    "path": "assets/audio/phonics/rhyming_words/word_box.mp3",
+    "sha256": "D39598497A44CB52A7263BDBD2328A93E5BF825695C456D4F09CAA4E8D6BB138"
+  },
+  {
+    "path": "assets/audio/phonics/rhyming_words/word_bug.mp3",
+    "sha256": "07EC4F97294EBBF9E59FE7E3A7BEA8825B9B6928232B7D84A09DB879060DB284"
+  },
+  {
+    "path": "assets/audio/phonics/rhyming_words/word_cake.mp3",
+    "sha256": "DF5974159565FC62630A56232E97C3802EA5203ABC18F8038A567DA7917D89D5"
+  },
+  {
+    "path": "assets/audio/phonics/rhyming_words/word_car.mp3",
+    "sha256": "9BE72D4434F63F84F292A760371856A19775E70AB4367775C68A679C2D711D37"
+  },
+  {
+    "path": "assets/audio/phonics/rhyming_words/word_fox.mp3",
+    "sha256": "57B9B1F84CA94D70BC1DF16035B1A988C3D292C51F45EB0EE3D7E11C3D53EB1C"
+  },
+  {
+    "path": "assets/audio/phonics/rhyming_words/word_hat.mp3",
+    "sha256": "6FDA40FF775501103D979B0DA98119505FB96D150663A4679E12D58C4BA3C2EB"
+  },
+  {
+    "path": "assets/audio/phonics/rhyming_words/word_lake.mp3",
+    "sha256": "FD568382BC86A9CF543597027846F4BE0005491A1C967A08FDDDE07A31500272"
+  },
+  {
+    "path": "assets/audio/phonics/rhyming_words/word_log.mp3",
+    "sha256": "2F5E532C6DF47178D135AE6F814646E6BE8687F494B3154B23B70D26B0AFD9B8"
+  },
+  {
+    "path": "assets/audio/phonics/rhyming_words/word_mat.mp3",
+    "sha256": "F6693CA526E0F87C41E4F6B32A9B5ABA4C8838703A9C5C7541B6328A34B03574"
+  },
+  {
+    "path": "assets/audio/phonics/rhyming_words/word_mouse.mp3",
+    "sha256": "626F368E2C81EF6E82708FC7395D5FFF2058FEAFE6C0CB15FA447C15B2575C13"
+  },
+  {
+    "path": "assets/audio/phonics/rhyming_words/word_mug.mp3",
+    "sha256": "8B00D7AB403AE0590F01CAD9C2D26BF76FA8D021C925A4B689CBB4D7916A898E"
+  },
+  {
+    "path": "assets/audio/phonics/rhyming_words/word_snake.mp3",
+    "sha256": "F7B8B32A85ECCD664167316C81002A9B1A754EDF9F05A3194148BCA956335FEC"
+  },
+  {
+    "path": "assets/audio/phonics/rhyming_words/word_tree.mp3",
+    "sha256": "1AFBCDDD51DC855BC8FCB76BA52A4A558B30B4C0662582AF1D0A70EF7332414A"
+  },
+  {
+    "path": "assets/audio/phonics/say_it_right/word_banana.mp3",
+    "sha256": "BB0C3D9DA492FDD3986424833CFEF0D15F37A10655D3929B4706B0719C3F944F"
+  },
+  {
+    "path": "assets/audio/phonics/say_it_right/word_bee.mp3",
+    "sha256": "DA10FC5239594C1696EFCF64DFEC2799F98BB9AF680AECAAE9E40911A7FA655B"
+  },
+  {
+    "path": "assets/audio/phonics/say_it_right/word_cat.mp3",
+    "sha256": "06BB135F83BF73E72D3A1C8AEFECFC8E35A6618C3629FE1497871CF835BFBFA1"
+  },
+  {
+    "path": "assets/audio/phonics/say_it_right/word_cub.mp3",
+    "sha256": "092215AADF445D545CFA60B32C8823CD1D0A4D502A671DD3A700DEF4C83E6303"
+  },
+  {
+    "path": "assets/audio/phonics/say_it_right/word_egg.mp3",
+    "sha256": "85A7894B1448910B46E3F2D6E2510A041E818610A942EC369F4E017C01372C71"
+  },
+  {
+    "path": "assets/audio/phonics/say_it_right/word_fish.mp3",
+    "sha256": "CE8B50ED081D133686BE57ED127CB6FCF57EDC0EED3BACDE1DA48354EF11E25D"
+  },
+  {
+    "path": "assets/audio/phonics/say_it_right/word_hog.mp3",
+    "sha256": "708A62D04A2ECB135C47BC67360014E6CCB59E919CEA2B6CEBA406AB91E5D144"
+  },
+  {
+    "path": "assets/audio/phonics/say_it_right/word_juice.mp3",
+    "sha256": "ACAB2B931A21B2A50A023AEFB170F325DD2C8A53CACAAD61EF5FC0817A22EC9E"
+  },
+  {
+    "path": "assets/audio/phonics/say_it_right/word_kite.mp3",
+    "sha256": "159BBE46CC783609881A0F50DFACC339D69DCFAE28CBB7DC9D6B871405466AAE"
+  },
+  {
+    "path": "assets/audio/phonics/say_it_right/word_lion.mp3",
+    "sha256": "9D0D192E20C1ABE36E3EA1C40BCF105C0787728B18E604E77425D8C1CA672969"
+  },
+  {
+    "path": "assets/audio/phonics/say_it_right/word_nut.mp3",
+    "sha256": "DBFB37FB1D8D1D0E8112851F3569BE5AE4EBE3B6E769FCCA5623EDB9D731D1D7"
+  },
+  {
+    "path": "assets/audio/phonics/say_it_right/word_oak.mp3",
+    "sha256": "92CE35B9C3C49B14BF5E86EBDD9E2096000A9153509401D374560C035DE649F5"
+  },
+  {
+    "path": "assets/audio/phonics/say_it_right/word_pig.mp3",
+    "sha256": "A0245F3D707E46B20F35F03288714CC8B47223FB448A171B36780C206E5584A4"
+  },
+  {
+    "path": "assets/audio/phonics/say_it_right/word_rain.mp3",
+    "sha256": "C0A7262C040E3098497BE58D63F54977FC39E310BACE3777BD16BD042D8B28D4"
+  },
+  {
+    "path": "assets/audio/phonics/say_it_right/word_rainbow.mp3",
+    "sha256": "45014A06DABEDFCA96851F2EA2898814BF5E57976112168C51C124525FA3DDDD"
+  },
+  {
+    "path": "assets/audio/phonics/say_it_right/word_sun.mp3",
+    "sha256": "633E28C08CAB9A678DA93E635D52F7694D62CF24AD6AF3A69227DA0CF2705DBC"
+  },
+  {
+    "path": "assets/audio/phonics/say_it_right/word_turtle.mp3",
+    "sha256": "C43EDB50CFD354DAA6FD40BB50561FB84223252912016E347A3824E0BD06E5E9"
+  },
+  {
+    "path": "assets/audio/phonics/say_it_right/word_zebra.mp3",
+    "sha256": "9B7796BD041289B384BA326792AD44429AF8CD8782B4264A5B68BCC09E7BDA45"
+  },
+  {
+    "path": "assets/audio/phonics/word_builder/word_ape.mp3",
+    "sha256": "924594C0098724455308F658F3B60772B1D95EE8E54AA6F7440C3EB3965B81E0"
+  },
+  {
+    "path": "assets/audio/phonics/word_builder/word_fin.mp3",
+    "sha256": "2F2826A5AA29749EE1948CE2B8D853A5F903A63EDF1F73C2506C6FDBD03C6B1B"
+  },
+  {
+    "path": "assets/audio/phonics/word_builder/word_lip.mp3",
+    "sha256": "E67FE1929C9A88C5E3BB799054ED1ADD6A3B31E487229C9C01A411734F5B1E56"
+  },
+  {
+    "path": "assets/audio/phonics/word_builder/word_mop.mp3",
+    "sha256": "02911965E9D076D91D67DA387223B992147B1425C46D6D5738F77BDB9E637993"
+  },
+  {
+    "path": "assets/audio/phonics/word_builder/word_rat.mp3",
+    "sha256": "443621A9EB5967D5BB0234F89AC8F5A48E3C95E2C5E03397A0853A279AD3CE36"
+  },
+  {
+    "path": "assets/audio/quick_check/hunt.mp3",
+    "sha256": "A0D6D30077389E4EA62DAD03E1B8BA5779503E9701E1FF36C6EB98FA0AAF7A0C"
+  },
+  {
+    "path": "assets/audio/quick_check/intro.mp3",
+    "sha256": "3FCC88B250C4465A256CB679010B75B69E56B4B4FC1EB4B1B522A7E32E52650F"
+  },
+  {
+    "path": "assets/audio/quick_check/mastered.mp3",
+    "sha256": "295E5C7DF6ACCD1ED3666D2F7FC51EFA6CFF9B662E47D2E89C5433ACC0E18E20"
+  },
+  {
+    "path": "assets/audio/quick_check/match.mp3",
+    "sha256": "10720DEC8DA5649737DE571E64A135C031AF3A30A34FF87D60F350E907DD2FE5"
+  },
+  {
+    "path": "assets/audio/quick_check/picture-beginning.mp3",
+    "sha256": "3CBB5B62BC3542AE572B227CA40E2E46CE4C32DD8B61216C11BA2C2F4DBC838A"
+  },
+  {
+    "path": "assets/audio/quick_check/picture-end.mp3",
+    "sha256": "35C542F33A11D116D805AE9F848E80F8E7417329388C91015B228D36D0950D11"
+  },
+  {
+    "path": "assets/audio/quick_check/picture-middle.mp3",
+    "sha256": "03EFCEDD6E05182E4234453732AFBDC7074BAA6EA2D45DB985E46E2D45C8053A"
+  },
+  {
+    "path": "assets/audio/quick_check/practice.mp3",
+    "sha256": "FD71C393CBAA0F9C3593BC9E4F562330B8F1BF2E2F7362C1F1D97B6F78B16093"
+  },
+  {
+    "path": "assets/audio/quick_check/saved.mp3",
+    "sha256": "570CC2187040175E2B33AFFCCEFA2D3C0E132F007024E43110C8A117AC9F6332"
+  },
+  {
+    "path": "assets/audio/quick_check/sound.mp3",
+    "sha256": "42DBA6C760C252BB5FF5A19535582683E706679470B6DA8D080A1549BEFD1C3D"
+  },
+  {
+    "path": "assets/audio/quick_check/spelling.mp3",
+    "sha256": "C5A37A371C96BEAB79820D6089AE3B6AF3C30449C5B845C311238674589B2763"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/intro.mp3",
+    "sha256": "F2B5B16D7F84397D3CDEC8D042DEC637F234902DDBBF78DE752F9C7A4A4E4F9F"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/praise-bed.mp3",
+    "sha256": "76110FBBA463E0C174B474C598A4C678995177C060537189F733D3F4D5B5F7EF"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/praise-bug.mp3",
+    "sha256": "1B361036B207292D5248183492D249D1EB4CB74619D834136CF3BA61EA845356"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/praise-cat.mp3",
+    "sha256": "33C4A2D2238C5BA61EF783ED2770D372559E6B174C9C9B083324E6A8D7CAB554"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/praise-fan.mp3",
+    "sha256": "953FF92AFE4E72D89A57FEE2850AF8A4651E1EA93ABBF5DC81BFC64B7D87644A"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/praise-lip.mp3",
+    "sha256": "C5FAC920340F285C7B0EAF9DB7697A5D56DD620ED10B8853E71576397FF5DEF3"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/praise-pen.mp3",
+    "sha256": "FB633B0E3E13950447AF1D03191F179C4182E4AEBC081285BF747D72222D3417"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/praise-pig.mp3",
+    "sha256": "7FA2C10C591E070B31C91BC31FC3A4A2C1159778CF4753E2DDA6858FBA5FA1A8"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/praise-pin.mp3",
+    "sha256": "4E40A8B36E5227A4AE6535A6FBD1CADCB98D88E0897A0FCEA851C2471E941BCB"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/praise-sun.mp3",
+    "sha256": "BDC90E9E4ACC93E08C8431252F30C90628F052E74FEE457DD0E022682170420C"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/praise-top.mp3",
+    "sha256": "94E33B634F9946FA75E4B4B3B371F5D2BD32E72651EB42769D6DAF3F4312FA74"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-bat.mp3",
+    "sha256": "EB015BF82074CB2D28CCCEAF668ADF1010B3BCDD22DC2ADAC62841FDD378FF9F"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-bed.mp3",
+    "sha256": "06C8881C680BF32B96CA968279800B19897ED1130DB630EB20ED35B23BCF0B8E"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-big.mp3",
+    "sha256": "7BA2CF8E50CBCC0876CF45E5ED084ED8BF5E20BB1A474CE9BA4BA0BD4DDF43B3"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-bin.mp3",
+    "sha256": "07AA651E6D1F050E13C94215DB44C919C8BB3D0FDBAE52DAC9D0EC87FE2A99A6"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-bug.mp3",
+    "sha256": "17E9D121DAA13E27289B96DE8E87751D044803BCCA60D662B0A3FD3C598513C2"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-bun.mp3",
+    "sha256": "A96790DBD86E74E188340B2C4E6BA960BF6EB168C5812BA40B79081F3090D1B3"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-can.mp3",
+    "sha256": "85F4E57713BA83D8BCFB01C8DC0DF4CDC901336980E74026C411CFBAE391A19B"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-cat.mp3",
+    "sha256": "AE9554CD7FA7C40411A9C0C548BE8B373A2D57AA3F129D949F049CFE5969B33A"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-dig.mp3",
+    "sha256": "9EC80F92D21889164F1D5D1685CF4E3DB807863EF2C54A0B9EF85388D8585119"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-dip.mp3",
+    "sha256": "5F5B81D355A6525DBBFF6A06AB10BB8F7DF153A29DB6A095C357237E05033306"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-fan.mp3",
+    "sha256": "7FE6E47F14396A7732FD09BE5BA229D13501E34FC704EC95195079BDB2E6DE28"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-fed.mp3",
+    "sha256": "90E338B71CFE4118DAADF2740EAC9D776B8E08EE8F94BA7BE9B7663097D71EDA"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-fin.mp3",
+    "sha256": "AC8B34DE8CE84FD459F4FBF16614CC96103E5A9579AE853851AC3AA8B588A107"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-fun.mp3",
+    "sha256": "C735A7C381813EC4C330D5E68129B3B5A9F0E98DD0414D3520533D0A5ADABD6D"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-hat.mp3",
+    "sha256": "9331816B931D225FB2735FB1DD69B1A4AB43E04A121AFDCB71270DFF742B3192"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-hen.mp3",
+    "sha256": "5943F94CE259DFD87BF26DCAE1AC4F332A986386127D03EF977CED2B77C8D257"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-hip.mp3",
+    "sha256": "18E5D46950D162238EC14C2FCD8FDDF300052500ACA57F558703947DD365E311"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-hop.mp3",
+    "sha256": "9FE7136144FBE13852D17EE883086495644667E23054B675916389B9B32C3E0D"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-hug.mp3",
+    "sha256": "FBF29E1F584C26F1B28AFA9D5E00AF2FA91B785D44B317B159EA4B550C906572"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-led.mp3",
+    "sha256": "78FA58A1FC0A000FA5C6A3A12B55DBF314F929156732D56F26EACBE5603E326F"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-lip.mp3",
+    "sha256": "C9E9A63F41D3831E754CFDA096A55BD95E3CBDB7156F923FDF4C26AECADC5C46"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-man.mp3",
+    "sha256": "2997DC91A737BEE1426784EC0D41E6B6E1A23863BCAC8DB2E58CFDB97CB47687"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-mat.mp3",
+    "sha256": "B1108435C841E2360C125C8B45BEA00871148D0D1CD0818D23345050A02D30AD"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-men.mp3",
+    "sha256": "F645C685C0708E6365D7B6A2B548C0969A97DFDB4F1820483261F5D777C2D597"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-mop.mp3",
+    "sha256": "016C62B4E7DEA622014F84260E1CB5EF5D48B81276E3DA6B1C54FA4CD304E20B"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-mug.mp3",
+    "sha256": "14F0AC3CDAB208871552E5503921E2547450FFF2B6C49501B4BDC244FC5716A9"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-pan.mp3",
+    "sha256": "B3DD55001A16EAD294C0E2462B61CB194FCDCA17C2DB9AEFC1974CD3CD277575"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-pen.mp3",
+    "sha256": "2A0779628E44BF0B42F4D82DCAE5C98F31FA83068B616F451358888F3A477E93"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-pig.mp3",
+    "sha256": "8DFBAB95C6B5A1B29383FCFF07639123D6DBBF5289A83D17C27BCC18C0307CAB"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-pin.mp3",
+    "sha256": "818D6614F06487D97C1A20750DB87B80FEA2563A9B56E25FC6CFD89F8AA81704"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-pop.mp3",
+    "sha256": "7C63622DCAD493DFAD93B1D78ED87FD2E0F5F1893873A6BA6CE758C5A3EB2505"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-red.mp3",
+    "sha256": "46159C79942FE51612938F8C82AD581AAABA0952925080FD3B87B1AC617B5884"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-rug.mp3",
+    "sha256": "6ADDF298D04BFC1320496B68521A49F65011D64D7E6C5207E2B5CA6DCA2F64B7"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-run.mp3",
+    "sha256": "C6F5FD47611CFF5AF4E0597385F53FDF2F25063959C7FEEAB9EE597B30D27344"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-sip.mp3",
+    "sha256": "5459DFD73B26E4CF48E3C70F114EA48A7B787D4C94EE1D2CF4C485B0573BB0F3"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-sun.mp3",
+    "sha256": "3DD618D51790C619F4C8CA2441A77F9E850C8EE0627164C31886925BD55065C8"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-ten.mp3",
+    "sha256": "5F3EAE024959AC470DB3D986C06986BB764362CC7C80F7946DDEC63061564CC8"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-top.mp3",
+    "sha256": "9AE8D1C3D61CA45A9D75BBAF608F32E825200627F60893ED37D07EE4E522D25F"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-wig.mp3",
+    "sha256": "3B7F9A29D43722E093AB2154974EA01EDDC3020B92A8D5DAEB9B44F50526B9EB"
+  },
+  {
+    "path": "assets/audio/rhyming_jar/word-win.mp3",
+    "sha256": "2C4669E961CD3BFEAEEA20ABF8FC730A24445D0A32DE099C123249885573D238"
+  },
+  {
+    "path": "assets/audio/tap.mp3",
+    "sha256": "FB60FDBA42C9759C8156ABE50A3AA66CF1816B72D619D469F40F1641C7AE3B7F"
+  },
+  {
+    "path": "assets/audio/wrong.mp3",
+    "sha256": "2D711C8158D03CB65B0FC6ADC797AAB1D44FD6440974B737FEA8BD0EE1D2B764"
+  },
+  {
+    "path": "assets/fonts/Fredoka-Regular.ttf",
+    "sha256": "125CC34039587D0926961DA82659002E686518AF02C0771F7224C40A63F2C144"
+  },
+  {
+    "path": "assets/fonts/Nunito-Black.ttf",
+    "sha256": "A5DDD59DA28C281984AE3BD12AA3B9AF3B204E61156E50F1108D5FCF71AA5665"
+  },
+  {
+    "path": "assets/fonts/Nunito-Bold.ttf",
+    "sha256": "8148A236E4127DAD38346CE596C544389AA2FDAAA9F311E589741DE30D25DDB8"
+  },
+  {
+    "path": "assets/fonts/Nunito-ExtraBold.ttf",
+    "sha256": "43364AC2D05D1033B5E255CE77E4D84D2F6467BFADB5E5985CA4E688949E73BF"
+  },
+  {
+    "path": "assets/fonts/Nunito-Medium.ttf",
+    "sha256": "1F6452D3509DB129D3468088C1C952F1A844B6DC865703A09595FC53700A6251"
+  },
+  {
+    "path": "assets/fonts/Nunito-Regular.ttf",
+    "sha256": "6F96017E762896B4CF3C2DB345D41D7A72A3720A95698C3CD47020BF433DB435"
+  },
+  {
+    "path": "assets/fonts/Nunito-SemiBold.ttf",
+    "sha256": "F165190D31319DC6384C83FDD014ED983630541B21D005B5CAADF1D74FBD513D"
+  },
+  {
+    "path": "assets/fonts/fredoka-OFL.txt",
+    "sha256": "5C9E7EEE5C6B25F4B05B8D53B2E470EA4962F9CED742D044A98F7D95D1375BAB"
+  },
+  {
+    "path": "assets/fonts/nunito-OFL.txt",
+    "sha256": "580DF76C95A1EC5AB878CEB25BB3D85C6A076804E9C970C8C6972AEA775FDF65"
+  },
+  {
+    "path": "assets/images/activity_cards/game_alphabet_order-v2.png",
+    "sha256": "CB04AB1824992711463A3A453DDF0E785CC70A8ACD01992AE617EBB1E685F4B5"
+  },
+  {
+    "path": "assets/images/activity_cards/game_flappy_letters.png",
+    "sha256": "78C2F229485A2B6B4765ECF072BD1E3D507F02A11DAB1A6E7A0940FFF9A2F3F8"
+  },
+  {
+    "path": "assets/images/activity_cards/game_memory_flip.png",
+    "sha256": "A3D9A5855F9BD3BA6DF01436CD0B20F404063F8EB36D2C6F3D5BAEF2901B6AC1"
+  },
+  {
+    "path": "assets/images/activity_cards/game_missing_vowel.png",
+    "sha256": "17DB531B8A370934258D118037219B33F25F3B81F40B1AFCF543C736A2281823"
+  },
+  {
+    "path": "assets/images/activity_cards/game_phonics_quiz.png",
+    "sha256": "F07C84D2C9C528F7091CC46A0E3367AD8D81578381CE3D90B57C947BB7AB01FC"
+  },
+  {
+    "path": "assets/images/activity_cards/game_picture_match.png",
+    "sha256": "44BBD9CB4898A48AF7FBD80745F3B9400EED32506EACE8D18E70C3FB5D27C3A0"
+  },
+  {
+    "path": "assets/images/activity_cards/game_rhyming_words.png",
+    "sha256": "DADA8B5D0B225EF774083D21CCDB33D2736F4DBFF7237AD79D633C8AB971E4FE"
+  },
+  {
+    "path": "assets/images/activity_cards/game_rumbled_words.png",
+    "sha256": "EDBC933EEB1B075E0B3D363AE9B363CDF8B63E009ED5E25970F0E56C3C5679CA"
+  },
+  {
+    "path": "assets/images/activity_cards/game_sound_match.png",
+    "sha256": "818C2FD312ED816A42C8D2CDBCDEB03DB1ACC9594BDD9B9DA234A8AC58549DE2"
+  },
+  {
+    "path": "assets/images/activity_cards/game_speak_and_recognize.png",
+    "sha256": "27912DE0CF8B4D0C40ADCA1445ED30827B6C1149CBF1B11E77515F74D47A42BF"
+  },
+  {
+    "path": "assets/images/activity_cards/game_word_builder-v2.png",
+    "sha256": "00CD804E60F1E415CB2A5CDF97E776BD8E4F8A8A96229C89D336F4C58833CBC8"
+  },
+  {
+    "path": "assets/images/activity_cards/lesson_blending_sounds-v2.png",
+    "sha256": "310C720E047ECC301D940702270E43C684AF3C7B9157E812B4F3AF06DE4A757C"
+  },
+  {
+    "path": "assets/images/activity_cards/lesson_cvc_words.png",
+    "sha256": "CDABE9911CF69E27187BBABB4FCE9AF4B7525DA4E468185E6EAE2BFA89D15706"
+  },
+  {
+    "path": "assets/images/activity_cards/lesson_letter_recognition.png",
+    "sha256": "7AE20785E6B2DB4B8F1A38C9A78DA691B4EE6B1190956066226DD935C55B89FD"
+  },
+  {
+    "path": "assets/images/activity_cards/lesson_letter_sounds.png",
+    "sha256": "A46EA59C3A09130638B3ABD5AC6BE2F2DDAF1BBB39041A79045B9D7C92C19C2F"
+  },
+  {
+    "path": "assets/images/activity_cards/lesson_short_vowel.png",
+    "sha256": "6D9C1B51E7231939DBF3479B476B2B009C069424577337571B4BF0FDF779658A"
+  },
+  {
+    "path": "assets/images/answer_choices/frame-1.webp",
+    "sha256": "460B43A46C395B7773117FC47D037AB5F61DEA5C4FCAFEBA721BF3AE44D1C8B8"
+  },
+  {
+    "path": "assets/images/answer_choices/frame-2.webp",
+    "sha256": "FF42E66CFFB38F63744DFD48F874E06D0204E8C79139589931D440DF2D254BB8"
+  },
+  {
+    "path": "assets/images/answer_choices/frame-3.webp",
+    "sha256": "32EA118C4EDEC66A60B93F104CDB0CF43CF861D74F9D7CA2215F7052E4C258EC"
+  },
+  {
+    "path": "assets/images/answer_choices/frame-4.webp",
+    "sha256": "36EB945C51567F1C254F59855CFB3453A930E2A7E5CF0D86340614D947E0145E"
+  },
+  {
+    "path": "assets/images/app_icon.png",
+    "sha256": "57D0281C11693087534CA7FEBA8249BDAD3939EB0EB8571330555A7BA37C8015"
+  },
+  {
+    "path": "assets/images/app_mascot.gif",
+    "sha256": "BD393FFEB2D04D2ABCC1E09648C6C319823AA3AA94BDFFF2EC0A99D050F0996B"
+  },
+  {
+    "path": "assets/images/app_mascot.png",
+    "sha256": "E1CBE2EB7FE82EE6ED5EFCE91580278C3CFC8BF49749AB9D5AB70FF54FDEEF24"
+  },
+  {
+    "path": "assets/images/button_designs/next_button_1.webp",
+    "sha256": "793F67B4972051AC16DDA7837F9CFC9242A7184038ECBEE4ECDF8AC97CFE234C"
+  },
+  {
+    "path": "assets/images/button_designs/next_button_2.webp",
+    "sha256": "F66685D47F7988E1F54B85EE4809657933893EE074536F9E6BCD70FED90E7032"
+  },
+  {
+    "path": "assets/images/button_designs/next_button_3.webp",
+    "sha256": "842098FFD00F5B9302EE9997954FE15682E638F3C7E2BEE70CCD24B9B4F9FD41"
+  },
+  {
+    "path": "assets/images/button_designs/previous_button_1.webp",
+    "sha256": "DCB61436827DD8A1C031BC3E6CFD45E488A1487FE4056A2DA290EB2A3B1F6F7D"
+  },
+  {
+    "path": "assets/images/button_designs/previous_button_2.webp",
+    "sha256": "A8EFEA062F2D0A0A8A47F9CF4A1CE606917CD22E77C7A7F75CBBE15B6D36B249"
+  },
+  {
+    "path": "assets/images/button_designs/sound_button_1.webp",
+    "sha256": "5B8DB51A954B94DEBBED34D569023F798B4DB6A4BCFEA0269F9E3CC5FA245E63"
+  },
+  {
+    "path": "assets/images/button_designs/sound_button_2.webp",
+    "sha256": "E895A58870E1D18239A2F72F1CC1B0428A7C724AD1F7BB776102F5FD4301727F"
+  },
+  {
+    "path": "assets/images/button_designs/sound_button_3.webp",
+    "sha256": "EB2F88CB07C936788A9826DF537EF305946505D8591298DC22EE745492CCBE67"
+  },
+  {
+    "path": "assets/images/character_selection/banner.png",
+    "sha256": "BFAE8F5A64D7358B2D07A761ED61517EC72B3C1D7EF6314979D5BE3B0A0DC4A3"
+  },
+  {
+    "path": "assets/images/character_selection/boy.png",
+    "sha256": "09BB0D2220A739D0CD4E1EAF31D5B73895380678DFC2DC30A920FB6E6F963E99"
+  },
+  {
+    "path": "assets/images/character_selection/girl.png",
+    "sha256": "471059C4A13FF4846279D08936FA7D39BBD198569541A15A990B5D4786753DA6"
+  },
+  {
+    "path": "assets/images/custom_navigation/home_button_glowing.png",
+    "sha256": "249A6A3853211C15894A888B63B0A9B02ABBBEFDC9FC8FE1165BEF250465AAD8"
+  },
+  {
+    "path": "assets/images/custom_navigation/home_button_not_glowing.png",
+    "sha256": "2CC64527D89349EDDAF99360BE803BF9725805FC160EEFB7DB48C4B2AB363B81"
+  },
+  {
+    "path": "assets/images/custom_navigation/parent_button_glowing.png",
+    "sha256": "5ECD3D4D0563278B8E54C6B1CC62257531FE840D4648C8B395AF3F0A462D877E"
+  },
+  {
+    "path": "assets/images/custom_navigation/parent_button_not_glowing.png",
+    "sha256": "9748C6C4C5F8522057C7C90B47B282C0675F30FF8FDA293E6764CCD38177500B"
+  },
+  {
+    "path": "assets/images/custom_navigation/progress_button_glowing.png",
+    "sha256": "2A2293D2028A66D3C118CFF82B7A95B3D18A0A969CCBC7C52D0ECB376BF79E76"
+  },
+  {
+    "path": "assets/images/custom_navigation/progress_button_not_glowing.png",
+    "sha256": "BC77F03A78950ED749DD77D63542F46240399FD1429E37598DEB654A4D8A05C4"
+  },
+  {
+    "path": "assets/images/custom_navigation/settings_button_glowing.png",
+    "sha256": "E72B6E1510A49919B1F0749DEE33E5E3C2336437DC80841C3B8983DADA646CEA"
+  },
+  {
+    "path": "assets/images/custom_navigation/settings_button_not_glowing.png",
+    "sha256": "C0CE0ED03D35A04D38F941A6E913F1F69A146F1D8749558A180E50BAB0E70241"
+  },
+  {
+    "path": "assets/images/custom_navigation/wooden frame.png",
+    "sha256": "1C3E2FFC0EB742CE7F052BD19C9255F1B3207D52C39ADD1FD4615E40169C449A"
+  },
+  {
+    "path": "assets/images/custom_navigation/wooden_frame_home.png",
+    "sha256": "283395C567BAE22DFF665CD7613C08C2AF8D5E75169F564C072C4FC1F2A23BC7"
+  },
+  {
+    "path": "assets/images/cvc_blending/bag.webp",
+    "sha256": "D4EDBF51DE9B3D8E9B600D7403745D5AB739889DA54DDEF790B6315278CF0B22"
+  },
+  {
+    "path": "assets/images/cvc_blending/bat.webp",
+    "sha256": "ECFE84FBB5332DE5C777F3F1AEF8B29006766777F2BA068C59545DC16A98814E"
+  },
+  {
+    "path": "assets/images/cvc_blending/bed.webp",
+    "sha256": "081FD7CFDFCCF09F89168054ABA5CC083B72A52E898A41AB47B2275558B9DE71"
+  },
+  {
+    "path": "assets/images/cvc_blending/box.webp",
+    "sha256": "C8055C822C3885A5F74BEA3C16FB97F6E6A4E84E4452BA7D30437467FE5AD1A0"
+  },
+  {
+    "path": "assets/images/cvc_blending/bug.webp",
+    "sha256": "8A2F243260A8D46D9A667EA0A701CFF66496B998F7C5B6BCFD2052812D00CAE2"
+  },
+  {
+    "path": "assets/images/cvc_blending/bus.webp",
+    "sha256": "BBACFD2BC5E483D0F3554FEA34339CC10AB7CB3120803C72D6ACF3E7B08DEE77"
+  },
+  {
+    "path": "assets/images/cvc_blending/cap.webp",
+    "sha256": "EA593263757C0F8398E65EEB71263830AC89E8A760233BFEEAAC1D8163412E2B"
+  },
+  {
+    "path": "assets/images/cvc_blending/cat.webp",
+    "sha256": "CB52559398B9CBA2347947121B6F075E54529BC73E8453A979A0F5CCF759470C"
+  },
+  {
+    "path": "assets/images/cvc_blending/cup.webp",
+    "sha256": "994F11CEE19D8B348D8B7DA3E3ED1290D284738AC36A96C5C6395ACCB5C9366D"
+  },
+  {
+    "path": "assets/images/cvc_blending/dig.webp",
+    "sha256": "0ECF629385348ACA0E394732D7934103A369BF03DBA0F3C00FDD9426CEB18015"
+  },
+  {
+    "path": "assets/images/cvc_blending/dog.webp",
+    "sha256": "235AC376165D2A004710F8918BC565CD80D90F2200C035C262E7872B0DB6F4CE"
+  },
+  {
+    "path": "assets/images/cvc_blending/fan.webp",
+    "sha256": "7775915250E00F76E352F65AC46F8A9A1F94F28CE17E0806E426E6AE1FF90BBA"
+  },
+  {
+    "path": "assets/images/cvc_blending/hat.webp",
+    "sha256": "E26127418EE2812E9A31FA5952958411065D3554911A2AA3CDBB7783E5BFF924"
+  },
+  {
+    "path": "assets/images/cvc_blending/hen.webp",
+    "sha256": "562996F15AA299C79E7662114EE85C0306BCE05B9AB36B64F42D9DCAD7A87B8A"
+  },
+  {
+    "path": "assets/images/cvc_blending/hut.webp",
+    "sha256": "9DA5DD27F036AED4D4D4A6D8D06ECDE37FA21BE30655FF9ED8B828D47AF0E133"
+  },
+  {
+    "path": "assets/images/cvc_blending/jet.webp",
+    "sha256": "751343F3382D18F0B17970E757012EEBEE445036B54B83E562EEF7F7A853D852"
+  },
+  {
+    "path": "assets/images/cvc_blending/leg.webp",
+    "sha256": "0D07C84FF41DD47DFF9BD252F6B27CD814583C53A1AF7AFA29E871EB24FE06DA"
+  },
+  {
+    "path": "assets/images/cvc_blending/lip.webp",
+    "sha256": "529BF6268BE276F1CCA5E653BC66998539CC5CF3AD748902A7780ABDCA5FA29A"
+  },
+  {
+    "path": "assets/images/cvc_blending/log.webp",
+    "sha256": "C600627B8D62E14D73484680B8CCB3985AD63647B0E849D7D419EA672FBF734C"
+  },
+  {
+    "path": "assets/images/cvc_blending/map.webp",
+    "sha256": "3293DD67D6C2601B711252EA61AD802D04C8AA4D44DC2D5EEAD37635B9C8F4CA"
+  },
+  {
+    "path": "assets/images/cvc_blending/mop.webp",
+    "sha256": "86E680EADB808A0EBA262CE7EA1E795DD71DF8B4BA0A95EE6987E07EE3A388F6"
+  },
+  {
+    "path": "assets/images/cvc_blending/mug.webp",
+    "sha256": "62451E558F73CB07723B5664CB3AC55DAA833F03F072C2BA7715AE14F7D5B5FF"
+  },
+  {
+    "path": "assets/images/cvc_blending/net.webp",
+    "sha256": "04301B5A5923EAC457308A31D3CBDA026C138BD6A28B97B2C11BCB32934A56CB"
+  },
+  {
+    "path": "assets/images/cvc_blending/nut.webp",
+    "sha256": "89742E271F79687D96D73FCB64638E1B1C6B0225454579D54ACCE7FEF8BB358E"
+  },
+  {
+    "path": "assets/images/cvc_blending/pan.webp",
+    "sha256": "07A2C541DDC5C3F713526C7621EABEB98F563910F3970664FF686FDF83023A1C"
+  },
+  {
+    "path": "assets/images/cvc_blending/pen.webp",
+    "sha256": "8ABB8244C6775D264FF9FD61E334BF04B1180CEE6A6E98CABC113A50207DC1A7"
+  },
+  {
+    "path": "assets/images/cvc_blending/pig.webp",
+    "sha256": "BBE98A0044C5D262FEF3E35A9E695CFC93BD36B127920BFF92B30133D2BD3AFE"
+  },
+  {
+    "path": "assets/images/cvc_blending/pin.webp",
+    "sha256": "6027E87CFE8F97C023C1F51302C19B9A46A39E80AF4BB2B40DB5E5884D2DE5AB"
+  },
+  {
+    "path": "assets/images/cvc_blending/pot.webp",
+    "sha256": "11BFA09D2DDC5A56A344725C02BA7187DC1AE655BADC1593CD9152040B37A3D7"
+  },
+  {
+    "path": "assets/images/cvc_blending/red.webp",
+    "sha256": "CE6EBEEEBB6CD2A79AB695881B704C4FC9B3D82276E03EC922D6C5A7FDB51C22"
+  },
+  {
+    "path": "assets/images/cvc_blending/rug.webp",
+    "sha256": "3BB7F646099A513747784F7572C38B9DFA24BCD0797D16E2B1EAD35B86B842B8"
+  },
+  {
+    "path": "assets/images/cvc_blending/run.webp",
+    "sha256": "69A582945BACC8C148A05B1D5FE7174BFBD1013699C8BA7F9A38AC068ED0A7EE"
+  },
+  {
+    "path": "assets/images/cvc_blending/sit.webp",
+    "sha256": "50B7CBC3624E1506F5DDEF3D0C593691801E746E0356EC78E810177F780CD944"
+  },
+  {
+    "path": "assets/images/cvc_blending/sun.webp",
+    "sha256": "46815F0907E7B829CA2DB118015CB5FA904FE4A677733FDA139A3C459E67214C"
+  },
+  {
+    "path": "assets/images/cvc_blending/ten.webp",
+    "sha256": "F1AEE41E17F75343A5EA4093A8E6696293587519D8E9592F5360FF6E0E500453"
+  },
+  {
+    "path": "assets/images/cvc_blending/top.webp",
+    "sha256": "19C5E6415828F6DB24E5880BE3A8F06DA389EADEDB7F9C41BB3358726E2B00F4"
+  },
+  {
+    "path": "assets/images/cvc_blending/van.webp",
+    "sha256": "39ABDDCAA6AF2CC2968E998FA46DB501C312D2841CB41F70F8B1EC69A4C9DD90"
+  },
+  {
+    "path": "assets/images/cvc_blending/web.webp",
+    "sha256": "A1BA1A16350AF9558688886790883718271AF0BA62070576C022A7186AD20126"
+  },
+  {
+    "path": "assets/images/cvc_blending/wig.webp",
+    "sha256": "70EF25C363FF8A8CB57AB944F5C4D2C882F472CE9F3917736217DB67A5B753A2"
+  },
+  {
+    "path": "assets/images/game_background/games_newbg_1.png",
+    "sha256": "81528EFF5418BB696E5C62747A8C42E1C32170C98E7F90F99719B19D9B19D295"
+  },
+  {
+    "path": "assets/images/game_background/games_newbg_2.png",
+    "sha256": "F96754D5481D1D9064D3C8C9CF81B6F2F2EF92B673B13FD0B2D485C41A65EC8B"
+  },
+  {
+    "path": "assets/images/game_background/games_newbg_3.png",
+    "sha256": "C3CAD02AB0B97D9F39FF799269058E59A597F0AE9862A5E9ECC113CB74E68FD9"
+  },
+  {
+    "path": "assets/images/game_background/games_newbg_4.png",
+    "sha256": "DDA9BDF847E37F65CE22AE94A1541F4C3C0BA99D060D7CC0F34825C0AA16377B"
+  },
+  {
+    "path": "assets/images/game_background/games_newbg_5.png",
+    "sha256": "0A792D834475F98844C51F3D5539EC7932D682494C59990FB4523EF67A4BDEBF"
+  },
+  {
+    "path": "assets/images/game_logos/alphabet_order.webp",
+    "sha256": "C984D70E8E0E15AFDF89BB5CCC135591477E44E12873B1C78D0C86CFA4A07B7C"
+  },
+  {
+    "path": "assets/images/game_logos/flappy_letters.webp",
+    "sha256": "0772C3E4132AF7FD848236B0594554063458C858C8D208A8244EAD192C8FFBBE"
+  },
+  {
+    "path": "assets/images/game_logos/memory_flip.webp",
+    "sha256": "A160FB8FDC717C201F38D6630B6DE410DBF1DEF652B2FBBA35C5F6E5521D5A59"
+  },
+  {
+    "path": "assets/images/game_logos/missing_vowel.webp",
+    "sha256": "CD287A22F1C3ED1AD2FC32673AE3510288957F9231EFF53BFD738BD19C91D2EB"
+  },
+  {
+    "path": "assets/images/game_logos/phonics_quiz.webp",
+    "sha256": "63B5B09DAED4E39057F4CB6C064E7A0C6666DF4F1C4720C2A49233D1F19A98F4"
+  },
+  {
+    "path": "assets/images/game_logos/picture_match.webp",
+    "sha256": "3F6592D3E40822E2E37B190587BBEE240C5EB6233D4E3453F5E9EFC73C785013"
+  },
+  {
+    "path": "assets/images/game_logos/rumbled_words.webp",
+    "sha256": "03DE940B32885F4D45F06F87800C587535BC9FDCA24B577BD509E37047F2CDB6"
+  },
+  {
+    "path": "assets/images/game_logos/sound_match.webp",
+    "sha256": "2ACCD738102871F0813BBDBEA6A95960E1CFDBAF91821131444795A5F2C44D93"
+  },
+  {
+    "path": "assets/images/game_logos/speak_and_recognize.webp",
+    "sha256": "75471107C6DE37F2DA94FA681A3DD6C2426CEEDC511E3B8CD897F130D4A63CB2"
+  },
+  {
+    "path": "assets/images/game_logos/word_builder.webp",
+    "sha256": "D7F12CD0B5087E73F5092356079DE69724A25C3129B9703077E72B93832E7056"
+  },
+  {
+    "path": "assets/images/game_words/airplane-0.webp",
+    "sha256": "9222909A4DD784213D2D3563D52246FC025BD20769A6670EEEF88D702871741B"
+  },
+  {
+    "path": "assets/images/game_words/airplane-1.webp",
+    "sha256": "E9425CFBDA01D4BC24776B9E0B5213B5A97E3BBBF687C51DB6D9BB889864EA76"
+  },
+  {
+    "path": "assets/images/game_words/apple-0.webp",
+    "sha256": "CCF91D4ABE54FDB5FF218B406E2A5D463C10C2E408F8C0E72A80274396E2F57A"
+  },
+  {
+    "path": "assets/images/game_words/apple-1.webp",
+    "sha256": "74C39BE3D32B12EEF4D0931F2B9E31BA2E4FE97558F470A15FD8B3114EA317C1"
+  },
+  {
+    "path": "assets/images/game_words/axe-0.webp",
+    "sha256": "071C95A539E85EF1604344D9D458BB8682C7399981663366AC4A504B008047F0"
+  },
+  {
+    "path": "assets/images/game_words/bag-0.webp",
+    "sha256": "D3791EDC001D00AEECAD26D7ABED500D962B091AD1D00A1915CC26F59D0AC514"
+  },
+  {
+    "path": "assets/images/game_words/bag-1.webp",
+    "sha256": "9A34B7743CE2BA3A40B3D08F0995BE2F28C38BE763293C895F0068A5E791BE1C"
+  },
+  {
+    "path": "assets/images/game_words/book-0.webp",
+    "sha256": "75A93158B370017284D621FE16DECA4D97D2A01A75FB001E3D6737E81BE44693"
+  },
+  {
+    "path": "assets/images/game_words/book-1.webp",
+    "sha256": "3CCDE245C8865AADECA73D0E751D457D7C2E34841A08F801CE5B6373B8E19207"
+  },
+  {
+    "path": "assets/images/game_words/bottle-0.webp",
+    "sha256": "6C7893011523F7F007C550514182C825F787CF0C7AAEF5F08291C3EA52F811FD"
+  },
+  {
+    "path": "assets/images/game_words/bottle-1.webp",
+    "sha256": "2381A5C0C3CAB41E203B66CA9C9CDEAFAF9F8D5A3F832BD75D636F91A4B7A8E8"
+  },
+  {
+    "path": "assets/images/game_words/chicken-0.webp",
+    "sha256": "6C90417BAB2CD6B55444DAA433293672E70A213D1BBCE8D30D3B516B8EDE81B8"
+  },
+  {
+    "path": "assets/images/game_words/chicken-1.webp",
+    "sha256": "595CA2C769C697F2E80C65978A2C2941908455563BEDD6B180B6F31F5E24AAF6"
+  },
+  {
+    "path": "assets/images/game_words/corn-0.webp",
+    "sha256": "A32966C34BDE4887FCAD60E48BCA9EAAC874675D08BD7D13B126C082EA11F41B"
+  },
+  {
+    "path": "assets/images/game_words/corn-1.webp",
+    "sha256": "068823A3D6EF3A2A9C053E4FA680A9AEF586E7BA2320FDDE38DBFB5B38FC54F9"
+  },
+  {
+    "path": "assets/images/game_words/cow-0.webp",
+    "sha256": "BA7A298FEEF0961360243460800A87E76D4D07D843FC967AE37E896EC8D015AE"
+  },
+  {
+    "path": "assets/images/game_words/cow-1.webp",
+    "sha256": "A3AC6514E9F2A19779B04945F6D9D8F38DD6AF7DA6DACA03EAB739C6100E3C8C"
+  },
+  {
+    "path": "assets/images/game_words/dog-0.webp",
+    "sha256": "1CD5A060420950021847D3EFF926F1483978576613083C811D2C3D9056E384BF"
+  },
+  {
+    "path": "assets/images/game_words/dog-1.webp",
+    "sha256": "5028DADB2956E359DEE250D3C694E6790FF497091C0FECA2C266BE651FF3DDFF"
+  },
+  {
+    "path": "assets/images/game_words/donkey-0.webp",
+    "sha256": "49C95D759111AD489A6A3EFB8A78975BC0251D53411BE2C06D58F2851F8515B9"
+  },
+  {
+    "path": "assets/images/game_words/donkey-1.webp",
+    "sha256": "D1CFAFD0E232369F42264B948B7FA14762BEBB4BD71FE0086D858A5F68516625"
+  },
+  {
+    "path": "assets/images/game_words/door-0.webp",
+    "sha256": "38F71A25747E1660EFF12AE12F2AE948B78DA3ADA9D9D4B14C7E12CEC60D391E"
+  },
+  {
+    "path": "assets/images/game_words/door-1.webp",
+    "sha256": "A2C5F7E58B507BE3552B715809E69AE37C87433C03850812227F1D07EB930AEA"
+  },
+  {
+    "path": "assets/images/game_words/ear-0.webp",
+    "sha256": "4789EA0270C05BD634F9D267C495042E5661C0B8744BA27A2DCC5969FBA57C1B"
+  },
+  {
+    "path": "assets/images/game_words/ear-1.webp",
+    "sha256": "738C478A778A55DB3307CE61216EE7E6514A90244AB9B8DCCDEB4712F3A29CE1"
+  },
+  {
+    "path": "assets/images/game_words/eggplant-0.webp",
+    "sha256": "78F1AE6F5232E5F0E05EAB0BB3B95A432E705439D466D42D1568E0836CA0C38A"
+  },
+  {
+    "path": "assets/images/game_words/eggplant-1.webp",
+    "sha256": "21558A54F938CC837B2ACE806D9858BB6998A7FB0B079201CF4FF020A6BBEA2A"
+  },
+  {
+    "path": "assets/images/game_words/elephant-0.webp",
+    "sha256": "E152357BA6260B4D07CD41C2FD09C1EF35CA07A73DCE147361C97C622F92066E"
+  },
+  {
+    "path": "assets/images/game_words/elephant-1.webp",
+    "sha256": "F622AA72C44145B48C0CC68EC8DF488C0990A6D22A76A5B1F873FC80F5044096"
+  },
+  {
+    "path": "assets/images/game_words/fairy-0.webp",
+    "sha256": "2706678BB1E3FA59803171A82966933AD83ECFB20A5EDEB38FF105C308562F5B"
+  },
+  {
+    "path": "assets/images/game_words/fairy-1.webp",
+    "sha256": "D0F50F13DF674EB0A17B6C24D8D9A31160FB8D224A396A389102640FBF054C78"
+  },
+  {
+    "path": "assets/images/game_words/fan-0.webp",
+    "sha256": "FFF5B4D96CCC78B32EA9EB05A3DFDC10DB8B63E1A3E0D8E1684F28F80498AD9D"
+  },
+  {
+    "path": "assets/images/game_words/fan-1.webp",
+    "sha256": "045781C93701E8D45BB8B4E29CFEEA23C5493A82F04F24338E6B3D2300F73C7F"
+  },
+  {
+    "path": "assets/images/game_words/frog-0.webp",
+    "sha256": "6B1645E9AC08AFFD27C68E7387F16714B4FF2BB94FBA343B0B04D276E696C86F"
+  },
+  {
+    "path": "assets/images/game_words/frog-1.webp",
+    "sha256": "76C11560D8658ECFE2DF822FCE9DCADCE1F438EFF53AB00384E27DCCAED7F546"
+  },
+  {
+    "path": "assets/images/game_words/goat-0.webp",
+    "sha256": "974BB8FD939AE2DDA8E2259BFAD1AF2D8CDACBA43AAA79348FB5E394C2362231"
+  },
+  {
+    "path": "assets/images/game_words/goat-1.webp",
+    "sha256": "F4F3898C3FCF3C2D9A5E6EEC1530ED0C6EB0213977F82FE7924C2D3510B5C75D"
+  },
+  {
+    "path": "assets/images/game_words/gorilla-0.webp",
+    "sha256": "9C0B928BBB8A04D57A39E24FCABC68E835ED249FD7B7813A0A2B48CA5BD2E690"
+  },
+  {
+    "path": "assets/images/game_words/gorilla-1.webp",
+    "sha256": "A9C1B32923E08B2F733013EB3A7578A1B2363F96A59D7A510114CCC72814BD8B"
+  },
+  {
+    "path": "assets/images/game_words/grapes-0.webp",
+    "sha256": "96660DC0817BD910AA13879EB4CBE2A3C6E3B0C67BD02E814BBD36C4AB540365"
+  },
+  {
+    "path": "assets/images/game_words/grapes-1.webp",
+    "sha256": "76BA1C84799AB6C9676E43E23EBC4E5F1545486B13BC410B8CDEE9E1DFDA643C"
+  },
+  {
+    "path": "assets/images/game_words/hand-0.webp",
+    "sha256": "E50A49AEB35082B35C22CE8805A8951C707FCA10B66A0B52DEACBDE52EC2935C"
+  },
+  {
+    "path": "assets/images/game_words/hand-1.webp",
+    "sha256": "5888B948FB7FD9C9480B08F85DE58BDA30460C71366777EC480DEEE278F07EDB"
+  },
+  {
+    "path": "assets/images/game_words/heart-0.webp",
+    "sha256": "53BD9B58988E813824597553487470DEB35EDA43B1A902539B389B0BB32B54F9"
+  },
+  {
+    "path": "assets/images/game_words/heart-1.webp",
+    "sha256": "9FA82B4C2C69543204B6807C7223018DEB1BFB2BAB90CA9C091C4F88C6CB20BA"
+  },
+  {
+    "path": "assets/images/game_words/house-0.webp",
+    "sha256": "51EE9953721EBCF65EEC974CBD618A7E9F9310E1F6A69649B8C83484908F978A"
+  },
+  {
+    "path": "assets/images/game_words/house-1.webp",
+    "sha256": "39059E3C4C1AA04B492FC2D6F107D2F1595FCB34A89D9FD09B19B38D656993E7"
+  },
+  {
+    "path": "assets/images/game_words/ice-0.webp",
+    "sha256": "EB51039F35656D0F9943D68D3B473CB78E19C7E312AB89CC22EDFFE98805EB5A"
+  },
+  {
+    "path": "assets/images/game_words/ice-1.webp",
+    "sha256": "C67FD08146E4B06C588678AD334A2126525F61990AD62A40BD619C4DEAD9370E"
+  },
+  {
+    "path": "assets/images/game_words/ice_cream-0.webp",
+    "sha256": "583E25D824FFD3B9A53ED7BAA7FC7B16D56EAFD9EFB9BFBA9EE8A91D509B031D"
+  },
+  {
+    "path": "assets/images/game_words/ice_cream-1.webp",
+    "sha256": "5484C58A7988B4EA51CD6292273E411B208796E7DF011DDE7DBD8074A4A8E224"
+  },
+  {
+    "path": "assets/images/game_words/island-0.webp",
+    "sha256": "5E143A43C0280813F24D560942CEAF59328C56206F70877AF0BEFF4F2280D779"
+  },
+  {
+    "path": "assets/images/game_words/island-1.webp",
+    "sha256": "55AF953CB5236B08CF830894CBB8B7860CAFDB57EB77286D994B93A25BE52EFA"
+  },
+  {
+    "path": "assets/images/game_words/jacket-0.webp",
+    "sha256": "550991BC808C2A8F76679778058614DC8E2C79AC338E174D06C6F86CBCBF4A4F"
+  },
+  {
+    "path": "assets/images/game_words/jacket-1.webp",
+    "sha256": "816E2414E5DBF2ECB00BFCE41C0758BE7BE518D0D7B07C34381CB5905BD0CC48"
+  },
+  {
+    "path": "assets/images/game_words/jar-0.webp",
+    "sha256": "48872DBBE71A5FDB75BBAEBCB66C64BD31C78821895DC1FD5DE9B6A69EA6046A"
+  },
+  {
+    "path": "assets/images/game_words/jar-1.webp",
+    "sha256": "55889E5007E2A1E18E22FDF55283F7DEBC787CA7C7F06106BBFCB828020928F2"
+  },
+  {
+    "path": "assets/images/game_words/jellyfish-0.webp",
+    "sha256": "3C7D53FF5E4397DEFA69EADA2D1E13A242A0B1AF5700A0578E31569925465605"
+  },
+  {
+    "path": "assets/images/game_words/jellyfish-1.webp",
+    "sha256": "50DCB2B1E73936717D298B555C613B2335F21E1FB257CF051C23F8D99D8EBAE4"
+  },
+  {
+    "path": "assets/images/game_words/kangaroo-0.webp",
+    "sha256": "6766D6023B165E728E9213F692FDCEFD2460E9E9D3C649133735BC0F6BF22497"
+  },
+  {
+    "path": "assets/images/game_words/kangaroo-1.webp",
+    "sha256": "8F48F8F1BAF20282A1BCF08A6047A90533A49F11D62728C9AA31E14EF992E1D6"
+  },
+  {
+    "path": "assets/images/game_words/key-0.webp",
+    "sha256": "E4E0C2AB73BEA683DDEF8A0530CA0ABDA19217C22171793B83CD472C29E50774"
+  },
+  {
+    "path": "assets/images/game_words/key-1.webp",
+    "sha256": "0DA514021379DE9E27DC9951398C5A4691C7F2EA2490DF6FDE234610A2F99938"
+  },
+  {
+    "path": "assets/images/game_words/king-0.webp",
+    "sha256": "4EA3CBC3F0D7CF49FF7E2AD238D0EDB560E5C285D875BFFBBB82F3AB5C0EC4D6"
+  },
+  {
+    "path": "assets/images/game_words/king-1.webp",
+    "sha256": "E288F5D393544B49D4BE04E7FE809858AED04D7613D83ED282123A767BAC013B"
+  },
+  {
+    "path": "assets/images/game_words/lamb-0.webp",
+    "sha256": "2EBF0397B1DB58282079D5D9973E47C76CA149DF76265AC748FA97A65AC924B6"
+  },
+  {
+    "path": "assets/images/game_words/lamb-1.webp",
+    "sha256": "03AFB76D4AB34627B51F632D373F882EB0E5FE773E28737BBB51614F2A17001F"
+  },
+  {
+    "path": "assets/images/game_words/lips-0.webp",
+    "sha256": "27D3D75B51B63628040CD07A3263FA0D2388B7857183F7A6DEA0E854BE21AB7E"
+  },
+  {
+    "path": "assets/images/game_words/lips-1.webp",
+    "sha256": "79BDF46DA22CD6A0E2A0457C79BECB721C09AD11488E0B9E8955264CD603FFEC"
+  },
+  {
+    "path": "assets/images/game_words/lollipop-0.webp",
+    "sha256": "79869DF95D5F2FA4EA5785B4F719CEC13FD26E0158AD858E23E0DE18259CC5FD"
+  },
+  {
+    "path": "assets/images/game_words/lollipop-1.webp",
+    "sha256": "5A308CB0EBAA1F59E575D89A6989249435BCAB22A084555E2298E6C546EBC878"
+  },
+  {
+    "path": "assets/images/game_words/mango-0.webp",
+    "sha256": "6DE1E6996AF88ACD335F495C9E9D8121F2145C44FB0F499E4671D25B4581BD7A"
+  },
+  {
+    "path": "assets/images/game_words/mango-1.webp",
+    "sha256": "3E272369F08926419F7A646ED59DDE19BF2BED6C3308E7A891653BE1C1C3DD56"
+  },
+  {
+    "path": "assets/images/game_words/monkey-0.webp",
+    "sha256": "51A8A53E52C982D993FC0024143E5A9B552B90F59806B81DB848608A4EAF8B69"
+  },
+  {
+    "path": "assets/images/game_words/moon-0.webp",
+    "sha256": "47D581972120274AC138F3638A27701D904D330AE160FFEC8C4A334E77992C25"
+  },
+  {
+    "path": "assets/images/game_words/moon-1.webp",
+    "sha256": "4186A9358717A9CB9DCDDFEF50CA2EB51AA42EE804B4F3DE05880EC3BCD57BE2"
+  },
+  {
+    "path": "assets/images/game_words/nest-0.webp",
+    "sha256": "38B0D6EB4B50C2C7A8F7D803893A0A0B31BBF48A1D4B2B9B435D2069D01EA37C"
+  },
+  {
+    "path": "assets/images/game_words/nest-1.webp",
+    "sha256": "A4780E3803862EBF107A1C721F18CA8528ECA003FF42748CA362D4A4A063281A"
+  },
+  {
+    "path": "assets/images/game_words/net-0.webp",
+    "sha256": "5BF5D458CEA08E1DAD8376444C8ACCA70FDF8D8488F5695BE9B4592D4FEFC411"
+  },
+  {
+    "path": "assets/images/game_words/net-1.webp",
+    "sha256": "21A22A2820830E91E30E89FA0045461FAE96464E41FAA267774291861CF1F3D8"
+  },
+  {
+    "path": "assets/images/game_words/notebook-0.webp",
+    "sha256": "30E775776FF12251572A8B791BCBCDD3ABA920A955AF9CCEB3A22B84F0167D3E"
+  },
+  {
+    "path": "assets/images/game_words/notebook-1.webp",
+    "sha256": "AC197F860D68EA9CE65982FAC05D356B289EC95EC32070B7A8A55A7F76ECDF17"
+  },
+  {
+    "path": "assets/images/game_words/octopus-0.webp",
+    "sha256": "0D326F72F8C908266890C81569DE1ACCC4F95094550970BC4AE51D35B47E8926"
+  },
+  {
+    "path": "assets/images/game_words/onion-0.webp",
+    "sha256": "90AD94AFB510FF828F254C37258795CBE7271FAF766AE2348FF299090D171D16"
+  },
+  {
+    "path": "assets/images/game_words/onion-1.webp",
+    "sha256": "7E0DAFBC22D2D5D8CC08F665EC989082236F56B7CDCFBFFEE5B4C7EB6CE11F1E"
+  },
+  {
+    "path": "assets/images/game_words/orange-0.webp",
+    "sha256": "35608A68613D07091371C9A0113D048C9644B54C2979840D5994063EC290A9D6"
+  },
+  {
+    "path": "assets/images/game_words/pen-0.webp",
+    "sha256": "6FC4A6C2EB1AF918831F3C6E3710A4C9E229495D31DE06C3C7A627A155059046"
+  },
+  {
+    "path": "assets/images/game_words/pen-1.webp",
+    "sha256": "B5E6EEDD26C27CF647DFAAB42C83AEE0DD65D2AF62695A35BB029E9C6AF79F43"
+  },
+  {
+    "path": "assets/images/game_words/plate-0.webp",
+    "sha256": "84E5ED707B8C0B68B065F7B5E7095FC0475BCA1BF482197869C703832EEE7193"
+  },
+  {
+    "path": "assets/images/game_words/plate-1.webp",
+    "sha256": "C14334A163D7E59A947D504E27CDAEEF08E044A7F6A423D4797216495C1781CA"
+  },
+  {
+    "path": "assets/images/game_words/potato-0.webp",
+    "sha256": "A92E2FC34D865866105939E878FAF5E3A20F75D68D04682B130D4F971BBD3271"
+  },
+  {
+    "path": "assets/images/game_words/potato-1.webp",
+    "sha256": "AC9946A5DC4565C133A6BA5AB42ABEF7C26DADFF21ABCF35F4C47C90944BB8D5"
+  },
+  {
+    "path": "assets/images/game_words/quack-0.webp",
+    "sha256": "C1005A2BEC85B7CA5244FAE8A6FCD9FFB67100E453A9BE5E488E1656A28C01F2"
+  },
+  {
+    "path": "assets/images/game_words/quack-1.webp",
+    "sha256": "A1C52DB326EB4AD190A478D59251D42BDABF64610295FDE717DFD07E312289B0"
+  },
+  {
+    "path": "assets/images/game_words/queen-0.webp",
+    "sha256": "EF7FA219819ED700002C33DB2BFBCE96C15B4239933A194492E876D8C8B03B2C"
+  },
+  {
+    "path": "assets/images/game_words/queen-1.webp",
+    "sha256": "7AD86596F1295BFECB53431392EB4FA7B1103D25EFDAE9E6EF5BD1D5FD9C7424"
+  },
+  {
+    "path": "assets/images/game_words/quill-0.webp",
+    "sha256": "71E0FDA29BA04D22EB13E9D40DEBE8430C63FDAA30ACFE5F41A10B114D12423C"
+  },
+  {
+    "path": "assets/images/game_words/quill-1.webp",
+    "sha256": "BF118BB416836350F3C860072F87B572DE49B9D49BBCC5E8C8FFF67A3C39FFD7"
+  },
+  {
+    "path": "assets/images/game_words/rabbit-0.webp",
+    "sha256": "6095A57EEDEDD851B4EAD032F1F11AF80252F91F0C12B9928DA8E75DBC09B43A"
+  },
+  {
+    "path": "assets/images/game_words/rabbit-1.webp",
+    "sha256": "3675284F6CC9F0668E00DE82889BF3A7D0D8F2DB7AAF8256768A7002B5F861B9"
+  },
+  {
+    "path": "assets/images/game_words/rooster-0.webp",
+    "sha256": "CFE60C2ECCD5B180410334EA855F35DEA8BABF56089F1B967B2E5206615A99BC"
+  },
+  {
+    "path": "assets/images/game_words/rooster-1.webp",
+    "sha256": "8AE83DD705158DA2D3467642D3A835868DD661E35D7AE92DCC884CDD3EE09685"
+  },
+  {
+    "path": "assets/images/game_words/rose-0.webp",
+    "sha256": "DEA43785917742DE8976B19F67CE1AD462C881990FB2C78D9A8E7A4E42726661"
+  },
+  {
+    "path": "assets/images/game_words/rose-1.webp",
+    "sha256": "88AB15650AD8B3CD2E54F4FA98A3161C26DF713477320ADEA3A5850E371D66C9"
+  },
+  {
+    "path": "assets/images/game_words/sheep-0.webp",
+    "sha256": "3422829123D25B79E0B35D811CB750BE5D27887F520502790D78A91AA2B1533A"
+  },
+  {
+    "path": "assets/images/game_words/sheep-1.webp",
+    "sha256": "D6BE9C39A9D7D4A1724755A3D4B283AAD65B00CCFECDDD26A39388170453C6AA"
+  },
+  {
+    "path": "assets/images/game_words/spoon-0.webp",
+    "sha256": "0F308A22E99DFD1C9FFD31FEB5D422814717717B7DF8A13CD7F6C63B70B27D31"
+  },
+  {
+    "path": "assets/images/game_words/spoon-1.webp",
+    "sha256": "2A999C87841413D705872024D0F6E819D96F454DB3AA246695D1F8D2834C35C9"
+  },
+  {
+    "path": "assets/images/game_words/star-0.webp",
+    "sha256": "0104CA6B767AB58E6E0F68EE66F29EF4F52ADEB1EFCC7C4F674F44A957976B5E"
+  },
+  {
+    "path": "assets/images/game_words/star-1.webp",
+    "sha256": "6B326EEAC5276A706C7ED5D18C2552B9BB04C3DEEEA52A520CC25778DF19595E"
+  },
+  {
+    "path": "assets/images/game_words/tiger-0.webp",
+    "sha256": "88BCC191DBE85CCD0FF5440C5A54A854D47C37B58A1689FDD3FBE6BF2971256E"
+  },
+  {
+    "path": "assets/images/game_words/tiger-1.webp",
+    "sha256": "4EDB4ED724232AF6320521AC9C87708AE4A891959D582AB81461DDAD52C1FF38"
+  },
+  {
+    "path": "assets/images/game_words/train-0.webp",
+    "sha256": "3F7DB7E442C0B1D99E02F8A88DEFEAA03CE9C8C984E8C228FE774FA6BED6258E"
+  },
+  {
+    "path": "assets/images/game_words/train-1.webp",
+    "sha256": "B7FD86C2CB80A6BC9069306C24748B69853E7E09D1AD661CDEBD36D9C06F18C9"
+  },
+  {
+    "path": "assets/images/game_words/tub-0.webp",
+    "sha256": "463AAAE50EFFC514169A5D8A655AE1FFE892BF8D2D741CB7BB57F81CB53718D8"
+  },
+  {
+    "path": "assets/images/game_words/tub-1.webp",
+    "sha256": "244C8BA7F6A6FE41DED9D320480B13B36E751359F1474B9880E95943C7597A68"
+  },
+  {
+    "path": "assets/images/game_words/umbrella-0.webp",
+    "sha256": "9F9515D5C3B74FFB27EB37A58FD159A9D1ECF26A5E4B4F86173B8FE79E48007F"
+  },
+  {
+    "path": "assets/images/game_words/umbrella-1.webp",
+    "sha256": "8BEBE668029CB397987794392192030C3687E7A5779BE248574E1C461A9DB7A9"
+  },
+  {
+    "path": "assets/images/game_words/unicorn-0.webp",
+    "sha256": "5A7A190140B6BBF012323FCCFBB7C3C0099E26BC84FE2F8E6DDBA8DEA3ECFFF5"
+  },
+  {
+    "path": "assets/images/game_words/unicorn-1.webp",
+    "sha256": "C2C7D43BF460DBF2739D5E7CA544CF1DF97181E76D756A1ACE517223954F7704"
+  },
+  {
+    "path": "assets/images/game_words/uniform-0.webp",
+    "sha256": "A221EEED7475097D1198A394D1B3653905C13C1A20456C8B9C93F33B1B2D1A11"
+  },
+  {
+    "path": "assets/images/game_words/uniform-1.webp",
+    "sha256": "3CE5DFDD29958761361F1D31C1DEAB4399FCE6E0F0811D3B3B64F9496510FAE5"
+  },
+  {
+    "path": "assets/images/game_words/vacuum-0.webp",
+    "sha256": "58A16B9E2F2E08532382AE001718BBCECE42DABF5CD82403AE32668462ADE0C0"
+  },
+  {
+    "path": "assets/images/game_words/vacuum-1.webp",
+    "sha256": "33C3090F1B670AFE45A51E65DEA4EAE8EC2C1CE4D52629656A6565EF726EF255"
+  },
+  {
+    "path": "assets/images/game_words/vase-0.webp",
+    "sha256": "44BE3DB1763403455876B5A4A1E56368B9D80BD5D9A1CE47CC71B1206D6DA345"
+  },
+  {
+    "path": "assets/images/game_words/vase-1.webp",
+    "sha256": "490E372059DAC423753E9C0605C78D9E45AE0BD964E21530045100CD71E484CE"
+  },
+  {
+    "path": "assets/images/game_words/violin-0.webp",
+    "sha256": "AC81CDDAAEA0F54DEDB4412037FAE065D0DCA8547628508BF0BF5A3CA20C640E"
+  },
+  {
+    "path": "assets/images/game_words/violin-1.webp",
+    "sha256": "2B6B04E36B064EA2BBD96F4953EF3B8952FDE5173225A56EBF177CF75C9A1D7B"
+  },
+  {
+    "path": "assets/images/game_words/web-0.webp",
+    "sha256": "BFD637E771C3989CEF9B317DFACE330604090E0FB4A1B4443E6C82FE8DF10A54"
+  },
+  {
+    "path": "assets/images/game_words/web-1.webp",
+    "sha256": "ED58C3FAC41FA033B95AFA8514B8279C9C2AF1A7AFF7E0657F2267DF942B52D3"
+  },
+  {
+    "path": "assets/images/game_words/whale-0.webp",
+    "sha256": "0727390B9EE9125F8650279A008E9BD7BD69BA23F89087048268430F0F933D46"
+  },
+  {
+    "path": "assets/images/game_words/whale-1.webp",
+    "sha256": "76B72DE9EE70B062BCAE522301A8B8B01F5C9083328FADF9A08E7D885979DADA"
+  },
+  {
+    "path": "assets/images/game_words/wolf-0.webp",
+    "sha256": "2786AE6FFA69D8EE58D29E97688BDA9750031C283B5188FAF3286C61C3B8FF5B"
+  },
+  {
+    "path": "assets/images/game_words/wolf-1.webp",
+    "sha256": "BC02B0579C4ECDC057DE1EA38F030A8C13DB144B8DBBFFDAA66D7DC2E0B02F8F"
+  },
+  {
+    "path": "assets/images/game_words/yarn-0.webp",
+    "sha256": "284B785B5DD80AE13E573E723125E187EBA3721EA7913E939987EEB16DA10B7E"
+  },
+  {
+    "path": "assets/images/game_words/yarn-1.webp",
+    "sha256": "3F3740339CA8EDDDCCCEBA3DE3CAAD85AF3A8DE31AD3ACEA780CB3CCB88D4572"
+  },
+  {
+    "path": "assets/images/game_words/yogurt-0.webp",
+    "sha256": "A5259AD9B06753B7376DCB8994B511FE69757A6F3E6B53714187B00639A588DF"
+  },
+  {
+    "path": "assets/images/game_words/yogurt-1.webp",
+    "sha256": "687DB860ED429D5825DA332BC1956797DEFD4E579BDC302CA4A431659C5AD875"
+  },
+  {
+    "path": "assets/images/games_locl.png",
+    "sha256": "5347CA64DCA3070751BB9A052352A05719880D1E6F317ED083CFEBB05FA7F761"
+  },
+  {
+    "path": "assets/images/games_menu/games_card_frame.png",
+    "sha256": "2C4FCBCA59E02FAFB1B03C787C8EE8EAE52CA1FD3B0908570E8EBF5FBAD0C4D4"
+  },
+  {
+    "path": "assets/images/games_menu/rhyming_words.webp",
+    "sha256": "DAD6B1A21E7748F39612A0C0CE3B6150865E396DD5A9E10EC26DEEA1EA06EFD7"
+  },
+  {
+    "path": "assets/images/home_banner/fire.png",
+    "sha256": "993A2FEEAC42C9B24F2480D9F786F94CBB1553BFF0EF3E7F60D81E3A1EC8CFB2"
+  },
+  {
+    "path": "assets/images/home_banner/flower.png",
+    "sha256": "CB4020C9FEB51D1527A4BAA38FA5670105D57F2FA33558FEB2FE2BC562999B44"
+  },
+  {
+    "path": "assets/images/home_banner/logo.png",
+    "sha256": "F053E22DCDCE6CEFBC2610DAE0579694762AF996BF38ABC3920952525D2193FE"
+  },
+  {
+    "path": "assets/images/home_banner/panel.png",
+    "sha256": "33F5B6F7EDFCE7EDB1DC119232A62D7EB0062FF89DA6331F9FF8F0EECAEA42BB"
+  },
+  {
+    "path": "assets/images/home_banner/star.png",
+    "sha256": "2CE9C03CA2BDA9E991209381FFEDE07C88A5698800EDC8C3FA348084DDCA5F7B"
+  },
+  {
+    "path": "assets/images/home_banner/trophy.png",
+    "sha256": "64F3791CAF3E7FEEAE4CB6C5F42825180A7402B8FC89EF5262ED0D6F065215E8"
+  },
+  {
+    "path": "assets/images/home_banner/xp.png",
+    "sha256": "3F557AFA0BCF0C39C38ED71B8490D89F47C2A534B91F3E35B8BB387349954C5D"
+  },
+  {
+    "path": "assets/images/home_buttons/button_games.png",
+    "sha256": "ECE69805A895BABB8BA1EA8B2241FA901F24AA62580A9BEEF58429FC887B8E8D"
+  },
+  {
+    "path": "assets/images/home_buttons/button_lessons.png",
+    "sha256": "71E5445096D09991086FA75F4F69ACCDA37691BF6688EE5606A632AF11234F49"
+  },
+  {
+    "path": "assets/images/home_buttons/practice_letters_button.png",
+    "sha256": "65437E3DF824CFAB8D361DF813436FDA4939B3C04C3B1EF733454FF74F3069DC"
+  },
+  {
+    "path": "assets/images/home_buttons/yellow_guide_arrow_v1.png",
+    "sha256": "4BC1632C4DE8B9902B8EF4EB24292E619640BE6A77B15A8AD41C9E5695EA4962"
+  },
+  {
+    "path": "assets/images/home_classroom/new_bg_night.png",
+    "sha256": "C10E614DAE6F4B5FDEBE3D3A38FE812FEC5A0CA5168AB9D76B66DA1FBA8ABC77"
+  },
+  {
+    "path": "assets/images/home_classroom/new_bg_sunset.png",
+    "sha256": "6DA868D628BFC6F47160D41F891929AB5E28A3F4C454155D4C7CAB1790B7831F"
+  },
+  {
+    "path": "assets/images/home_classroom/new_bgmornig.png",
+    "sha256": "07EA266057DB487A6A45890335E69B1B0B90DD5BC2081D78ADD71DF3AA5FF0D1"
+  },
+  {
+    "path": "assets/images/lesson_background/Lesson_new_bg_1.png",
+    "sha256": "E35FA174567EDE282CCD4DCBFE069A5458ED2EF99EF388E5EA60887C088AA3C1"
+  },
+  {
+    "path": "assets/images/lesson_background/Lesson_new_bg_2.png",
+    "sha256": "A064D5C6E15BFDFD03D5D057F6E5F5C3A5F82257C41356F02345A8A952C30986"
+  },
+  {
+    "path": "assets/images/lesson_background/Lesson_new_bg_3.png",
+    "sha256": "2AD20A9653A58FAF559219E07575890A2FA5DA0E9167CD3022CFA9755E3C67A8"
+  },
+  {
+    "path": "assets/images/lesson_background/Lesson_new_bg_4.png",
+    "sha256": "733F30CAE662748ADBA5B0FBC2718A9C791FDD3583EC1CBD5511805927D210CE"
+  },
+  {
+    "path": "assets/images/lesson_background/Lesson_new_bg_5.png",
+    "sha256": "A87AC80F79C7CE2121C6FE585285A0B2269D8D4A34842A157872F5FE385FC546"
+  },
+  {
+    "path": "assets/images/lesson_frames/ant_A.webp",
+    "sha256": "A754C285890CBCBE3F428E57D279B3EC7007AB9828F0D8B0495DAC1BE00D9513"
+  },
+  {
+    "path": "assets/images/lesson_frames/ant_A1.webp",
+    "sha256": "3F56FB6027C53F67AD7B66EAF3B9AF3C27862294860BDE8479D89BF865B633CB"
+  },
+  {
+    "path": "assets/images/lesson_frames/ant_A2.webp",
+    "sha256": "FB0718FAC3B5D5CF49D7925C3E6167C548588A3DD0C6561A6D809B2652EE5EF2"
+  },
+  {
+    "path": "assets/images/lesson_frames/ball_B.webp",
+    "sha256": "E842A0CE636B5575DEA16733AF9C52242D401F3DAC227623135775ECD253A9B9"
+  },
+  {
+    "path": "assets/images/lesson_frames/ball_B1.webp",
+    "sha256": "C013AB2D97A3AC959C6EAEA2B2C699F02FACDD61FCD2005213A23AD1DB1DE246"
+  },
+  {
+    "path": "assets/images/lesson_frames/ball_B2.webp",
+    "sha256": "874BC242FEFE5BCA14C86DA0BD2A950F3771175029AD3BEF8715507E8D877175"
+  },
+  {
+    "path": "assets/images/lesson_frames/cat_C.webp",
+    "sha256": "1A51473655BD94DAE0853F482CA133FB0DA97554859D5FE09A37F71BF9A3DEDF"
+  },
+  {
+    "path": "assets/images/lesson_frames/cat_C1.webp",
+    "sha256": "F32BAE83044EFC935FA6DFF0B684ED4EA4084199CA5C86F6DAF0C7D9F39D361A"
+  },
+  {
+    "path": "assets/images/lesson_frames/cat_C2.webp",
+    "sha256": "08F405AA73BCE8487C54C89F8E8CBDCE57188F110272AD5E65F272EBBC907E1F"
+  },
+  {
+    "path": "assets/images/lesson_frames/drum_D.webp",
+    "sha256": "C85D40F2264462F09BBCE7E0DB7F0D100353E80D59CD5B3C24FFAC4E0D391A48"
+  },
+  {
+    "path": "assets/images/lesson_frames/drum_D1.webp",
+    "sha256": "704CB10AF17D2D4054E0A0D889CD5C7D633DABB813F402AA44F9C00E18CF8A81"
+  },
+  {
+    "path": "assets/images/lesson_frames/drum_D2.webp",
+    "sha256": "0BFCFAF728BE8E385B78742874F83FB2701C6212DEC164915E3AAE0F048D2C11"
+  },
+  {
+    "path": "assets/images/lesson_frames/egg_E.webp",
+    "sha256": "1D46963DACA9CABCFA1B182F2C673F850F81C96AEC497BB1D752BD780CB7FC5F"
+  },
+  {
+    "path": "assets/images/lesson_frames/egg_E1.webp",
+    "sha256": "DD2F90096785D4EED3199C6DE0C6B78F7123B0EB6FECB9A0679B3D442E70DE4E"
+  },
+  {
+    "path": "assets/images/lesson_frames/egg_E2.webp",
+    "sha256": "21B09470A5A23E3CF15AADBC871230899A3C3E593556637A744A8F3F75030D8B"
+  },
+  {
+    "path": "assets/images/lesson_frames/fish_F.webp",
+    "sha256": "0790DE9D78C39AEE274F98BD5BABB8460E83F9C5532F16D365EE139939EB8432"
+  },
+  {
+    "path": "assets/images/lesson_frames/fish_F1.webp",
+    "sha256": "4EFC6D5877F8D9F22EF36FE75E531A89125EC3CDAACC43E04977D689319BF55B"
+  },
+  {
+    "path": "assets/images/lesson_frames/fish_F2.webp",
+    "sha256": "739B22A17B0B4F2CB96C69682078E9D546B8D21383FDADF4476588AC8E2240CF"
+  },
+  {
+    "path": "assets/images/lesson_frames/giraffe_G.webp",
+    "sha256": "4D0CF0DD5F437A50061AF676D229E27C9E7C84BBDD7811DAD16A75080DB77D8D"
+  },
+  {
+    "path": "assets/images/lesson_frames/giraffe_G1.webp",
+    "sha256": "52F72D6DEFCFB94D1D42713A69153D74EC6E0FE56C5438320C5BC2F3F17FB6B3"
+  },
+  {
+    "path": "assets/images/lesson_frames/giraffe_G2.webp",
+    "sha256": "2602A1BA3C3F6E038DD78EF78E8AE2EE88D17C82E634EB4580BFC6CE9C9ED1EE"
+  },
+  {
+    "path": "assets/images/lesson_frames/hat_H.webp",
+    "sha256": "D32732C2B2F7665C6E24BCAE677BB1520F7B647B9834643130334C310CD42C80"
+  },
+  {
+    "path": "assets/images/lesson_frames/hat_H1.webp",
+    "sha256": "897ABC3389920694A9BD0FDF8BD7F21FB728AC1D1D33CC81420C2089CA19F54E"
+  },
+  {
+    "path": "assets/images/lesson_frames/hat_H2.webp",
+    "sha256": "CAB5F9FC28E386DDBDBA13C8717F5B273E8D60849696B2641B0AC7F8238A0C9F"
+  },
+  {
+    "path": "assets/images/lesson_frames/igloo_I.webp",
+    "sha256": "1928FD2E630F3CDEA584070F8795FA26E9CE92061127A0A4F8841E6FF1EE9B5C"
+  },
+  {
+    "path": "assets/images/lesson_frames/igloo_I1.webp",
+    "sha256": "C057F7F4C39CF6241E6F292117DE628A4EEBF1F86133E6520CF7238C0C02FE3F"
+  },
+  {
+    "path": "assets/images/lesson_frames/igloo_I2.webp",
+    "sha256": "7C76234DF8C5670F23B96725079AA895627C120BAD15D4B345FC6E14411CED22"
+  },
+  {
+    "path": "assets/images/lesson_frames/juice_J.webp",
+    "sha256": "E574799AB1DE8DDAD0D8C80725D7B8E09EEBD6644FE9A87908B2607961DDDCF5"
+  },
+  {
+    "path": "assets/images/lesson_frames/juice_J1.webp",
+    "sha256": "D48F13A29360BC9AAD57EA4C099F4551037763AC80AAFAFCFB396FE7A7977CDA"
+  },
+  {
+    "path": "assets/images/lesson_frames/juice_J2.webp",
+    "sha256": "D8F1568C2709159EA082D80354D104D0748A9C240D4684CE2D9446F022C286B0"
+  },
+  {
+    "path": "assets/images/lesson_frames/kite_K.webp",
+    "sha256": "92DB7D6EA2EFF656D371BD3BEC40171EB2536E7A184CC80E46DEF96F43C9EB2F"
+  },
+  {
+    "path": "assets/images/lesson_frames/kite_K1.webp",
+    "sha256": "96BC7CBE98EF246D2A528701BB1A05DD5FC183FF0187E9CFAF4F3F63B7ABC07B"
+  },
+  {
+    "path": "assets/images/lesson_frames/kite_K2.webp",
+    "sha256": "E3D29E06CA71527815404BCCC3C77C950D71E62140C2C1C1DF957802E5265323"
+  },
+  {
+    "path": "assets/images/lesson_frames/lion_L.webp",
+    "sha256": "42614C9D1D632270C41A5610909BB6E2AFD00024034F65482049A6A31AD9DC04"
+  },
+  {
+    "path": "assets/images/lesson_frames/lion_L1.webp",
+    "sha256": "7CB3FB460B7DBFBFC0FEF29F8975398E76EB2620DEAD20A7A98800ECD2B36E31"
+  },
+  {
+    "path": "assets/images/lesson_frames/lion_L2.webp",
+    "sha256": "E7CC859EC9C972DBA90DE7C1E02AE8680F3DA6B907BFF04E811AE2C72762927E"
+  },
+  {
+    "path": "assets/images/lesson_frames/penguin_P.webp",
+    "sha256": "1B2CAE0D8E7E8C7369CDE28C296461053837C59494D78C9727B313371BD4F61E"
+  },
+  {
+    "path": "assets/images/lesson_frames/penguin_P1.webp",
+    "sha256": "16F7DF8841C8BC3E1AAEEAA57191AA0FB9408DD230BA5E8C59C513046A445A58"
+  },
+  {
+    "path": "assets/images/lesson_frames/penguin_P2.webp",
+    "sha256": "172C737B4DD3EC13D66404FD00C7EB482C4103EB17C89A2080E0F4E54B527746"
+  },
+  {
+    "path": "assets/images/lesson_frames/sun_S.webp",
+    "sha256": "FDE3ACD3086C9724F14903FB3226022A0B322810EE3F61371BA24F52894AE7F4"
+  },
+  {
+    "path": "assets/images/lesson_frames/sun_S1.webp",
+    "sha256": "703D194960BE9D2BD0CDE93CFF80EA99967F4F5DD3FDCADD5E37646F393776B5"
+  },
+  {
+    "path": "assets/images/lesson_frames/sun_S2.webp",
+    "sha256": "ABBC03AB62DF583DF20A383DA541D5D1BFAC926A615F947354215011C0EDE706"
+  },
+  {
+    "path": "assets/images/lesson_frames/turtle_T.webp",
+    "sha256": "A3DAD1E187C861F5E6745CFA5B728A3ACC08BD72F5819F13AD37DB9C7B4901B7"
+  },
+  {
+    "path": "assets/images/lesson_frames/turtle_T1.webp",
+    "sha256": "5EB9FCAAD24C47EA73D7C6CB3F087FF9BE59C20BAD9C70B1CFC81E50BB93B981"
+  },
+  {
+    "path": "assets/images/lesson_frames/turtle_T2.webp",
+    "sha256": "261A6DFB61E5B507E8BBB2B17697E549CF4041311BD85AD5641C2BF337874F5E"
+  },
+  {
+    "path": "assets/images/lesson_frames/van_V.webp",
+    "sha256": "E2A763409943BF64DDEFE4DBFB2EEED0C3C63D7651159CA3BED7EF671825A7BE"
+  },
+  {
+    "path": "assets/images/lesson_frames/van_V1.webp",
+    "sha256": "C9E25A21F00280FC5CFDE2A05EB308085495C4F22B24CF8C3EA6FCE2263F0DFF"
+  },
+  {
+    "path": "assets/images/lesson_frames/van_V2.webp",
+    "sha256": "49B8AD0F4D9109C776E99F7522518B8068A070F9AB318EA8E28E09DC61BABEA5"
+  },
+  {
+    "path": "assets/images/lesson_frames/xylophone_X.webp",
+    "sha256": "614B2EBCEC6CCF7C7385E2704E644ECD3E88310C91A2E4C50050E77FE58C505F"
+  },
+  {
+    "path": "assets/images/lesson_frames/xylophone_X1.webp",
+    "sha256": "FCA8783227924FCE2AE2CC2F623A90608C35B45409500C973573FA770F97692C"
+  },
+  {
+    "path": "assets/images/lesson_frames/xylophone_X2.webp",
+    "sha256": "2E5FCAE2954977E43A3F9B7A3F033BD42E357F94B518460F30BED4D9077D69C4"
+  },
+  {
+    "path": "assets/images/lesson_frames/yoyo_Y.webp",
+    "sha256": "79951640027D7A8511AB0C3EE230E9BEF8949DEFF41AA3A5327162E9F6C32DEC"
+  },
+  {
+    "path": "assets/images/lesson_frames/yoyo_Y1.webp",
+    "sha256": "869ABF62167D3894CF2BCF3A000AE46D76DCB6764582FE4AFB891876DC527019"
+  },
+  {
+    "path": "assets/images/lesson_frames/yoyo_Y2.webp",
+    "sha256": "D88E4F694C69AA85FF8AABF016D67430C9DE65892325FFFEF7D2BCB10673E0E7"
+  },
+  {
+    "path": "assets/images/lesson_frames/zebra_Z.webp",
+    "sha256": "4D527A1C18650311D8D17F55672EAD4934D76C0E05D9E50464DF865233E34CFD"
+  },
+  {
+    "path": "assets/images/lesson_frames/zebra_Z1.webp",
+    "sha256": "9BCAD1590234CA196AF6D9D5988728268FC7EA3BFDBFE27C8D4D03CB4D8688E9"
+  },
+  {
+    "path": "assets/images/lesson_frames/zebra_Z2.webp",
+    "sha256": "802CC4443EA95B2BCF7C7358AF2D02DD073F2A5519F16F991D06CC95DCA1DD11"
+  },
+  {
+    "path": "assets/images/lesson_header/banner_lessons.png",
+    "sha256": "BB7FFF83A2964DA2AD5D0186AF73F1CA17E209E00CC5634CE2812930EE59966A"
+  },
+  {
+    "path": "assets/images/lesson_header/boy_profile.png",
+    "sha256": "1203D5F7A24EA9192C7D363003077202357F9062E260F3EF3AF89EAFFA9F8C19"
+  },
+  {
+    "path": "assets/images/lesson_header/girl_profile.png",
+    "sha256": "6585377561EC0DC01FD59393F8647189D09B36BB23EFDB213F861F95E93D8A59"
+  },
+  {
+    "path": "assets/images/lesson_header/instructions_dialogue_boy.png",
+    "sha256": "C709F3316EFED0BD54C6F8282A18E5616EA9F6E113248963A4F5F4367288E24F"
+  },
+  {
+    "path": "assets/images/lesson_header/instructions_dialogue_girl.png",
+    "sha256": "47EFCFF1199C64B372749CAC981E289CAA18C976AD986883CA3E6E76634F73EC"
+  },
+  {
+    "path": "assets/images/lesson_logos/letter_recognition.webp",
+    "sha256": "DC1BF26314826A4B879BB76570685C94B43620A0B32D25D2C115DF424FEC847C"
+  },
+  {
+    "path": "assets/images/lesson_logos/letter_sounds.webp",
+    "sha256": "EA7AF34D9E603BBCD0E2EA60639CB917A5137504F4679173DF71344F3DB85E9F"
+  },
+  {
+    "path": "assets/images/lesson_logos/tricky_letters.webp",
+    "sha256": "984DFA2F2E63EF782459A6F0F7263F522FC71698689D67226A6A38567838CC04"
+  },
+  {
+    "path": "assets/images/lesson_logos/vowel_sounds.webp",
+    "sha256": "EC529ACB2873438294D6B01F768E67CEF00DAB2A49FD7E1B93E975DF81E559E4"
+  },
+  {
+    "path": "assets/images/lessons_menu/blending_sounds.webp",
+    "sha256": "74867F626CD1E84D7EA84C3A4E991B35AEA4D235C2C6202DC794B5B7AD6D2C8D"
+  },
+  {
+    "path": "assets/images/lessons_menu/cvc_words.webp",
+    "sha256": "7CFFD130AF917A6050AD7F5C3A7B5F227A2E69C1C998A35839D702519B544053"
+  },
+  {
+    "path": "assets/images/letters/a.webp",
+    "sha256": "C835ADD8C347351688659EB3F04B384DE669AA3819A542698EA0D964AF22C8D2"
+  },
+  {
+    "path": "assets/images/letters/b.webp",
+    "sha256": "952D8C310DA3DE6533D58DE8F7F065CCE3222ACF3B8B0938EC728A519F11958C"
+  },
+  {
+    "path": "assets/images/letters/c.webp",
+    "sha256": "F1C60254AEC7D754A88075E431523D3F2C09D0D1ED8C2AB2E908E078E08CD699"
+  },
+  {
+    "path": "assets/images/letters/d.webp",
+    "sha256": "5C907D4BD204298DD575E375E9054337F032416908D1087F3982A51DB8076400"
+  },
+  {
+    "path": "assets/images/letters/e.webp",
+    "sha256": "E4118477C7DE08FE6174E6A3F25446F03DD3F54F7C64BE02B7CD4EB10CBDFA42"
+  },
+  {
+    "path": "assets/images/letters/f.webp",
+    "sha256": "A25BC3CED441CF40E076C9A412642591F2EDE6C1FE795356D8BC390E548EB324"
+  },
+  {
+    "path": "assets/images/letters/g.webp",
+    "sha256": "2099A97ADD27D5BBF8A2245B353FC54F607562ED765D2ECEBEAFF8E99B04B8A0"
+  },
+  {
+    "path": "assets/images/letters/h.webp",
+    "sha256": "B4219C93F3325BC642CC6480026CEDC202ACE301AC92F7CECEF983053F594F70"
+  },
+  {
+    "path": "assets/images/letters/i.webp",
+    "sha256": "D9B112196C9C80F090BEF8FD81C87C433B630D97F51DE862F5DF6977B183E31F"
+  },
+  {
+    "path": "assets/images/letters/j.webp",
+    "sha256": "C055F1FC3DE9B7195E0CE0F020AE2CA2F73C183CB536D157C6FF97A1711E9B6B"
+  },
+  {
+    "path": "assets/images/letters/k.webp",
+    "sha256": "8D59FA3DA36A85C1DB7F47AC55A3098A323B02A32A1CB1AEE9E8D22599D707EC"
+  },
+  {
+    "path": "assets/images/letters/l.webp",
+    "sha256": "F1E061D972350A698C731016D7F6718092E3E917373AC0651D37381BCDB2C8B9"
+  },
+  {
+    "path": "assets/images/letters/m.webp",
+    "sha256": "DB392E09C8EC62C2099F14B9B780EEA3BEBB1264A49BA60497C472E6EE584A2E"
+  },
+  {
+    "path": "assets/images/letters/n.webp",
+    "sha256": "DFA545A1801FDA3E3382C7B4925FDF3400D3DAB3851319768D7B73F818EB1040"
+  },
+  {
+    "path": "assets/images/letters/o.webp",
+    "sha256": "20568C0938DDB5C512521DFFAB3213707F2144834DB7A983B781E7708692D47C"
+  },
+  {
+    "path": "assets/images/letters/p.webp",
+    "sha256": "2C9D0F713F021A94DCAD8CBDF7ED17837ECA73D21B67DCD5E370EA2F13DD8ABF"
+  },
+  {
+    "path": "assets/images/letters/q.webp",
+    "sha256": "806C510766C23DA1EC1A1EF3AA6136BB415EF253817F1BDF71CB8A7E1822C398"
+  },
+  {
+    "path": "assets/images/letters/r.webp",
+    "sha256": "66B4A43F8D0710215346FB29CA7E43AC89644E7D05438C6A772F6B670EA92E08"
+  },
+  {
+    "path": "assets/images/letters/s.webp",
+    "sha256": "B083B40978C902D11D0C9F6B7071D9348280B5E557E5B7913BEC468C1BDA4012"
+  },
+  {
+    "path": "assets/images/letters/t.webp",
+    "sha256": "99F48ABC5DB2C7E467DF6B5F36D3E5450E77BC9F3E3F749F63CF038349A212C5"
+  },
+  {
+    "path": "assets/images/letters/u.webp",
+    "sha256": "F21BDA6D241AC2BD3076CFA1FF9971D8E8633CA9D2DF497F33DB945DFB514652"
+  },
+  {
+    "path": "assets/images/letters/v.webp",
+    "sha256": "F1D590FB3C107C1C1F782440DFDAE920642BBFEB9C0239A2D11A7C96F0FA91B1"
+  },
+  {
+    "path": "assets/images/letters/w.webp",
+    "sha256": "87F70BF6C91C866C9442BF2F45816BA03315BDFA7C1741105B9C85D2E095A669"
+  },
+  {
+    "path": "assets/images/letters/x.webp",
+    "sha256": "C38BDD679969A02B2E8FE1D26B4E0689C7FC0A9BF23EC4C8A9CB23DA1AC714BC"
+  },
+  {
+    "path": "assets/images/letters/y.webp",
+    "sha256": "5C50A9AE056C90071CAA3FADCE0EF2C85BD5C51D40443074B7EBD7992E1E5356"
+  },
+  {
+    "path": "assets/images/letters/z.webp",
+    "sha256": "8EC0EA9191AC24F2686810E250CD66D46968BF309DBB25BC41A02F72F845995F"
+  },
+  {
+    "path": "assets/images/new_ui/cloud-transition-1.webp",
+    "sha256": "D8FA8285FDED86BF5EBFE0D3811367A5D2D585B1BDAEAC1747EED20D696D0CA9"
+  },
+  {
+    "path": "assets/images/new_ui/cloud-transition-2.webp",
+    "sha256": "F13798F1A1D9EAEF2D9BCA9B2BDB9BBAC07E6AEBD01CCB84510914EECDC453F0"
+  },
+  {
+    "path": "assets/images/new_ui/cloud-transition-3.webp",
+    "sha256": "9AD2DEA15CCEBF5984DD7DD72EE4FCCAC55AECA59AD6A654DB7B34B42A82B200"
+  },
+  {
+    "path": "assets/images/new_ui/cloud-transition-4.webp",
+    "sha256": "52C33769BBCB35354D762704360EC4D3B62F6E5D4C2115F5091BFD921CBBF8C6"
+  },
+  {
+    "path": "assets/images/new_ui/flappy_bird_frames.webp",
+    "sha256": "DF81B492C8FB9AACBD708E1B27418A984E1B3FA561392914A08F59D9F4D7A508"
+  },
+  {
+    "path": "assets/images/new_ui/frame_pink.webp",
+    "sha256": "FC3EE04D4A1F59ACB7FBD9B8D041E9B1B3766908B1C75F82F397CBC55BC32361"
+  },
+  {
+    "path": "assets/images/new_ui/game_mascot.webp",
+    "sha256": "A13905A74B8FD77F71A3935FD2CD79F2BA07777240A13153B85EA8007FF05538"
+  },
+  {
+    "path": "assets/images/new_ui/lessons_banner.webp",
+    "sha256": "64B4DBC557160414F38EC39BF89D7EAF9653DA1A14D0601D55CBF79570FB307B"
+  },
+  {
+    "path": "assets/images/new_ui/magical_sound_orb.png",
+    "sha256": "A658B12A2D22D9E7BF85B0603D97C2088F93C17EA55E4390E782373560F88191"
+  },
+  {
+    "path": "assets/images/quick_check_background/quickcheck_newbg_1.png",
+    "sha256": "8D5859534DB5CE2D1023D9CB9FD9149F9392A203983E6BF34EEEFB95A1E9EA6A"
+  },
+  {
+    "path": "assets/images/quick_check_background/quickcheck_newbg_2.png",
+    "sha256": "0EE33AAEAFEF2563F31449F9BC282454CC072C648606CCBE297B62A106A4632B"
+  },
+  {
+    "path": "assets/images/quick_check_background/quickcheck_newbg_3.png",
+    "sha256": "28C31C6ABB9A84AF47E37D8A6FB5BCBA6F18D8812696B7A448E563E567DBB1A7"
+  },
+  {
+    "path": "assets/images/rhyming_jar/cloud.png",
+    "sha256": "7AB9A19212042A34DBAF445D80773AA7D391A8C192BE1B7538A064C16CBE8A0F"
+  },
+  {
+    "path": "assets/images/rhyming_jar/jar.png",
+    "sha256": "31C7E5AD30AD542FD62CB590E06EDBDAD552390E8F62897784780D7D5C2F0D5C"
+  },
+  {
+    "path": "assets/images/school_adventure_v1/generation_prompts.json",
+    "sha256": "4518A15C74E042D64B34927A1CAC81116F21AB7E186B577E9D7FBB23023F7AC3"
+  },
+  {
+    "path": "assets/images/school_adventure_v1/student_boy.png",
+    "sha256": "EA95DFB186E4A674251F6BAF72330868AFF10170C0F7A9AB2A4CF51E1828FCB8"
+  },
+  {
+    "path": "assets/images/school_adventure_v1/student_girl.png",
+    "sha256": "ABD764BF9AAC2F9A3B873DAFCF2127CB5F553D239120A734821C589730AC0C36"
+  },
+  {
+    "path": "assets/images/school_home/boy_wave.png",
+    "sha256": "0643C234FD3FD6E2E49813E6A0D0B5680F299E74462CE8F59DA61A8BD9476E52"
+  },
+  {
+    "path": "assets/images/school_home/games_mascot.png",
+    "sha256": "C0497B5E9D847245AFEBAC7920D2412246F9431378D7190C8DBE50764ADFC950"
+  },
+  {
+    "path": "assets/images/school_home/girl_wave.png",
+    "sha256": "68F59F0D895A5DAFCCF9E32FA571ECD07CC3CBBC218C9B1A8398083AC6B003EB"
+  },
+  {
+    "path": "assets/images/school_home/lessons_mascot.png",
+    "sha256": "292A010173993EA18FDDC73213197989D31F138DA727E557800BDE35ADB4DC32"
+  },
+  {
+    "path": "assets/images/screen_frames/games/g1.webp",
+    "sha256": "2E80BCA77EF9E350C6C15F0AE9D8437D7FB4250229F58EA902B0F506C4460BEC"
+  },
+  {
+    "path": "assets/images/screen_frames/games/g2.webp",
+    "sha256": "19B8D62314376018143B96BD42E7218638F5856D570ABECE12AE6AED2D8FC391"
+  },
+  {
+    "path": "assets/images/screen_frames/games/g3.webp",
+    "sha256": "D24029F8455941D6A5BCD1417EBC81173D72676A343EC3DC86A6A84C2DD4D7CE"
+  },
+  {
+    "path": "assets/images/screen_frames/games/g4.webp",
+    "sha256": "10D2A4F1BC93FE39122F0BF9A38D1CCF7180942A02164E55C8457C1E1C723932"
+  },
+  {
+    "path": "assets/images/screen_frames/lessons/leson1.webp",
+    "sha256": "252438F4B2EC344177913A21E71017B1704C7C1D8DCF3391BB0AA579F527DA3D"
+  },
+  {
+    "path": "assets/images/screen_frames/lessons/leson2.webp",
+    "sha256": "9599E75FC8D80975E41862579B405F9A40BE211116D40CB122248E2356BE775E"
+  },
+  {
+    "path": "assets/images/screen_frames/lessons/leson3.webp",
+    "sha256": "DD2BF60E28C51AEB3AE85745E8AC17B5FBAC5C4E58CD388315D87E9F056529FB"
+  },
+  {
+    "path": "assets/images/screen_frames/lessons/leson4.webp",
+    "sha256": "D2746686FE089A62A695E6497AAA2BBE08BB9E8D558A00D19C4C4F03D53B7E62"
+  },
+  {
+    "path": "assets/images/screen_transitions/curtain_1.png",
+    "sha256": "7A962F8F46E1CAF7BC52BF7B8D4A92DA2D00E304D160B9C5B52DCEBEEB05B0B4"
+  },
+  {
+    "path": "assets/images/screen_transitions/curtain_2.png",
+    "sha256": "2D39ED6E87961F8AC7C4A303CED29D1318EF4AA076D9AD5BCBD529D89316DF9A"
+  },
+  {
+    "path": "assets/images/screen_transitions/curtain_3.png",
+    "sha256": "4BDF9C250BE17AD4EBDEA67DD6A290F2C0BA452F6BF7C61CA27C7A0E2E4258AF"
+  },
+  {
+    "path": "assets/images/screen_transitions/curtain_4.png",
+    "sha256": "869AAC4165B6973D5B05DAF1FB2B270E0F61BFC5C76225963F76DBF6A8396694"
+  },
+  {
+    "path": "assets/images/screen_transitions/curtain_5.png",
+    "sha256": "B431EE6477E940CB0C9F101F47E5FEDED0C84D8D50854255C78062046AD19CE9"
+  },
+  {
+    "path": "assets/images/update_scene/boy_1.png",
+    "sha256": "B01F65E920FEE56279BA18804C98BE3C79246E76F659E710534804A131BB339A"
+  },
+  {
+    "path": "assets/images/update_scene/boy_10.png",
+    "sha256": "8E3042F3EAD96B1D27BA542679B391184D9E42A6492B8BF89B821A68D8307CD1"
+  },
+  {
+    "path": "assets/images/update_scene/boy_2.png",
+    "sha256": "95691B8FEB3F713691BDC7B33A922C66F5E0C9673930E6498172A835C0213BA2"
+  },
+  {
+    "path": "assets/images/update_scene/boy_3.png",
+    "sha256": "69E9691451D5563C2F4CD79005A6DB1E4A3BC03240FB4EF497A4521914ABB5FE"
+  },
+  {
+    "path": "assets/images/update_scene/boy_4.png",
+    "sha256": "31745453D6E9464CD642BCE85E0F1BC9844D3B97627B9B8E08D16748F6DEA532"
+  },
+  {
+    "path": "assets/images/update_scene/boy_5.png",
+    "sha256": "0F7F567D59F436277CBB2C4D865ACBD08232F97B3526E5A9A913E850DC18A3F9"
+  },
+  {
+    "path": "assets/images/update_scene/boy_6.png",
+    "sha256": "2D8401DF6D4BF75339C7FC55FC7049B220019507285944C867E2960DE8EBFC55"
+  },
+  {
+    "path": "assets/images/update_scene/boy_7.png",
+    "sha256": "282799AFC464844EAA07F12619C84799068779126997040CA2D313CDF16E28DC"
+  },
+  {
+    "path": "assets/images/update_scene/boy_8.png",
+    "sha256": "B08DA1909D3EFC88AFC18C5E78726F5206C17EDDA9FE4F6056BAFD2D40B13D5B"
+  },
+  {
+    "path": "assets/images/update_scene/boy_9.png",
+    "sha256": "C694CED5B2FD89D9C0710262855B4ED2CF047567F666E959342A611A8D13F71D"
+  },
+  {
+    "path": "assets/images/update_scene/dialogue_box_1.png",
+    "sha256": "05A60233D534A0A3FF1E371900A94B5BA169D682926826F4F9C7B51771772911"
+  },
+  {
+    "path": "assets/images/update_scene/dialogue_box_2.png",
+    "sha256": "09247B8C623E81DF6A2C866A8B001EBC553EE73E16AF82CE5662B510097259F7"
+  },
+  {
+    "path": "assets/images/update_scene/dialogue_box_3.png",
+    "sha256": "D1C5DEF4A63F60AC623A7CB5C887113DAFDCD706C50AA00346485AE8A0E1C4C5"
+  },
+  {
+    "path": "assets/images/update_scene/dialogue_box_4.png",
+    "sha256": "869801774D097EB2B107332DE5567E8E49085CD4794AAD45F2CAFBAD1C11389F"
+  },
+  {
+    "path": "assets/images/update_scene/games_button.png",
+    "sha256": "46572F2D668E11A3E7E00C0DC4F4AA753687055674315F0540F58F363E70B6A5"
+  },
+  {
+    "path": "assets/images/update_scene/games_new_bg1.png",
+    "sha256": "35994DA137817933CC2D242169BF63C329993761886D668F1AA2B229BBA6A089"
+  },
+  {
+    "path": "assets/images/update_scene/games_new_bg_2.png",
+    "sha256": "DD6986A36C3F0A72EB25E5BBBD4B487AC2F2BEABD88A543D5C7659756C569DB7"
+  },
+  {
+    "path": "assets/images/update_scene/games_new_bg_3.png",
+    "sha256": "BDE31E87EC27DCBF2DEC8D3BFB558DE4955FD75334E152A0A1A68D05B991884E"
+  },
+  {
+    "path": "assets/images/update_scene/games_signage.png",
+    "sha256": "421B51DB088D524E237469C0F98A1E5AEA995A549FE8406D3978ADF031FB19AA"
+  },
+  {
+    "path": "assets/images/update_scene/games_talking_1.png",
+    "sha256": "7E80C9669585B4AC8CDC5A97B87E2FA1FEB780464B9A15495485EFCE83F1DA7F"
+  },
+  {
+    "path": "assets/images/update_scene/games_talking_2.png",
+    "sha256": "B08D6ED339D1A74CBD0DC9FEDFBD574640F5D83BFBFDC5AD61242EE6CE63CC9F"
+  },
+  {
+    "path": "assets/images/update_scene/games_talking_3.png",
+    "sha256": "08A7A73904FD3A36057C158AFA4CA52EC8187C68C231E65EE19B926B7EE5F288"
+  },
+  {
+    "path": "assets/images/update_scene/games_talking_4.png",
+    "sha256": "F90DACE692AD57EFC5C408E54C2CDFF152631E63ADBF916227B58F5F3929F75F"
+  },
+  {
+    "path": "assets/images/update_scene/games_talking_5.png",
+    "sha256": "EE58D85D706D03EDA9E88F86633FF3D5D551FCEEE74BA0CA7FC297E359B8751E"
+  },
+  {
+    "path": "assets/images/update_scene/girl_1.png",
+    "sha256": "8D688C3D3944D96339DDECE7C534483FD6CC10D1FDDC9E2F567679859BCF8F75"
+  },
+  {
+    "path": "assets/images/update_scene/girl_10.png",
+    "sha256": "41B9470A6A9AE7231619788D53077E5A790355276BC773D49D314FC212FB8CA9"
+  },
+  {
+    "path": "assets/images/update_scene/girl_2.png",
+    "sha256": "8CE8D94A0C1484133E8A60AC7CCA20036A84B11EEA223DA0A51D87F1607823D1"
+  },
+  {
+    "path": "assets/images/update_scene/girl_3.png",
+    "sha256": "48BE1108D14D0D55A15CC4053E4A836FF3134E1BD047AF6E9A815C53670D2DB1"
+  },
+  {
+    "path": "assets/images/update_scene/girl_4.png",
+    "sha256": "2AEA67B41AEFB074B32CE8D5591FCDC07C07EBF592762B64F29B6100FB2DECA9"
+  },
+  {
+    "path": "assets/images/update_scene/girl_5.png",
+    "sha256": "737D14F8C6F458620DE846BBDF91129036BCD7C21161F532CC926378FDC8B695"
+  },
+  {
+    "path": "assets/images/update_scene/girl_6.png",
+    "sha256": "5ED4079B9983941156F2E9242727D127DD5155CC5343E3E67028C7DB78BC6098"
+  },
+  {
+    "path": "assets/images/update_scene/girl_7.png",
+    "sha256": "795DED172A4A7015AC308ED20D94C4F756BAC0B026189F58998553343E649D10"
+  },
+  {
+    "path": "assets/images/update_scene/girl_8.png",
+    "sha256": "CDB0CB8EABE59FB3B8EFD6B0D4DA9F3CEBFCBD0AC7DF26FBD7F10BE8F8F10682"
+  },
+  {
+    "path": "assets/images/update_scene/girl_9.png",
+    "sha256": "4CF8CA39A284CFEE42505763099E4F5F3A78FE7773104FC2571B37E7658090E5"
+  },
+  {
+    "path": "assets/images/update_scene/lesson_button.png",
+    "sha256": "75885511CDC100F30290BBC9E54E72D2BFD32244BF356C3FBC1EA58FED468BBD"
+  },
+  {
+    "path": "assets/images/update_scene/lesson_mascot_talking1.png",
+    "sha256": "D74906783A81F64C2A0B1065B3810AFFE4A43E862F9D701DE7E23EBD43AA2644"
+  },
+  {
+    "path": "assets/images/update_scene/lesson_mascot_talking2.png",
+    "sha256": "8AB6571E45122822B2E771F488C84B46CE0365C1311407ADD598C96AF1DD1B1B"
+  },
+  {
+    "path": "assets/images/update_scene/lesson_mascot_talking3.png",
+    "sha256": "5B529137B9159B5DA3F0D61C6BBF3555B74E378D3EC98F71D270CC4A5855A093"
+  },
+  {
+    "path": "assets/images/update_scene/lesson_mascot_talking4.png",
+    "sha256": "AD930E95D229152A49FB5902B741AC44FC3CC4D06412527CEA261B24C0F3E65C"
+  },
+  {
+    "path": "assets/images/update_scene/lesson_mascot_talking5.png",
+    "sha256": "795AC42C347C642E174DBDE66BCE9242C0E4ABD00F97EA9C131907C0090CA698"
+  },
+  {
+    "path": "assets/images/update_scene/lesson_new_bg_1.png",
+    "sha256": "D03B1C2EBA9DB58428F19E986777FA6E2A1783518ECBDFF71F328CD6545FDD66"
+  },
+  {
+    "path": "assets/images/update_scene/lesson_new_bg_2.png",
+    "sha256": "7808F25D62ACF5E847DB156DE863E53BC3BC3CB69D039D5C7196AD45F6A287DF"
+  },
+  {
+    "path": "assets/images/update_scene/lesson_new_bg_3.png",
+    "sha256": "ED5E49212EADCDE4242FB1A14A4ECEBA6950DAF58DA30A1AE8A4E708A2D65EBB"
+  },
+  {
+    "path": "assets/images/update_scene/parent_new_bg_1.png",
+    "sha256": "63C25BE1E24C686E2A21DD3BF4095548A102997992D9304E73DB24A4FFE2EAB8"
+  },
+  {
+    "path": "assets/images/update_scene/parent_new_bg_2.png",
+    "sha256": "1A63409A872ADC53AE6502DEF28CB948699A2CB1BF85425F43A206C437FF9C0B"
+  },
+  {
+    "path": "assets/images/update_scene/parent_new_bg_3.png",
+    "sha256": "B1181C82E39966C28509260A70EDEDB563DE5452E328962920BEDAACCF231D04"
+  },
+  {
+    "path": "assets/images/update_scene/profile_frame_boy.png",
+    "sha256": "DB53E8C7E7AA3F3234B50D05F8DC0B6A4ED299AD2C1E274389CED69C4E9DDCD0"
+  },
+  {
+    "path": "assets/images/update_scene/profile_frame_girl.png",
+    "sha256": "38DD04C36041230AEEEA47F47078756D08BA657BCAF4EB834A5C42BDD0F24885"
+  },
+  {
+    "path": "assets/images/update_scene/progress_new_bg_1.png",
+    "sha256": "70AE2A85E9CC4504089B6B193BDAB01ABE8F14E4392A53C54A97F0C337D7A895"
+  },
+  {
+    "path": "assets/images/update_scene/progress_new_bg_2.png",
+    "sha256": "E9406C55AA4C516A33DB0AAD603C44C1ADE923A2176194B78CF4211A82DA4FFB"
+  },
+  {
+    "path": "assets/images/update_scene/progress_new_bg_3.png",
+    "sha256": "2A9C4AAAA6391EE52E76C7058A691EDAA7368EBFC5538B7B9F916D4C43F71025"
+  },
+  {
+    "path": "lib/controllers/blending_lesson_controller.dart",
+    "sha256": "53B4D4A92B062EC5C6F919F53A1BC0F2B65CB7160F61FF4B17E216671428DF59"
+  },
+  {
+    "path": "lib/controllers/cvc_lesson_controller.dart",
+    "sha256": "1B2EA07FD722BD4F9FE910FF1D594684B938DB4E4988B62DFE5896C8BF7DBE9B"
+  },
+  {
+    "path": "lib/controllers/game_narration_controller.dart",
+    "sha256": "885E180CD8D0831C5570228F31E990AD469FD091944E0D57B359B47415795B62"
+  },
+  {
+    "path": "lib/controllers/lesson_instruction_playback.dart",
+    "sha256": "E10FF23D85014AC6A5CEBFEE7E36DFFEDCF7ECD4D58CA1758A45DEF86FC0B960"
+  },
+  {
+    "path": "lib/controllers/lesson_introduction_sequence.dart",
+    "sha256": "CEBD9CBD91E65A48128626F7D1740449FA7A331FECB06DB78CF5C56EDD20141C"
+  },
+  {
+    "path": "lib/controllers/rhyming_jar_controller.dart",
+    "sha256": "3956BD7B9389197CD768F350D433AAC75C6931970E3ECC5C3D748BEC026B9AFB"
+  },
+  {
+    "path": "lib/controllers/scene_voice_controller.dart",
+    "sha256": "0E160465F0899EF8F1BCFC5068094E64D5B7B7851080682A0EADE9CF92F82C43"
+  },
+  {
+    "path": "lib/data/activity_card_art.dart",
+    "sha256": "922A78290E80B395FB2C447B55A7926450626325A928D2898B71D65EF560C9D5"
+  },
+  {
+    "path": "lib/data/adventure_narration.dart",
+    "sha256": "3FA82AB2D299CA673C4E64820E7E65EF6FF17B5D1B4BF1FF02E82D0E6A347EE7"
+  },
+  {
+    "path": "lib/data/blending_lesson_data.dart",
+    "sha256": "C8FBCE591821CA3BDB162D8E13B6B216961934D2CC6323A60AAE9426B6D35002"
+  },
+  {
+    "path": "lib/data/character_selection_art.dart",
+    "sha256": "EDDC065004F71041477657CB17D2103DD19AF0F57317CEBDDADF95536BE456E7"
+  },
+  {
+    "path": "lib/data/cvc_lesson_data.dart",
+    "sha256": "DFAD35C8993F39DCCC4E39E6F8019541EB00E15BAE57B5D741C8855B166314A1"
+  },
+  {
+    "path": "lib/data/game_instruction_scripts.dart",
+    "sha256": "8562954C45A1816A2F2506D539D576BE9878D7374EF6D552D5531FB8DCAD3E06"
+  },
+  {
+    "path": "lib/data/game_session_order.dart",
+    "sha256": "5C6993689CFA96A39835D5714E99C8BDFFFA8B14F8DB228806D57CBC6E57F396"
+  },
+  {
+    "path": "lib/data/game_word_data.dart",
+    "sha256": "C670F4DF24E792156FD272C078FF050595483BDA4808931A5442E052563392FE"
+  },
+  {
+    "path": "lib/data/games_menu_art.dart",
+    "sha256": "3A58B01F7AA162354CE5B6C6D2AEEEF12D8B0DB90E56B970F20706B47F0F0AAE"
+  },
+  {
+    "path": "lib/data/home_narration.dart",
+    "sha256": "86C88AFA088445BB605427155189A9AE88FDB998DD8D73E86D5A3C85B326B596"
+  },
+  {
+    "path": "lib/data/home_village.dart",
+    "sha256": "45747A339907F39697244909B54BB4FF15FE7427A80826743BC06EFBE9D0F538"
+  },
+  {
+    "path": "lib/data/lesson_example_data.dart",
+    "sha256": "8E85239E14155CCD8D031330CC0F9A262A74E1A2030F40444A6E552A665C05C1"
+  },
+  {
+    "path": "lib/data/lesson_instruction_scripts.dart",
+    "sha256": "076D49A60F682BBE30DF8B765A070071E442902B5060974C57FDE5A05FE3FF59"
+  },
+  {
+    "path": "lib/data/lesson_journey.dart",
+    "sha256": "D16BA4CDCB0C555B42B8CBA6B4AFD795EB397214C5A6714C8C89C83826D50F00"
+  },
+  {
+    "path": "lib/data/lesson_menu_art.dart",
+    "sha256": "8E822C37554C546C7C0C8D69795AA1D0BAB453DD5C41356F54CBA55DA21E09C2"
+  },
+  {
+    "path": "lib/data/letter_data.dart",
+    "sha256": "498EEAABDF9AA466C5FCFCCB9C26B95A282E10241BD1AEDB7A864AD6886E075F"
+  },
+  {
+    "path": "lib/data/missing_vowel_sounds.dart",
+    "sha256": "742FCEA71F92FD5B9AD8AE55D33E9921192E0D1D345E7FF922A69A0D79553FF2"
+  },
+  {
+    "path": "lib/data/phonics_activity_data.dart",
+    "sha256": "899F2FEEDECCD193CBD98C4D78D37558C4804BEA62DBE9D493CE202F1FAFE8A6"
+  },
+  {
+    "path": "lib/data/rhyming_jar_data.dart",
+    "sha256": "A93DF186147BFFE6AA3E6543012994CD6B7E4D6C1B90619383AF27289C7F9CBA"
+  },
+  {
+    "path": "lib/data/rumbled_words_data.dart",
+    "sha256": "F843359E88BD76E5F57812B06524F7DCA171E867EA27AB0993A185D434D3BC69"
+  },
+  {
+    "path": "lib/data/updated_scene.dart",
+    "sha256": "D2212AC8BAE74818FF4347EDF2F811DB6B195731A99666B6A167F33DF91EAEFA"
+  },
+  {
+    "path": "lib/main.dart",
+    "sha256": "B0C04E394986DFB417BFB77128169C3BA49640DF080593609A6E436FF82F3C07"
+  },
+  {
+    "path": "lib/models/difficulty.dart",
+    "sha256": "A8128450BDA3B3EB03CC7FCE7FA2F33C9C8401DB4FBF27D335ED4401E38D5686"
+  },
+  {
+    "path": "lib/models/flappy_letters_game.dart",
+    "sha256": "16A2C1420DCF4D28D569DB8C353877A1ECA3501E8F65606F47BA631ED0BD54E0"
+  },
+  {
+    "path": "lib/models/learning_progress.dart",
+    "sha256": "7E8E918CC2A9033307DE3105363AED2EB023517FC47BFBC64EB21A8FFC815660"
+  },
+  {
+    "path": "lib/models/letter_adventure.dart",
+    "sha256": "C30C747CD58A9056CB0822C728E1C58F9C982C1295B9B39F3D494836620098FF"
+  },
+  {
+    "path": "lib/models/mastery_question.dart",
+    "sha256": "7DF013CAA27C79FEBC02F17319AD0DBC30EF302B12F539138A1F091521CEA753"
+  },
+  {
+    "path": "lib/models/progress_badge.dart",
+    "sha256": "4128D993C8B56584D5CC8B2B07ACB9859CDE3EA060BCCDF4506276DA8F0054E2"
+  },
+  {
+    "path": "lib/models/weekly_learning_summary.dart",
+    "sha256": "671286B6DC04CFBDA96AE319624FBA54392C2FA759A1BA7BB056FDE32A858945"
+  },
+  {
+    "path": "lib/models/word_lesson_progress.dart",
+    "sha256": "F744E835F1779C91419D7B50F5ACFA12DBC79F1EB219EA4F76E2FD8B3CBDB7F9"
+  },
+  {
+    "path": "lib/providers/app_provider.dart",
+    "sha256": "E7BF879DE18763E7C90D6A1863AAFD4E65CB3325B278AD56BBB39FCA5429A2DC"
+  },
+  {
+    "path": "lib/screens/alphabet_order_screen.dart",
+    "sha256": "547FC1E5D66A4678CF36EB0811FF5D8B16107C27DAF850C5CC270F229DB241E8"
+  },
+  {
+    "path": "lib/screens/blending_sounds_screen.dart",
+    "sha256": "BE5249BFC21458D6E1C3CFF15BCEEE0EB75859816951A84F4224848AD7C8C42D"
+  },
+  {
+    "path": "lib/screens/cvc_words_screen.dart",
+    "sha256": "41E0FABF34A0308E9681AC97CBC76446071E57EFEA067A93BA8651CE87605F03"
+  },
+  {
+    "path": "lib/screens/flappy_letters_screen.dart",
+    "sha256": "164D2769DC233D2142CF3802B25148334891631EC7EF817CC72EC38DA88BC4F7"
+  },
+  {
+    "path": "lib/screens/games_screen.dart",
+    "sha256": "14664B347E00EDD342FC24C0B9A7A2CCFD78EFDBFD59797E37BE8D8A6A91FFAB"
+  },
+  {
+    "path": "lib/screens/home_screen.dart",
+    "sha256": "83C4D2261B6C9600F7DA081E9FAB8F7B80D6F9501E3BD53D27D5FC5ABB754F62"
+  },
+  {
+    "path": "lib/screens/journey_lesson_screen.dart",
+    "sha256": "4B23A71D9639085A7E28AF9A109737A670AC0DDC9EFB381D246D19C2712AC00D"
+  },
+  {
+    "path": "lib/screens/lessons_screen.dart",
+    "sha256": "287D5B991775B1F731B84613DFABB1E83857476E785E2E3BA24DA10F8CCBEAF7"
+  },
+  {
+    "path": "lib/screens/letter_introduction_screen.dart",
+    "sha256": "454C72304F699068F8E19FEC2B9D0E3B5C7764F2EBED641AADBC849DD252B0E1"
+  },
+  {
+    "path": "lib/screens/letter_mastery_check_screen.dart",
+    "sha256": "23F708167EBD598FD819E8F21A47584EE2A200CB968DAAFE8FCE65E3BAC69193"
+  },
+  {
+    "path": "lib/screens/letter_recognition_screen.dart",
+    "sha256": "4DC2AA9297A41DEE77FC89AA76CB4041A7BE11AB32E75799297893E0E55B821E"
+  },
+  {
+    "path": "lib/screens/letter_sounds_screen.dart",
+    "sha256": "8DB6176EFB8B93447E43D2D6EEC84D0FAAF0C8A9D139ADF79DE84B8164B31D4D"
+  },
+  {
+    "path": "lib/screens/memory_game_screen.dart",
+    "sha256": "C1DEB85F426C0A4D57DA956BDB0C05A641E296A019607B96CD554CE611C7ECE4"
+  },
+  {
+    "path": "lib/screens/missing_vowel_screen.dart",
+    "sha256": "DEC370F5840374F503F92B1B4BC5542780E324C9672BD576CE5EC7C39CE26DAF"
+  },
+  {
+    "path": "lib/screens/parent_screen.dart",
+    "sha256": "3932A574575A1CA362ACF2318D60259A898F3F19EB62A7D1459AA49A4E8196F3"
+  },
+  {
+    "path": "lib/screens/phonics_quiz_screen.dart",
+    "sha256": "F6724EAE987DDA88EC89734BA3D51AFFAB8FBC053240CD93A4FEA17BA89B283E"
+  },
+  {
+    "path": "lib/screens/picture_word_match_screen.dart",
+    "sha256": "F6FDE29503F5F5696B7D4BD1ED8DC48C1F099675A69FB96C50A94FE354191262"
+  },
+  {
+    "path": "lib/screens/progress_screen.dart",
+    "sha256": "33BD3388ACD232BB43BCD40F315B3CDCEF5116F99D498E676937E5275CD088F5"
+  },
+  {
+    "path": "lib/screens/rhyming_words_screen.dart",
+    "sha256": "0D0D9867624EDADF6EC5BB40F8B7C0B5BA7E10444AA93811BD6A6FFC2B9D0882"
+  },
+  {
+    "path": "lib/screens/rumbled_words_screen.dart",
+    "sha256": "FB938B730DD797F6671EB6BCE8D042CD3520723FDBF4D99B64F2BCA4D419FF7C"
+  },
+  {
+    "path": "lib/screens/settings_screen.dart",
+    "sha256": "623D73B1CCBB2D0C6C1CAC88F03E1F2DFE4795ACF875016568E8A551B8E470F4"
+  },
+  {
+    "path": "lib/screens/sound_match_screen.dart",
+    "sha256": "4526D6BD74305ADF2B11663B2532B4904C8A4739D489332781C9AA4BFF1FB916"
+  },
+  {
+    "path": "lib/screens/sound_position_screen.dart",
+    "sha256": "0107C7E09844D4A899822CFBD589E7B2800E9C4C6341C6636BAF9294F99DDCFE"
+  },
+  {
+    "path": "lib/screens/tricky_letters_screen.dart",
+    "sha256": "AC955703CE28D9E67E4FEC495A4A50FEB3C2662410070746B7CD3BD90983BF82"
+  },
+  {
+    "path": "lib/screens/voice_recognition_screen.dart",
+    "sha256": "D438C604293465B7639ED001C7003A6B15EABE729E474F480A0D7537807DFD5E"
+  },
+  {
+    "path": "lib/screens/vowel_sounds_screen.dart",
+    "sha256": "294AD9C7527FB7F7DBF796F9CBDE082EFDE27638E421D3EED9C06EB26BBD1F0F"
+  },
+  {
+    "path": "lib/screens/welcome_screen.dart",
+    "sha256": "89C3E6F90ABA563F32DEEA7DFD1AE1EDB23B7E3B25CDBA18B59C7529A354D550"
+  },
+  {
+    "path": "lib/screens/word_builder_screen.dart",
+    "sha256": "E49DC0A4D2B777668808AD555D9B32637AF34A6DCC711F9CAF420FAB40735AB6"
+  },
+  {
+    "path": "lib/services/app_build_info.dart",
+    "sha256": "EA3C4D4CDDFE4040170C06D58E1B5F7F0E5FA43FE38286812B0C84A7C8D72EF8"
+  },
+  {
+    "path": "lib/services/audio_service.dart",
+    "sha256": "C30CFBA753D41EE03ED2F0E02C4E76356178F10FC5C249B67D988986CC94AC91"
+  },
+  {
+    "path": "lib/services/background_music_service.dart",
+    "sha256": "EB967655BB321919978AC9CF02B8E3AAEB8AF26D6B58B862B489725E95157687"
+  },
+  {
+    "path": "lib/services/local_audio_focus.dart",
+    "sha256": "2A065E4B90A9CB0B72CE7C6542B7790E97DFBFCD2F7BC72CB4180E9F4AF61487"
+  },
+  {
+    "path": "lib/services/mastery_audio_service.dart",
+    "sha256": "E29205043F69CB7C49320F0F28595DEF23B46ECE72D0175C78DD6D202C72C959"
+  },
+  {
+    "path": "lib/services/parent_auth_service.dart",
+    "sha256": "D1C69DC716CF0E8D2DADA0E8B7E6C3517C69325C2A5716C924867D43F6FCBEE3"
+  },
+  {
+    "path": "lib/services/phonics_audio_service.dart",
+    "sha256": "C744B80BD058CE8017E4C719A16A7AEA5A34860BFF657B60CC0A3BFECDC54FD5"
+  },
+  {
+    "path": "lib/services/preference_write_queue.dart",
+    "sha256": "2420EC0825E90A7DB4F4DD926D4CFEA455E0ED9A1D2B531B1CFBB4B985350451"
+  },
+  {
+    "path": "lib/services/screen_time_service.dart",
+    "sha256": "1E32AF7CABB0278538603136BB9C5F8986A575130C3772610AD519340331566D"
+  },
+  {
+    "path": "lib/services/speech_practice_service.dart",
+    "sha256": "7041EC5D941CA436EFE5A8F7F078605C6E05EBC57BB989DB5A67B4F8ACC21F6A"
+  },
+  {
+    "path": "lib/theme/app_theme.dart",
+    "sha256": "03A142C8951CE2CCD56C5CDD34828B183786B864A6E3ED0A1E833F8AD29F941B"
+  },
+  {
+    "path": "lib/theme/kids_ui.dart",
+    "sha256": "BDA7C394E7ED7C0090E8B2E3C7AC9F1622981460A0FE2580B782241F891928A6"
+  },
+  {
+    "path": "lib/widgets/activity_artwork.dart",
+    "sha256": "5BF74E145787BD9358E598569A99A88CE993C5D60D622A1D77F693E7C9168949"
+  },
+  {
+    "path": "lib/widgets/activity_prompt.dart",
+    "sha256": "21C610C1C9D5FFBED876B8D0968FA4F2CB80539A68FBA0083A42310954C68997"
+  },
+  {
+    "path": "lib/widgets/activity_round_header.dart",
+    "sha256": "F44905E0CD4D0FED3EE687E3F5908805A260787303C6BE25FFD458779911ED13"
+  },
+  {
+    "path": "lib/widgets/adventure_background.dart",
+    "sha256": "591B68F5C63EBE8091E77291D18F0F5FA645D6B2779FF0D81CFCA07814ADB284"
+  },
+  {
+    "path": "lib/widgets/alphabet_order_design.dart",
+    "sha256": "CEAE7D813260E225A9CB8247C009FB8020342CADF5ADC07ADEF635B727547237"
+  },
+  {
+    "path": "lib/widgets/animated_screen_art.dart",
+    "sha256": "33911C64F646E6B7CB917F53A19EFB024E27A17DAEA34FDE8DECFD6584705AC3"
+  },
+  {
+    "path": "lib/widgets/answer_choice_button.dart",
+    "sha256": "EA45A0D34EFC44B325BD1A35700599913A3902979848859103417045419A43C2"
+  },
+  {
+    "path": "lib/widgets/app_display_preferences.dart",
+    "sha256": "B6C0022D1EF7FAD8C7796A99F067D324278CABAE579B96BCC7171783521C3EA2"
+  },
+  {
+    "path": "lib/widgets/background_music_host.dart",
+    "sha256": "432FA63B4E883134A6E9E76124BD7D29B2F32B9AA4990428696D88808A01B975"
+  },
+  {
+    "path": "lib/widgets/blending_puzzle_piece.dart",
+    "sha256": "C9638F801399D54A21C93CA17C2A8D8B8D37F71258501992BFEF0327E12FDBDA"
+  },
+  {
+    "path": "lib/widgets/button_sound.dart",
+    "sha256": "D9FCCB7C9D6DB13D46F99E4765857FB15CFEDBC1C5C6A454ADECB20B2B71760F"
+  },
+  {
+    "path": "lib/widgets/category_house.dart",
+    "sha256": "6262BBA2C9C715507124141766A1A01357CCA37306D32EB673D45ECEE332120E"
+  },
+  {
+    "path": "lib/widgets/category_navigation.dart",
+    "sha256": "D791316C94AA41652848B672110EFC37D512CADCC89E38D9E069D0906EA4F6A5"
+  },
+  {
+    "path": "lib/widgets/cloud_page_route.dart",
+    "sha256": "F6AAAE1FDC23FF30AA7D389BE5038B2A0EA266EA8CFE7DDE22BCBE7AA960F058"
+  },
+  {
+    "path": "lib/widgets/completion_celebration.dart",
+    "sha256": "F31EA33890893039C733AF1064BB1C5EAA6836D729A6E7CB54B0540E9AA755D5"
+  },
+  {
+    "path": "lib/widgets/cvc_word_picture.dart",
+    "sha256": "2231CE626F59102CCB5DDA5D3E98BD2BD7B992C3DAE2757BC8FBDEE8B93DD1BD"
+  },
+  {
+    "path": "lib/widgets/dashboard_widgets.dart",
+    "sha256": "7EF041D987DA37CC50B9C23A28C854362DDBD09A0D3370DF809D600663D6965F"
+  },
+  {
+    "path": "lib/widgets/day_cycle_background.dart",
+    "sha256": "83CC92AA939525A2E3F3D393CEC10A268E2DE86ABE3F9EF469EC2E86C665E464"
+  },
+  {
+    "path": "lib/widgets/flappy_bird_sprite.dart",
+    "sha256": "EF05C0D669FC4F96293E9BB4158FFAB3ED13FC2EF8C203F3C9A4ACCE65DE9FD5"
+  },
+  {
+    "path": "lib/widgets/flappy_letters_design.dart",
+    "sha256": "7E9CB55AE53693650F8C153CD89E6B1E10E3FA0564CBE95ED3E93A9D1D5B7823"
+  },
+  {
+    "path": "lib/widgets/floating_choice.dart",
+    "sha256": "8DCA5C94F4A953194ABAEF3A4269B264C61005232452818CCE9D9585D5F5D959"
+  },
+  {
+    "path": "lib/widgets/game_design.dart",
+    "sha256": "BB80CFE112FBC934C8E41F19F1CF2792642724FFFBF4FCFAABD6C4943D965A23"
+  },
+  {
+    "path": "lib/widgets/game_difficulty_dialog.dart",
+    "sha256": "EB0C64AA6B3B1F91C33D0CF1A3E6A37F0E60DB03FBAB6E6EFC9AB3030435F03F"
+  },
+  {
+    "path": "lib/widgets/game_instruction_guide.dart",
+    "sha256": "3F47A1424A2B0DE35FADAD94BADB6DF672B6F8278173801CFC7DB9C744F495B0"
+  },
+  {
+    "path": "lib/widgets/game_leave_dialog.dart",
+    "sha256": "6CD5DB5C2BABB66694FA0E62B3506B7F07825C164F6B6F962899E4FB55F5DC2B"
+  },
+  {
+    "path": "lib/widgets/game_mascot_coach.dart",
+    "sha256": "095E03A977427666B0FB5E86255E420CF923E73727C11512EC4C94FB689DFA80"
+  },
+  {
+    "path": "lib/widgets/game_theme_background.dart",
+    "sha256": "918E45208B53EC53C8D75E67EE6E64FFAA1A85C5EADC55F5404D692B1E9F4E5D"
+  },
+  {
+    "path": "lib/widgets/game_tutorial.dart",
+    "sha256": "C0BBCE5AC35A91C0CCA96B2386FEC7E2C4F0886870414A2A1B91C337E5A5401D"
+  },
+  {
+    "path": "lib/widgets/game_tutorial_design.dart",
+    "sha256": "94872233559F405C5AFAB6E99B20527D567F88EC32AA0350120015F27CC66164"
+  },
+  {
+    "path": "lib/widgets/game_word_picture.dart",
+    "sha256": "B8FEA8F69C852FFB4312D95A1AF263D0FF43B67E811191FE814076B0B610D3B0"
+  },
+  {
+    "path": "lib/widgets/game_zone_card.dart",
+    "sha256": "9D16AD04080BD74169275428D374027E08F54EEF40CB29AD248C5F1A76BF2A98"
+  },
+  {
+    "path": "lib/widgets/game_zone_welcome.dart",
+    "sha256": "EDB757329BA38BB6624E24996185DE34DE4D34CC8A24C91591432F2BEA9C7CBE"
+  },
+  {
+    "path": "lib/widgets/games_menu_header.dart",
+    "sha256": "2C33E5EA58600FC8C6D6CDCD1A5F9DA7F762D59D55C17022233AD069927193C9"
+  },
+  {
+    "path": "lib/widgets/home_character_visit.dart",
+    "sha256": "5B0B3B1F5DC1C9D64D9F4034F2E66D9B67CDA34C198662B5F510B3DB6A0C1369"
+  },
+  {
+    "path": "lib/widgets/home_flight_menu.dart",
+    "sha256": "DDB2D9661387BE777D54B17F74754C3E77AE711958E8DBE435D0FE7230929720"
+  },
+  {
+    "path": "lib/widgets/home_guideline_dialog.dart",
+    "sha256": "0F053BFDC40796A70F7698E79C7B4ECC921C4E8AA70CBEC9124F6F4792402996"
+  },
+  {
+    "path": "lib/widgets/home_playground_mascot.dart",
+    "sha256": "4F2A533454C382C5FE54E5284483D140A0C4DAD9C0DA08784D633C899951EA97"
+  },
+  {
+    "path": "lib/widgets/home_progress_banner.dart",
+    "sha256": "167429BCAAFF6867B1CA6D1CA86AE78C369CB8D29B347B5F2CB4731CD9966A3E"
+  },
+  {
+    "path": "lib/widgets/home_recommendation_panel.dart",
+    "sha256": "6FD6E64F6958574906AF4312E214BBB14615F49F55B796FC4F7FF25FD55F230D"
+  },
+  {
+    "path": "lib/widgets/home_scene_layout.dart",
+    "sha256": "3037F8A48AE45F4399D076D5002F82ACAB06B49D40103BE9B23A657736918935"
+  },
+  {
+    "path": "lib/widgets/home_village_footer.dart",
+    "sha256": "1E33A7A3F24294AA0FC764173229CA688A7054E66144577676980E2E65D673D0"
+  },
+  {
+    "path": "lib/widgets/home_village_menu.dart",
+    "sha256": "EA1C3E1B680641EDBB6D778E0D5021D9D165D56C075E13F4DE1F8FBEE4E3F15D"
+  },
+  {
+    "path": "lib/widgets/kids_navigation_bar.dart",
+    "sha256": "09564C11FBFA02A0DB22E1EAB16466E49E809054AF6F55C847D461E5FCDFFD5B"
+  },
+  {
+    "path": "lib/widgets/learner_widgets.dart",
+    "sha256": "1DDC5CB2C211A71CEBF894D2EBE06667B329C18EC2F2DF61F5B8A4594C97BEBC"
+  },
+  {
+    "path": "lib/widgets/learning_progress_widgets.dart",
+    "sha256": "FD794B017A2D3663ABDEA306889FB4EAB3695BF22768D587A67D279F1830FA35"
+  },
+  {
+    "path": "lib/widgets/lesson_activity_header.dart",
+    "sha256": "7B8B55A76A88693A8AB13D878B39C56D1FAC684978B90E7A8233B82D9409CAF0"
+  },
+  {
+    "path": "lib/widgets/lesson_control_button.dart",
+    "sha256": "D4F92DD40EA658CAAEA743266AFCA468367C88CDC737C523AC4C014E2062E003"
+  },
+  {
+    "path": "lib/widgets/lesson_dialogue_prompt.dart",
+    "sha256": "232EC9A6D4FB2278FCC26B93B167101D2D0B34B087719A1482FEC3323A899234"
+  },
+  {
+    "path": "lib/widgets/lesson_frame.dart",
+    "sha256": "E8F60C41DA7F9A80F7C68610CCD982AAA3CA130AB07E32B9AFCFE2AC781C9308"
+  },
+  {
+    "path": "lib/widgets/lesson_menu_card.dart",
+    "sha256": "D8B41D8E3246244E66059DED527A43FA974CD8A5B4C5F75C487CC1676C25FFD0"
+  },
+  {
+    "path": "lib/widgets/lesson_menu_header.dart",
+    "sha256": "BEF8714318C874777F5A113AAC1FF3DE9A4A7DA739A67E3BB65EB106DAA913AE"
+  },
+  {
+    "path": "lib/widgets/lesson_picture.dart",
+    "sha256": "51253CA02B1554F6810784B8A68EE5527E0AB8E64BE51C801957E0C1316F164C"
+  },
+  {
+    "path": "lib/widgets/lessons_menu_page.dart",
+    "sha256": "2E1018C935FC4A6AAB3CD5E655A713F2FAA0D55BC6D39F3AC5779141B34A804E"
+  },
+  {
+    "path": "lib/widgets/letter_lesson_page.dart",
+    "sha256": "7BEC02537685A076178A4159D2DA19DDFE03D242F572F937E361125A7AD7E0A6"
+  },
+  {
+    "path": "lib/widgets/main_navigation_scope.dart",
+    "sha256": "E82E17CC96A693B906DB5A2B77D2F40D39D8431117400840471C3A96E199E62E"
+  },
+  {
+    "path": "lib/widgets/main_navigation_shell.dart",
+    "sha256": "D0D71F73FDB20EEEDBECF40EAB92596067E7A865ED4E3163D809437C5C51A5CB"
+  },
+  {
+    "path": "lib/widgets/mascot_guide.dart",
+    "sha256": "27E6C48C439E7D54FE369415C3D7C8FB284C67F7748C0EEB3D67DE7F102808E0"
+  },
+  {
+    "path": "lib/widgets/mastery_illustration.dart",
+    "sha256": "D7798362DE9636D19EB313FBA6486DE5CF3A5C9E51808B02B1B7F0A951F54F82"
+  },
+  {
+    "path": "lib/widgets/memory_flip_design.dart",
+    "sha256": "B16C276C321E092D1B84A39CE7ADFE1E6F0A654134C5ACA09262E660B74C850F"
+  },
+  {
+    "path": "lib/widgets/overall_mastery_panel.dart",
+    "sha256": "624B85173079885FB24C51E9F3D102081273B076A5ED080C2A18A5111747D0B5"
+  },
+  {
+    "path": "lib/widgets/parent_garden_activity.dart",
+    "sha256": "FB4B848C3053205617CA1783F3DC21A5606F9EC0F660C8CCE0EEDD3DBE5E0703"
+  },
+  {
+    "path": "lib/widgets/parent_garden_overview.dart",
+    "sha256": "FAE3B617375FA50D5DEB07463E4ED8B97E95938026D091A9DC3E01B57B530BC9"
+  },
+  {
+    "path": "lib/widgets/parent_pin_form.dart",
+    "sha256": "085D633C23A084F2D38EE77B1A1D663EBFA9A75B8009E6CF78B432138F7BCDA0"
+  },
+  {
+    "path": "lib/widgets/parent_settings_design.dart",
+    "sha256": "25A9506B0B059A60D99F1D950E0D6C5488456FF032D1EDDB4F1B8BFFDC66CE8D"
+  },
+  {
+    "path": "lib/widgets/parent_weekly_summary.dart",
+    "sha256": "3D1A95DDA9E522B8FF3C5B137F8ED6D5DC2271C0B4353788A6C66ACF0CFAD5CF"
+  },
+  {
+    "path": "lib/widgets/picture_frame_animation.dart",
+    "sha256": "77963594ABC9BFEDF37E0EC54997F735E69DDF8F838C2FC16B0FEC546D64762E"
+  },
+  {
+    "path": "lib/widgets/progress_collection_design.dart",
+    "sha256": "662CA172BD7E16D3D2FE362D7885ECD629E4ACC9FBC8C5294283D4676DD75903"
+  },
+  {
+    "path": "lib/widgets/progress_design.dart",
+    "sha256": "6D921DCD653D809FE982BEB3A886CD8F822C3FB3A67F41F2A8A60D6FAD076883"
+  },
+  {
+    "path": "lib/widgets/progress_journey_view.dart",
+    "sha256": "2C1B24BF7B82AC3AADCE799ECA3089A2604E00218FD3759887C68773458B9276"
+  },
+  {
+    "path": "lib/widgets/progress_reference_design.dart",
+    "sha256": "F9A7E02D1885F0518B1C7FEAC2F7D0A0DB1BF4CD407DD109917E812143549F24"
+  },
+  {
+    "path": "lib/widgets/quick_adventure_result.dart",
+    "sha256": "6FB85407E4E8E52D9CDA396201F9B93104C42157605C2E7DEFE88643D773975E"
+  },
+  {
+    "path": "lib/widgets/quick_check_design.dart",
+    "sha256": "EA2D17AAF9DDEF36078C6ED5E8639ED2F43558E3D0D79C4CBDFDC7E7EDA9CB1C"
+  },
+  {
+    "path": "lib/widgets/quick_check_recommendation.dart",
+    "sha256": "DEC724E8BD421AE4416637821BE435BFC454AC37D16ED26BE90651EF91ED1DD8"
+  },
+  {
+    "path": "lib/widgets/quick_choice_art.dart",
+    "sha256": "27FE6762C53AB9AC74B9BAD8D29FAA5E16A039ACDB7C6B3768BF3EF55EEAD708"
+  },
+  {
+    "path": "lib/widgets/rhyming_words_design.dart",
+    "sha256": "DE9EA59EFBB7CB310E67143EF28AF1E24F13041009495AED4E28E9C75F57AFDC"
+  },
+  {
+    "path": "lib/widgets/rumbled_words_design.dart",
+    "sha256": "3E78F47C5FA72F67764D7F83DCE082491313EDC8F271EFD4148C1AB6B289B1C6"
+  },
+  {
+    "path": "lib/widgets/scene_controls.dart",
+    "sha256": "1CA01BEB2EDF7BBC803E65EA553A2237B93DE8ADFC2FAD178FD59A7519735856"
+  },
+  {
+    "path": "lib/widgets/scene_dialogue.dart",
+    "sha256": "E77DA923B6E3BEF9EE3813CA5F1C209093EEA02757C0F1D4B3680992E873857D"
+  },
+  {
+    "path": "lib/widgets/school_home_scene.dart",
+    "sha256": "C1E2C88B0FA507FEA3A1E98FB62210E4A01FC66894638608CFDFD0018E56E821"
+  },
+  {
+    "path": "lib/widgets/school_room_body.dart",
+    "sha256": "CF11B835ADD2A76C889D41996D548063955B0EED80CCDF9B36482B80E1067C5E"
+  },
+  {
+    "path": "lib/widgets/settings_about_design.dart",
+    "sha256": "23247C8EDCE3778197BB3835FACDD10F104D5AAA8C8169BA5DA2AAE19A9071AF"
+  },
+  {
+    "path": "lib/widgets/settings_display_design.dart",
+    "sha256": "923FA460D021EA26C06A6E82B3C82589B0DCEC03B06CB6D7F17B8613716BD6C2"
+  },
+  {
+    "path": "lib/widgets/settings_help_design.dart",
+    "sha256": "FD9A7ACC1933AD5A1B0D35A39168505EE55047A4CE67148341FFFB56FF9019CA"
+  },
+  {
+    "path": "lib/widgets/settings_reference_design.dart",
+    "sha256": "7A53682A15A467D0112B82A7964637AFED1237B42FAA5E61377EA69F0720BCCA"
+  },
+  {
+    "path": "lib/widgets/settings_sound_design.dart",
+    "sha256": "F93CFDCC0A0B0FBF411B04A194B491A44066A423A64B6FFF2426B5A0C7D416C1"
+  },
+  {
+    "path": "lib/widgets/sound_match_design.dart",
+    "sha256": "EA8AB3A2F55E3B04BA55C16F9CAA261D99AE8CA93A6AAE1C02D1AC30AF4C9FA3"
+  },
+  {
+    "path": "lib/widgets/speech_practice_design.dart",
+    "sha256": "0E9072CDE2E6BCDA0B1E79239022EE3A78B4E81EEEB9291BE34D38810595ACB8"
+  },
+  {
+    "path": "lib/widgets/student_character_picker.dart",
+    "sha256": "4A623641F462E7FE916BE6AE7C1E77627084CEC4BACDFE896907E3ED9E534769"
+  },
+  {
+    "path": "lib/widgets/student_wave.dart",
+    "sha256": "C93AB4E6479F27F6CE77E74D6C9C3E3AE66F9566E658BEAED1CF383B79844964"
+  },
+  {
+    "path": "lib/widgets/time_limit_overlay.dart",
+    "sha256": "EA12181ABB06A750320C1C9A2F7A011909B859D9C1BC6D8B66BCB11DBE920CA0"
+  },
+  {
+    "path": "lib/widgets/word_game_layout.dart",
+    "sha256": "8AEEDD9DA0B81BF20EA5B62CC1C88A0D90417049B0B9C75F230B45E49D430A71"
+  },
+  {
+    "path": "pubspec.lock",
+    "sha256": "AF1585C8AD5953D3C334A43CE90FA28D01D78EED3D2BCF1FA876B02F502FD212"
+  },
+  {
+    "path": "pubspec.yaml",
+    "sha256": "BE43998536499180AFB7D44E94C01DB8FCBD7425F370D8DF9D2C32E6558D08B6"
+  }
+]

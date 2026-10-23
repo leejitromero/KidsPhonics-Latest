@@ -24,16 +24,19 @@ class MascotPortrait extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ExcludeSemantics(
         child: RepaintBoundary(
-          child: Image.asset(
-              MediaQuery.disableAnimationsOf(context) ||
-                      !TickerMode.valuesOf(context).enabled
-                  ? mascot.asset
-                  : mascot.animatedAsset,
-              width: size,
-              height: size,
-              fit: BoxFit.contain,
-              cacheWidth:
-                  (size * MediaQuery.devicePixelRatioOf(context)).ceil()),
+          child: SizedBox.square(
+            dimension: size,
+            child: Image.asset(
+                MediaQuery.disableAnimationsOf(context) ||
+                        !TickerMode.valuesOf(context).enabled
+                    ? mascot.asset
+                    : mascot.animatedAsset,
+                width: size,
+                height: size,
+                fit: BoxFit.contain,
+                cacheWidth:
+                    (size * MediaQuery.devicePixelRatioOf(context)).ceil()),
+          ),
         ),
       );
 }

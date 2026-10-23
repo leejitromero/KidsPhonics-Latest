@@ -25,8 +25,22 @@ void main() {
       await t.tap(find.text('Skip'));
       await t.pump(const Duration(milliseconds: 500));
     }
-    expect(audio.sources, isEmpty,
-        reason: 'No generated instructions on entry');
+    for (var i = 0;
+        i < 100 &&
+            !audio.starts.any(
+                (s) => s.endsWith('/game_instructions/flappy_letters.mp3'));
+        i++) {
+      await t.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 10)));
+      await t.pump();
+    }
+    expect(
+        audio.starts
+            .where((s) => s.endsWith('/game_instructions/flappy_letters.mp3')),
+        hasLength(1));
+    await t.runAsync(
+        () => audio.completeSource('/game_instructions/flappy_letters.mp3'));
+    await t.pump();
     await t.tap(find.text('Start flying'));
     await t.pump();
     // Steer the bird through actual course ticks; no direct model mutation.

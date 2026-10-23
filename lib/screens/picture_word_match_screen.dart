@@ -12,6 +12,8 @@ import '../widgets/game_word_picture.dart';
 // Hard   : 5 choices + longer words
 
 import 'package:flutter/material.dart';
+import '../widgets/game_instruction_guide.dart';
+import '../widgets/game_mascot_coach.dart';
 import 'dart:math' as math;
 
 import 'package:provider/provider.dart';
@@ -191,6 +193,11 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
         title: 'Picture Match',
         fitViewport: true,
         instructions: 'Tap the matching picture.',
+        instructionPanel: GameMascotCoach(
+            title: 'Picture Match',
+            instructions: 'Tap the matching picture.',
+            controller: gameNarration,
+            child: const GameInstructionGuide(gameTitle: 'Picture Match')),
         difficulty: widget.difficulty,
         hasProgress: scoredAttempts > 0 && !resultOpen,
         current: _index + 1,
@@ -228,16 +235,28 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
                                           .clamp(130.0, 200.0),
                                       height: (box.maxHeight * .32)
                                           .clamp(130.0, 200.0),
-                                      child: _landed
-                                          ? GameWordPicture(
-                                              key: const ValueKey(
-                                                  'matched-picture'),
-                                              word: _round.word)
-                                          : const Icon(
-                                              Icons
-                                                  .add_photo_alternate_outlined,
-                                              size: 64,
-                                              color: Color(0xFF8A72B6))),
+                                      child: Container(
+                                          key: const ValueKey(
+                                              'picture-answer-box'),
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFFFFFCF3),
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            border: Border.all(
+                                                color: const Color(0xFFD1AFF4),
+                                                width: 3),
+                                          ),
+                                          child: _landed
+                                              ? GameWordPicture(
+                                                  key: const ValueKey(
+                                                      'matched-picture'),
+                                                  word: _round.word)
+                                              : const Icon(
+                                                  Icons
+                                                      .add_photo_alternate_outlined,
+                                                  size: 64,
+                                                  color: Color(0xFF8A72B6)))),
                                   const SizedBox(height: 8),
                                   Text(
                                       _landed
@@ -253,11 +272,12 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
                               )),
                               const SizedBox(height: 6),
                               GameChoiceGrid(
-                                  columns: 2,
+                                  columns: _round.options.length == 4 ? 2 : 3,
                                   children: _shuffledIdx
                                       .map((option) => GameAnswerButton(
                                           label: 'Picture ${option + 1}',
                                           showLabel: false,
+                                          floating: false,
                                           visual: SizedBox(
                                               key: _pictureKeys.putIfAbsent(
                                                   option, () => GlobalKey()),

@@ -252,7 +252,7 @@ void main() {
   testWidgets('Letter Sounds menu and grid keep the selected phoneme',
       (t) async {
     final p = await mount(t, const LessonsScreen());
-    await t.tap(find.text('Letter Sounds A–Z'));
+    await t.tap(find.text('Letter Sounds A-Z'));
     await t.pump();
     await t.runAsync(() => Future<void>.delayed(Duration.zero));
     await t.pump(const Duration(milliseconds: 500));

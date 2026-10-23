@@ -5,12 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/app_provider.dart';
+import '../controllers/lesson_instruction_playback.dart';
+import '../data/lesson_instruction_scripts.dart';
 import '../models/learning_progress.dart';
 import '../theme/kids_ui.dart';
 import 'button_sound.dart';
 import 'learner_widgets.dart';
 import 'lessons_menu_page.dart';
 import 'lesson_control_button.dart';
+import 'lesson_frame.dart';
 
 enum LetterLessonAudio { name, sound }
 
@@ -23,11 +26,17 @@ class LetterLessonPage extends StatefulWidget {
   State<LetterLessonPage> createState() => _LetterLessonPageState();
 }
 
-class _LetterLessonPageState extends State<LetterLessonPage> {
+class _LetterLessonPageState extends State<LetterLessonPage>
+    with LessonInstructionPlayback<LetterLessonPage> {
   int _index = 0;
   int _audioVersion = 0;
   bool _gridOpen = false;
   AppProvider? _provider;
+
+  @override
+  String get lessonInstructionPhrase => widget.audio == LetterLessonAudio.name
+      ? 'lesson-instruction-recognition'
+      : 'lesson-instruction-sounds';
 
   String get _letter => String.fromCharCode(65 + _index);
   String get _audioPhrase => widget.audio == LetterLessonAudio.name
@@ -52,6 +61,7 @@ class _LetterLessonPageState extends State<LetterLessonPage> {
 
   void _select(int index) {
     if (index < 0 || index > 25 || index == _index) return;
+    stopLessonInstruction();
     unawaited(_provider!.phonicsAudio.stop());
     setState(() {
       _index = index;
@@ -62,6 +72,7 @@ class _LetterLessonPageState extends State<LetterLessonPage> {
 
   Future<void> _openGrid() async {
     if (_gridOpen) return;
+    stopLessonInstruction();
     // Replace the audio control so intentional cancellation isn't an error.
     setState(() {
       _gridOpen = true;
@@ -72,7 +83,7 @@ class _LetterLessonPageState extends State<LetterLessonPage> {
       context: context,
       builder: (context) => Theme(
         data: KidsUi.theme,
-        child: _AlphabetPicker(selectedIndex: _index),
+        child: AlphabetLetterPicker(selectedIndex: _index),
       ),
     );
     if (!mounted) return;
@@ -82,82 +93,89 @@ class _LetterLessonPageState extends State<LetterLessonPage> {
 
   @override
   Widget build(BuildContext context) => LessonsMenuPage(
-        child: Column(children: [
-          Expanded(
-            child: LayoutBuilder(builder: (context, box) {
-              final side =
-                  math.min(480.0, math.min(box.maxWidth, box.maxHeight));
-              return Center(
-                child: Container(
-                  width: side,
-                  height: side,
-                  padding: EdgeInsets.all(side * .08),
-                  decoration: BoxDecoration(
-                    color: KidsUi.cardSurface,
-                    borderRadius: BorderRadius.circular(32),
-                    border: Border.all(color: Colors.white, width: 2),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x26335C7D),
-                        blurRadius: 20,
-                        offset: Offset(0, 8),
+        title: widget.audio == LetterLessonAudio.name
+            ? 'Letter Recognition'
+            : 'Letter Sounds',
+        introduction: lessonInstructionScripts[lessonInstructionPhrase]!,
+        introductionStatus: lessonIntroductionStatus,
+        instruction: lessonInstructionDefaults[lessonInstructionPhrase]!,
+        child: LayoutBuilder(builder: (context, available) {
+          final scale = MediaQuery.textScalerOf(context).scale(18) / 18;
+          final minimumHeight = 250 + 62 * scale;
+          final content = SizedBox(
+              height: math.max(available.maxHeight, minimumHeight),
+              child: Column(children: [
+                Expanded(
+                  child: LayoutBuilder(builder: (context, box) {
+                    final side =
+                        math.min(480.0, math.min(box.maxWidth, box.maxHeight));
+                    return Center(
+                      child: SizedBox(
+                        width: side,
+                        height: side,
+                        child: LessonFrame(
+                            radius: 32,
+                            padding: EdgeInsets.all(side * .08),
+                            child: Image.asset(
+                              'assets/images/letters/${_letter.toLowerCase()}.webp',
+                              key: const ValueKey('recognition-letter'),
+                              fit: BoxFit.contain,
+                              semanticLabel: 'Letter $_letter',
+                              cacheWidth: (side *
+                                      MediaQuery.devicePixelRatioOf(context))
+                                  .ceil(),
+                            )),
                       ),
-                    ],
-                  ),
-                  child: Image.asset(
-                    'assets/images/letters/${_letter.toLowerCase()}.webp',
-                    key: const ValueKey('recognition-letter'),
-                    fit: BoxFit.contain,
-                    semanticLabel: 'Letter $_letter',
-                    cacheWidth:
-                        (side * MediaQuery.devicePixelRatioOf(context)).ceil(),
-                  ),
+                    );
+                  }),
                 ),
-              );
-            }),
-          ),
-          const SizedBox(height: 12),
-          AudioButton(
-            key: ValueKey('letter-${widget.audio.name}-$_index-$_audioVersion'),
-            phrase: _audioPhrase,
-            onPlayed: () => _provider!.recordLetterListening(
-                _letter,
-                widget.audio == LetterLessonAudio.name
-                    ? LetterListeningKind.name
-                    : LetterListeningKind.sound),
-            label: 'Sound',
-            icon: Icons.volume_up_rounded,
-            color: const Color(0xFF087F86),
-            lessonArt: true,
-          ),
-          const SizedBox(height: 20),
-          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Expanded(
-              child: _LetterNavigationButton(
-                label: 'Previous',
-                icon: Icons.arrow_back_rounded,
-                onPressed: _index == 0 ? null : () => _select(_index - 1),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _LetterNavigationButton(
-                label: 'A–Z Grid',
-                icon: Icons.grid_view_rounded,
-                primary: true,
-                onPressed: _gridOpen ? null : _openGrid,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _LetterNavigationButton(
-                label: 'Next',
-                icon: Icons.arrow_forward_rounded,
-                onPressed: _index == 25 ? null : () => _select(_index + 1),
-              ),
-            ),
-          ]),
-        ]),
+                const SizedBox(height: 12),
+                AudioButton(
+                  key: ValueKey(
+                      'letter-${widget.audio.name}-$_index-$_audioVersion'),
+                  phrase: _audioPhrase,
+                  onBeforePlay: stopLessonInstruction,
+                  onPlayed: () => _provider!.recordLetterListening(
+                      _letter,
+                      widget.audio == LetterLessonAudio.name
+                          ? LetterListeningKind.name
+                          : LetterListeningKind.sound),
+                  label: 'Sound',
+                  icon: Icons.volume_up_rounded,
+                  color: const Color(0xFF087F86),
+                  lessonArt: true,
+                ),
+                const SizedBox(height: 20),
+                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Expanded(
+                    child: _LetterNavigationButton(
+                      label: 'Previous',
+                      icon: Icons.arrow_back_rounded,
+                      onPressed: _index == 0 ? null : () => _select(_index - 1),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _LetterNavigationButton(
+                      label: 'A–Z Grid',
+                      icon: Icons.grid_view_rounded,
+                      primary: true,
+                      onPressed: _gridOpen ? null : _openGrid,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _LetterNavigationButton(
+                      label: 'Next',
+                      icon: Icons.arrow_forward_rounded,
+                      onPressed:
+                          _index == 25 ? null : () => _select(_index + 1),
+                    ),
+                  ),
+                ]),
+              ]));
+          return SingleChildScrollView(child: content);
+        }),
       );
 }
 
@@ -177,9 +195,13 @@ class _LetterNavigationButton extends LessonControlButton {
                         : null);
 }
 
-class _AlphabetPicker extends StatelessWidget {
-  const _AlphabetPicker({required this.selectedIndex});
+class AlphabetLetterPicker extends StatelessWidget {
+  const AlphabetLetterPicker(
+      {super.key,
+      required this.selectedIndex,
+      this.gridKey = const ValueKey('recognition-grid')});
   final int selectedIndex;
+  final Key gridKey;
 
   @override
   Widget build(BuildContext context) => AlertDialog(
@@ -211,7 +233,7 @@ class _AlphabetPicker extends StatelessWidget {
             final scale = MediaQuery.textScalerOf(context).scale(24) / 24;
             final columns = (box.maxWidth / (64 * scale)).floor().clamp(2, 6);
             return GridView.builder(
-              key: const ValueKey('recognition-grid'),
+              key: gridKey,
               padding: EdgeInsets.zero,
               itemCount: 26,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

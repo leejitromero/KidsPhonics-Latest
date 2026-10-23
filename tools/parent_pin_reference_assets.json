@@ -1,0 +1,29 @@
+{
+  "mode": "built-in image_gen",
+  "useCase": "stylized-concept",
+  "referenceRole": "User-provided Parent Access and PIN setup images used as visual references.",
+  "assets": [
+    {
+      "path": "assets/images/parent_access/parent_access_lock.png",
+      "prompt": "Use case: stylized-concept. Asset type: transparent cutout UI illustration for a children's phonics app Parent Access screen. Create ONE large centered padlock, front view with slight sculpted 3D depth. Polished glossy toy-like cartoon render: rounded emerald and lime-green arched shackle, thick softly beveled ivory/pale mint lock body, dark forest-green keyhole, bright white specular highlights, soft ambient occlusion and dimensional green edging. Match a gentle green classroom app theme. Keep silhouette simple, friendly, premium and clearly readable at 120 pixels. Entire object visible with modest transparent margin. Genuine transparent background, including keyhole opening where appropriate. No text, letters, people, face, stars, clouds, foliage, leaves, flowers, floor, background, buttons, UI panels or extra objects. Only the lock.",
+      "sha256": "4226FF544FE05D0C8AB1E667F3E27F74ABB47F93F42C8E72BA01972110256AE2",
+      "dimensions": [
+        1218,
+        1291
+      ],
+      "transparentBackground": true,
+      "format": "RGBA PNG"
+    },
+    {
+      "path": "assets/images/parent_access/parent_setup_lock.png",
+      "prompt": "Use case: stylized-concept. Asset type: transparent cutout UI illustration for a children's phonics app Set Up Parent PIN screen. Create ONE small friendly house-shaped security icon, straight front view with sculpted 3D depth: thick glossy lime/emerald green peaked roof with rounded edges and small green chimney, ivory white rounded house body, a prominent shiny golden-yellow padlock with dark keyhole in the center of the house. Polished high-quality glossy toy-like 3D cartoon render, soft ambient occlusion, beveled edges and bright white specular highlights. Match a gentle green classroom app theme. Whole icon visible, isolated and centered, readable at 120 pixels, modest transparent margin. Genuine transparent background. No text, letters, people, faces, stars, clouds, foliage, leaves, flowers, floor, background, buttons, UI panels or extra objects.",
+      "sha256": "A3DA3A2A008400CE310907024B139A7C841815649ACCDF0D40FA7C0F6D7EA6D1",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "transparentBackground": true,
+      "format": "RGBA PNG"
+    }
+  ]
+}

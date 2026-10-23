@@ -141,103 +141,80 @@ class ProgressLetterTile extends StatelessWidget {
       {super.key, required this.letter, required this.onPressed});
   final LetterProgress letter;
   final VoidCallback onPressed;
+  static const purpleFrame =
+      'assets/images/progress_collection/letter_frame_purple.png';
+  static const greenFrame =
+      'assets/images/progress_collection/letter_frame_green.png';
+
   @override
   Widget build(BuildContext context) {
     final color = collectionStatusColor(letter.status);
-    final border = Color.lerp(color, Colors.white, .45)!;
+    final mastered = letter.status == LearningStatus.mastered;
     return Semantics(
         label: '${letter.letter}: ${collectionStatusName(letter.status)}',
         button: true,
         child: Tooltip(
             message: collectionStatusName(letter.status),
-            child: DecoratedBox(
-                decoration: BoxDecoration(
+            child: Material(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(16),
+                child: InkWell(
+                    key: ValueKey('progress-letter-${letter.letter}'),
                     borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                          color: color.withValues(alpha: .22),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4))
-                    ]),
-                child: Material(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    clipBehavior: Clip.antiAlias,
-                    child: InkWell(
-                        key: ValueKey('progress-letter-${letter.letter}'),
-                        onTap: withButtonSound(onPressed),
-                        child: Ink(
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: [
-                                      Colors.white,
-                                      _statusTint(letter.status)
-                                    ]),
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(color: border, width: 2)),
-                            child: Stack(children: [
-                              const Positioned.fill(
-                                  child: IgnorePointer(
-                                      child: CustomPaint(
-                                          painter: _CloudStarsPainter()))),
-                              Padding(
-                                  padding: const EdgeInsets.all(6),
-                                  child: SizedBox(
-                                      width: double.infinity,
-                                      child: Column(children: [
-                                        Expanded(
-                                            child: FittedBox(
-                                                fit: BoxFit.scaleDown,
-                                                child: Text(letter.letter,
-                                                    style: TextStyle(
-                                                        fontFamily: 'Nunito',
-                                                        fontSize: 40,
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                        color: color,
-                                                        shadows: [
-                                                          const Shadow(
-                                                              color:
-                                                                  Colors.white,
-                                                              offset: Offset(
-                                                                  0, -1)),
-                                                          Shadow(
-                                                              color: color
-                                                                  .withValues(
-                                                                      alpha:
-                                                                          .2),
-                                                              blurRadius: 2,
-                                                              offset:
-                                                                  const Offset(
-                                                                      0, 2))
-                                                        ])))),
-                                        const SizedBox(height: 2),
-                                        Container(
-                                            width: 22,
-                                            height: 22,
-                                            decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color:
-                                                    _statusTint(letter.status),
-                                                border: Border.all(
+                    onTap: withButtonSound(onPressed),
+                    child: LayoutBuilder(
+                        builder: (_, box) => ClipRect(
+                                child: Stack(fit: StackFit.expand, children: [
+                              // Display the frame's source rectangle (200, 40,
+                              // 850, 1175), keeping the original PNG unchanged.
+                              Positioned(
+                                  left: -box.maxWidth * 200 / 850,
+                                  top: -box.maxHeight * 40 / 1175,
+                                  width: box.maxWidth * 1254 / 850,
+                                  height: box.maxHeight * 1254 / 1175,
+                                  child: Image.asset(
+                                      mastered ? greenFrame : purpleFrame,
+                                      key: ValueKey(
+                                          'progress-letter-frame-${letter.letter}'),
+                                      fit: BoxFit.fill,
+                                      cacheWidth: 400,
+                                      excludeFromSemantics: true)),
+                              Positioned(
+                                  left: box.maxWidth * .17,
+                                  top: box.maxHeight * .18,
+                                  width: box.maxWidth * .66,
+                                  height: box.maxHeight * .57,
+                                  child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(letter.letter,
+                                          style: TextStyle(
+                                              fontFamily: 'Nunito',
+                                              fontSize: 40,
+                                              fontWeight: FontWeight.w900,
+                                              color: color,
+                                              shadows: [
+                                                const Shadow(
                                                     color: Colors.white,
-                                                    width: 2),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: color.withValues(
-                                                          alpha: .15),
-                                                      blurRadius: 4,
-                                                      offset:
-                                                          const Offset(0, 2))
-                                                ]),
-                                            child: Icon(
-                                                collectionStatusIcon(
-                                                    letter.status),
-                                                color: color,
-                                                size: 15)),
-                                      ]))),
+                                                    offset: Offset(0, -1)),
+                                                Shadow(
+                                                    color: color.withValues(
+                                                        alpha: .2),
+                                                    blurRadius: 2,
+                                                    offset: const Offset(0, 2))
+                                              ])))),
+                              if (mastered)
+                                Positioned(
+                                    left: box.maxWidth * .454,
+                                    top: box.maxHeight * .885,
+                                    width: box.maxWidth * .10,
+                                    height: box.maxHeight * .075,
+                                    child: FittedBox(
+                                        fit: BoxFit.contain,
+                                        child: Icon(Icons.check_rounded,
+                                            key: ValueKey(
+                                                'progress-letter-check-${letter.letter}'),
+                                            color: color,
+                                            size: 24)))
                             ])))))));
   }
 }

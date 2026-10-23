@@ -217,11 +217,6 @@ class FlappyFlightPanel extends StatelessWidget {
                               offset: Offset(-8 * (1 - value), 6 * (1 - value)),
                               child: child),
                         ))),
-                    Positioned(
-                        top: width * .10,
-                        right: -2,
-                        width: width * .45,
-                        child: const _FlightSpeechBubble()),
                   ]),
                 )),
           ),
@@ -261,64 +256,6 @@ class _FlightTitle extends StatelessWidget {
               ])),
         ]));
   }
-}
-
-class _FlightSpeechBubble extends StatelessWidget {
-  const _FlightSpeechBubble();
-  @override
-  Widget build(BuildContext context) => CustomPaint(
-      foregroundPainter: const _BubbleTail(),
-      child: Container(
-        key: const ValueKey('flappy-instruction-bubble'),
-        padding: const EdgeInsets.fromLTRB(8, 12, 8, 14),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: const Color(0xFFEA9AED), width: 3),
-            gradient:
-                const LinearGradient(colors: [Colors.white, Color(0xFFFFE8FB)]),
-            boxShadow: const [
-              BoxShadow(
-                  color: Color(0x448D43B7), blurRadius: 5, offset: Offset(0, 3))
-            ]),
-        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Image.asset(GameMascotCoach.mascotAsset,
-              width: 28,
-              height: 34,
-              cacheWidth: 128,
-              excludeFromSemantics: true),
-          const SizedBox(width: 4),
-          const Expanded(
-              child: Text('Tap to fly through the gaps!',
-                  style: TextStyle(
-                      fontFamily: 'Nunito',
-                      fontSize: 12,
-                      color: GameDesign.ink,
-                      fontWeight: FontWeight.w900))),
-        ]),
-      ));
-}
-
-class _BubbleTail extends CustomPainter {
-  const _BubbleTail();
-  @override
-  void paint(Canvas canvas, Size size) {
-    final path = Path()
-      ..moveTo(20, size.height - 4)
-      ..lineTo(14, size.height + 12)
-      ..lineTo(42, size.height - 4);
-    canvas.drawPath(
-        path,
-        Paint()
-          ..color = const Color(0xFFEA9AED)
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 3
-          ..strokeJoin = StrokeJoin.round);
-    path.close();
-    canvas.drawPath(path, Paint()..color = const Color(0xFFFFF4FD));
-  }
-
-  @override
-  bool shouldRepaint(_BubbleTail oldDelegate) => false;
 }
 
 class _FlightAction extends StatelessWidget {

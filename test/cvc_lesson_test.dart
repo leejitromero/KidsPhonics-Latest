@@ -49,7 +49,8 @@ void main() {
     }
     await finished;
     expect(heard, [
-      'cvc-intro',
+      'cvc-intro-1',
+      'cvc-intro-2',
       'cvc-word-cat',
       for (var i = 0; i < 3; i++) ...[
         'lesson-sound-C',
@@ -182,7 +183,8 @@ void main() {
       for (final phrase in [
         word.wordAudio,
         word.praiseAudio,
-        'cvc-intro',
+        'cvc-intro-1',
+        'cvc-intro-2',
         for (var i = 0; i < 3; i++) word.soundAudio(i)
       ]) {
         final asset = PhonicsAudioService.assetForPhrase(phrase);
@@ -193,7 +195,7 @@ void main() {
       }
     }
     expect(Directory('assets/audio/cvc_lesson').listSync().whereType<File>(),
-        hasLength(35));
+        hasLength(34));
   });
 
   Finder control(String label) => find.widgetWithText(OutlinedButton, label);
@@ -207,7 +209,7 @@ void main() {
       voiceEnabled: false,
     );
     final playback = lesson.start(introduction: true);
-    await Future<void>.delayed(const Duration(milliseconds: 850));
+    await Future<void>.delayed(const Duration(milliseconds: 1450));
     expect(lesson.phase, CvcPhase.picture);
     lesson.dispose();
     await playback;
@@ -216,6 +218,16 @@ void main() {
   CvcWordsScreen visualLesson() => CvcWordsScreen(
       controller: CvcLessonController(
           play: (_) async => true, stop: () async {}, voiceEnabled: false));
+
+  Future<void> finishIntroduction(WidgetTester t) async {
+    final lesson =
+        t.widget<CvcWordsScreen>(find.byType(CvcWordsScreen)).controller!;
+    for (var i = 0; i < 240 && lesson.phase == CvcPhase.intro; i++) {
+      await t.pump(const Duration(milliseconds: 500));
+    }
+    expect(lesson.phase, isNot(CvcPhase.intro));
+    await t.pump();
+  }
 
   for (final size in [
     const Size(320, 568),
@@ -245,6 +257,7 @@ void main() {
             () => Future<void>.delayed(const Duration(milliseconds: 100)));
         await t.pump();
         await t.pump(const Duration(milliseconds: 700));
+        await finishIntroduction(t);
         await t.pump();
         expect(find.byType(CvcWordPicture), findsOneWidget);
         final nav = ['Previous', 'Hear Again', 'Next']
@@ -281,6 +294,7 @@ void main() {
     await t.runAsync(() => Future<void>.delayed(Duration.zero));
     await t.pump();
     await t.pump(const Duration(milliseconds: 700));
+    await finishIntroduction(t);
     for (final word in cvcLessonWords) {
       expect(t.widget<CvcWordPicture>(find.byType(CvcWordPicture)).word.word,
           word.word);

@@ -1,0 +1,61 @@
+﻿{
+    "reviewDate":  "2026-10-11",
+    "timezone":  "Asia/Manila",
+    "verifiedUtc":  "2026-10-11T09:43:17.6000198Z",
+    "scope":  "Home screen only",
+    "staticAnalysis":  "No issues found",
+    "focusedTestsPassed":  78,
+    "reviewedExistingRuntimeFilesUnchanged":  true,
+    "suppliedAssetCopiesVerified":  true,
+    "requiredAssets":  687,
+    "unusedAssetCandidates":  0,
+    "mapping":  {
+                    "lowerRight":  "Lessons mascot",
+                    "upperLeft":  "Games house",
+                    "lowerLeft":  "Games mascot",
+                    "progressAndParents":  "Home navigation bar",
+                    "upperRight":  "Lessons house"
+                },
+    "backgroundFrameCount":  4,
+    "blendedBackgroundFrameMilliseconds":  700,
+    "mascotPlayLoopMilliseconds":  4200,
+    "mediumPortraitScrollExtent":  0,
+    "layouts":  [
+                    "320x568",
+                    "390x844",
+                    "430x932",
+                    "800x600",
+                    "320x568 with 2x text",
+                    "390x844 with system insets"
+                ],
+    "sourceSHA256":  {
+                         "lib/screens/home_screen.dart":  "1f31dd81f468b8c12199185856efd3a5a07dc712c9497908e9253fe3a8b9952b",
+                         "lib/data/home_village.dart":  "91ed7ad098e5742a9c93c5e08493d521767253ce45369c1cbeeadd8fb4b5c0d2",
+                         "lib/widgets/home_village_menu.dart":  "712fdee95e817c2f73936de13f8c266b1ffcec61a8730bccdbc0f11352c68f6d",
+                         "lib/widgets/home_playground_mascot.dart":  "161f1569033af4a7dbd85ca807dd971ebe84acb733fdddab30b8163eacb6f886",
+                         "lib/widgets/home_village_footer.dart":  "ab24dee58855195c972887753641f2cde29047147f0cbaa1ce11a1210a6075a3",
+                         "pubspec.yaml":  "3ea73c32086f710e002781d097fceb689ecc96b41bc1e8374d8d9f26341fc498",
+                         "test/home_mascot_menu_test.dart":  "ec92d58108d33145b60cf67e193f2d029c8f32f0c9a6e794f2b6f193b7100178",
+                         "test/home_voice_test.dart":  "0b66684fc0abd64d3b147e36072c7b6e58db98a24785048b211057e89f95ca0c",
+                         "test/home_continue_test.dart":  "1c36e7a20e59b92b28ce9abc0d9c48ce94c796f1a447692f960fa8932edcea4a",
+                         "test/animated_screen_art_test.dart":  "06a51b53b05e0470b03b7193994476f849dddb856db66c1966e4afc1d0f53e52",
+                         "test/asset_usage_audit_test.dart":  "de4bd9384fab6f2d5e1e4d6faf855ada58676146240d78cf0e86fe63a99f0014",
+                         "assets/images/home_village/progress.png":  "06580f7ef792b02bd0abae6cb21ae89e3ca9b8038f749b87c428833ebb3115e9",
+                         "assets/images/home_village/parents.png":  "374790eb196793e9344648d03250f30570245b40b6dd1411decde052b37047d6",
+                         "assets/images/home_village/lessons_house.png":  "81579d021abc678d8b216060ed6ccb2da577b0fd40b9d6975ad4737da5682cf1",
+                         "assets/images/home_village/lessons.png":  "292a010173993ea18fddc73213197989d31f138da727e557800bde35adb4dc32",
+                         "assets/images/home_village/games_house.png":  "45124b64608345e50fea6c83c7ba372f16c577156121915dbcefd48c383abe46",
+                         "assets/images/home_village/games.png":  "c0497b5e9d847245afebac7920d2412246f9431378d7190c8dbe50764adfc950",
+                         "assets/images/home_village/bg_4.png":  "707953cedc68fc55fbcadf75c63d4500fb9f584899757713a0840c1f28fdbaa3",
+                         "assets/images/home_village/bg_3.png":  "428207a69278e5627d74040fee8864567b230d3584ed046fb7e6b3eca51d68db",
+                         "assets/images/home_village/bg_2.png":  "9bc5b3a98270268b654bd0b9ee7416a53caf3d4f0758079256f4a803e1413121",
+                         "assets/images/home_village/bg_1.png":  "21d8af6be37436f71e5806483cf9e8f92ef49f0c31ea249f7ba841af5858ba1c"
+                     },
+    "logs":  {
+                 "analysis":  "build/home_garden_analysis.log",
+                 "tests":  "build/home_garden_final_tests.log"
+             },
+    "preview":  "build/ui_previews/home_garden_390.png",
+    "apkRebuilt":  false,
+    "physicalDeviceTested":  false
+}

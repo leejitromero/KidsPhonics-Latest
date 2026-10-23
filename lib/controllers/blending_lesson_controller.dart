@@ -10,12 +10,14 @@ class BlendingLessonController extends ChangeNotifier {
       {required this.play,
       required this.stop,
       this.voiceEnabled = true,
+      this.playIntroduction,
       Random? random})
       : _random = random ?? Random() {
     _shuffle();
   }
   final Future<bool> Function(String) play;
   final Future<void> Function() stop;
+  Future<bool> Function()? playIntroduction;
   final Random _random;
   bool voiceEnabled;
   int index = 0;
@@ -118,7 +120,13 @@ class BlendingLessonController extends ChangeNotifier {
     _invalidate();
     phase = BlendingPhase.intro;
     _enqueue((generation) async {
-      if (!await _cue('blend-intro', generation)) return;
+      if (playIntroduction != null) {
+        if (!await playIntroduction!()) return;
+      } else {
+        if (!await _cue('blend-intro-1', generation)) return;
+        if (!await _cue('blend-intro-2', generation)) return;
+      }
+      if (!_current(generation)) return;
       phase = BlendingPhase.puzzle;
     });
   }

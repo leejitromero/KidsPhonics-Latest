@@ -1,0 +1,49 @@
+{
+  "version": "1.0.32+33",
+  "verifiedUtc": "2026-10-23T09:00:09.120069+00:00",
+  "APK": "output/apk/KidsPhonics-1.0.32-build33.apk",
+  "capturedSourceInputs": 1035,
+  "sourceInputsUnchanged": true,
+  "registeredAssetsVerified": 828,
+  "bundledAssetsMatchSource": 828,
+  "suppliedGameRecordingsVerified": 11,
+  "suppliedLessonRecordingsVerified": 10,
+  "retiredIntroRecordingsAbsent": 5,
+  "ApkBytes": 496921360,
+  "ApkSHA256": "F93F8F28CB12927647C1E451C96F55DABD5A98BE8F1291DDF372E4D3E499BE43",
+  "physicalDeviceTested": false,
+  "signatureVerified": true,
+  "updateCertificateMatchesPreviousRelease": true,
+  "signerCertificateSHA256": "e51915ff388c75d5cb980d40ecb354a5379806fee2b3dc67a36ab4e701774f69",
+  "packageMetadata": "package: name='com.example.kidsphonics' versionCode='33' versionName='1.0.32' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+  "androidVersionName": "1.0.32",
+  "androidVersionCode": 33,
+  "androidArchitectures": [
+    "armeabi-v7a",
+    "arm64-v8a",
+    "x86_64"
+  ],
+  "updates": [
+    "Soft green 3D Parent Access and Parent PIN setup",
+    "Compact glossy Games cards with labeled Play buttons",
+    "Supplied My Letters summary frame and filter buttons",
+    "Purple unmastered and green mastered letter frames with check marks",
+    "Shared Recommended Practice frame on My Journey, My Letters and Parents",
+    "Previously delivered Settings, Quick Check and game improvements"
+  ],
+  "validationLogs": [
+    "build/parent_pin_reference_analysis.log",
+    "build/parent_pin_reference_regression.log",
+    "build/parent_pin_reference_layout.log",
+    "build/parent_pin_reference_integration.log",
+    "build/games_glossy_cards_analysis.log",
+    "build/games_glossy_cards_checks.log",
+    "build/games_glossy_cards_artwork.log",
+    "build/progress_frame_analysis.log",
+    "build/progress_frame_checks.log",
+    "build/progress_letter_frames_analysis.log",
+    "build/progress_letter_frames_checks.log",
+    "build/recommended_practice_analysis.log",
+    "build/recommended_practice_checks.log"
+  ]
+}

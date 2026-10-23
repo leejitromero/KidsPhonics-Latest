@@ -7,6 +7,21 @@ import 'package:kidsphonics/widgets/game_zone_card.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show mount, close;
 
+Finder gameCard(String title) => find.byWidgetPredicate(
+    (widget) => widget is GameZoneCard && widget.title == title);
+
+int gameCount(WidgetTester t) =>
+    (t.widget<GridView>(find.byType(GridView)).childrenDelegate
+            as SliverChildBuilderDelegate)
+        .childCount!;
+
+Future<void> reachGame(WidgetTester t, String title) async {
+  await t.scrollUntilVisible(gameCard(title), 150,
+      scrollable: find.descendant(
+          of: find.byType(GridView), matching: find.byType(Scrollable)));
+  await t.pumpAndSettle();
+}
+
 void main() {
   setUp(() {
     TestWidgetsFlutterBinding
@@ -27,27 +42,28 @@ void main() {
       mockProgressAudio();
       final p = await mount(t, const GamesScreen());
       await t.pumpAndSettle();
-      expect(find.byType(GameZoneCard), findsNWidgets(11));
-      expect(find.byKey(const ValueKey('game-zone-mascot')), findsOneWidget);
+      expect(gameCount(t), 11);
+      expect(find.byKey(const ValueKey('game-zone-mascot')), findsNothing);
+      expect(find.byKey(const ValueKey('games-profile-boy')), findsOneWidget);
       await t.ensureVisible(find.widgetWithText(ChoiceChip, 'Letters'));
       await t.pumpAndSettle();
       await t.tap(find.widgetWithText(ChoiceChip, 'Letters'));
       await t.pumpAndSettle();
-      expect(find.byType(GameZoneCard), findsNWidgets(2));
-      expect(find.text('Flappy Letters'), findsOneWidget);
-      expect(find.text('Alphabet Order'), findsOneWidget);
-      expect(find.text('Sound Match'), findsNothing);
+      expect(gameCount(t), 2);
+      expect(gameCard('Flappy Letters'), findsOneWidget);
+      expect(gameCard('Alphabet Order'), findsOneWidget);
+      expect(gameCard('Sound Match'), findsNothing);
       await t.ensureVisible(find.widgetWithText(ChoiceChip, 'Sounds'));
       await t.pumpAndSettle();
       await t.tap(find.widgetWithText(ChoiceChip, 'Sounds'));
       await t.pumpAndSettle();
-      expect(find.byType(GameZoneCard), findsNWidgets(3));
+      expect(gameCount(t), 3);
       await t.ensureVisible(find.widgetWithText(ChoiceChip, 'Words'));
       await t.pumpAndSettle();
       await t.tap(find.widgetWithText(ChoiceChip, 'Words'));
       await t.pumpAndSettle();
-      expect(find.byType(GameZoneCard), findsNWidgets(6));
-      expect(find.text('Rhyming Words'), findsOneWidget);
+      expect(gameCount(t), 6);
+      await reachGame(t, 'Rhyming Words');
       expect(t.takeException(), isNull);
       await close(t, p);
     });
@@ -58,9 +74,12 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     mockProgressAudio();
     final p = await mount(t, const GamesScreen());
-    await t.ensureVisible(find.text('Rhyming Words'));
+    await reachGame(t, 'Rhyming Words');
     await t.pumpAndSettle();
-    await t.tap(find.text('Rhyming Words'));
+    final play = find.byKey(const ValueKey('game-play-Rhyming Words'));
+    await t.ensureVisible(play);
+    await t.pumpAndSettle();
+    await t.tap(play);
     await t.pumpAndSettle();
     await t.tap(find.text('Easy'));
     await t.pump();
@@ -71,8 +90,10 @@ void main() {
     await close(t, p);
   });
 
-  testWidgets('large text stacks cards and game still opens difficulty picker',
+  testWidgets('large text keeps artwork reachable and opens difficulty picker',
       (t) async {
+    await t.binding.setSurfaceSize(const Size(320, 568));
+    addTearDown(() => t.binding.setSurfaceSize(null));
     SharedPreferences.setMockInitialValues({});
     mockProgressAudio();
     final p = await mount(
@@ -84,11 +105,17 @@ void main() {
                 disableAnimations: true),
             child: GamesScreen()));
     await t.pumpAndSettle();
-    await t.ensureVisible(find.text('Sound Match'));
+    await t.ensureVisible(gameCard('Sound Match'));
     await t.pumpAndSettle();
-    await t.tap(find.text('Sound Match'));
+    final visibleCard = t
+        .getRect(gameCard('Sound Match'))
+        .intersect(t.getRect(find.byType(GridView)));
+    expect(visibleCard.width, greaterThanOrEqualTo(48));
+    expect(visibleCard.height, greaterThanOrEqualTo(48));
+    await t.tapAt(visibleCard.center);
     await t.pump();
-    await t.runAsync(() => Future<void>.delayed(Duration.zero));
+    await t.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 100)));
     await t.pump(const Duration(milliseconds: 500));
     expect(find.text('Easy'), findsOneWidget);
     expect(find.text('Medium'), findsOneWidget);

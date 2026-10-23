@@ -9,10 +9,14 @@ class ActivityRoundHeader extends StatelessWidget {
       this.difficulty,
       this.current,
       this.total,
+      this.fitLabels = false,
+      this.leaves = true,
       required this.label});
   final Difficulty? difficulty;
   final int? current, total;
   final String label;
+  final bool fitLabels;
+  final bool leaves;
 
   @override
   Widget build(BuildContext context) {
@@ -25,30 +29,70 @@ class ActivityRoundHeader extends StatelessWidget {
     if (difficulty == null && !hasProgress) return const SizedBox.shrink();
     final content =
         Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      Row(children: [
-        if (difficulty != null)
-          Container(
-              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [Color.lerp(accent, Colors.white, .18)!, accent]),
-                  borderRadius: BorderRadius.circular(12)),
-              child: Text(difficulty!.label,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w900))),
-        if (hasProgress) ...[
-          const SizedBox(width: 6),
-          Expanded(
-              child: Text('$current / $total ${label.toLowerCase()}',
-                  textAlign: TextAlign.end,
-                  style: const TextStyle(
-                      color: GameDesign.ink,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w900))),
-        ],
-      ]),
+      if (fitLabels)
+        SizedBox(
+            height: 34,
+            child: Row(children: [
+              if (difficulty != null)
+                Flexible(
+                    flex: 4,
+                    child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 9, vertical: 5),
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(colors: [
+                              Color.lerp(accent, Colors.white, .18)!,
+                              accent
+                            ]),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(difficulty!.label,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w900))))),
+              if (hasProgress) ...[
+                const SizedBox(width: 6),
+                Expanded(
+                    flex: 6,
+                    child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerRight,
+                        child: Text('$current / $total ${label.toLowerCase()}',
+                            style: const TextStyle(
+                                color: GameDesign.ink,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w900))))
+              ]
+            ]))
+      else
+        Row(children: [
+          if (difficulty != null)
+            Container(
+                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                      Color.lerp(accent, Colors.white, .18)!,
+                      accent
+                    ]),
+                    borderRadius: BorderRadius.circular(12)),
+                child: Text(difficulty!.label,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w900))),
+          if (hasProgress) ...[
+            const SizedBox(width: 6),
+            Expanded(
+                child: Text('$current / $total ${label.toLowerCase()}',
+                    textAlign: TextAlign.end,
+                    style: const TextStyle(
+                        color: GameDesign.ink,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w900))),
+          ],
+        ]),
       if (hasProgress) ...[
         const SizedBox(height: 6),
         Semantics(
@@ -63,6 +107,7 @@ class ActivityRoundHeader extends StatelessWidget {
     ]);
     if (GameDesign.active(context)) {
       return ForestPanel(
+          leaves: leaves,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
           child: content);
     }

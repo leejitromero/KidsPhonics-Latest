@@ -85,6 +85,7 @@ void main() {
       (t) async {
     final audio = QuizAudioHarness()..install();
     final p = await mount(t, const RumbledWordsScreen());
+    await audio.finishGameIntro(t, 'rumbled_word.mp3');
     await t.runAsync(() => p.toggleSfx());
     await t.pump();
     final task = shownWord(t);

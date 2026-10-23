@@ -1,0 +1,48 @@
+{
+  "version": "1.0.30+31",
+  "verifiedUtc": "2026-10-21T09:18:48.791166+00:00",
+  "APK": "output/apk/KidsPhonics-1.0.30-build31.apk",
+  "capturedSourceInputs": 1020,
+  "sourceInputsUnchanged": true,
+  "registeredAssetsVerified": 821,
+  "bundledAssetsMatchSource": 821,
+  "suppliedGameRecordingsVerified": 11,
+  "suppliedLessonRecordingsVerified": 10,
+  "retiredIntroRecordingsAbsent": 5,
+  "ApkBytes": 488076814,
+  "ApkSHA256": "F9E2BF0F9D97A623685758A2320AF4BE1BA4B036923EDC2716036C80C9759847",
+  "physicalDeviceTested": false,
+  "signatureVerified": true,
+  "updateCertificateMatchesPreviousRelease": true,
+  "signerCertificateSHA256": "e51915ff388c75d5cb980d40ecb354a5379806fee2b3dc67a36ab4e701774f69",
+  "packageMetadata": "package: name='com.example.kidsphonics' versionCode='31' versionName='1.0.30' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+  "androidVersionName": "1.0.30",
+  "androidVersionCode": 31,
+  "androidArchitectures": [
+    "armeabi-v7a",
+    "arm64-v8a",
+    "x86_64"
+  ],
+  "updates": [
+    "Square Games menu cards",
+    "Memory Flip reference layout",
+    "Alphabet Order reference layout without decorative leaves",
+    "Missing Vowel choices, sound sequence, highlighting and replay",
+    "Picture Match answer box and aligned choices",
+    "Rumbled Words larger tiles and polished controls",
+    "Rhyming Words readable word and score panels, controls and pause overlay",
+    "Existing progress tracking and instruction recordings"
+  ],
+  "validationLogs": [
+    "build/games_square_checks.log",
+    "build/games_square_analysis.log",
+    "build/memory_reference_gameplay.log",
+    "build/memory_reference_integration.log",
+    "build/alphabet_reference_checks.log",
+    "build/alphabet_reference_integration.log",
+    "build/missing_vowel_sounds_regression.log",
+    "build/missing_vowel_sounds_integration.log",
+    "build/rumbled_ui_visibility.log",
+    "build/rumbled_ui_gameplay_checks.log"
+  ]
+}

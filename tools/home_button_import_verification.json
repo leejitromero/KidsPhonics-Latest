@@ -1,0 +1,17 @@
+﻿[
+    {
+        "file":  "lesson_button.png",
+        "sha256":  "75885511CDC100F30290BBC9E54E72D2BFD32244BF356C3FBC1EA58FED468BBD",
+        "matchesOriginal":  true
+    },
+    {
+        "file":  "games_button.png",
+        "sha256":  "46572F2D668E11A3E7E00C0DC4F4AA753687055674315F0540F58F363E70B6A5",
+        "matchesOriginal":  true
+    },
+    {
+        "file":  "practice_letter_button.png",
+        "sha256":  "6B5B252E27155119823BD26AA4178B734EC4B657989AB91A56D611517AAD1BD5",
+        "matchesOriginal":  true
+    }
+]

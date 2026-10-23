@@ -2,12 +2,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
+import '../controllers/lesson_instruction_playback.dart';
+import '../data/lesson_instruction_scripts.dart';
 import '../models/learning_progress.dart';
 import '../theme/kids_ui.dart';
 import '../widgets/button_sound.dart';
 import '../widgets/learner_widgets.dart';
 import '../widgets/lesson_control_button.dart';
 import '../widgets/lessons_menu_page.dart';
+import '../widgets/lesson_frame.dart';
 
 class VowelSoundsScreen extends StatefulWidget {
   const VowelSoundsScreen({super.key});
@@ -15,7 +18,10 @@ class VowelSoundsScreen extends StatefulWidget {
   State<VowelSoundsScreen> createState() => _VowelSoundsScreenState();
 }
 
-class _VowelSoundsScreenState extends State<VowelSoundsScreen> {
+class _VowelSoundsScreenState extends State<VowelSoundsScreen>
+    with LessonInstructionPlayback<VowelSoundsScreen> {
+  @override
+  String get lessonInstructionPhrase => 'lesson-instruction-vowels';
   static const _vowels = ['A', 'E', 'I', 'O', 'U'];
   int _index = 0;
   AppProvider? _provider;
@@ -32,6 +38,7 @@ class _VowelSoundsScreenState extends State<VowelSoundsScreen> {
 
   void _select(int index) {
     if (index == _index || index < 0 || index >= _vowels.length) return;
+    stopLessonInstruction();
     unawaited(_provider!.phonicsAudio.stop());
     setState(() => _index = index);
     unawaited(_provider!.markLetterViewed(_letter));
@@ -45,17 +52,15 @@ class _VowelSoundsScreenState extends State<VowelSoundsScreen> {
 
   @override
   Widget build(BuildContext context) => LessonsMenuPage(
-          child: Column(children: [
+      title: 'Short Vowel Sounds',
+      introduction: lessonInstructionScripts[lessonInstructionPhrase]!,
+      introductionStatus: lessonIntroductionStatus,
+      instruction: lessonInstructionDefaults[lessonInstructionPhrase]!,
+      child: Column(children: [
         Expanded(child: LayoutBuilder(builder: (context, box) {
           final pictureHeight = (box.maxHeight - 240).clamp(120.0, 330.0);
           return SingleChildScrollView(
               child: Column(children: [
-            const Text('Short Vowel Sounds',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900,
-                    color: KidsUi.ink)),
             const Text('Meet the Vowels!',
                 style: TextStyle(fontSize: 15, color: KidsUi.ink)),
             const SizedBox(height: 10),
@@ -105,41 +110,32 @@ class _VowelSoundsScreenState extends State<VowelSoundsScreen> {
                 )
             ]),
             const SizedBox(height: 12),
-            Container(
+            SizedBox(
               width: double.infinity,
               height: pictureHeight,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                  color: KidsUi.cardSurface,
-                  borderRadius: BorderRadius.circular(32),
-                  border: Border.all(color: Colors.white, width: 2),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Color(0x26335C7D),
-                        blurRadius: 20,
-                        offset: Offset(0, 8))
-                  ]),
-              child: Semantics(
-                  label:
-                      'Uppercase $_letter, lowercase ${_letter.toLowerCase()}',
-                  child: ExcludeSemantics(
-                      child: Column(children: [
-                    Expanded(
-                        child: Image.asset(
-                            'assets/images/letters/${_letter.toLowerCase()}.webp',
-                            key: const ValueKey('vowel-letter'),
-                            fit: BoxFit.contain,
-                            cacheWidth: 480)),
-                    SizedBox(
-                        height: 42,
-                        child: FittedBox(
-                            child: Text(_letter.toLowerCase(),
-                                style: const TextStyle(
-                                    fontFamily: 'Nunito',
-                                    fontSize: 38,
-                                    fontWeight: FontWeight.w900,
-                                    color: KidsUi.ink)))),
-                  ]))),
+              child: LessonFrame(
+                  radius: 32,
+                  child: Semantics(
+                      label:
+                          'Uppercase $_letter, lowercase ${_letter.toLowerCase()}',
+                      child: ExcludeSemantics(
+                          child: Column(children: [
+                        Expanded(
+                            child: Image.asset(
+                                'assets/images/letters/${_letter.toLowerCase()}.webp',
+                                key: const ValueKey('vowel-letter'),
+                                fit: BoxFit.contain,
+                                cacheWidth: 480)),
+                        SizedBox(
+                            height: 42,
+                            child: FittedBox(
+                                child: Text(_letter.toLowerCase(),
+                                    style: const TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontSize: 38,
+                                        fontWeight: FontWeight.w900,
+                                        color: KidsUi.ink)))),
+                      ])))),
             ),
             const SizedBox(height: 10),
             const Text('Hear the vowel sound',
@@ -151,6 +147,7 @@ class _VowelSoundsScreenState extends State<VowelSoundsScreen> {
             AudioButton(
                 key: ValueKey('vowel-sound-$_letter'),
                 phrase: 'lesson-sound-$_letter',
+                onBeforePlay: stopLessonInstruction,
                 onPlayed: () => _provider!
                     .recordLetterListening(_letter, LetterListeningKind.sound),
                 label: '/${_letter.toLowerCase()}/',

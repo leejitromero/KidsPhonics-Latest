@@ -1,0 +1,61 @@
+﻿{
+    "reviewDate":  "2026-10-11",
+    "verifiedUtc":  "2026-10-11T14:17:52.8803351Z",
+    "scope":  "Home navigation artwork, smaller garden mascots, uniform game cards without duplicate captions",
+    "focusedTestsPassed":  46,
+    "staticAnalysis":  "No issues found",
+    "requiredAssets":  705,
+    "unusedAssetCandidates":  0,
+    "gameCardAspectRatio":  0.8,
+    "navigationCopies":  [
+                             {
+                                 "source":  "C:\\Users\\leeji\\Downloads\\home_button.png",
+                                 "runtime":  "assets/images/navigation_buttons/home_button.png",
+                                 "sha256":  "0cfa96cfd7e3500776912556aff9cb64072e65b935155da675a744865db48b7e",
+                                 "exactCopy":  true
+                             },
+                             {
+                                 "source":  "C:\\Users\\leeji\\Downloads\\lessons_button.png",
+                                 "runtime":  "assets/images/navigation_buttons/lessons_button.png",
+                                 "sha256":  "3b33e22f16ddee09b8eed33449bf0fdbacf934f33dab9b174b53b3be42bf70f1",
+                                 "exactCopy":  true
+                             },
+                             {
+                                 "source":  "C:\\Users\\leeji\\Downloads\\games_button.png",
+                                 "runtime":  "assets/images/navigation_buttons/games_button.png",
+                                 "sha256":  "a8b4c6becf7a0a8a9bf8fb25dbde84eed4de72451b2b2038d223647033ea702d",
+                                 "exactCopy":  true
+                             },
+                             {
+                                 "source":  "C:\\Users\\leeji\\Downloads\\progress_button.png",
+                                 "runtime":  "assets/images/navigation_buttons/progress_button.png",
+                                 "sha256":  "c4175503ef36132defaf732eaf64a3975b71bc4bb70acf0c5fe16860225cc381",
+                                 "exactCopy":  true
+                             },
+                             {
+                                 "source":  "C:\\Users\\leeji\\Downloads\\parent_button.png",
+                                 "runtime":  "assets/images/navigation_buttons/parent_button.png",
+                                 "sha256":  "c724e1be33897e3b3e916e8c221a45425a634633dfc53db5f032ab1117880cc8",
+                                 "exactCopy":  true
+                             }
+                         ],
+    "sourceSHA256":  {
+                         "lib/data/home_village.dart":  "2d96290cf6c851505a5d4f810c042ec42973ef688c5087b885e273e1df8734a9",
+                         "lib/widgets/activity_artwork.dart":  "5bf74e145787bd9358e598569a99a88ce993c5d60d622a1d77f693e7c9168949",
+                         "lib/widgets/game_zone_card.dart":  "0fc547dc37ac1d5b4414c425927db303ca417e7ad2c8868ac50bf4d8ddba2572",
+                         "lib/widgets/home_village_menu.dart":  "ea1c3e1b680641edbb6d778e0d5021d9d165d56c075e13f4de1f8fbee4e3f15d",
+                         "lib/widgets/home_playground_mascot.dart":  "4f2a533454c382c5fe54e5284483d140a0c4dad9c0da08784d633c899951ea97",
+                         "lib/widgets/home_village_footer.dart":  "1e33a7a3f24294aa0fc764173229ca688a7054e66144577676980e2e65d673d0",
+                         "pubspec.yaml":  "0455768b911e46d538ae9c9a2942e41086f1097cea8c75bcba7ae8ce06e488c3",
+                         "test/activity_card_refresh_test.dart":  "c62f9640206c01ad59a1b69e9e9d260586def337fe743ab38f93ddb70e584db8",
+                         "test/game_zone_menu_test.dart":  "970fee478e27cfbc3dca4dacb0b7aa4b1b853add2aaa93ca068bdc107fa67f29",
+                         "test/home_mascot_menu_test.dart":  "04973ba6a7083b120dc7e5be4710f358000db9459c364c7b5784a60fd6cd7967",
+                         "test/asset_usage_audit_test.dart":  "992c2b05331d522c60d5be2e86a2ed5c9966447ec33ddc777a53b47226a6a27a"
+                     },
+    "previews":  [
+                     "build/ui_previews/home_garden_390.png",
+                     "build/ui_previews/games_cards_390_844_1x.png"
+                 ],
+    "apkRebuilt":  false,
+    "physicalAndroidTesting":  "Not performed"
+}

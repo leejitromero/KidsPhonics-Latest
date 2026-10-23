@@ -44,6 +44,7 @@ void main() {
     final audio = QuizAudioHarness()..install();
     final speech = FakeSpeech();
     final p = await mount(t, VoiceRecognitionScreen(speech: speech));
+    await audio.finishGameIntro(t, 'speak_recognize.mp3');
     await t.runAsync(() => p.toggleSfx());
     await t.pump();
     final hear = find.byKey(const ValueKey('speech-hear-word'));

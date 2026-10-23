@@ -1,7 +1,7 @@
 name: kidsphonics
 description: KidsPhonics - Mobile App for Grade 1 Learners
 publish_to: 'none'
-version: 1.0.12+13
+version: 1.0.33+34
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -44,12 +44,32 @@ flutter:
     - assets/images/
     - assets/images/game_words/
     - assets/images/game_logos/
+    - assets/images/games_menu/
+    - assets/images/progress_collection/
+    - assets/images/parent_access/
     - assets/images/lesson_logos/
+    - assets/images/lessons_menu/
     - assets/images/letters/
     - assets/images/button_designs/
     - assets/images/answer_choices/
     - assets/images/new_ui/
+    - assets/images/screen_transitions/
+    - assets/images/quick_check_background/
+    - assets/images/game_background/
+    - assets/images/lesson_background/
+    - assets/images/lesson_header/
     - assets/images/home_mascots/
+    - assets/images/home_village/
+    - assets/images/activity_cards/
+    - assets/images/navigation_buttons/
+    - assets/images/school_home/
+    - assets/images/home_classroom/
+    - assets/images/home_buttons/
+    - assets/images/home_banner/
+    - assets/images/custom_navigation/
+    - assets/images/school_rooms/
+    - assets/images/update_scene/
+    - assets/images/character_selection/
     - assets/audio/game_words/
     - assets/audio/rhyming_jar/
     - assets/images/rhyming_jar/
@@ -65,6 +85,10 @@ flutter:
     - assets/audio/phonics/lesson_audio/words/
     - assets/audio/
     - assets/audio/home/
+    - assets/audio/home_intro/
+    - assets/audio/lesson_instructions/
+    - assets/audio/alphabet_pictures/
+    - assets/audio/game_instructions/
     - assets/audio/quick_check/
     - assets/audio/phonics/rhyming_words/
     - assets/audio/phonics/word_builder/

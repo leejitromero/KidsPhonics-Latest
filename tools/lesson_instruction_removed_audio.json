@@ -1,0 +1,27 @@
+[
+    {
+        "path":  "assets/audio/lesson_instructions/letter_recognition_instruction.mp3",
+        "bytes":  130203,
+        "sha256":  "56320186C8E1F23140F4F758C6FB327C61742D47C183F65D8FA61A90BC72698C"
+    },
+    {
+        "path":  "assets/audio/lesson_instructions/letter_sounds_instruction.mp3",
+        "bytes":  141906,
+        "sha256":  "68A64550E02B751FC66D3D9D76E9C71384E82E01C22061591721EFC246874A55"
+    },
+    {
+        "path":  "assets/audio/lesson_instructions/short_vowel_instructions.mp3",
+        "bytes":  140234,
+        "sha256":  "992DAB5C3CB4863501AC994DF04CA6CED50615B9564157CA92D6D76A96D50D81"
+    },
+    {
+        "path":  "assets/audio/cvc_lesson/intro.mp3",
+        "bytes":  55808,
+        "sha256":  "BAF32F847F9B7C2534E8930D9C7F00F781E34ECAFB35E83D89FE8B62E89A92DC"
+    },
+    {
+        "path":  "assets/audio/blending_lesson/intro.mp3",
+        "bytes":  87991,
+        "sha256":  "6442F687B32BC3E827E331714A70361579FE0B7389A45DCBE84957DD56B40C3C"
+    }
+]

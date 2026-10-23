@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 const skyFrames = [
@@ -9,16 +10,18 @@ const skyFrames = [
   'assets/images/screen_frames/background/bg-5.webp',
 ];
 const lessonFrames = [
-  'assets/images/screen_frames/lessons/leson1.webp',
-  'assets/images/screen_frames/lessons/leson2.webp',
-  'assets/images/screen_frames/lessons/leson3.webp',
-  'assets/images/screen_frames/lessons/leson4.webp',
+  'assets/images/lesson_background/Lesson_new_bg_1.png',
+  'assets/images/lesson_background/Lesson_new_bg_2.png',
+  'assets/images/lesson_background/Lesson_new_bg_3.png',
+  'assets/images/lesson_background/Lesson_new_bg_4.png',
+  'assets/images/lesson_background/Lesson_new_bg_5.png',
 ];
 const gameFrames = [
-  'assets/images/screen_frames/games/g1.webp',
-  'assets/images/screen_frames/games/g2.webp',
-  'assets/images/screen_frames/games/g3.webp',
-  'assets/images/screen_frames/games/g4.webp',
+  'assets/images/game_background/games_newbg_1.png',
+  'assets/images/game_background/games_newbg_2.png',
+  'assets/images/game_background/games_newbg_3.png',
+  'assets/images/game_background/games_newbg_4.png',
+  'assets/images/game_background/games_newbg_5.png',
 ];
 
 /// Preloaded, local frames. Only this artwork repaints when the frame changes.
@@ -30,11 +33,13 @@ class AnimatedScreenArt extends StatefulWidget {
       this.fit = BoxFit.cover,
       this.alignment = Alignment.center,
       this.blend = false,
+      this.maxDecodeWidth = 941,
       this.frameDuration = const Duration(milliseconds: 180)});
   final List<String> frames;
   final BoxFit fit;
   final Alignment alignment;
   final bool blend;
+  final int maxDecodeWidth;
   final Duration frameDuration;
 
   @override
@@ -62,11 +67,12 @@ class _AnimatedScreenArtState extends State<AnimatedScreenArt>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _motionAllowed = !MediaQuery.disableAnimationsOf(context) &&
-        TickerMode.valuesOf(context).enabled;
+        TickerMode.valuesOf(context).enabled &&
+        (ModalRoute.isCurrentOf(context) ?? true);
     final width = (MediaQuery.sizeOf(context).width *
             MediaQuery.devicePixelRatioOf(context))
         .ceil()
-        .clamp(1, 941);
+        .clamp(1, widget.maxDecodeWidth);
     if (_decodeWidth != width) {
       _decodeWidth = width;
       _ready = false;
@@ -78,10 +84,23 @@ class _AnimatedScreenArtState extends State<AnimatedScreenArt>
 
   Future<void> _preload(int request) async {
     await Future.wait(widget.frames.map((asset) => precacheImage(
-        ResizeImage(AssetImage(asset), width: _decodeWidth), context)));
+        ResizeImage(AssetImage(asset), width: _decodeWidth), context,
+        onError: (_, __) {})));
     if (!mounted || request != _request) return;
     _ready = true;
     _syncMotion();
+  }
+
+  @override
+  void didUpdateWidget(AnimatedScreenArt oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!listEquals(oldWidget.frames, widget.frames) ||
+        oldWidget.frameDuration != widget.frameDuration) {
+      _clock.stop();
+      _clock.value = 0;
+      _ready = false;
+      unawaited(_preload(++_request));
+    }
   }
 
   void _syncMotion() {

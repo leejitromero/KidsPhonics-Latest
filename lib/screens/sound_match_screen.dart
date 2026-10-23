@@ -1,7 +1,7 @@
 import 'dart:async';
 import '../data/game_session_order.dart';
 import '../widgets/sound_match_design.dart';
-import '../widgets/game_design.dart';
+import '../widgets/game_instruction_guide.dart';
 // lib/screens/sound_match_screen.dart
 import 'package:flutter/material.dart';
 
@@ -158,8 +158,7 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
         answerResult: _picks.isEmpty ? null : _picks.values.last,
         title: 'Sound Match',
         instructions: 'Hear the sound. Pick a letter.',
-        instructionPanel: const GameInstruction(
-            text: 'Sound Match\nListen carefully. Find the letter!'),
+        instructionPanel: const GameInstructionGuide(gameTitle: 'Sound Match'),
         difficulty: widget.difficulty,
         hasProgress: scoredAttempts > 0 && !resultOpen,
         current: _roundIndex + 1,

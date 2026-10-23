@@ -1,9 +1,12 @@
 import '../data/game_word_data.dart';
+import '../data/alphabet_picture_data.dart';
 import '../data/rhyming_jar_data.dart';
 import '../data/adventure_narration.dart';
 import '../data/home_narration.dart';
 import '../data/cvc_lesson_data.dart';
 import '../data/blending_lesson_data.dart';
+import '../data/lesson_instruction_scripts.dart';
+import '../data/game_instruction_scripts.dart';
 import 'local_audio_focus.dart';
 import '../data/lesson_example_data.dart';
 import 'background_music_service.dart';
@@ -71,6 +74,13 @@ class PhonicsAudioService {
   };
 
   static String? assetForPhrase(String phrase) {
+    if (phrase.startsWith('alphabet-picture-')) {
+      return alphabetPictureAudioAsset(phrase);
+    }
+    final gameInstruction = gameInstructionAsset(phrase);
+    if (gameInstruction != null) return gameInstruction;
+    final instruction = lessonInstructionAsset(phrase);
+    if (instruction != null) return instruction;
     if (phrase.startsWith('home-')) {
       return homeNarrationAssets[phrase.substring('home-'.length)];
     }
@@ -115,6 +125,18 @@ class PhonicsAudioService {
   Completer<bool>? _completion;
   String? _currentPhrase;
   String? get currentPhrase => _currentPhrase;
+
+  /// Cache the local file before a speaker or walking transition needs it.
+  static Future<void> prepareInstruction(String phrase) async {
+    final asset = assetForPhrase(phrase);
+    if (asset == null) return;
+    try {
+      await AudioCache.instance.fetchToMemory(asset);
+    } catch (_) {
+      // Playback handles device failures without trapping the interface.
+    }
+  }
+
   Future<void> stop() async {
     _request++;
     _currentPhrase = null;

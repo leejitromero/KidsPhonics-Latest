@@ -1,0 +1,154 @@
+[
+  {
+    "file": "boy_automatic_voicefeedback.mp3",
+    "seconds": 3.866,
+    "leadingSilenceSeconds": 0.063,
+    "trailingSilenceSeconds": 0.363,
+    "peak": 0.5241,
+    "sha256": "74a7d2e5e74b9e3ef919d8a6b11623082e8290ae4acc9dcd107444317ecc648d"
+  },
+  {
+    "file": "boy_lets_learn.mp3",
+    "seconds": 1.724,
+    "leadingSilenceSeconds": 0.09,
+    "trailingSilenceSeconds": 0.481,
+    "peak": 0.4686,
+    "sha256": "fa41113a3ac570292ebba9ff1470ef0d437402b2076d115659410d5502d93f8b"
+  },
+  {
+    "file": "boy_lets_play.mp3",
+    "seconds": 1.646,
+    "leadingSilenceSeconds": 0.062,
+    "trailingSilenceSeconds": 0.023,
+    "peak": 0.4548,
+    "sha256": "4ac0b4c1cd559fb48768c3172f78411afc67c3d8b520dcb8dcf8444d04e8886c"
+  },
+  {
+    "file": "games_intro_01.mp3",
+    "seconds": 3.474,
+    "leadingSilenceSeconds": 0.07,
+    "trailingSilenceSeconds": 0.283,
+    "peak": 0.7846,
+    "sha256": "04ded5f844eb856e3e9f37cc9f1b2b41673637e355e7bff60583ec95f945cdae"
+  },
+  {
+    "file": "games_intro_02.mp3",
+    "seconds": 6.844,
+    "leadingSilenceSeconds": 0.071,
+    "trailingSilenceSeconds": 0.315,
+    "peak": 0.7792,
+    "sha256": "d271a5359c9bdb2ce709ffa6ddfb1b8e1a9a75376c1d572b897d1495389290d9"
+  },
+  {
+    "file": "games_intro_03.mp3",
+    "seconds": 6.609,
+    "leadingSilenceSeconds": 0.13,
+    "trailingSilenceSeconds": 0.242,
+    "peak": 0.8496,
+    "sha256": "9b2bf9a9f34921ac9eeae298da47f4dff06c50846b8ccb1f2e0714460497819f"
+  },
+  {
+    "file": "games_intro_04.mp3",
+    "seconds": 5.146,
+    "leadingSilenceSeconds": 0.05,
+    "trailingSilenceSeconds": 0.273,
+    "peak": 0.5831,
+    "sha256": "83ea921c8467a8e7d3879229117eebd85707739996ab006f0c48c57dc93a9b26"
+  },
+  {
+    "file": "games_intro_05.mp3",
+    "seconds": 4.598,
+    "leadingSilenceSeconds": 0.122,
+    "trailingSilenceSeconds": 0.267,
+    "peak": 0.7354,
+    "sha256": "3aeecaa6f31d6c402f2868a6a2bd1de54eb748408e51ae3283df8460f44949f5"
+  },
+  {
+    "file": "girl_automatic_voicefeedback.mp3",
+    "seconds": 3.971,
+    "leadingSilenceSeconds": 0.067,
+    "trailingSilenceSeconds": 0.429,
+    "peak": 0.7452,
+    "sha256": "f083da3bc0e6a7491ad62eb7da516361b41bddd8091412126385ddc2f215e1cd"
+  },
+  {
+    "file": "girl_lets_learn.mp3",
+    "seconds": 1.411,
+    "leadingSilenceSeconds": 0.062,
+    "trailingSilenceSeconds": 0.266,
+    "peak": 0.8712,
+    "sha256": "8522409211a2ef94c7542fc8aac565c00c88afbb4ec756921631ae1fa26c5a7e"
+  },
+  {
+    "file": "girl_lets_play.mp3",
+    "seconds": 1.411,
+    "leadingSilenceSeconds": 0.061,
+    "trailingSilenceSeconds": 0.434,
+    "peak": 0.9166,
+    "sha256": "19f0f33ac11df4a281cb02bf4e322729df56720a82b5f927475eab1fd8f24c7d"
+  },
+  {
+    "file": "kidsphonics_title_chorus.mp3",
+    "seconds": 1.567,
+    "leadingSilenceSeconds": 0.059,
+    "trailingSilenceSeconds": 0.422,
+    "peak": 0.3823,
+    "sha256": "2c8f30deef3329aeb93c4e7f34512a2b7c7e7d2467d9097e9f5f442c76d4d387"
+  },
+  {
+    "file": "lessons_intro_01.mp3",
+    "seconds": 4.989,
+    "leadingSilenceSeconds": 0.081,
+    "trailingSilenceSeconds": 0.201,
+    "peak": 0.8828,
+    "sha256": "97975a8491735826f7f91044106d961bda50a3e79e97b92acea2c9ff3d9c49e2"
+  },
+  {
+    "file": "lessons_intro_02.mp3",
+    "seconds": 7.471,
+    "leadingSilenceSeconds": 0.064,
+    "trailingSilenceSeconds": 0.385,
+    "peak": 0.7952,
+    "sha256": "fe3ea094d7bba9d40d141a39a7ef5ecf1b34ae21653fb8791a16a87e28aa54a4"
+  },
+  {
+    "file": "lessons_intro_03.mp3",
+    "seconds": 6.609,
+    "leadingSilenceSeconds": 0.111,
+    "trailingSilenceSeconds": 0.295,
+    "peak": 0.8532,
+    "sha256": "1ca7f7457d09a82fcfa4bf41d1d2b33802cbd959c22a6d1091d39ac14d15332e"
+  },
+  {
+    "file": "lessons_intro_04.mp3",
+    "seconds": 6.844,
+    "leadingSilenceSeconds": 0.091,
+    "trailingSilenceSeconds": 0.264,
+    "peak": 0.8846,
+    "sha256": "325a4f8008d2d17200ae7ddaa609c5611de986f2d24cf1e2c825d9133ac7657e"
+  },
+  {
+    "file": "lessons_intro_05.mp3",
+    "seconds": 3.239,
+    "leadingSilenceSeconds": 0.11,
+    "trailingSilenceSeconds": 0.27,
+    "peak": 0.8998,
+    "sha256": "066c435b8e594ab24e6fea8bb2ba8d449898a5d6d4b34ac98b9b2677589f66a1"
+  },
+  {
+    "file": "profile_setup_01.mp3",
+    "seconds": 6.609,
+    "leadingSilenceSeconds": 0.06,
+    "trailingSilenceSeconds": 0.261,
+    "peak": 0.6165,
+    "sha256": "de7ca3fae00dac0e7f43cea7170c11940e6314712fe0ef0491782f05c4f6de21"
+  },
+  {
+    "file": "profile_setup_02.mp3",
+    "seconds": 4.598,
+    "leadingSilenceSeconds": 0.109,
+    "trailingSilenceSeconds": 0.387,
+    "peak": 0.8233,
+    "sha256": "b3a26a9febd6d33439f25bd149460dc6004de90e97ba35de25d1e518339a75cc"
+  }
+]

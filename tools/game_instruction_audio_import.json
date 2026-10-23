@@ -1,0 +1,68 @@
+[
+  {
+    "file": "alphabet_order.mp3",
+    "path": "assets/audio/game_instructions/alphabet_order.mp3",
+    "bytes": 70017,
+    "sha256": "F87FEF6C8A401E4CA6FEACDE2BA9F679D48B80056152062A9A9A77B085D26843"
+  },
+  {
+    "file": "flappy_letters.mp3",
+    "path": "assets/audio/game_instructions/flappy_letters.mp3",
+    "bytes": 71271,
+    "sha256": "3CD78E6EED329FE7640C8A2F9ABFDE8470BEED22B98860590E56406D1A1BAA95"
+  },
+  {
+    "file": "memory_flip.mp3",
+    "path": "assets/audio/game_instructions/memory_flip.mp3",
+    "bytes": 71271,
+    "sha256": "E6DC5A956DD6F1F5FA0259527AAB0F0C1CCCFC78438112AB2B264632DA31C39F"
+  },
+  {
+    "file": "missing_vowel.mp3",
+    "path": "assets/audio/game_instructions/missing_vowel.mp3",
+    "bytes": 67510,
+    "sha256": "9208863032B1D3E6EA332378FCF6CE243FC989E59C296C64BC24A1CBFC7F0A27"
+  },
+  {
+    "file": "phonics_quiz.mp3",
+    "path": "assets/audio/game_instructions/phonics_quiz.mp3",
+    "bytes": 68763,
+    "sha256": "E86A49AB347C6E7B569DA7C698D5DC0113276103026546654D84820A6D18DF37"
+  },
+  {
+    "file": "picture_match.mp3",
+    "path": "assets/audio/game_instructions/picture_match.mp3",
+    "bytes": 70017,
+    "sha256": "F390ACC125BC4A6669CB5296D635431C9D5690A862EE97980086DE565E454E2F"
+  },
+  {
+    "file": "rhyming_word.mp3",
+    "path": "assets/audio/rhyming_jar/intro.mp3",
+    "bytes": 75033,
+    "sha256": "F2B5B16D7F84397D3CDEC8D042DEC637F234902DDBBF78DE752F9C7A4A4E4F9F"
+  },
+  {
+    "file": "rumbled_word.mp3",
+    "path": "assets/audio/game_instructions/rumbled_word.mp3",
+    "bytes": 67510,
+    "sha256": "BBD8BD8F3973BD2DE63B73AAA6BC5E9403B928D565CA452D60076EA6ACB656AB"
+  },
+  {
+    "file": "sound_match.mp3",
+    "path": "assets/audio/game_instructions/sound_match.mp3",
+    "bytes": 73779,
+    "sha256": "C72F623330E9524BF549B58FAC62BF9BA942B9B64A11936F720D616A66AD31F0"
+  },
+  {
+    "file": "speak_recognize.mp3",
+    "path": "assets/audio/game_instructions/speak_recognize.mp3",
+    "bytes": 72525,
+    "sha256": "1869F60D90FE69E1EF65DC4AF673A67483E2759830DD2DB2334EAC1B5AE3F725"
+  },
+  {
+    "file": "world_builder.mp3",
+    "path": "assets/audio/game_instructions/world_builder.mp3",
+    "bytes": 67510,
+    "sha256": "23FBEA7ADECEFA718BD0F7C55CCF07B5C514E0EBDA0897F0A311E4252EB45B1A"
+  }
+]

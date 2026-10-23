@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 const cloudTransitionAssets = [
-  'assets/images/new_ui/cloud-transition-1.webp',
-  'assets/images/new_ui/cloud-transition-2.webp',
-  'assets/images/new_ui/cloud-transition-3.webp',
-  'assets/images/new_ui/cloud-transition-4.webp',
+  'assets/images/screen_transitions/curtain_1.png',
+  'assets/images/screen_transitions/curtain_2.png',
+  'assets/images/screen_transitions/curtain_3.png',
+  'assets/images/screen_transitions/curtain_4.png',
+  'assets/images/screen_transitions/curtain_5.png',
 ];
 
 /// Decode the short curtain sequence before pushing, avoiding blank first frames.
@@ -27,7 +28,7 @@ Future<bool> prepareCloudTransition(
   return available;
 }
 
-/// Closes the clouds, reveals the destination under cover, then opens them.
+/// Closes the supplied curtain, switches screens under cover, then opens it.
 /// Reversing the route naturally plays the curtain in the opposite direction.
 class CloudPageRoute<T> extends PageRouteBuilder<T> {
   CloudPageRoute({required Widget page, required List<ImageProvider> frames})
@@ -73,7 +74,7 @@ class CloudScreenTransition extends StatelessWidget {
         final blend = position - index;
         final opacity =
             (t / .10).clamp(0.0, 1.0) * ((1 - t) / .10).clamp(0.0, 1.0);
-        // The solid cloud-colored wash covers tiny transparent seams at the swap.
+        // Matching dark purple seals transparent PNG seams at the screen swap.
         final wash = t < .44
             ? ((t - .37) / .07).clamp(0.0, 1.0)
             : t > .56
@@ -96,7 +97,7 @@ class CloudScreenTransition extends StatelessWidget {
                                   Opacity(
                                       opacity: wash,
                                       child: const ColoredBox(
-                                          color: Color(0xFFE5F3FF))),
+                                          color: Color(0xFF27083D))),
                                 Image(
                                     image: frames[index],
                                     fit: BoxFit.cover,

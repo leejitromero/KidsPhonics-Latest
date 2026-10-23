@@ -44,7 +44,32 @@ void main() {
     addTearDown(() => t.binding.setSurfaceSize(null));
     for (final difficulty in Difficulty.values) {
       final p = await mount(t, SoundMatchScreen(difficulty: difficulty));
+      final character = difficulty == Difficulty.hard ? 'girl' : 'boy';
+      await t.runAsync(() => p.setStudentCharacter(character, ''));
       await t.pumpAndSettle();
+      final guide =
+          t.getRect(find.byKey(const ValueKey('game-instruction-guide')));
+      expect(guide.width, lessThanOrEqualTo(340));
+      expect(guide.height, lessThanOrEqualTo(112));
+      expect(
+          guide.bottom, lessThan(t.getRect(find.byType(MagicalSoundOrb)).top));
+      for (final (key, name) in [
+        ('lesson-guide-profile', '${character}_profile.png'),
+        ('lesson-dialogue-art', 'instructions_dialogue_$character.png'),
+      ]) {
+        final image = t.widget<Image>(find.byKey(ValueKey(key)));
+        expect(
+            ((image.image as ResizeImage).imageProvider as AssetImage)
+                .assetName,
+            'assets/images/lesson_header/$name');
+        expect(image.fit, BoxFit.contain);
+      }
+      final ink =
+          t.getRect(find.byKey(const ValueKey('lesson-instruction-text')));
+      final opening =
+          t.getRect(find.byKey(const ValueKey('lesson-dialogue-content')));
+      expect(opening.inflate(.01).contains(ink.topLeft), isTrue);
+      expect(opening.inflate(.01).contains(ink.bottomRight), isTrue);
       expect(find.byType(GameWordPicture), findsNothing);
       expect(find.byType(MagicalSoundOrb), findsOneWidget);
       expect(find.byType(GameAnswerButton), findsNWidgets(3));

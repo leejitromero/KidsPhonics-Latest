@@ -1,0 +1,30 @@
+﻿{
+    "analysis":  "No issues found",
+    "regressionTestsPassed":  90,
+    "phoneDensityPreviewTestsPassed":  5,
+    "apk":  "build/app/outputs/flutter-apk/app-debug.apk",
+    "apkBytes":  586293157,
+    "apkSha256":  "051757247D6D463D47F0206CE6B76872AB2E5127084D911A4CA3B0812E0CA4FE",
+    "bundledHomeImages":  [
+                              {
+                                  "path":  "assets/images/home_classroom/morning.png",
+                                  "sha256":  "2ECE0982A9657D277B989FCDE86CD2C6DB74934625066EBD89FCF4B89B171C04",
+                                  "bytes":  2173434,
+                                  "matchesSource":  true
+                              },
+                              {
+                                  "path":  "assets/images/home_classroom/sunset.png",
+                                  "sha256":  "6DFE0EEA3002A1F5445EA1F5A64138E14D6BC6F55714B0158CACEE2B3F87667E",
+                                  "bytes":  2189055,
+                                  "matchesSource":  true
+                              },
+                              {
+                                  "path":  "assets/images/home_classroom/night.png",
+                                  "sha256":  "45030644D37C844D1B1FB61BAD684DD682942D9DDCD80BA06B509510DA076D01",
+                                  "bytes":  2155422,
+                                  "matchesSource":  true
+                              }
+                          ],
+    "exports":  "output/home_classroom/8k/manifest.json",
+    "previews":  "output/home_classroom/previews/"
+}

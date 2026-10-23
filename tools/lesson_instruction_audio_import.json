@@ -1,0 +1,52 @@
+[
+    {
+        "file":  "blending_sounds_1.mp3",
+        "bytes":  58314,
+        "sha256":  "6644A0CF865A4B77AEDECDB411258125E1BE20832FD2693342C2FE1F3D8F4235"
+    },
+    {
+        "file":  "blending_sounds_2.mp3",
+        "bytes":  63748,
+        "sha256":  "2F4E5E66695CE18C476894CD70D86531C3CDA8F37B4FF3C792EB3259100274B0"
+    },
+    {
+        "file":  "cvc_word_1.mp3",
+        "bytes":  70017,
+        "sha256":  "2D2B44436DA8B9BB3DD4EB01519149E9462DE946253A463974CF5D248A66F4D0"
+    },
+    {
+        "file":  "cvc_word_2.mp3",
+        "bytes":  59986,
+        "sha256":  "25D252E20237B44CDE2EB2E45DF44583EA59527C0FAD1EC6FBB035968D426C6B"
+    },
+    {
+        "file":  "letter_recognition_1.mp3",
+        "bytes":  57061,
+        "sha256":  "23C76457CA7DA4321227DDDB61640B8B2271F33C3B6F041951FB9366E0F2949A"
+    },
+    {
+        "file":  "letter_recognition_2.mp3",
+        "bytes":  54553,
+        "sha256":  "3AE8E415F6ED8B8DA5369ED2EB1FDBEA01453CFD731412C3432C2060D93790DF"
+    },
+    {
+        "file":  "letter_sounds_1.mp3",
+        "bytes":  75033,
+        "sha256":  "392DE709F8E036A5F074A541C6A8D405A521B4FE5554EBBFF35FD00A3190FBA1"
+    },
+    {
+        "file":  "letter_sounds_2.mp3",
+        "bytes":  55807,
+        "sha256":  "3DA6B3AB3F478355779FB21E8726AE1115F547D83A646DDFD5CD0EA2F7A4B3BB"
+    },
+    {
+        "file":  "short_vowel_1.mp3",
+        "bytes":  63748,
+        "sha256":  "24BE07EBC8D32E2C4535DD38870009F5007F25761D330B108B4013A780A7BBC7"
+    },
+    {
+        "file":  "short_vowel_2.mp3",
+        "bytes":  61240,
+        "sha256":  "1A84F78FE8861448B048839FA3FE5454023B46BB361BB89F50855A1F43B9C4F4"
+    }
+]

@@ -16,6 +16,45 @@ import 'letter_mastery_check_test.dart'
     show AdventureTestAudio, press, hear, flushAdventure;
 
 void main() {
+  testWidgets('header shows the saved character and tracks profile changes',
+      (t) async {
+    mockProgressAudio();
+    SharedPreferences.setMockInitialValues({
+      'studentCharacter': 'girl',
+      'studentName': 'Mia',
+      'voice': false,
+    });
+    t.platformDispatcher.accessibilityFeaturesTestValue =
+        const FakeAccessibilityFeatures(disableAnimations: true);
+    addTearDown(t.platformDispatcher.clearAccessibilityFeaturesTestValue);
+    late AppProvider p;
+    await t.runAsync(() async {
+      p = AppProvider();
+      await p.ready;
+    });
+    await t.pumpWidget(ChangeNotifierProvider.value(
+        value: p,
+        child: MaterialApp(
+            home: LetterMasteryCheckScreen(
+                letter: letterContent('A'), audio: AdventureTestAudio()))));
+    await flushAdventure(t);
+    expect(
+        find.byKey(const ValueKey('quick-check-profile-girl')), findsOneWidget);
+    expect(find.byKey(const ValueKey('quick-check-profile-boy')), findsNothing);
+    expect(t.getRect(find.byKey(const ValueKey('quick-check-profile'))).left,
+        greaterThan(t.getRect(find.text('Quick Check')).right));
+    await t.runAsync(() => p.setStudentCharacter('boy', 'Mia'));
+    await t.pump();
+    expect(
+        find.byKey(const ValueKey('quick-check-profile-boy')), findsOneWidget);
+    expect(
+        find.byKey(const ValueKey('quick-check-profile-girl')), findsNothing);
+    expect(find.byType(Scrollable), findsNothing);
+    expect(t.takeException(), isNull);
+    await t.pumpWidget(const SizedBox());
+    p.dispose();
+  });
+
   testWidgets(
       'Back leaves intro directly and confirms before discarding a task',
       (t) async {
@@ -72,6 +111,7 @@ void main() {
   for (final scenario in [
     (size: const Size(320, 568), scale: 1.0),
     (size: const Size(390, 844), scale: 1.0),
+    (size: const Size(768, 1024), scale: 1.0),
     (size: const Size(800, 600), scale: 1.0),
     (size: const Size(320, 568), scale: 1.8),
   ]) {
@@ -80,11 +120,15 @@ void main() {
         (t) async {
       mockProgressAudio();
       SharedPreferences.setMockInitialValues({});
-      await t.binding.setSurfaceSize(scenario.size);
+      t.view.physicalSize = scenario.size;
+      t.view.devicePixelRatio = 1;
+      t.view.padding = const FakeViewPadding(top: 24, bottom: 24);
       t.platformDispatcher.accessibilityFeaturesTestValue =
           const FakeAccessibilityFeatures(disableAnimations: true);
       addTearDown(() {
-        t.binding.setSurfaceSize(null);
+        t.view.resetPhysicalSize();
+        t.view.resetDevicePixelRatio();
+        t.view.resetPadding();
         t.platformDispatcher.clearAccessibilityFeaturesTestValue();
       });
       late AppProvider p;
@@ -116,11 +160,47 @@ void main() {
       await t.pump();
       Future<void> capture(String name) async {
         expect(t.takeException(), isNull);
+        expect(find.byType(Scrollable), findsNothing);
+        if (find.byType(QuickInstruction).evaluate().isNotEmpty) {
+          expect(
+              t
+                  .getRect(
+                      find.byKey(const ValueKey('adventure-progress-stars')))
+                  .bottom,
+              lessThanOrEqualTo(t.getRect(find.byType(QuickInstruction)).top),
+              reason: '$name: challenge progress stays above the instructions');
+        }
+        final safeScreen = Offset.zero & scenario.size;
+        for (final element in find
+            .byWidgetPredicate((widget) =>
+                widget is ElevatedButton ||
+                widget is FilledButton ||
+                widget is TextButton)
+            .evaluate()) {
+          final button =
+              find.byElementPredicate((other) => identical(other, element));
+          final rect = t.getRect(button);
+          expect(rect.left, greaterThanOrEqualTo(safeScreen.left));
+          expect(rect.top, greaterThanOrEqualTo(safeScreen.top));
+          expect(rect.right, lessThanOrEqualTo(safeScreen.right));
+          expect(rect.bottom, lessThanOrEqualTo(safeScreen.bottom));
+          expect(rect.width, greaterThanOrEqualTo(48 - .000001),
+              reason: '$name: ${element.widget.key}');
+          expect(rect.height, greaterThanOrEqualTo(48 - .000001),
+              reason: '$name: ${element.widget.key}');
+          // Choices stay compact even when a tablet has spare space.
+          final key = element.widget.key;
+          if (key is ValueKey<String> &&
+              (key.value.startsWith('adventure-option-') ||
+                  key.value.startsWith('hunt-'))) {
+            expect(rect.width, lessThanOrEqualTo(180), reason: '$name: $key');
+            expect(rect.height, lessThanOrEqualTo(112), reason: '$name: $key');
+          }
+        }
         if (!const bool.fromEnvironment('CAPTURE_UI') ||
             scenario.size.width != 390) {
           return;
         }
-        await t.drag(find.byType(SingleChildScrollView), const Offset(0, 2000));
         await t.pumpAndSettle();
         await t.runAsync(() async {
           await Future.wait(t
@@ -151,15 +231,18 @@ void main() {
               w.key is ValueKey<String> &&
               w.key != const ValueKey('adventure-option-c'));
       await press(t, find.byKey(wrong.key!));
+      await capture('matching_answered');
       expect(t.widget<QuickProgress>(find.byType(QuickProgress)).completed, 1);
       await press(t, find.text('Next Challenge'));
       await capture('sounds');
       await hear(t, audio, 'lesson-sound-C');
       await press(t, find.byKey(const ValueKey('adventure-option-C')));
+      await capture('sounds_answered');
       await press(t, find.text('Next Challenge'));
       await capture('spelling');
       await hear(t, audio, adventureWordKey('Cat'));
       await press(t, find.byKey(const ValueKey('adventure-option-C')));
+      await capture('spelling_answered');
       await press(t, find.text('Next Challenge'));
       await capture('pictures');
       // The speaker inside a picture card previews audio without choosing it
@@ -174,6 +257,7 @@ void main() {
           isNull);
       await hear(t, audio, 'lesson-sound-C');
       await press(t, find.byKey(const ValueKey('adventure-option-Cow')));
+      await capture('pictures_answered');
       await press(t, find.text('Next Challenge'));
       await capture('hunt');
       expect(t.widget<QuickProgress>(find.byType(QuickProgress)).completed, 4);
@@ -184,6 +268,7 @@ void main() {
         }
       }
       expect(t.widget<QuickProgress>(find.byType(QuickProgress)).completed, 5);
+      await capture('hunt_answered');
       await press(t, find.text('See Result'));
       expect(find.text('Score: 4 / 5'), findsOneWidget);
       await capture('result');

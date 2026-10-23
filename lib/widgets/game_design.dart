@@ -156,9 +156,11 @@ class ForestIconButton extends StatelessWidget {
 }
 
 class ForestTile extends StatelessWidget {
-  const ForestTile({super.key, required this.child, this.variant = 0});
+  const ForestTile(
+      {super.key, required this.child, this.variant = 0, this.leaves = true});
   final Widget child;
   final int variant;
+  final bool leaves;
   static const frames = [
     'assets/images/new_ui/frame_pink.webp',
     'assets/images/answer_choices/frame-1.webp',
@@ -168,7 +170,7 @@ class ForestTile extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) => CustomPaint(
-      foregroundPainter: const ForestLeaves(),
+      foregroundPainter: leaves ? const ForestLeaves() : null,
       child: Stack(fit: StackFit.expand, children: [
         ClipRect(
             child: FractionallySizedBox(

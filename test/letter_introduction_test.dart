@@ -25,11 +25,15 @@ void main() {
       await t.tap(find.byKey(const ValueKey('progress-tab-1')));
       await t.pumpAndSettle();
       final letter = find.byKey(const ValueKey('progress-letter-B'));
-      await t.scrollUntilVisible(letter, 150,
-          scrollable: find.byType(Scrollable).first);
+      // The grid builds letters before they enter the outer list's viewport.
+      // Scroll until B can receive a tap, rather than only finding its element.
+      await t.dragUntilVisible(
+          letter.hitTestable(), find.byType(ListView), const Offset(0, -150));
+      expect(letter.hitTestable(), findsOneWidget);
       await t.tap(letter);
       await t.pumpAndSettle();
       final practice = find.byKey(const ValueKey('progress-practice-letter'));
+      expect(practice, findsOneWidget);
       await t.ensureVisible(practice);
       await t.pumpAndSettle();
       await t.tap(practice);

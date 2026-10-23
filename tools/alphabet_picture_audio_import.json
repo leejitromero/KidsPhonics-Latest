@@ -1,0 +1,321 @@
+{
+  "source": "C:/Users/leeji/Downloads/A_Z_sounds.zip",
+  "sourceSHA256": "0D32124E5D4C266935C368449BE272501288FB9A1BCDF6589422966F0E615B00",
+  "recordings": 26,
+  "audioUnmodified": true,
+  "mpegFramesValidated": true,
+  "files": [
+    {
+      "letter": "A",
+      "original": "A_Z_sounds/A.mp3",
+      "path": "assets/audio/alphabet_pictures/A.mp3",
+      "sha256": "1868D4E26FC22A11461255F741D41EA0488C7BA2DEE00D1964041B12C79F5A8C",
+      "bytes": 49537,
+      "mpegFrames": 78,
+      "frameDurationSeconds": 2.038,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "B",
+      "original": "A_Z_sounds/B.mp3",
+      "path": "assets/audio/alphabet_pictures/B.mp3",
+      "sha256": "535C4ED6D3CCF6D55C9032967D127731549C53D26395273F9759E874A49691AC",
+      "bytes": 52045,
+      "mpegFrames": 84,
+      "frameDurationSeconds": 2.194,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "C",
+      "original": "A_Z_sounds/C.mp3",
+      "path": "assets/audio/alphabet_pictures/C.mp3",
+      "sha256": "E24AD7FCE539889B83D13C63CA9AF4F89FB743A1605186C2BA2D13403F90EA9D",
+      "bytes": 49537,
+      "mpegFrames": 78,
+      "frameDurationSeconds": 2.038,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "D",
+      "original": "A_Z_sounds/D.mp3",
+      "path": "assets/audio/alphabet_pictures/D.mp3",
+      "sha256": "0953C95A266C77B36D6D1290311F51B8056E98DD488C1D900361C342EDC2AB0E",
+      "bytes": 53299,
+      "mpegFrames": 87,
+      "frameDurationSeconds": 2.273,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "E",
+      "original": "A_Z_sounds/E.mp3",
+      "path": "assets/audio/alphabet_pictures/E.mp3",
+      "sha256": "F10D85FEC4D6C9C11F1E8B1F53D7D94892BA91A3A39052DCD5F45EBA34DB6948",
+      "bytes": 48283,
+      "mpegFrames": 75,
+      "frameDurationSeconds": 1.959,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "F",
+      "original": "A_Z_sounds/F.mp3",
+      "path": "assets/audio/alphabet_pictures/F.mp3",
+      "sha256": "23B81B0A677EACA8302476D68745B21FB6D69AEEF10EF5138D90C56537717683",
+      "bytes": 47030,
+      "mpegFrames": 72,
+      "frameDurationSeconds": 1.881,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "G",
+      "original": "A_Z_sounds/G.mp3",
+      "path": "assets/audio/alphabet_pictures/G.mp3",
+      "sha256": "DE87F6BCD919E4C49D29993272CE6F8AB2E2DB4C52FCCC209E4178054E7A60EE",
+      "bytes": 52045,
+      "mpegFrames": 84,
+      "frameDurationSeconds": 2.194,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "H",
+      "original": "A_Z_sounds/H.mp3",
+      "path": "assets/audio/alphabet_pictures/H.mp3",
+      "sha256": "B5F1B26F142FAD2CD1699FF3BEAD53B3DA8640773312E798493001B0F80B4D7B",
+      "bytes": 48283,
+      "mpegFrames": 75,
+      "frameDurationSeconds": 1.959,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "I",
+      "original": "A_Z_sounds/I.mp3",
+      "path": "assets/audio/alphabet_pictures/I.mp3",
+      "sha256": "2F7BB3FDE242AA9F335AA6BA3E67F64D9E4988177AE95A26AE02245483F82FB4",
+      "bytes": 52045,
+      "mpegFrames": 84,
+      "frameDurationSeconds": 2.194,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "J",
+      "original": "A_Z_sounds/J.mp3",
+      "path": "assets/audio/alphabet_pictures/J.mp3",
+      "sha256": "07733E305F7E16A117135921704006EBA9E23288C7BD3951BEE493B702C98BE8",
+      "bytes": 52045,
+      "mpegFrames": 84,
+      "frameDurationSeconds": 2.194,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "K",
+      "original": "A_Z_sounds/k.mp3",
+      "path": "assets/audio/alphabet_pictures/k.mp3",
+      "sha256": "068509C6F23381833826979973A645404B6233AB033358567295A2C170C2EA06",
+      "bytes": 49537,
+      "mpegFrames": 78,
+      "frameDurationSeconds": 2.038,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "L",
+      "original": "A_Z_sounds/L.mp3",
+      "path": "assets/audio/alphabet_pictures/L.mp3",
+      "sha256": "AACA17131E2F58D96D701715AECE466763C03C5C1B3C7AEEAE062968822C9EE2",
+      "bytes": 52045,
+      "mpegFrames": 84,
+      "frameDurationSeconds": 2.194,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "M",
+      "original": "A_Z_sounds/M.mp3",
+      "path": "assets/audio/alphabet_pictures/M.mp3",
+      "sha256": "11AB836CFA0C1D3A67F3FB91DA81644FEE18D7E7DE27F2E95D3C1097BDD8B569",
+      "bytes": 52045,
+      "mpegFrames": 84,
+      "frameDurationSeconds": 2.194,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "N",
+      "original": "A_Z_sounds/N.mp3",
+      "path": "assets/audio/alphabet_pictures/N.mp3",
+      "sha256": "C3D5C76665533AB75B3BDD8A3C7A1E948132461C98E2AAA1723340372AA3B203",
+      "bytes": 48283,
+      "mpegFrames": 75,
+      "frameDurationSeconds": 1.959,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "O",
+      "original": "A_Z_sounds/O.mp3",
+      "path": "assets/audio/alphabet_pictures/O.mp3",
+      "sha256": "C355B3BCB2E879794128AF8D5480B21524E8FD9EA38D9C60E83FE1CA75D31FF5",
+      "bytes": 50791,
+      "mpegFrames": 81,
+      "frameDurationSeconds": 2.116,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "P",
+      "original": "A_Z_sounds/P.mp3",
+      "path": "assets/audio/alphabet_pictures/P.mp3",
+      "sha256": "0BCE1339B853C2F49E8487A65D48B4ED92EE73BF03F66C81C97399F2A9F0021B",
+      "bytes": 50791,
+      "mpegFrames": 81,
+      "frameDurationSeconds": 2.116,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "Q",
+      "original": "A_Z_sounds/Q.mp3",
+      "path": "assets/audio/alphabet_pictures/Q.mp3",
+      "sha256": "23BFEADFD320714BD471328798AA6C3D3FFE9D894AAF396AC81B2FBA8DF1EB5C",
+      "bytes": 52045,
+      "mpegFrames": 84,
+      "frameDurationSeconds": 2.194,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "R",
+      "original": "A_Z_sounds/R.mp3",
+      "path": "assets/audio/alphabet_pictures/R.mp3",
+      "sha256": "BFD287C70CCC89711F4DCF248D7CAD3632C1EC3E34CC01D90DBB70411CCFB45A",
+      "bytes": 48283,
+      "mpegFrames": 75,
+      "frameDurationSeconds": 1.959,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "S",
+      "original": "A_Z_sounds/S.mp3",
+      "path": "assets/audio/alphabet_pictures/S.mp3",
+      "sha256": "C88181A2BA976C58C4FBB47DA0685B05B86E168E314E4FDD6A7965AACC25762F",
+      "bytes": 49537,
+      "mpegFrames": 78,
+      "frameDurationSeconds": 2.038,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "T",
+      "original": "A_Z_sounds/T.mp3",
+      "path": "assets/audio/alphabet_pictures/T.mp3",
+      "sha256": "9C9F23367D408098724BF3B3356F30B33DC9DB886609CEA167CFC9E3688CD720",
+      "bytes": 52045,
+      "mpegFrames": 84,
+      "frameDurationSeconds": 2.194,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "U",
+      "original": "A_Z_sounds/U.mp3",
+      "path": "assets/audio/alphabet_pictures/U.mp3",
+      "sha256": "C7575BB5533C2459186E9C042F4CDC6DDCB2264351B9E2138DEE95D5E38AF79A",
+      "bytes": 50791,
+      "mpegFrames": 81,
+      "frameDurationSeconds": 2.116,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "V",
+      "original": "A_Z_sounds/V.mp3",
+      "path": "assets/audio/alphabet_pictures/V.mp3",
+      "sha256": "19AAEF9A83E0B842E896CC62A12C565417283D9E62E073F125A0296F76A71547",
+      "bytes": 49537,
+      "mpegFrames": 78,
+      "frameDurationSeconds": 2.038,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "W",
+      "original": "A_Z_sounds/W.mp3",
+      "path": "assets/audio/alphabet_pictures/W.mp3",
+      "sha256": "B6F6E151BAAB70E3F5A4DB410E539F61A2480FC9FCAE4CA68C6F91CD242BD555",
+      "bytes": 55807,
+      "mpegFrames": 93,
+      "frameDurationSeconds": 2.429,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "X",
+      "original": "A_Z_sounds/X.mp3",
+      "path": "assets/audio/alphabet_pictures/X.mp3",
+      "sha256": "7E37ECB73D7B39CFD6738B63BDDA2B23046F5181A730C706B4E235D43BA90D37",
+      "bytes": 52045,
+      "mpegFrames": 84,
+      "frameDurationSeconds": 2.194,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "Y",
+      "original": "A_Z_sounds/Y.mp3",
+      "path": "assets/audio/alphabet_pictures/Y.mp3",
+      "sha256": "2CB99129D3CDA1709F5005E5263AD10743E313152EEC7FE4E790E85E0D470525",
+      "bytes": 52045,
+      "mpegFrames": 84,
+      "frameDurationSeconds": 2.194,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "letter": "Z",
+      "original": "A_Z_sounds/Z.mp3",
+      "path": "assets/audio/alphabet_pictures/Z.mp3",
+      "sha256": "D2F9ED1EB5F57C36698BFD77097370B61F203383EE8185EAA8D1E2E9F4868030",
+      "bytes": 50791,
+      "mpegFrames": 81,
+      "frameDurationSeconds": 2.116,
+      "sampleRatesHz": [
+        44100
+      ]
+    }
+  ]
+}

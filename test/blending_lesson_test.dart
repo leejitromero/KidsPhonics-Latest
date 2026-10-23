@@ -46,6 +46,15 @@ void main() {
   Finder slot(int i) => find.byKey(ValueKey('blend-slot-$i'));
   Finder piece(int i) => find.byKey(ValueKey('blend-piece-$i'));
 
+  Future<void> finishIntroduction(
+      WidgetTester t, BlendingLessonController lesson) async {
+    for (var i = 0; i < 240 && lesson.phase == BlendingPhase.intro; i++) {
+      await t.pump(const Duration(milliseconds: 500));
+    }
+    expect(lesson.phase, BlendingPhase.puzzle);
+    await t.pump();
+  }
+
   testWidgets(
       'intro, out-of-order placements, blending and praise stay ordered',
       (t) async {
@@ -60,7 +69,8 @@ void main() {
     expect(lesson.place(1, 1), isTrue);
     await finish(t);
     expect(heard, [
-      'blend-intro',
+      'blend-intro-1',
+      'blend-intro-2',
       'lesson-sound-N',
       'lesson-sound-S',
       'lesson-sound-U',
@@ -216,7 +226,8 @@ void main() {
       for (final phrase in [
         word.wordAudio,
         word.praiseAudio,
-        'blend-intro',
+        'blend-intro-1',
+        'blend-intro-2',
         'blend-try-another',
         for (var i = 0; i < 3; i++) word.soundAudio(i)
       ]) {
@@ -229,7 +240,7 @@ void main() {
     }
     expect(
         Directory('assets/audio/blending_lesson').listSync().whereType<File>(),
-        hasLength(46));
+        hasLength(45));
   });
 
   testWidgets(
@@ -240,6 +251,7 @@ void main() {
     final lesson = controller();
     final p = await mount(t, BlendingSoundsScreen(controller: lesson));
     await t.pump();
+    await finishIntroduction(t, lesson);
     await t.dragFrom(
         t.getCenter(piece(0)), t.getCenter(slot(1)) - t.getCenter(piece(0)));
     await t.pump();
@@ -277,6 +289,7 @@ void main() {
     final lesson = controller();
     final p = await mount(t, BlendingSoundsScreen(controller: lesson));
     await t.pump();
+    await finishIntroduction(t, lesson);
     await t.dragFrom(
         t.getCenter(piece(0)), t.getCenter(slot(1)) - t.getCenter(piece(0)));
     await t.pump();
@@ -323,6 +336,7 @@ void main() {
                 home: BlendingSoundsScreen(controller: lesson))));
         await t.pump();
         await t.pump(const Duration(milliseconds: 700));
+        await finishIntroduction(t, lesson);
         expect(find.byType(CvcWordPicture), findsOneWidget);
         for (final label in ['Hear Again', 'Try Again', 'Next']) {
           final rect = t.getRect(control(label));
@@ -348,6 +362,7 @@ void main() {
     final lesson = controller();
     final p = await mount(t, BlendingSoundsScreen(controller: lesson));
     await t.pump();
+    await finishIntroduction(t, lesson);
     for (final word in blendingLessonWords) {
       expect(t.widget<CvcWordPicture>(find.byType(CvcWordPicture)).word.word,
           word.word);

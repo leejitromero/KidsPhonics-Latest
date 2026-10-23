@@ -40,14 +40,14 @@ void main() {
     final p = await mount(t, const ProgressScreen());
     await t.tap(find.byKey(const ValueKey('progress-tab-1')));
     await t.pumpAndSettle();
-    final selector = find.byKey(const ValueKey('adventure-letter-selector'));
-    await t.ensureVisible(selector);
-    await t.tap(find.text('Choose a letter adventure'));
-    await t.pumpAndSettle();
-    final z = find.byKey(const ValueKey('overall-letter-Z'));
-    await t.scrollUntilVisible(z, 150,
+    final z = find.byKey(const ValueKey('progress-letter-Z'));
+    await t.scrollUntilVisible(z.hitTestable(), 150,
         scrollable: find.byType(Scrollable).first);
     await t.tap(z);
+    await t.pumpAndSettle();
+    final practice = find.byKey(const ValueKey('progress-practice-letter'));
+    await t.ensureVisible(practice);
+    await t.tap(practice);
     await t.pumpAndSettle();
     expect(
         t
@@ -74,8 +74,11 @@ void main() {
         await p.markLetterViewed('B');
       });
       await t.pumpAndSettle();
-      final start = find.byKey(const ValueKey('home-start-adventure'));
-      await t.ensureVisible(start);
+      final start = find.byKey(ValueKey(source == 'Progress'
+          ? 'progress-start-quick-check'
+          : 'home-start-adventure'));
+      await t.scrollUntilVisible(start.hitTestable(), 150,
+          scrollable: find.byType(Scrollable).first);
       await t.tap(start);
       await t.pumpAndSettle();
       expect(

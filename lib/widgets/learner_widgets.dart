@@ -2,6 +2,7 @@ import 'answer_choice_button.dart';
 import 'game_design.dart';
 import 'game_leave_dialog.dart';
 import 'cloud_page_route.dart';
+import 'main_navigation_scope.dart';
 import 'game_theme_background.dart';
 import 'game_difficulty_dialog.dart';
 import 'lesson_control_button.dart';
@@ -306,12 +307,28 @@ class LearnerNavigation {
   static Future<void> open(BuildContext context, Widget page,
       {bool replace = false,
       bool cloudTransition = false,
+      bool fadeTransition = false,
       bool endParentSession = false}) async {
     final navigator = Navigator.of(context);
     final Object source = context;
     if (!_opening.add(source)) return;
     try {
+      final navigation = MainNavigationScope.maybeOf(context);
+      if (navigation != null) {
+        page = MainNavigationScope(controller: navigation, child: page);
+      }
       Route<void> route = MaterialPageRoute<void>(builder: (_) => page);
+      if (fadeTransition) {
+        final duration = MediaQuery.disableAnimationsOf(context)
+            ? Duration.zero
+            : const Duration(milliseconds: 300);
+        route = PageRouteBuilder<void>(
+            pageBuilder: (_, __, ___) => page,
+            transitionDuration: duration,
+            reverseTransitionDuration: duration,
+            transitionsBuilder: (_, animation, __, child) =>
+                FadeTransition(opacity: animation, child: child));
+      }
       if (cloudTransition) {
         final images = cloudTransitionImages(context);
         final reduced = MediaQuery.disableAnimationsOf(context);
@@ -567,6 +584,9 @@ class GameAnswerButton extends StatelessWidget {
       this.selected = false,
       this.compact = false,
       this.showLabel = true,
+      this.floating = true,
+      this.leaves = true,
+      this.labelStyle,
       this.accent,
       this.colorIndex,
       this.buttonKey});
@@ -579,10 +599,13 @@ class GameAnswerButton extends StatelessWidget {
   final bool selected;
   final bool compact;
   final bool showLabel;
+  final bool floating;
+  final bool leaves;
+  final TextStyle? labelStyle;
   final Key? buttonKey;
   @override
   Widget build(BuildContext context) => FloatingChoice(
-        enabled: onPressed != null && result == null,
+        enabled: floating && onPressed != null && result == null,
         seed: label.codeUnits.fold(0, (a, b) => a + b),
         child: _button(context),
       );
@@ -632,6 +655,7 @@ class GameAnswerButton extends StatelessWidget {
         onPressed: onPressed,
         selected: selected,
         result: result,
+        leaves: leaves,
         variant: grid?.variant ?? label.codeUnits.fold<int>(0, (a, b) => a + b),
         child: LayoutBuilder(
             builder: (_, box) => Column(
@@ -650,13 +674,15 @@ class GameAnswerButton extends StatelessWidget {
                               child: Text(label,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontFamily: 'Nunito',
-                                      fontSize: compact
-                                          ? 20
-                                          : visual != null || label.length > 3
-                                              ? 18
-                                              : 28,
-                                      fontWeight: FontWeight.w900)))),
+                                          fontFamily: 'Nunito',
+                                          fontSize: compact
+                                              ? 20
+                                              : visual != null ||
+                                                      label.length > 3
+                                                  ? 18
+                                                  : 28,
+                                          fontWeight: FontWeight.w900)
+                                      .merge(labelStyle)))),
                   ],
                 )),
       ),
@@ -745,15 +771,21 @@ class AudioButton extends StatefulWidget {
       this.compact = false,
       this.lessonArt = false,
       this.controlBuilder,
+      this.statusBuilder,
       this.semanticLabel,
+      this.onBeforePlay,
       this.onPlayed,
       this.enabled = true});
   final VoidCallback? onPlayed;
+  final VoidCallback? onBeforePlay;
 
   /// Allows a game to share one playback operation across an illustration and
   /// its labelled control, including the same busy and unavailable states.
   final Widget Function(BuildContext, VoidCallback?, bool, String)?
       controlBuilder;
+
+  /// Optional compact presentation for the same playback status message.
+  final Widget Function(String)? statusBuilder;
   final String? semanticLabel;
   final String phrase, label;
   final Color? color;
@@ -831,6 +863,7 @@ class _AudioButtonState extends State<AudioButton> with WidgetsBindingObserver {
         !context.read<AppProvider>().voiceEnabled) {
       return;
     }
+    widget.onBeforePlay?.call();
     final attempt = ++_attempt;
     final p = context.read<AppProvider>();
     setState(() {
@@ -956,10 +989,12 @@ class _AudioButtonState extends State<AudioButton> with WidgetsBindingObserver {
                               icon: Icon(icon),
                               label: Text(label))),
       if (!voiceEnabled)
-        const Text('Audio is turned off.', style: TextStyle(fontSize: 16)),
+        widget.statusBuilder?.call('Audio is turned off.') ??
+            const Text('Audio is turned off.', style: TextStyle(fontSize: 16)),
       if (!available || _message != null)
-        Text(_message ?? 'Audio unavailable.',
-            style: const TextStyle(fontSize: 16)),
+        widget.statusBuilder?.call(_message ?? 'Audio unavailable.') ??
+            Text(_message ?? 'Audio unavailable.',
+                style: const TextStyle(fontSize: 16)),
     ]);
   }
 }
@@ -1179,6 +1214,7 @@ class GameScaffold extends StatefulWidget {
       required this.child,
       required this.hasProgress,
       this.instructionPanel,
+      this.roundHeader,
       this.tutorial,
       this.canOpenTutorial,
       this.answerResult,
@@ -1201,6 +1237,7 @@ class GameScaffold extends StatefulWidget {
   final LearningMascot mascot;
   final String title, instructions, progressLabel;
   final Widget? instructionPanel;
+  final Widget? roundHeader;
   final GameTutorial? tutorial;
   final bool Function()? canOpenTutorial;
   final bool? answerResult;
@@ -1278,12 +1315,13 @@ class _GameScaffoldState extends State<GameScaffold> {
                         icon: Icons.arrow_back_rounded),
                   if (!widget.showHeader) const SizedBox(width: 8),
                   Expanded(
-                      child: ActivityRoundHeader(
-                    difficulty: widget.difficulty,
-                    current: widget.current,
-                    total: widget.total,
-                    label: widget.progressLabel,
-                  )),
+                      child: widget.roundHeader ??
+                          ActivityRoundHeader(
+                            difficulty: widget.difficulty,
+                            current: widget.current,
+                            total: widget.total,
+                            label: widget.progressLabel,
+                          )),
                   if (!widget.showHeader && onHelp != null)
                     Padding(
                         padding: const EdgeInsets.only(left: 8),

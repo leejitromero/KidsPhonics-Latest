@@ -1,6 +1,10 @@
 import '../widgets/answer_choice_button.dart';
 import '../widgets/button_sound.dart';
 import '../widgets/game_design.dart';
+import '../widgets/game_instruction_guide.dart';
+import '../widgets/game_mascot_coach.dart';
+import '../widgets/activity_round_header.dart';
+import '../widgets/memory_flip_design.dart';
 // lib/screens/memory_game_screen.dart
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -428,9 +432,25 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
             !_locked && !resultOpen && !_paused && !_timeUpOpen,
         answerResult: _answerResult,
         title: 'Memory Flip',
+        roundHeader: ActivityRoundHeader(
+            difficulty: widget.difficulty,
+            current: _matchCount,
+            total: _totalPairs,
+            label: 'Pairs matched',
+            fitLabels: true),
         instructions: _previewing
             ? 'Look at the pictures. Remember their places!'
             : 'Tap two cards. Find a pair!',
+        instructionPanel: GameMascotCoach(
+            title: 'Memory Flip',
+            controller: gameNarration,
+            enabled: !_paused && !_timeUpOpen && !resultOpen,
+            instructions: _previewing
+                ? 'Look at the pictures. Remember their places!'
+                : 'Tap two cards. Find a pair!',
+            child: GameInstructionGuide(
+                gameTitle: 'Memory Flip',
+                enabled: !_paused && !_timeUpOpen && !resultOpen)),
         fitViewport: true,
         difficulty: widget.difficulty,
         current: _matchCount,
@@ -438,133 +458,162 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
         progressLabel: 'Pairs matched',
         hasProgress: (scoredAttempts > 0 || _flipped.isNotEmpty) && !resultOpen,
         child: Stack(children: [
-          Column(children: [
-            Row(children: [
-              Expanded(
-                  child: TweenAnimationBuilder<double>(
-                tween: Tween(
-                    end: !_practice &&
-                            _secondsLeft <= 10 &&
-                            _secondsLeft > 0 &&
-                            !_paused &&
-                            !MediaQuery.disableAnimationsOf(context) &&
-                            _secondsLeft.isOdd
-                        ? 1.05
-                        : 1),
-                duration: const Duration(milliseconds: 450),
-                builder: (_, scale, child) =>
-                    Transform.scale(scale: scale, child: child),
-                child: Text(
-                    _practice
-                        ? 'Practice • No timer'
-                        : '${_paused ? 'Paused' : 'Time'} ${_secondsLeft ~/ 60}:${(_secondsLeft % 60).toString().padLeft(2, '0')}',
-                    key: const ValueKey('memory-timer'),
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                        color: !_practice && _secondsLeft <= 10
-                            ? const Color(0xFFB85D08)
-                            : choiceBlue)),
-              )),
-              IconButton(
-                tooltip: _paused ? 'Resume game' : 'Pause game',
-                onPressed: withButtonSound(!_started ||
-                        _locked ||
-                        resultOpen ||
-                        _timeUpOpen ||
-                        (!_practice && _secondsLeft == 0)
-                    ? null
-                    : () {
-                        setState(() => _paused = !_paused);
-                        _syncClock();
-                      }),
-                icon: Icon(
-                    _paused ? Icons.play_arrow_rounded : Icons.pause_rounded),
-              ),
-            ]),
-            if (_previewing)
-              Text('Remember the pictures! $_previewSeconds',
-                  key: const ValueKey('memory-preview'),
-                  style: const TextStyle(fontSize: 12))
-            else if (!_started)
-              const Text('Timer starts on your first flip',
-                  style: TextStyle(fontSize: 12)),
-            ForestPanel(
-                glass: true,
-                leaves: false,
-                accent: const Color(0xFFBDACED),
-                padding: const EdgeInsets.all(6),
-                child: Column(children: [
-                  const Text('Your matches',
-                      style: TextStyle(fontWeight: FontWeight.w800)),
-                  const SizedBox(height: 4),
-                  SizedBox(
-                      height: _totalPairs <= 6 ? 44 : 88,
-                      child: Center(
-                          child: Wrap(
-                        spacing: 5,
-                        runSpacing: 5,
-                        alignment: WrapAlignment.center,
-                        children: List.generate(
-                            _totalPairs,
-                            (i) => Container(
-                                  key: _collectionKeys.putIfAbsent(
-                                      i, () => GlobalKey()),
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                      color: i < _collected.length
-                                          ? const Color(0xFFD7EEE7)
-                                          : const Color(0xFFE9E2F4),
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                          color: const Color(0xFFBCAAD5))),
-                                  child: i < _collected.length
-                                      ? GameWordPicture(
-                                          key: ValueKey('memory-collected-$i'),
-                                          word: _collected[i],
-                                          size: 36)
-                                      : const Icon(Icons.star_rounded,
-                                          color: Color(0xFFB5A0EC), size: 26),
-                                )),
-                      ))),
-                ])),
-            const SizedBox(height: 6),
-            Expanded(child: LayoutBuilder(builder: (_, box) {
-              const columns = 4;
-              final rows = (_cards.length / columns).ceil();
-              // Use Medium's sizing for Easy too, even when height limits the grid.
-              final sizingRows = widget.difficulty == Difficulty.easy
-                  ? (memoryPairsForDifficulty(Difficulty.medium).length *
-                          2 /
-                          columns)
-                      .ceil()
-                  : rows;
-              const gap = 8.0;
-              final width = (box.maxWidth - gap * (columns - 1)) / columns;
-              final height =
-                  (box.maxHeight - gap * (sizingRows - 1)) / sizingRows;
-              final side = width < height ? width : height;
-              return Center(
-                child: SizedBox(
-                  width: side * columns + gap * (columns - 1),
-                  height: side * rows + gap * (rows - 1),
-                  child: GridView.builder(
-                    padding: EdgeInsets.zero,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: columns,
-                      mainAxisSpacing: gap,
-                      crossAxisSpacing: gap,
+          LayoutBuilder(builder: (_, viewport) {
+            final compact = viewport.maxHeight < 440;
+            final sectionGap = compact ? 8.0 : 14.0;
+            final collectionSide = math.min(46.0,
+                (viewport.maxWidth - 30 - 5 * (_totalPairs - 1)) / _totalPairs);
+            return Column(children: [
+              SizedBox(
+                  height: compact ? 76 : 92,
+                  child: MemoryTimerPanel(
+                    timer: TweenAnimationBuilder<double>(
+                      tween: Tween(
+                          end: !_practice &&
+                                  _secondsLeft <= 10 &&
+                                  _secondsLeft > 0 &&
+                                  !_paused &&
+                                  !MediaQuery.disableAnimationsOf(context) &&
+                                  _secondsLeft.isOdd
+                              ? 1.05
+                              : 1),
+                      duration: const Duration(milliseconds: 450),
+                      builder: (_, scale, child) =>
+                          Transform.scale(scale: scale, child: child),
+                      child: Text(
+                          _practice
+                              ? 'Practice • No timer'
+                              : '${_paused ? 'Paused' : 'Time'} ${_secondsLeft ~/ 60}:${(_secondsLeft % 60).toString().padLeft(2, '0')}',
+                          key: const ValueKey('memory-timer'),
+                          style: TextStyle(
+                              fontSize: 34,
+                              fontWeight: FontWeight.w900,
+                              color: !_practice && _secondsLeft <= 10
+                                  ? const Color(0xFFB85D08)
+                                  : GameDesign.ink)),
                     ),
-                    itemCount: _cards.length,
-                    itemBuilder: (_, index) => _buildCard(index),
+                    pauseControl: IconButton(
+                      tooltip: _paused ? 'Resume game' : 'Pause game',
+                      onPressed: withButtonSound(!_started ||
+                              _locked ||
+                              resultOpen ||
+                              _timeUpOpen ||
+                              (!_practice && _secondsLeft == 0)
+                          ? null
+                          : () {
+                              setState(() => _paused = !_paused);
+                              _syncClock();
+                            }),
+                      icon: Icon(_paused
+                          ? Icons.play_arrow_rounded
+                          : Icons.pause_rounded),
+                      color: const Color(0xFF7052CA),
+                      style: IconButton.styleFrom(
+                          backgroundColor: const Color(0xFFE9D8FF)),
+                    ),
+                    note: _previewing
+                        ? Text('Remember the pictures! $_previewSeconds',
+                            key: const ValueKey('memory-preview'),
+                            style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w800,
+                                color: GameDesign.ink))
+                        : !_started
+                            ? const Text('Timer starts on your first flip',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w800,
+                                    color: GameDesign.ink))
+                            : const SizedBox.shrink(),
+                  )),
+              SizedBox(height: sectionGap),
+              ForestPanel(
+                  glass: true,
+                  leaves: false,
+                  accent: const Color(0xFFBDACED),
+                  padding: const EdgeInsets.all(8),
+                  child: Column(children: [
+                    const SizedBox(
+                        height: 26,
+                        child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text('Your matches',
+                                style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w900,
+                                    color: GameDesign.ink)))),
+                    const SizedBox(height: 4),
+                    SizedBox(
+                        height: collectionSide,
+                        child: Center(
+                            child: Wrap(
+                          spacing: 5,
+                          runSpacing: 5,
+                          alignment: WrapAlignment.center,
+                          children: List.generate(
+                              _totalPairs,
+                              (i) => Container(
+                                    key: _collectionKeys.putIfAbsent(
+                                        i, () => GlobalKey()),
+                                    width: collectionSide,
+                                    height: collectionSide,
+                                    decoration: BoxDecoration(
+                                        color: i < _collected.length
+                                            ? const Color(0xFFD7EEE7)
+                                            : const Color(0xFFEEE6FA),
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            color: const Color(0xFFBCAAD5),
+                                            width: 1.5)),
+                                    child: i < _collected.length
+                                        ? GameWordPicture(
+                                            key:
+                                                ValueKey('memory-collected-$i'),
+                                            word: _collected[i],
+                                            size: collectionSide - 4)
+                                        : Icon(Icons.star_rounded,
+                                            color: const Color(0xFFB5A0EC),
+                                            size: collectionSide * .65),
+                                  )),
+                        ))),
+                  ])),
+              SizedBox(height: sectionGap),
+              Expanded(child: LayoutBuilder(builder: (_, box) {
+                const columns = 4;
+                final rows = (_cards.length / columns).ceil();
+                // Use Medium's sizing for Easy too, even when height limits the grid.
+                final sizingRows = widget.difficulty == Difficulty.easy
+                    ? (memoryPairsForDifficulty(Difficulty.medium).length *
+                            2 /
+                            columns)
+                        .ceil()
+                    : rows;
+                const gap = 8.0;
+                final width = (box.maxWidth - gap * (columns - 1)) / columns;
+                final height =
+                    (box.maxHeight - gap * (sizingRows - 1)) / sizingRows;
+                final side = width < height ? width : height;
+                return Center(
+                  child: SizedBox(
+                    width: side * columns + gap * (columns - 1),
+                    height: side * rows + gap * (rows - 1),
+                    child: GridView.builder(
+                      padding: EdgeInsets.zero,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: columns,
+                        mainAxisSpacing: gap,
+                        crossAxisSpacing: gap,
+                      ),
+                      itemCount: _cards.length,
+                      itemBuilder: (_, index) => _buildCard(index),
+                    ),
                   ),
-                ),
-              );
-            })),
-          ]),
+                );
+              })),
+            ]);
+          }),
           if (_paused)
             Positioned.fill(
                 child: ColoredBox(
@@ -630,24 +679,12 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
             child: ExcludeSemantics(
               child: shown
                   ? FittedBox(child: GameWordPicture(word: card.id, size: 100))
-                  : Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(9),
-                        border: Border.all(
-                            color: Colors.white.withValues(alpha: .3)),
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Colors.white.withValues(alpha: .18),
-                            Colors.transparent
-                          ],
-                        ),
-                      ),
-                      child: const Icon(Icons.auto_awesome_rounded,
-                          color: Color(0xFF7B55B5), size: 24),
-                    ),
+                  : LayoutBuilder(
+                      builder: (_, face) => Center(
+                          child: Icon(Icons.auto_awesome_rounded,
+                              color: const Color(0xFF7B55B5),
+                              size: (face.biggest.shortestSide * .6)
+                                  .clamp(14.0, 36.0)))),
             ),
           ),
         ));

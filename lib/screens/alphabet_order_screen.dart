@@ -17,6 +17,11 @@ import '../providers/app_provider.dart';
 import '../models/difficulty.dart';
 import '../widgets/learner_widgets.dart';
 import '../widgets/floating_choice.dart';
+import '../widgets/game_instruction_guide.dart';
+import '../widgets/game_mascot_coach.dart';
+import '../widgets/game_design.dart';
+import '../widgets/activity_round_header.dart';
+import '../widgets/alphabet_order_design.dart';
 
 class AlphabetOrderScreen extends StatefulWidget {
   final Difficulty difficulty;
@@ -188,7 +193,19 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
       narration: gameNarration,
       answerResult: _busy ? _wrongLetter == null : null,
       title: 'Alphabet Order',
+      roundHeader: ActivityRoundHeader(
+          difficulty: widget.difficulty,
+          current: _correct.length,
+          total: _totalLetters,
+          label: 'Letters placed',
+          fitLabels: true,
+          leaves: false),
       instructions: 'Tap letters in order. Start with A.',
+      instructionPanel: GameMascotCoach(
+          title: 'Alphabet Order',
+          instructions: 'Tap letters in order. Start with A.',
+          controller: gameNarration,
+          child: const GameInstructionGuide(gameTitle: 'Alphabet Order')),
       difficulty: widget.difficulty,
       current: _correct.length,
       total: _totalLetters,
@@ -202,17 +219,17 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
           Difficulty.hard => 7,
         };
         final rows = (_totalLetters / columns).ceil();
-        const gap = 5.0;
+        final gap = widget.difficulty == Difficulty.easy ? 8.0 : 5.0;
         final side = math
             .min(
-                90.0,
+                112.0,
                 math.min(
                   (box.maxWidth - gap * (columns - 1)) / columns,
-                  (box.maxHeight - 58 - gap * (rows - 1) * 2) / (rows * 2),
+                  (box.maxHeight - 70 - gap * (rows - 1) * 2) / (rows * 2),
                 ))
-            .clamp(1.0, 90.0);
+            .clamp(1.0, 112.0);
         Widget grid(bool slots) => SizedBox(
-              width: side * columns + gap * (columns - 1),
+              width: side * columns + gap * (columns - 1) + .01,
               child: Wrap(
                   spacing: gap,
                   runSpacing: gap,
@@ -230,23 +247,26 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
                                 decoration: BoxDecoration(
                                     color: placed
                                         ? const Color(0xFF167769)
-                                        : const Color(0xFFE9E2F4),
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                        color: placed
-                                            ? const Color(0xFF167769)
-                                            : const Color(0xFFBCAAD5))),
-                                child: placed
-                                    ? Text(letter,
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w800,
-                                            color: placed
-                                                ? Colors.white
-                                                : const Color(0xFF73618B)))
-                                    : Icon(Icons.star_rounded,
-                                        size: side * .5,
-                                        color: const Color(0xFFB5A0EC)),
+                                        : const Color(0xFFFFFCF3),
+                                    borderRadius:
+                                        BorderRadius.circular(side * .16)),
+                                child: AlphabetSlotFrame(
+                                    placed: placed,
+                                    child: placed
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(5),
+                                            child: FittedBox(
+                                                fit: BoxFit.scaleDown,
+                                                child: Text(letter,
+                                                    style: TextStyle(
+                                                        fontSize: side * .5,
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color:
+                                                            GameDesign.ink))))
+                                        : Icon(Icons.star_rounded,
+                                            size: side * .48,
+                                            color: const Color(0xFFC9A9EF))),
                               )
                             : SizedBox(
                                 key: _choices.putIfAbsent(
@@ -261,6 +281,12 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
                                       buttonKey:
                                           ValueKey('alphabet-choice-$letter'),
                                       compact: true,
+                                      floating: false,
+                                      leaves: false,
+                                      labelStyle: TextStyle(
+                                          fontSize: side * .5,
+                                          fontWeight: FontWeight.w900,
+                                          color: GameDesign.ink),
                                       accent: _wrongLetter == letter
                                           ? const Color(0xFF8D2037)
                                           : choiceBlue,
@@ -278,17 +304,26 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               grid(true),
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: Text(
-                      _finished
-                          ? 'Alphabet complete!'
-                          : _wrongLetter != null
-                              ? 'Try again! Find ${_letters[_nextExpected]}'
-                              : 'Find ${_letters[_nextExpected]}',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w800))),
+              SizedBox(
+                  height: 46,
+                  width: math.min(220, box.maxWidth * .55),
+                  child: ForestPanel(
+                      leaves: false,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 3),
+                      child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                              _finished
+                                  ? 'Alphabet complete!'
+                                  : _wrongLetter != null
+                                      ? 'Try again! Find ${_letters[_nextExpected]}'
+                                      : 'Find ${_letters[_nextExpected]}',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w900,
+                                  color: GameDesign.ink))))),
               grid(false),
             ]);
       }));

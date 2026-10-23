@@ -1,0 +1,27 @@
+{
+    "version":  "1.0.17+18",
+    "verifiedUtc":  "2026-10-13T12:02:31.0749675Z",
+    "APK":  "releases/KidsPhonics-1.0.17-build18.apk",
+    "sourceInputCount":  944,
+    "capturedInputsUnchangedAfterBuild":  true,
+    "RequiredAssetsVerified":  774,
+    "AllBundledSourceAssetsVerified":  781,
+    "introRecordingCount":  16,
+    "dialogueArtworkCount":  4,
+    "ApkBytes":  466782764,
+    "ApkSHA256":  "4E59EC45936A640DFD6ED9A63AD706B0FC53CC2B6AD2EB675BBBEE4E18AA9248",
+    "androidVersionName":  "1.0.17",
+    "androidVersionCode":  18,
+    "signatureVerified":  true,
+    "signerCertificateSHA256":  "e51915ff388c75d5cb980d40ecb354a5379806fee2b3dc67a36ab4e701774f69",
+    "updateCertificateMatchesPreviousRelease":  true,
+    "packageMetadata":  [
+                            "package: name=\u0027com.example.kidsphonics\u0027 versionCode=\u002718\u0027 versionName=\u00271.0.17\u0027 platformBuildVersionName=\u002716\u0027 platformBuildVersionCode=\u002736\u0027 compileSdkVersion=\u002736\u0027 compileSdkVersionCodename=\u002716\u0027",
+                            "sdkVersion:\u002724\u0027",
+                            "targetSdkVersion:\u002736\u0027",
+                            "uses-permission: name=\u0027android.permission.RECORD_AUDIO\u0027",
+                            "uses-permission: name=\u0027com.example.kidsphonics.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION\u0027",
+                            "application-label:\u0027KidsPhonics\u0027",
+                            "application-label-af:\u0027KidsPhonics\u0027"
+                        ]
+}

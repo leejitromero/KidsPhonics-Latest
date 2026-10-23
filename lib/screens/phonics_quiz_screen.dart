@@ -1,6 +1,8 @@
 import '../data/game_session_order.dart';
 import 'dart:async';
 import '../widgets/word_game_layout.dart';
+import '../widgets/game_instruction_guide.dart';
+import '../widgets/game_mascot_coach.dart';
 // lib/screens/phonics_quiz_screen.dart
 import 'package:flutter/material.dart';
 
@@ -147,6 +149,11 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
         answerResult: _selected == null ? null : _selected == _q.correctLetter,
         title: 'Phonics Quiz',
         instructions: 'Listen and pick the letters.',
+        instructionPanel: GameMascotCoach(
+            title: 'Phonics Quiz',
+            instructions: 'Listen and pick the letters.',
+            controller: gameNarration,
+            child: const GameInstructionGuide(gameTitle: 'Phonics Quiz')),
         difficulty: widget.difficulty,
         hasProgress: scoredAttempts > 0 && !resultOpen,
         current: _qIndex + 1,

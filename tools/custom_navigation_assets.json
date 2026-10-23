@@ -1,0 +1,47 @@
+﻿[
+    {
+        "path":  "assets/images/custom_navigation/home_button_glowing.png",
+        "sha256":  "249A6A3853211C15894A888B63B0A9B02ABBBEFDC9FC8FE1165BEF250465AAD8",
+        "bytes":  1469427
+    },
+    {
+        "path":  "assets/images/custom_navigation/home_button_not_glowing.png",
+        "sha256":  "2CC64527D89349EDDAF99360BE803BF9725805FC160EEFB7DB48C4B2AB363B81",
+        "bytes":  1071307
+    },
+    {
+        "path":  "assets/images/custom_navigation/parent_button_glowing.png",
+        "sha256":  "5ECD3D4D0563278B8E54C6B1CC62257531FE840D4648C8B395AF3F0A462D877E",
+        "bytes":  1363912
+    },
+    {
+        "path":  "assets/images/custom_navigation/parent_button_not_glowing.png",
+        "sha256":  "9748C6C4C5F8522057C7C90B47B282C0675F30FF8FDA293E6764CCD38177500B",
+        "bytes":  1061250
+    },
+    {
+        "path":  "assets/images/custom_navigation/progress_button_glowing.png",
+        "sha256":  "2A2293D2028A66D3C118CFF82B7A95B3D18A0A969CCBC7C52D0ECB376BF79E76",
+        "bytes":  1424870
+    },
+    {
+        "path":  "assets/images/custom_navigation/progress_button_not_glowing.png",
+        "sha256":  "BC77F03A78950ED749DD77D63542F46240399FD1429E37598DEB654A4D8A05C4",
+        "bytes":  1031559
+    },
+    {
+        "path":  "assets/images/custom_navigation/settings_button_glowing.png",
+        "sha256":  "E72B6E1510A49919B1F0749DEE33E5E3C2336437DC80841C3B8983DADA646CEA",
+        "bytes":  1206722
+    },
+    {
+        "path":  "assets/images/custom_navigation/settings_button_not_glowing.png",
+        "sha256":  "C0CE0ED03D35A04D38F941A6E913F1F69A146F1D8749558A180E50BAB0E70241",
+        "bytes":  900286
+    },
+    {
+        "path":  "assets/images/custom_navigation/wooden frame.png",
+        "sha256":  "1C3E2FFC0EB742CE7F052BD19C9255F1B3207D52C39ADD1FD4615E40169C449A",
+        "bytes":  756323
+    }
+]

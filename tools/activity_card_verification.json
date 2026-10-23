@@ -1,0 +1,42 @@
+﻿{
+    "reviewDate":  "2026-10-11",
+    "timezone":  "Asia/Manila",
+    "verifiedUtc":  "2026-10-11T11:25:27.7452897Z",
+    "scope":  "Lessons and Games category menus",
+    "staticAnalysis":  "No issues found",
+    "testsPassed":  70,
+    "suppliedCards":  16,
+    "unchangedRuntimeOriginals":  13,
+    "editedVariants":  3,
+    "allOriginalZipCopiesVerified":  true,
+    "requiredAssets":  700,
+    "unusedAssetCandidates":  0,
+    "layouts":  [
+                    "320x568",
+                    "390x844",
+                    "800x1024",
+                    "800x600",
+                    "320x568 at 2x text"
+                ],
+    "testLog":  "build/activity_cards_final_tests.log",
+    "analysisLog":  "build/activity_cards_analysis.log",
+    "previews":  [
+                     "build/ui_previews/games_cards_390_844_1x.png",
+                     "build/ui_previews/lessons_cards_390_844_1x.png"
+                 ],
+    "artworkManifest":  "tools/activity_card_assets.json",
+    "artworkPrompts":  "docs/LESSONS_GAMES_CARD_REFRESH.md",
+    "sourceSha256":  {
+                         "lib/data/activity_card_art.dart":  "922A78290E80B395FB2C447B55A7926450626325A928D2898B71D65EF560C9D5",
+                         "lib/widgets/activity_artwork.dart":  "90E27097A545937E691B8C5BD7D4634FCD8C57B58737C238EF42D2BA0CBAA247",
+                         "lib/widgets/game_zone_card.dart":  "48F40EFC10323167EC50B7BF76ADFBF3F66E926975809F51EDAC3FA3609019BC",
+                         "lib/screens/games_screen.dart":  "13B5AED899ADD76EA4525916AD9D98229784A1D7AA74993122AA6DAFD181E8E7",
+                         "lib/screens/lessons_screen.dart":  "584B58C6C44AB27565C25579C5A51B4AECA2793AA89C7835245E242CEA62475B",
+                         "test/activity_card_refresh_test.dart":  "E8AB0C185506C907B3DE2C0E550369C485291DAF6AE0F97E8F08763E8A099589",
+                         "test/lesson_menu_test.dart":  "81436FABE3149C724238AAECEE59078E2213CF282C87C82BEE96098718083029",
+                         "test/asset_usage_audit_test.dart":  "E45F728D863F053F71A477B2D0294C97D204B051F1A50E191E7E2CB0C2E13B90",
+                         "pubspec.yaml":  "E1C30B95A32620B1305A162F3D4938E35D6719AF3A1B41F950A48E717108FDBB"
+                     },
+    "apkRebuilt":  false,
+    "physicalDeviceTested":  false
+}

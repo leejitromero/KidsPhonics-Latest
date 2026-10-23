@@ -1,18 +1,23 @@
-import '../widgets/button_sound.dart';
-import '../theme/kids_ui.dart';
-
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/app_provider.dart';
+import '../data/lesson_menu_art.dart';
 import '../models/learning_progress.dart';
-
+import '../models/word_lesson_progress.dart';
+import '../providers/app_provider.dart';
+import '../theme/kids_ui.dart';
 import '../widgets/learner_widgets.dart';
-import '../widgets/lessons_menu_page.dart';
-import 'letter_sounds_screen.dart';
-import 'letter_recognition_screen.dart';
-import 'cvc_words_screen.dart';
+import '../widgets/lesson_menu_card.dart';
+import '../widgets/lesson_menu_header.dart';
+import '../widgets/main_navigation_scope.dart';
+import '../widgets/main_navigation_shell.dart';
+import '../widgets/school_room_body.dart';
+import '../widgets/student_character_picker.dart';
 import 'blending_sounds_screen.dart';
+import 'alphabet_pictures_screen.dart';
+import 'cvc_words_screen.dart';
+import 'letter_recognition_screen.dart';
+import 'letter_sounds_screen.dart';
 
 class LessonsScreen extends StatefulWidget {
   const LessonsScreen({super.key});
@@ -21,145 +26,138 @@ class LessonsScreen extends StatefulWidget {
 }
 
 class _LessonsScreenState extends State<LessonsScreen> {
+  bool _opening = false;
+  final _scroll = ScrollController();
+  Future<void> _open(Widget page) async {
+    final p = context.read<AppProvider>();
+    if (_opening || !p.isReady || p.timeLimitReached) return;
+    setState(() => _opening = true);
+    await LearnerNavigation.open(context, page, fadeTransition: true);
+    if (mounted) setState(() => _opening = false);
+  }
+
+  Future<void> _edit() async {
+    if (_opening || !context.read<AppProvider>().isReady) return;
+    setState(() => _opening = true);
+    await showDialog<void>(
+        context: context, builder: (_) => const StudentCharacterPicker());
+    if (mounted) setState(() => _opening = false);
+  }
+
+  Future<void> _back() async {
+    if (_opening) return;
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    } else {
+      await navigateKidsTab(context, KidsDestination.home);
+    }
+  }
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final p = context.watch<AppProvider>();
-    Widget lesson(
-        String title, String description, List<String> letters, bool vowels) {
-      final mastered = vowels ? p.masteredVowelCount : p.masteredLetterCount;
-      final started =
-          letters.any((l) => p.getLetterStatus(l) != LearningStatus.notStarted);
-      return _LessonTile(
-          imageAsset:
-              'assets/images/lesson_logos/${vowels ? 'vowel_sounds' : 'letter_sounds'}.webp',
-          accent: vowels ? const Color(0xFF167769) : const Color(0xFF7052CA),
+    final enabled = p.isReady && !_opening && !p.timeLimitReached;
+    final letters = p.quickCheckLetters;
+    final vowels = letters.where((letter) => 'AEIOU'.contains(letter.letter));
+    LessonMenuCard letterCard(String id, String title, Color color,
+            Iterable<LetterProgress> records, Widget page) =>
+        LessonMenuCard(
+            id: id,
+            title: title,
+            imageAsset: lessonMenuArt[id]!,
+            color: color,
+            mastered: records.where((record) => record.mastered).length,
+            total: records.length,
+            started: records
+                .any((record) => record.status != LearningStatus.notStarted),
+            onPressed: enabled ? () => _open(page) : null);
+    LessonMenuCard wordCard(
+        String id, String title, Color color, WordLesson lesson, Widget page) {
+      final progress = p.wordLessonProgress(lesson);
+      return LessonMenuCard(
+          id: id,
           title: title,
-          description: description,
-          detail: '$mastered / ${letters.length} Mastered',
-          status: mastered == letters.length
-              ? 'Completed'
-              : started
-                  ? 'In Progress'
-                  : 'Not Started',
-          progress: mastered / letters.length,
-          onPressed: () => LearnerNavigation.open(
-              context, LetterSoundsScreen(vowelsOnly: vowels)));
+          imageAsset: lessonMenuArt[id]!,
+          color: color,
+          mastered: progress.completed.length,
+          total: lesson.words.length,
+          started: progress.started,
+          unit: lesson == WordLesson.cvc ? 'Practiced' : 'Completed',
+          onPressed: enabled ? () => _open(page) : null);
     }
 
-    final lessons = <Widget>[
-      _LessonTile(
-        title: 'Letter Recognition',
-        description: 'See and hear A–Z.',
-        imageAsset: 'assets/images/lesson_logos/letter_recognition.webp',
-        accent: const Color(0xFF087F86),
-        onPressed: () =>
-            LearnerNavigation.open(context, const LetterRecognitionScreen()),
-      ),
-      lesson('Letter Sounds A–Z', 'Hear each letter sound.',
-          List.generate(26, (i) => String.fromCharCode(65 + i)), false),
-      lesson('Short Vowel Sounds', 'Practice A, E, I, O, U.',
-          const ['A', 'E', 'I', 'O', 'U'], true),
-      _LessonTile(
-        title: 'CVC Words',
-        description: 'Blend three sounds into a word.',
-        imageAsset: 'assets/images/lesson_logos/cvc_words.webp',
-        accent: const Color(0xFFB45731),
-        onPressed: () =>
-            LearnerNavigation.open(context, const CvcWordsScreen()),
-      ),
-      _LessonTile(
-        title: 'Blending Sounds',
-        description: 'Build a word. Blend the sounds.',
-        imageAsset: 'assets/images/lesson_logos/blending_sounds.webp',
-        accent: const Color(0xFF087F86),
-        onPressed: () =>
-            LearnerNavigation.open(context, const BlendingSoundsScreen()),
-      ),
+    final lessons = [
+      letterCard('letter_recognition', 'Letter Recognition',
+          const Color(0xFFFF48B2), letters, const LetterRecognitionScreen()),
+      letterCard('letter_sounds', 'Letter Sounds A-Z', const Color(0xFF00BEF4),
+          letters, const LetterSoundsScreen()),
+      letterCard('vowel_sounds', 'Short Vowel Sounds', const Color(0xFFFFCC27),
+          vowels, const LetterSoundsScreen(vowelsOnly: true)),
+      LessonMenuCard(
+          id: 'alphabet_pictures',
+          title: 'Alphabet & Pictures',
+          imageAsset: lessonMenuArt['alphabet_pictures']!,
+          color: const Color(0xFF36C796),
+          mastered: letters.where((record) => record.wordListens > 0).length,
+          total: 26,
+          unit: 'Listened',
+          started: letters.any((record) => record.viewCount > 0),
+          onPressed:
+              enabled ? () => _open(const AlphabetPicturesScreen()) : null),
+      wordCard('cvc_words', 'CVC Words', const Color(0xFFA257FF),
+          WordLesson.cvc, const CvcWordsScreen()),
+      wordCard('blending_sounds', 'Blending Sounds', const Color(0xFFFF48B2),
+          WordLesson.blending, const BlendingSoundsScreen()),
     ];
-    return LessonsMenuPage(
-      child: LayoutBuilder(builder: (context, box) {
-        final scale = MediaQuery.textScalerOf(context).scale(14) / 14;
-        final rows = (lessons.length / 2).ceil();
-        final height = math.max(190.0 * scale,
-            math.min(220.0 * scale, (box.maxHeight - 10 * (rows - 1)) / rows));
-        return GridView.count(
-            padding: EdgeInsets.zero,
-            crossAxisCount: 2,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            mainAxisExtent: height,
-            children: lessons);
-      }),
-    );
+    return Theme(
+        data: KidsUi.theme,
+        child: Scaffold(
+            body: SchoolRoomBody(
+                room: SchoolRoom.lessons,
+                navigationDestination: KidsDestination.home,
+                navigationOnRoute: true,
+                child: LayoutBuilder(builder: (context, box) {
+                  final width = math.min(560.0, box.maxWidth - 8);
+                  final cardWidth = (width - 12) / 2;
+                  final available = box.maxHeight -
+                      LessonMenuHeader.heightFor(context, box.maxWidth - 8) -
+                      48;
+                  final cardHeight = math.max(
+                      LessonMenuCard.minimumHeight(context, cardWidth),
+                      math.min(LessonMenuCard.heightFor(context, cardWidth),
+                          available / 3));
+                  return SingleChildScrollView(
+                      key: const PageStorageKey('lessons-scroll'),
+                      controller: _scroll,
+                      padding: const EdgeInsets.fromLTRB(4, 2, 4, 12),
+                      child: Column(children: [
+                        LessonMenuHeader(
+                            character: p.studentCharacter,
+                            onBack: _opening ? null : _back,
+                            onEdit: _opening ? null : _edit),
+                        const SizedBox(height: 10),
+                        Center(
+                            child: SizedBox(
+                                width: width,
+                                child: Wrap(
+                                    key: const ValueKey('lessons-grid'),
+                                    alignment: WrapAlignment.center,
+                                    spacing: 12,
+                                    runSpacing: 12,
+                                    children: [
+                                      for (final lesson in lessons)
+                                        SizedBox(
+                                            width: cardWidth,
+                                            height: cardHeight,
+                                            child: lesson)
+                                    ]))),
+                      ]));
+                }))));
   }
-}
-
-class _LessonTile extends StatelessWidget {
-  const _LessonTile(
-      {required this.title,
-      required this.description,
-      required this.imageAsset,
-      required this.accent,
-      required this.onPressed,
-      this.detail,
-      this.status,
-      this.progress});
-  final String title, description, imageAsset;
-  final Color accent;
-  final VoidCallback? onPressed;
-  final String? detail, status;
-  final double? progress;
-
-  @override
-  Widget build(BuildContext context) => Semantics(
-        hint: description,
-        child: Material(
-          color: Color.lerp(Colors.white, accent, .07)!
-              .withValues(alpha: KidsUi.cardOpacity),
-          surfaceTintColor: Colors.transparent,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-              side: BorderSide(color: accent.withValues(alpha: .25))),
-          clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            onTap: withButtonSound(onPressed),
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(children: [
-                Expanded(
-                    child: Image.asset(imageAsset,
-                        fit: BoxFit.contain,
-                        excludeFromSemantics: true,
-                        cacheWidth:
-                            (160 * MediaQuery.devicePixelRatioOf(context))
-                                .ceil())),
-                const SizedBox(height: 4),
-                Text(title,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w800)),
-                if (detail != null)
-                  Text(detail!,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 11)),
-                if (progress != null)
-                  Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: LinearProgressIndicator(
-                          value: progress,
-                          minHeight: 4,
-                          color: accent,
-                          borderRadius: BorderRadius.circular(4))),
-                if (status != null)
-                  Text(status!,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          color: accent)),
-              ]),
-            ),
-          ),
-        ),
-      );
 }

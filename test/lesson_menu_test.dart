@@ -6,6 +6,8 @@ import 'package:kidsphonics/screens/letter_sounds_screen.dart';
 import 'package:kidsphonics/widgets/mascot_guide.dart';
 import 'package:kidsphonics/screens/journey_lesson_screen.dart';
 import 'package:kidsphonics/data/lesson_journey.dart';
+import 'package:kidsphonics/data/lesson_menu_art.dart';
+import 'package:kidsphonics/widgets/kids_navigation_bar.dart';
 import 'package:kidsphonics/providers/app_provider.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show mount, close;
@@ -35,6 +37,7 @@ void main() {
         'letter_recognition',
         'letter_sounds',
         'vowel_sounds',
+        'alphabet_pictures',
         'cvc_words',
         'blending_sounds',
       ]) {
@@ -44,27 +47,25 @@ void main() {
               ? (w.image as ResizeImage).imageProvider
               : w.image;
           return provider is AssetImage &&
-              provider.assetName == 'assets/images/lesson_logos/$name.webp';
+              provider.assetName == lessonMenuArt[name];
         });
         // The compact phone keeps readable cards and scrolls the third row.
         if (logo.evaluate().isEmpty) {
-          await t.drag(find.byType(GridView), const Offset(0, -200));
+          await t.drag(find.byKey(const PageStorageKey('lessons-scroll')),
+              const Offset(0, -200));
           await t.pumpAndSettle();
         }
         expect(logo, findsOneWidget);
       }
       expect(find.byType(MascotGuide), findsNothing);
       expect(find.byType(AppBar), findsNothing);
-      expect(find.text('Lessons'), findsNothing);
+      expect(find.byKey(const ValueKey('category-menu')), findsNothing);
+      expect(find.byType(KidsNavigationBar), findsOneWidget);
       final banner = find.byKey(const ValueKey('lessons-banner'));
       expect(banner, findsOneWidget);
-      expect(t.getRect(banner).bottom,
-          lessThanOrEqualTo(t.getRect(find.byType(GridView)).top));
       expect(
-          (t.widget<GridView>(find.byType(GridView)).gridDelegate
-                  as SliverGridDelegateWithFixedCrossAxisCount)
-              .mainAxisExtent,
-          lessThanOrEqualTo(220));
+          t.widget<Wrap>(find.byKey(const ValueKey('lessons-grid'))).alignment,
+          WrapAlignment.center);
       expect(find.text('Rhyming Words'), findsNothing);
       expect(find.text('Tricky Letters'), findsNothing);
       await t.ensureVisible(find.text('Blending Sounds'));

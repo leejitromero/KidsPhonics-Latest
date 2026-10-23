@@ -37,7 +37,6 @@ const blendingLessonWords = [
 ];
 
 String? blendingAudioAsset(String phrase) {
-  if (phrase == 'blend-intro') return 'audio/blending_lesson/intro.mp3';
   if (phrase == 'blend-try-another') {
     return 'audio/blending_lesson/try-another.mp3';
   }

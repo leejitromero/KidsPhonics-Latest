@@ -1,4 +1,6 @@
 import '../widgets/button_sound.dart';
+import '../widgets/game_instruction_guide.dart';
+import '../widgets/game_mascot_coach.dart';
 import '../widgets/game_design.dart';
 import '../widgets/speech_practice_design.dart';
 import '../data/game_session_order.dart';
@@ -415,6 +417,17 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
       answerResult: _isCorrect,
       title: 'Speak & Recognize',
       instructions: 'Listen, then say the word.',
+      instructionPanel: GameMascotCoach(
+          title: 'Speak & Recognize',
+          instructions: 'Listen, then say the word.',
+          controller: gameNarration,
+          enabled: !_isListening && !_requestingPermission && !resultOpen,
+          child: GameInstructionGuide(
+              gameTitle: 'Speak & Recognize',
+              enabled: !_isListening &&
+                  !_requestingPermission &&
+                  !_isSpelling &&
+                  !resultOpen)),
       difficulty: widget.difficulty,
       current: _wordIndex + 1,
       total: _words.length,

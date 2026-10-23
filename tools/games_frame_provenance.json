@@ -1,0 +1,14 @@
+{
+  "mode": "built-in image_gen",
+  "source": "C:/Users/leeji/KidsPhonicsProject/screen animations/frames for games.png",
+  "sourceSha256": "21F38E3E06F756A4FEC7164043D112CDA6F43A5C7A0A2D438679FE79973F490B",
+  "output": "assets/images/games_menu/games_card_frame.png",
+  "outputSha256": "2C4FCBCA59E02FAFB1B03C787C8EE8EAE52CA1FD3B0908570E8EBF5FBAD0C4D4",
+  "canvas": [
+    1536,
+    1024
+  ],
+  "centerAlpha": 0,
+  "cornerAlpha": 0,
+  "prompt": "Use case: background-extraction. Edit target: the supplied 1536 by 1024 KidsPhonics golden-orange and bright pink decorative rectangular frame PNG. Primary request: remove ONLY the pure black center and the pure black outside background to genuine alpha transparency. Keep the EXACT existing frame artwork, original golden-orange glossy border, inner bright pink outline, stars, clouds, small side stars, corners, original proportions, original landscape orientation, and original canvas dimensions. This is an extraction of the actual supplied image, NOT a redesign or new illustration. Do not add or remove decorations. Do not add any text, characters or game content. All black areas behind/inside the frame must be alpha transparent. Keep all colored artwork and highlights in precisely the original positions."
+}

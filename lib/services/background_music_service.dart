@@ -38,6 +38,11 @@ class BackgroundMusicService {
   }
 
   Future<void> _sync() {
+    // An idle or disabled music channel has nothing to pause. Speech should
+    // not wait on that channel's queued setup work before it can start.
+    if (!shouldPlay && _player?.state != PlayerState.playing) {
+      return Future.value();
+    }
     _pending = _pending.then((_) async {
       if (!shouldPlay) {
         if (_player?.state == PlayerState.playing) await _player!.pause();

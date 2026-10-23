@@ -1,0 +1,47 @@
+{
+  "version": "1.0.31+32",
+  "verifiedUtc": "2026-10-22T12:12:59.423359+00:00",
+  "APK": "output/apk/KidsPhonics-1.0.31-build32.apk",
+  "capturedSourceInputs": 1025,
+  "sourceInputsUnchanged": true,
+  "registeredAssetsVerified": 821,
+  "bundledAssetsMatchSource": 821,
+  "suppliedGameRecordingsVerified": 11,
+  "suppliedLessonRecordingsVerified": 10,
+  "retiredIntroRecordingsAbsent": 5,
+  "ApkBytes": 488257374,
+  "ApkSHA256": "3FECFEC10474F35F46B25F53529C68F8E86F5A1384B8F4669D719C0F926AAC3D",
+  "physicalDeviceTested": false,
+  "signatureVerified": true,
+  "updateCertificateMatchesPreviousRelease": true,
+  "signerCertificateSHA256": "e51915ff388c75d5cb980d40ecb354a5379806fee2b3dc67a36ab4e701774f69",
+  "packageMetadata": "package: name='com.example.kidsphonics' versionCode='32' versionName='1.0.31' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+  "androidVersionName": "1.0.31",
+  "androidVersionCode": 32,
+  "androidArchitectures": [
+    "armeabi-v7a",
+    "arm64-v8a",
+    "x86_64"
+  ],
+  "updates": [
+    "Blue Settings reference design",
+    "Sound & Music reference panel and native controls",
+    "Display & Animations reference panel and text-size choices",
+    "Help & Tutorials and Lessons/Games guide cards",
+    "Simplified About KidsPhonics without decorative leaves",
+    "Quick Check challenge progress moved above instructions",
+    "Existing game updates, progress tracking and recordings"
+  ],
+  "validationLogs": [
+    "build/settings_about_checks.log",
+    "build/settings_about_analysis.log",
+    "build/settings_help_checks.log",
+    "build/settings_help_analysis.log",
+    "build/settings_sound_checks.log",
+    "build/settings_sound_analysis.log",
+    "build/settings_display_checks.log",
+    "build/settings_display_analysis.log",
+    "build/quick_check_top_progress_checks.log",
+    "build/quick_check_top_progress_analysis.log"
+  ]
+}

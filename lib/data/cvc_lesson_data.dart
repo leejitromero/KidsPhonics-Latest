@@ -36,7 +36,6 @@ const cvcLessonWords = [
 ];
 
 String? cvcAudioAsset(String phrase) {
-  if (phrase == 'cvc-intro') return 'audio/cvc_lesson/intro.mp3';
   for (final word in cvcLessonWords) {
     if (phrase == word.wordAudio) {
       return 'audio/cvc_lesson/word-${word.slug}.mp3';

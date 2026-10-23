@@ -1,0 +1,16 @@
+{
+  "version": "1.0.22+23",
+  "verifiedUtc": "2026-10-16T05:13:04.0155856Z",
+  "APK": "output/apk/KidsPhonics-1.0.22-build23.apk",
+  "ApkBytes": 462844893,
+  "ApkSHA256": "7F204147DF6428F61598187F9D5DB8EF8E7ACEE8A612A08DF9D1A06B31FCD3A0",
+  "signatureVerified": true,
+  "signerCertificateSHA256": "e51915ff388c75d5cb980d40ecb354a5379806fee2b3dc67a36ab4e701774f69",
+  "updateCertificateMatchesPreviousRelease": true,
+  "packageMetadata": "package: name='com.example.kidsphonics' versionCode='23' versionName='1.0.22' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+  "physicalDeviceTested": false,
+  "capturedSourceInputs": 948,
+  "sourceInputsUnchanged": true,
+  "bundledAssetsMatchSource": 785,
+  "scopedHomeCasesVerified": 95
+}

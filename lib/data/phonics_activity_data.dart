@@ -304,26 +304,7 @@ VowelPuzzle _vowelPuzzle(GameWord item) {
 }
 
 List<String> vowelChoicesFor(Difficulty d, String correctVowel) {
-  // Build the vowel set for this difficulty, always ensuring
-  // the correct answer is present — swap out last distractor if needed.
-  List<String> base;
-  switch (d) {
-    case Difficulty.easy:
-      base = ['A', 'E', 'I'];
-      break;
-    case Difficulty.medium:
-      base = ['A', 'E', 'I', 'O'];
-      break;
-    case Difficulty.hard:
-      base = ['A', 'E', 'I', 'O', 'U'];
-      break;
-  }
-  // If correct vowel is already in set, return as-is
-  if (base.contains(correctVowel)) return base;
-  // Otherwise replace the last element with the correct vowel
-  final result = List<String>.from(base);
-  result[result.length - 1] = correctVowel;
-  return result;
+  return ['A', 'E', 'I', 'O', 'U'];
 }
 
 // ── Screen ────────────────────────────────────────────────────────────────

@@ -1,0 +1,43 @@
+{
+  "version": "1.0.33+34",
+  "verifiedUtc": "2026-10-23T10:46:33.108398+00:00",
+  "APK": "output/apk/KidsPhonics-1.0.33-build34.apk",
+  "capturedSourceInputs": 1087,
+  "sourceInputsUnchanged": true,
+  "registeredAssetsVerified": 877,
+  "bundledAssetsMatchSource": 877,
+  "suppliedGameRecordingsVerified": 11,
+  "suppliedLessonRecordingsVerified": 10,
+  "retiredIntroRecordingsAbsent": 5,
+  "ApkBytes": 542573174,
+  "ApkSHA256": "53EA7E616E813ACF70F64D8E6ED3AFE59A18190DE8C3F65AF6AAE3794DDA7D4C",
+  "physicalDeviceTested": false,
+  "signatureVerified": true,
+  "updateCertificateMatchesPreviousRelease": true,
+  "signerCertificateSHA256": "e51915ff388c75d5cb980d40ecb354a5379806fee2b3dc67a36ab4e701774f69",
+  "packageMetadata": "package: name='com.example.kidsphonics' versionCode='34' versionName='1.0.33' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+  "androidVersionName": "1.0.33",
+  "androidVersionCode": 34,
+  "androidArchitectures": [
+    "armeabi-v7a",
+    "arm64-v8a",
+    "x86_64"
+  ],
+  "alphabetPicturesAssetsVerified": {
+    "pictures": 78,
+    "sentences": 26,
+    "instructions": 2
+  },
+  "updates": [
+    "Alphabet & Pictures as lesson 4 after Short Vowel Sounds",
+    "78 supplied A-Z picture frames and 26 original sentence recordings",
+    "Two supplied instruction recordings, sequenced before initial A audio",
+    "Existing six-lesson progress tracking and audio interruption handling",
+    "Previously delivered UI and game improvements"
+  ],
+  "validationLogs": [
+    "build/alphabet_picture_instructions_final.log",
+    "build/alphabet_picture_instructions_checks.log",
+    "build/alphabet_picture_instructions_analysis.log"
+  ]
+}

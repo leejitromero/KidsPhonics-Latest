@@ -3,6 +3,8 @@ import 'dart:async';
 import '../data/game_session_order.dart';
 import '../widgets/word_game_layout.dart';
 import '../widgets/game_design.dart';
+import '../widgets/game_instruction_guide.dart';
+import '../widgets/game_mascot_coach.dart';
 // lib/screens/word_builder_screen.dart
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -51,6 +53,8 @@ class _WordBuilderScreenState extends State<WordBuilderScreen>
   late List<String> _shuffledTiles;
 
   int get _blankCount => _puzzle.correctLetters.length;
+  String get _instruction =>
+      'Fill in ${_blankCount == 1 ? 'the blank' : 'the blanks'} to make ${_puzzle.word}!';
 
   @override
   void initState() {
@@ -277,7 +281,12 @@ class _WordBuilderScreenState extends State<WordBuilderScreen>
       canOpenTutorial: () => !_busy && !resultOpen,
       answerResult: _feedback,
       title: 'Word Builder',
-      instructions: 'Fill the blanks, left to right.',
+      instructions: _instruction,
+      instructionPanel: GameMascotCoach(
+          title: 'Word Builder',
+          instructions: _instruction,
+          controller: gameNarration,
+          child: const GameInstructionGuide(gameTitle: 'Word Builder')),
       difficulty: widget.difficulty,
       current: _puzzleIndex + 1,
       total: _activePuzzles.length,

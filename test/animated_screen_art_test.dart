@@ -6,11 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kidsphonics/screens/home_screen.dart';
 import 'package:kidsphonics/screens/lessons_screen.dart';
 import 'package:kidsphonics/screens/games_screen.dart';
-import 'package:kidsphonics/screens/progress_screen.dart';
 import 'package:kidsphonics/screens/parent_screen.dart';
 import 'package:kidsphonics/widgets/parent_pin_form.dart';
 import 'package:kidsphonics/widgets/animated_screen_art.dart';
-import 'package:kidsphonics/widgets/home_flight_menu.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show mount, close;
 
@@ -33,11 +31,9 @@ void main() {
   for (final (key, destination) in [
     ('home-lessons', LessonsScreen),
     ('home-games', GamesScreen),
-    ('home-progress', ProgressScreen),
-    ('home-parents', ParentScreen),
   ]) {
     testWidgets('artwork $key opens the corresponding screen', (t) async {
-      SharedPreferences.setMockInitialValues({});
+      SharedPreferences.setMockInitialValues({'voice': false});
       mockProgressAudio();
       t.binding.platformDispatcher.accessibilityFeaturesTestValue =
           const FakeAccessibilityFeatures(disableAnimations: true);
@@ -75,8 +71,8 @@ void main() {
     addTearDown(
         t.binding.platformDispatcher.clearAccessibilityFeaturesTestValue);
     final p = await mount(t, const HomeScreen());
-    expect(
-        t.widget<HomeFlightMenu>(find.byType(HomeFlightMenu)).onGames, isNull);
+    expect(t.widget<InkWell>(find.byKey(const ValueKey('home-games'))).onTap,
+        isNull);
     expect(find.byKey(const ValueKey('home-games-tap-mark')), findsNothing);
     await t.ensureVisible(find.byKey(const ValueKey('home-games')));
     await t.tap(find.byKey(const ValueKey('home-games')));

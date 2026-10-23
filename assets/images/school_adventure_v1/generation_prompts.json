@@ -1,0 +1,21 @@
+{
+  "tool": "Built-in image_gen",
+  "reference": "User-supplied KidsPhonics school home concept in this conversation",
+  "assets": [
+    {
+      "key": "school-background",
+      "transparent_background": false,
+      "prompt": "Use case: precise-object-edit. Asset type: portrait background plate for KidsPhonics mobile game. Input image 1 is the user's approved school home illustration and the edit target. Produce ONLY the school environment background as one portrait image, matching the reference composition and glossy soft 3D cartoon rendering as closely as possible. Preserve blue sky, clouds, green trees, warm cream central school with coral roof and clock, purple lesson classroom on the left with book emblem, blue game classroom on the right with gamepad emblem, warm lanterns and golden stone courtyard. Remove and cleanly reconstruct behind ALL foreground overlays: KidsPhonics logo, speech bubble and all text, central boy, both mascot creatures, both freestanding Lessons/Games wooden signposts, and bottom navigation bar. No people, creatures, text, words, logos, buttons, UI or watermarks. Retain architectural book and controller emblems as part of classroom buildings. Keep generous empty central and lower courtyard space for separate character sprites and navigation to be layered later, and sky space at the top for a separate logo. Background fills entire 2:3 portrait canvas; coherent perspective and same sunny soft lighting. This is the actual standalone background asset, not a mockup, collage or asset sheet."
+    },
+    {
+      "key": "student-boy",
+      "transparent_background": true,
+      "prompt": "Use case: background-extraction. Asset type: one transparent full-body student character sprite for KidsPhonics mobile game. Input image 1 is the user's approved reference; isolate and faithfully recreate ONLY the central schoolboy as one character on a genuinely transparent alpha background. Match his large friendly brown eyes, tousled dark brown hair, warm light-medium skin, rosy cheeks, happy smile, soft glossy high-quality 3D cartoon finish and chibi Grade 1 proportions. White short-sleeve collared shirt, blue necktie, small blue-and-gold shield badge without lettering, navy shorts, blue backpack, white socks with blue stripes, blue-and-white sneakers. Front-facing upright, his left hand on viewer's right waving hello with natural five fingers, other hand holding backpack strap. Entire body including hair, fingers and both shoes inside frame, centered with modest clear transparent margin. Match the reference costume, lighting and perspective; no ground plane or scenery or cast shadow outside character. ONLY one boy. No mascot, text, speech bubble, UI, props apart from backpack, border or watermark. Do not draw a checkerboard or colored backdrop; real transparency required. Portrait canvas."
+    },
+    {
+      "key": "student-girl",
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. Asset type: one transparent full-body student character sprite for KidsPhonics mobile game. Input image 1 is a style/costume/proportion reference for the central schoolboy. Create his matching GIRL student counterpart, same Grade 1 age, same height and chibi proportions, same soft glossy high-quality 3D cartoon finish, large friendly brown eyes, warm light-medium skin, rosy cheeks and happy smile. Dark brown hair in two neat shoulder-length pigtails with small blue ties. Matching white short-sleeve collared school shirt, blue necktie, small blue-and-gold shield badge without lettering, navy pleated knee-length school skirt, blue backpack, white socks with blue stripes, blue-and-white sneakers. Front-facing upright in matching friendly idle greeting pose: her left hand on viewer's right waving with natural five fingers, other hand holding backpack strap. Entire body including hair, fingers and both shoes inside frame, centered with modest clear transparent margin. Matching sunny soft lighting and near eye-level perspective. One girl ONLY on genuinely transparent alpha background; no floor or scenery or ground shadow outside character. No boy, mascots, text, speech bubble, UI, border, watermark or contact sheet. Do not draw checkerboard or solid-color backdrop; actual transparency required. Portrait canvas."
+    }
+  ]
+}

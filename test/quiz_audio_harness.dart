@@ -13,6 +13,7 @@ class _LocalQuizCache extends AudioCache {
 class QuizAudioHarness {
   final sources = <String>[];
   final starts = <String>[];
+  final calls = <String>[];
   final _players = <String, String>{};
   final _messenger =
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
@@ -25,6 +26,7 @@ class QuizAudioHarness {
         const MethodChannel('xyz.luan/audioplayers'), (call) async {
       final arguments = call.arguments as Map;
       final id = arguments['playerId'] as String;
+      calls.add('${call.method}:$id');
       if (call.method == 'create') {
         _messenger.setMockMethodCallHandler(
             MethodChannel('xyz.luan/audioplayers/events/$id'),
@@ -55,6 +57,25 @@ class QuizAudioHarness {
   Future<void> completeSound(String letter) async {
     final suffix = '/sounds/sound-${letter.toLowerCase()}.mp3';
     await completeSource(suffix);
+  }
+
+  /// Verify the entry recording, then count the activity's audio separately.
+  Future<void> finishGameIntro(WidgetTester t, String filename) async {
+    final suffix = '/game_instructions/$filename';
+    for (var i = 0; i < 150 && !starts.any((s) => s.endsWith(suffix)); i++) {
+      await t.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 10)));
+      await t.pump();
+    }
+    expect(starts.where((s) => s.endsWith(suffix)), hasLength(1));
+    await t.runAsync(() => completeSource(suffix));
+    for (var i = 0; i < 3; i++) {
+      await t.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 10)));
+      await t.pump();
+    }
+    starts.clear();
+    sources.clear();
   }
 
   Future<void> completeSource(String suffix) async {

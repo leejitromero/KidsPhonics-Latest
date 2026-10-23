@@ -1,23 +1,37 @@
-﻿# KidsPhonics
+# KidsPhonics
 
 KidsPhonics is a Flutter Android application for Grade 1 supplemental phonics practice. Lessons, recordings, games, learning progress, rewards, and parent controls use local assets and storage. No account, cloud database, or analytics service is required.
 
+Latest verified APK: [KidsPhonics 1.0.20 / build 21](releases/KidsPhonics-1.0.20-build21.apk).
+Release verification passed 78 scoped tests; the Flutter analyzer found no issues.
+See the [release notes](docs/RELEASE_1_0_20.md) for the supplied classroom Home,
+verified startup/setup/idle/walking flow and APK checks.
+
 ## Current features
 
-- Animated sky backgrounds and the supplied flying Home menu, with tappable
-  Lessons/Games/Progress artwork, plus the restored original loading screen.
-  See [animated screen delivery](ANIMATED_SCREEN_DELIVERY.md).
+- Full-screen classroom Home places Lala and Lulu behind compact Lessons and
+  Games buttons, with Practice This Letter between them. First-time learners
+  hear four voices say KidsPhonics together before Lala and Lulu's separate
+  introductions, choose a framed boy/girl and enter a name.
+  Clouds reveal their character on Home. Idle characters wave and give one
+  automatic prompt after five seconds without interaction. The student speaks
+  and walks into the selected classroom before it opens. Home has no navigation
+  bar or app header. Category screens retain morning/sunset/night backgrounds.
+  Category backgrounds fill the display without cropping; a small floating menu
+  replaces the fixed footer, and the learner profile sits in Progress content.
+  See [Home classroom update](docs/HOME_CLASSROOM_UPDATE.md).
 
 - A–Z letter lessons and Short Vowel Sounds, with separate LETTER, SOUND, and WORD buttons using the user's latest 78 supplied recordings. See [LESSON_ASSETS.md](LESSON_ASSETS.md) for current mappings and cleanup.
 - Five-question Quick Checks: **4/5 masters a letter**. Browsing only marks it Viewed. Statuses are Not Started, Viewed, Practiced, and Mastered; later practice does not remove previously earned mastery.
 - Game Zone: Flappy Letters, Sound Match, Memory Flip, Phonics Quiz, Word Builder, Speak & Recognize, Alphabet Order, Missing Vowel, Picture Match, Rumbled Words, and Rhyming Words: **eleven menu activities**. Sound Position remains implemented but currently has no menu entry.
+- Lessons and Games menus use the supplied five lesson and eleven game card designs. Game cards share one size and use the titles already printed in the artwork. Lessons retain responsive captions and saved progress. The selected learner profile appears in Progress and the category navigation. See [card refresh](docs/LESSONS_GAMES_CARD_REFRESH.md).
 - Real mastery, Needs Practice, Recommended Next, seven-day activity, streaks, and separate reward statistics. Results show the XP/stars actually saved for that play.
 - Parent PIN with a random salt and SHA-256 digest, session checks, protected progress reset, game-access control, daily foreground screen time, and parent-authorized extra time.
 - Local `shared_preferences` persistence. Existing keys and safe legacy migration are retained; old `learned` entries become Viewed, never Mastered.
 - Speak & Recognize uses the device's existing speech-recognition engine to match recognized words. It does **not** assess phonetic pronunciation. Offline recognition availability depends on the Android recognition service and installed language support; test it on the target phone in airplane mode. The app adds no online speech service.
 - New/viewed letters selected from Progress or parent recommendations open a teaching screen before Quick Check. Name/sound/word listening and speech-recognition practice are tracked separately from quiz accuracy.
 - Checked save retries and app/screen-time snapshots preserve consistent progress across interrupted writes; pending changes have a Retry action in the Parent Panel.
-- Runtime artwork uses lossless WebP encodings with verified identical pixels, retaining PNG launcher inputs and existing GIFs. All games offer visual How to Play examples. See [implemented improvements](IMPROVEMENTS_IMPLEMENTED.md).
+- Runtime artwork includes lossless WebP encodings and the latest supplied PNG Home/menu designs, retaining PNG launcher inputs and existing GIFs. All games offer visual How to Play examples. See [implemented improvements](IMPROVEMENTS_IMPLEMENTED.md).
 
 ## Development
 
@@ -52,7 +66,7 @@ The launcher label is **KidsPhonics**. Application ID and namespace remain `com.
 
 The main manifest requests microphone access and declares recognition-service discovery. The unused TTS query, legacy external-storage flag, and main-manifest internet permission were removed. Flutter's debug/profile internet permission remains for development tooling.
 
-Release currently uses the **development debug signing configuration**. No production signing keys or passwords were generated. Configure proper signing separately before store distribution. Release **1.0.12+13** includes the simplified Parents overview, parent-session cleanup and startup/reset save recovery fixes, alongside the colorful Quick Check buttons, updated Home layout, compact Progress/Parents cards and animated Sound Match orb. Build output is `build/app/outputs/flutter-apk/app-release.apk`; the verified delivery is `releases/KidsPhonics-1.0.12-build13.apk`. See [release verification](tools/latest_apk_verification.json) and [release notes](docs/RELEASE_1_0_12.md). Earlier deliveries are historical snapshots in [ANIMATED_SCREEN_DELIVERY.md](ANIMATED_SCREEN_DELIVERY.md) and [SCREEN_REFRESH_DELIVERY.md](SCREEN_REFRESH_DELIVERY.md).
+Release currently uses the **development debug signing configuration**. No production signing keys or passwords were generated. Configure proper signing separately before store distribution. Release **1.0.20+21** includes the supplied classroom Home and verified loading, title voice, mascot guidelines, character setup, cloud reveal, idle prompt and walking exits. Build output is `build/app/outputs/flutter-apk/app-release.apk`; the verified delivery is `releases/KidsPhonics-1.0.20-build21.apk`. See [release verification](tools/latest_apk_verification.json) and [release notes](docs/RELEASE_1_0_20.md). Earlier deliveries are historical snapshots in [ANIMATED_SCREEN_DELIVERY.md](ANIMATED_SCREEN_DELIVERY.md) and [SCREEN_REFRESH_DELIVERY.md](SCREEN_REFRESH_DELIVERY.md).
 
 ## Verification and manual testing
 

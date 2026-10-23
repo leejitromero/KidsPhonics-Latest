@@ -1,0 +1,36 @@
+{
+  "inputs": [
+    {
+      "file": "kidsphonics_intro_01.mp3",
+      "sha256": "d88b1325328e1d81f4ae535aed2518845691c2265a78f9f1f3aee27e85362fba",
+      "seconds": 1.411,
+      "startSample": 0,
+      "gain": 0.25
+    },
+    {
+      "file": "kidsphonics_intro_02.mp3",
+      "sha256": "49e410d3d61c4632e2a7ca108848fa8d077a9444558d3a2149400401a22219d1",
+      "seconds": 1.411,
+      "startSample": 0,
+      "gain": 0.25
+    },
+    {
+      "file": "kidsphonics_intro_03.mp3",
+      "sha256": "a6792e9e0f971953941256914f53c1f899bba8f2fe054b63fac3bb1029e0d2f4",
+      "seconds": 1.567,
+      "startSample": 0,
+      "gain": 0.25
+    },
+    {
+      "file": "kidsphonics_intro_04.mp3",
+      "sha256": "411b409f3ec792ab3c855e65ad9601570814b2bdc7d7501909aefc7952b27c49",
+      "seconds": 1.306,
+      "startSample": 0,
+      "gain": 0.25
+    }
+  ],
+  "output": "assets/audio/home_intro/kidsphonics_title_chorus.mp3",
+  "outputSha256": "2c8f30deef3329aeb93c4e7f34512a2b7c7e7d2467d9097e9f5f442c76d4d387",
+  "seconds": 1.567,
+  "unencodedPeak": 0.39505
+}

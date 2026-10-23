@@ -1,0 +1,29 @@
+{
+  "recordings": 2,
+  "audioUnmodified": true,
+  "mpegFramesValidated": true,
+  "files": [
+    {
+      "original": "C:\\Users\\leeji\\KidsPhonicsProject\\lessons_instructions_script\\alphabet_pictures_1.mp3",
+      "path": "assets/audio/lesson_instructions/alphabet_pictures_1.mp3",
+      "sha256": "0780B4EBD273CCEA4A99BC9E8A68BF7A5D68A83E379C3D59F88A0293BC4A3E76",
+      "bytes": 86736,
+      "mpegFrames": 167,
+      "frameDurationSeconds": 4.362,
+      "sampleRatesHz": [
+        44100
+      ]
+    },
+    {
+      "original": "C:\\Users\\leeji\\KidsPhonicsProject\\lessons_instructions_script\\alphabet_picture_2.mp3",
+      "path": "assets/audio/lesson_instructions/alphabet_picture_2.mp3",
+      "sha256": "4D4FF20641E645CC236B954D8D37264A5ED5C561331D20F80697FADA1350BF1D",
+      "bytes": 90497,
+      "mpegFrames": 176,
+      "frameDurationSeconds": 4.598,
+      "sampleRatesHz": [
+        44100
+      ]
+    }
+  ]
+}

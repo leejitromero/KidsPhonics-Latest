@@ -180,7 +180,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(
         find.descendant(
-            of: find.byKey(const ValueKey('overall-mastery-illustration')),
+            of: find.byKey(const ValueKey('journey-skill-letters')),
             matching: find.text('1 / 26')),
         findsOneWidget);
     await tester.scrollUntilVisible(find.text('1 / 5'), 180,

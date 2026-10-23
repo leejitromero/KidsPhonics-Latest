@@ -4,15 +4,18 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/blending_lesson_controller.dart';
+import '../controllers/lesson_introduction_sequence.dart';
+import '../data/lesson_instruction_scripts.dart';
 import '../data/blending_lesson_data.dart';
 import '../providers/app_provider.dart';
+import '../models/word_lesson_progress.dart';
 import '../services/background_music_service.dart';
 import '../theme/kids_ui.dart';
 import '../widgets/blending_puzzle_piece.dart';
 import '../widgets/button_sound.dart';
 import '../widgets/cvc_word_picture.dart';
 import '../widgets/lessons_menu_page.dart';
-import '../widgets/mascot_guide.dart';
+import '../widgets/lesson_frame.dart';
 
 class BlendingSoundsScreen extends StatefulWidget {
   const BlendingSoundsScreen({super.key, this.controller});
@@ -28,6 +31,7 @@ class _BlendingSoundsScreenState extends State<BlendingSoundsScreen>
   BlendingLessonController? _lesson;
   AppProvider? _provider;
   bool _holdingMusic = false;
+  final _introduction = LessonIntroductionSequence();
   final _pieceKeys = List.generate(3, (_) => GlobalKey());
   int? _dragging, _returning;
   int _epoch = 0, _dragEpoch = 0;
@@ -44,7 +48,13 @@ class _BlendingSoundsScreenState extends State<BlendingSoundsScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_lesson != null) return;
+    if (_lesson != null) {
+      if (ModalRoute.isCurrentOf(context) == false) {
+        _introduction.interrupt();
+        _lesson!.pause();
+      }
+      return;
+    }
     _provider = context.read<AppProvider>();
     _lesson = (widget.controller ??
         BlendingLessonController(
@@ -52,17 +62,44 @@ class _BlendingSoundsScreenState extends State<BlendingSoundsScreen>
           play: _provider!.phonicsAudio.playInstruction,
           stop: _provider!.phonicsAudio.stop,
         ))
+      ..playIntroduction = _playIntroduction
       ..addListener(_changed);
     _provider!.addListener(_settingsChanged);
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _lesson!.introduce();
+      if (mounted) {
+        unawaited(_provider!.startWordLesson(WordLesson.blending));
+        _lesson!.introduce();
+      }
     });
   }
 
-  void _settingsChanged() => _lesson!.setVoiceEnabled(_provider!.voiceEnabled);
+  Future<bool> _playIntroduction() => _introduction.run(
+      lesson: 'blend-intro',
+      play: _lesson!.play,
+      stop: _lesson!.stop,
+      voiceEnabled: () => _lesson!.voiceEnabled,
+      isCurrent: () =>
+          mounted &&
+          (ModalRoute.isCurrentOf(context) ?? true) &&
+          !_provider!.timeLimitReached);
+
+  void _settingsChanged() {
+    if (_lesson!.voiceEnabled != _provider!.voiceEnabled) {
+      _introduction.interrupt();
+    }
+    _lesson!.setVoiceEnabled(_provider!.voiceEnabled);
+  }
+
   void _changed() {
     if (!mounted) return;
+    if (_lesson!.phase != BlendingPhase.intro && !_introduction.finished) {
+      _introduction.interrupt();
+    }
+    if (_lesson!.phase == BlendingPhase.complete && !_lesson!.running) {
+      unawaited(_provider!
+          .completeWordLessonWord(WordLesson.blending, _lesson!.word.word));
+    }
     if (_holdingMusic != _lesson!.running) {
       _holdingMusic = _lesson!.running;
       if (_holdingMusic) {
@@ -84,6 +121,7 @@ class _BlendingSoundsScreenState extends State<BlendingSoundsScreen>
   }
 
   void _navigate(VoidCallback action) {
+    _introduction.interrupt();
     _clearDrag();
     action();
   }
@@ -133,6 +171,7 @@ class _BlendingSoundsScreenState extends State<BlendingSoundsScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state != AppLifecycleState.resumed) {
+      _introduction.interrupt();
       _clearDrag();
       _lesson?.pause();
     }
@@ -144,6 +183,7 @@ class _BlendingSoundsScreenState extends State<BlendingSoundsScreen>
     _provider?.removeListener(_settingsChanged);
     _lesson?.removeListener(_changed);
     _lesson?.dispose();
+    _introduction.dispose();
     _clearDrag();
     _returnAnimation.dispose();
     unawaited(BackgroundMusicService.instance.release(this));
@@ -153,12 +193,7 @@ class _BlendingSoundsScreenState extends State<BlendingSoundsScreen>
   String get _message {
     final lesson = _lesson!;
     if (lesson.tryAnother) return 'Try another spot!';
-    return switch (lesson.phase) {
-      BlendingPhase.intro => 'Let’s blend some sounds!',
-      BlendingPhase.puzzle => 'Drag the letters to build the word!',
-      BlendingPhase.blending => 'Blend the sounds!',
-      BlendingPhase.complete => lesson.word.praise,
-    };
+    return lessonInstructionDefaults['blend-intro']!;
   }
 
   @override
@@ -166,219 +201,225 @@ class _BlendingSoundsScreenState extends State<BlendingSoundsScreen>
     final lesson = _lesson!;
     final reducedMotion = MediaQuery.disableAnimationsOf(context);
     return LessonsMenuPage(
+        title: 'Blending Sounds',
+        introduction: lessonInstructionScripts['blend-intro']!,
+        introductionStatus: _introduction,
+        instruction: _message,
         child: Column(children: [
-      Expanded(child: LayoutBuilder(builder: (context, bounds) {
-        final pictureHeight = (bounds.maxHeight - 335).clamp(80.0, 200.0);
-        return SingleChildScrollView(
-          key: const ValueKey('blending-content'),
-          child: Column(children: [
-            Semantics(
-                liveRegion: true,
-                child: MascotGuide(
-                    mascot: LearningMascot.wigloo,
-                    compact: true,
-                    message: _message)),
-            const SizedBox(height: 8),
-            if (lesson.phase != BlendingPhase.intro)
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                    color: KidsUi.cardSurface,
-                    borderRadius: BorderRadius.circular(28),
-                    border: Border.all(color: Colors.white, width: 2)),
-                child: Column(children: [
-                  const Text('Blending Sounds',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w900,
-                          color: KidsUi.ink)),
-                  SizedBox(
-                      height: pictureHeight,
-                      width: double.infinity,
-                      child: CvcWordPicture(word: lesson.word)),
-                  LayoutBuilder(builder: (context, box) {
-                    final side = math.min(100.0, (box.maxWidth - 16) / 3);
-                    return Column(children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            for (var slot = 0; slot < 3; slot++) ...[
-                              if (slot > 0)
-                                AnimatedContainer(
-                                    duration: reducedMotion
-                                        ? Duration.zero
-                                        : const Duration(milliseconds: 500),
-                                    width: lesson.joined ? 0 : 8),
-                              SizedBox(
-                                  width: side,
-                                  height: side,
-                                  child: DragTarget<int>(
-                                    onWillAcceptWithDetails: (details) =>
-                                        _dragEpoch == _epoch &&
-                                        lesson.canPlace(details.data, slot),
-                                    onAcceptWithDetails: (details) =>
-                                        lesson.place(details.data, slot),
-                                    builder: (context, candidates, rejected) =>
-                                        BlendingPuzzlePiece(
-                                      key: ValueKey('blend-slot-$slot'),
-                                      position: slot,
-                                      letter: lesson.slots[slot] == null
-                                          ? null
-                                          : lesson.word.word[slot],
-                                      filled: lesson.slots[slot] != null,
-                                      active: lesson.highlighted == slot ||
-                                          candidates.isNotEmpty,
-                                      label: lesson.slots[slot] == null
-                                          ? 'Empty slot ${slot + 1}. Place selected letter'
-                                          : '${lesson.word.word[slot]}, slot ${slot + 1}',
-                                      onPressed: lesson.selected == null
-                                          ? null
-                                          : withButtonSound(() => lesson.place(
-                                              lesson.selected!, slot)),
-                                    ),
-                                  )),
-                            ],
-                          ]),
-                      const SizedBox(height: 12),
-                      if (!lesson.complete)
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              for (final piece in lesson.order)
-                                SizedBox(
-                                  key: _pieceKeys[piece],
-                                  width: side,
-                                  height: side,
-                                  child: lesson.used(piece)
-                                      ? const SizedBox.shrink()
-                                      : Draggable<int>(
-                                          key: ValueKey('blend-piece-$piece'),
-                                          data: piece,
-                                          maxSimultaneousDrags:
-                                              _dragging != null ||
-                                                      _returning != null
-                                                  ? 0
-                                                  : 1,
-                                          feedback: Material(
-                                              type: MaterialType.transparency,
-                                              child: SizedBox(
-                                                  width: side,
-                                                  height: side,
-                                                  child: BlendingPuzzlePiece(
-                                                      position: piece,
-                                                      letter: lesson
-                                                          .word.word[piece],
-                                                      active: true,
-                                                      filled: true))),
-                                          childWhenDragging:
-                                              const SizedBox.shrink(),
-                                          onDragStarted: () => setState(() {
-                                            _dragEpoch = _epoch;
-                                            _dragging = piece;
-                                          }),
-                                          onDragEnd: (_) {
-                                            if (mounted) {
-                                              setState(() => _dragging = null);
-                                            }
-                                          },
-                                          onDraggableCanceled: (_, offset) =>
-                                              unawaited(_returnPiece(
-                                                  piece, offset, side)),
-                                          child: Opacity(
-                                              opacity:
-                                                  _returning == piece ? 0 : 1,
-                                              child: BlendingPuzzlePiece(
-                                                position: piece,
-                                                letter: lesson.word.word[piece],
-                                                filled: true,
-                                                active:
-                                                    lesson.selected == piece,
-                                                label:
-                                                    'Select ${lesson.word.word[piece]}',
-                                                onPressed: withButtonSound(
-                                                    () => lesson.choose(piece)),
-                                              )),
+          Expanded(child: LayoutBuilder(builder: (context, bounds) {
+            final pictureHeight = (bounds.maxHeight - 335).clamp(80.0, 200.0);
+            return SingleChildScrollView(
+              key: const ValueKey('blending-content'),
+              child: Column(children: [
+                if (lesson.phase != BlendingPhase.intro)
+                  LessonFrame(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(children: [
+                      SizedBox(
+                          height: pictureHeight,
+                          width: double.infinity,
+                          child: CvcWordPicture(word: lesson.word)),
+                      LayoutBuilder(builder: (context, box) {
+                        final side = math.min(100.0, (box.maxWidth - 16) / 3);
+                        return Column(children: [
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                for (var slot = 0; slot < 3; slot++) ...[
+                                  if (slot > 0)
+                                    AnimatedContainer(
+                                        duration: reducedMotion
+                                            ? Duration.zero
+                                            : const Duration(milliseconds: 500),
+                                        width: lesson.joined ? 0 : 8),
+                                  SizedBox(
+                                      width: side,
+                                      height: side,
+                                      child: DragTarget<int>(
+                                        onWillAcceptWithDetails: (details) =>
+                                            _dragEpoch == _epoch &&
+                                            lesson.canPlace(details.data, slot),
+                                        onAcceptWithDetails: (details) =>
+                                            lesson.place(details.data, slot),
+                                        builder:
+                                            (context, candidates, rejected) =>
+                                                BlendingPuzzlePiece(
+                                          key: ValueKey('blend-slot-$slot'),
+                                          position: slot,
+                                          letter: lesson.slots[slot] == null
+                                              ? null
+                                              : lesson.word.word[slot],
+                                          filled: lesson.slots[slot] != null,
+                                          active: lesson.highlighted == slot ||
+                                              candidates.isNotEmpty,
+                                          label: lesson.slots[slot] == null
+                                              ? 'Empty slot ${slot + 1}. Place selected letter'
+                                              : '${lesson.word.word[slot]}, slot ${slot + 1}',
+                                          onPressed: lesson.selected == null
+                                              ? null
+                                              : withButtonSound(() =>
+                                                  lesson.place(
+                                                      lesson.selected!, slot)),
                                         ),
-                                ),
-                            ])
-                      else
-                        Semantics(
-                            liveRegion: true,
-                            child: AnimatedScale(
-                              scale: lesson.phase == BlendingPhase.complete &&
-                                      !reducedMotion
-                                  ? 1.08
-                                  : 1,
-                              duration: reducedMotion
-                                  ? Duration.zero
-                                  : const Duration(milliseconds: 450),
-                              curve: Curves.easeOutBack,
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    if (lesson.phase == BlendingPhase.complete)
-                                      const Icon(Icons.auto_awesome,
-                                          color: Color(0xFFAD6900)),
-                                    Flexible(
-                                        child: Padding(
-                                            padding: const EdgeInsets.all(8),
-                                            child: Text(
-                                                lesson.joined
-                                                    ? lesson.word.word
-                                                    : lesson.word.word
-                                                        .split('')
-                                                        .join(' · '),
-                                                key: const ValueKey(
-                                                    'blend-whole-word'),
-                                                style: const TextStyle(
-                                                    fontSize: 32,
-                                                    fontWeight: FontWeight.w900,
-                                                    color: KidsUi.ink)))),
-                                    if (lesson.phase == BlendingPhase.complete)
-                                      const Icon(Icons.auto_awesome,
-                                          color: Color(0xFFAD6900)),
-                                  ]),
-                            )),
-                    ]);
-                  }),
-                ]),
-              ),
-            if (!lesson.voiceEnabled || lesson.audioUnavailable)
-              Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                      !lesson.voiceEnabled
-                          ? 'Audio is turned off.'
-                          : 'Audio unavailable. Tap Hear Again.',
-                      style: const TextStyle(fontSize: 14, color: KidsUi.ink))),
-            const SizedBox(height: 8),
+                                      )),
+                                ],
+                              ]),
+                          const SizedBox(height: 12),
+                          if (!lesson.complete)
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  for (final piece in lesson.order)
+                                    SizedBox(
+                                      key: _pieceKeys[piece],
+                                      width: side,
+                                      height: side,
+                                      child: lesson.used(piece)
+                                          ? const SizedBox.shrink()
+                                          : Draggable<int>(
+                                              key: ValueKey(
+                                                  'blend-piece-$piece'),
+                                              data: piece,
+                                              maxSimultaneousDrags:
+                                                  _dragging != null ||
+                                                          _returning != null
+                                                      ? 0
+                                                      : 1,
+                                              feedback: Material(
+                                                  type:
+                                                      MaterialType.transparency,
+                                                  child: SizedBox(
+                                                      width: side,
+                                                      height: side,
+                                                      child:
+                                                          BlendingPuzzlePiece(
+                                                              position: piece,
+                                                              letter: lesson
+                                                                  .word
+                                                                  .word[piece],
+                                                              active: true,
+                                                              filled: true))),
+                                              childWhenDragging:
+                                                  const SizedBox.shrink(),
+                                              onDragStarted: () => setState(() {
+                                                _dragEpoch = _epoch;
+                                                _dragging = piece;
+                                              }),
+                                              onDragEnd: (_) {
+                                                if (mounted) {
+                                                  setState(
+                                                      () => _dragging = null);
+                                                }
+                                              },
+                                              onDraggableCanceled:
+                                                  (_, offset) => unawaited(
+                                                      _returnPiece(
+                                                          piece, offset, side)),
+                                              child: Opacity(
+                                                  opacity: _returning == piece
+                                                      ? 0
+                                                      : 1,
+                                                  child: BlendingPuzzlePiece(
+                                                    position: piece,
+                                                    letter:
+                                                        lesson.word.word[piece],
+                                                    filled: true,
+                                                    active: lesson.selected ==
+                                                        piece,
+                                                    label:
+                                                        'Select ${lesson.word.word[piece]}',
+                                                    onPressed: withButtonSound(
+                                                        () => lesson
+                                                            .choose(piece)),
+                                                  )),
+                                            ),
+                                    ),
+                                ])
+                          else
+                            Semantics(
+                                liveRegion: true,
+                                child: AnimatedScale(
+                                  scale:
+                                      lesson.phase == BlendingPhase.complete &&
+                                              !reducedMotion
+                                          ? 1.08
+                                          : 1,
+                                  duration: reducedMotion
+                                      ? Duration.zero
+                                      : const Duration(milliseconds: 450),
+                                  curve: Curves.easeOutBack,
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        if (lesson.phase ==
+                                            BlendingPhase.complete)
+                                          const Icon(Icons.auto_awesome,
+                                              color: Color(0xFFAD6900)),
+                                        Flexible(
+                                            child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8),
+                                                child: Text(
+                                                    lesson.joined
+                                                        ? lesson.word.word
+                                                        : lesson.word.word
+                                                            .split('')
+                                                            .join(' · '),
+                                                    key: const ValueKey(
+                                                        'blend-whole-word'),
+                                                    style: const TextStyle(
+                                                        fontSize: 32,
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color: KidsUi.ink)))),
+                                        if (lesson.phase ==
+                                            BlendingPhase.complete)
+                                          const Icon(Icons.auto_awesome,
+                                              color: Color(0xFFAD6900)),
+                                      ]),
+                                )),
+                        ]);
+                      }),
+                    ]),
+                  ),
+                if (!lesson.voiceEnabled || lesson.audioUnavailable)
+                  Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Text(
+                          !lesson.voiceEnabled
+                              ? 'Audio is turned off.'
+                              : 'Audio unavailable. Tap Hear Again.',
+                          style: const TextStyle(
+                              fontSize: 14, color: KidsUi.ink))),
+                const SizedBox(height: 8),
+              ]),
+            );
+          })),
+          const SizedBox(height: 8),
+          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Expanded(
+                child: _Control(
+                    label: 'Hear Again',
+                    icon: Icons.volume_up_rounded,
+                    primary: true,
+                    onPressed: () => _navigate(lesson.hearAgain))),
+            const SizedBox(width: 6),
+            Expanded(
+                child: _Control(
+                    label: 'Try Again',
+                    icon: Icons.replay_rounded,
+                    onPressed: () => _navigate(lesson.reset))),
+            const SizedBox(width: 6),
+            Expanded(
+                child: _Control(
+                    label: 'Next',
+                    icon: Icons.arrow_forward_rounded,
+                    onPressed: lesson.index == blendingLessonWords.length - 1
+                        ? null
+                        : () => _navigate(lesson.next))),
           ]),
-        );
-      })),
-      const SizedBox(height: 8),
-      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Expanded(
-            child: _Control(
-                label: 'Hear Again',
-                icon: Icons.volume_up_rounded,
-                primary: true,
-                onPressed: () => _navigate(lesson.hearAgain))),
-        const SizedBox(width: 6),
-        Expanded(
-            child: _Control(
-                label: 'Try Again',
-                icon: Icons.replay_rounded,
-                onPressed: () => _navigate(lesson.reset))),
-        const SizedBox(width: 6),
-        Expanded(
-            child: _Control(
-                label: 'Next',
-                icon: Icons.arrow_forward_rounded,
-                onPressed: lesson.index == blendingLessonWords.length - 1
-                    ? null
-                    : () => _navigate(lesson.next))),
-      ]),
-    ]));
+        ]));
   }
 }
 

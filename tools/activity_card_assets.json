@@ -1,0 +1,130 @@
+﻿[
+    {
+        "zipEntry":  "games/game_alphabet order.png",
+        "originalCopy":  "tools/retired_menu_art/game_alphabet_order-original.png",
+        "originalSha256":  "CE3CD4FF1B9B41CA5E2BC9B41ABF8E608758D8FB64E7475CE780A08C12A0414E",
+        "runtimeAsset":  "assets/images/activity_cards/game_alphabet_order-v2.png",
+        "runtimeSha256":  "CB04AB1824992711463A3A453DDF0E785CC70A8ACD01992AE617EBB1E685F4B5",
+        "edited":  true
+    },
+    {
+        "zipEntry":  "games/game_flappy letters.png",
+        "originalCopy":  "assets/images/activity_cards/game_flappy_letters.png",
+        "originalSha256":  "78C2F229485A2B6B4765ECF072BD1E3D507F02A11DAB1A6E7A0940FFF9A2F3F8",
+        "runtimeAsset":  "assets/images/activity_cards/game_flappy_letters.png",
+        "runtimeSha256":  "78C2F229485A2B6B4765ECF072BD1E3D507F02A11DAB1A6E7A0940FFF9A2F3F8",
+        "edited":  false
+    },
+    {
+        "zipEntry":  "games/game_memory flip.png",
+        "originalCopy":  "assets/images/activity_cards/game_memory_flip.png",
+        "originalSha256":  "A3D9A5855F9BD3BA6DF01436CD0B20F404063F8EB36D2C6F3D5BAEF2901B6AC1",
+        "runtimeAsset":  "assets/images/activity_cards/game_memory_flip.png",
+        "runtimeSha256":  "A3D9A5855F9BD3BA6DF01436CD0B20F404063F8EB36D2C6F3D5BAEF2901B6AC1",
+        "edited":  false
+    },
+    {
+        "zipEntry":  "games/game_missing vowel.png",
+        "originalCopy":  "assets/images/activity_cards/game_missing_vowel.png",
+        "originalSha256":  "17DB531B8A370934258D118037219B33F25F3B81F40B1AFCF543C736A2281823",
+        "runtimeAsset":  "assets/images/activity_cards/game_missing_vowel.png",
+        "runtimeSha256":  "17DB531B8A370934258D118037219B33F25F3B81F40B1AFCF543C736A2281823",
+        "edited":  false
+    },
+    {
+        "zipEntry":  "games/game_phonics quiz.png",
+        "originalCopy":  "assets/images/activity_cards/game_phonics_quiz.png",
+        "originalSha256":  "F07C84D2C9C528F7091CC46A0E3367AD8D81578381CE3D90B57C947BB7AB01FC",
+        "runtimeAsset":  "assets/images/activity_cards/game_phonics_quiz.png",
+        "runtimeSha256":  "F07C84D2C9C528F7091CC46A0E3367AD8D81578381CE3D90B57C947BB7AB01FC",
+        "edited":  false
+    },
+    {
+        "zipEntry":  "games/game_picture match.png",
+        "originalCopy":  "assets/images/activity_cards/game_picture_match.png",
+        "originalSha256":  "44BBD9CB4898A48AF7FBD80745F3B9400EED32506EACE8D18E70C3FB5D27C3A0",
+        "runtimeAsset":  "assets/images/activity_cards/game_picture_match.png",
+        "runtimeSha256":  "44BBD9CB4898A48AF7FBD80745F3B9400EED32506EACE8D18E70C3FB5D27C3A0",
+        "edited":  false
+    },
+    {
+        "zipEntry":  "games/game_rhyming words.png",
+        "originalCopy":  "assets/images/activity_cards/game_rhyming_words.png",
+        "originalSha256":  "DADA8B5D0B225EF774083D21CCDB33D2736F4DBFF7237AD79D633C8AB971E4FE",
+        "runtimeAsset":  "assets/images/activity_cards/game_rhyming_words.png",
+        "runtimeSha256":  "DADA8B5D0B225EF774083D21CCDB33D2736F4DBFF7237AD79D633C8AB971E4FE",
+        "edited":  false
+    },
+    {
+        "zipEntry":  "games/game_rumbled words.png",
+        "originalCopy":  "assets/images/activity_cards/game_rumbled_words.png",
+        "originalSha256":  "EDBC933EEB1B075E0B3D363AE9B363CDF8B63E009ED5E25970F0E56C3C5679CA",
+        "runtimeAsset":  "assets/images/activity_cards/game_rumbled_words.png",
+        "runtimeSha256":  "EDBC933EEB1B075E0B3D363AE9B363CDF8B63E009ED5E25970F0E56C3C5679CA",
+        "edited":  false
+    },
+    {
+        "zipEntry":  "games/game_sound match.png",
+        "originalCopy":  "assets/images/activity_cards/game_sound_match.png",
+        "originalSha256":  "818C2FD312ED816A42C8D2CDBCDEB03DB1ACC9594BDD9B9DA234A8AC58549DE2",
+        "runtimeAsset":  "assets/images/activity_cards/game_sound_match.png",
+        "runtimeSha256":  "818C2FD312ED816A42C8D2CDBCDEB03DB1ACC9594BDD9B9DA234A8AC58549DE2",
+        "edited":  false
+    },
+    {
+        "zipEntry":  "games/game_speak and recodnize.png",
+        "originalCopy":  "assets/images/activity_cards/game_speak_and_recognize.png",
+        "originalSha256":  "27912DE0CF8B4D0C40ADCA1445ED30827B6C1149CBF1B11E77515F74D47A42BF",
+        "runtimeAsset":  "assets/images/activity_cards/game_speak_and_recognize.png",
+        "runtimeSha256":  "27912DE0CF8B4D0C40ADCA1445ED30827B6C1149CBF1B11E77515F74D47A42BF",
+        "edited":  false
+    },
+    {
+        "zipEntry":  "games/game_world builder.png",
+        "originalCopy":  "tools/retired_menu_art/game_word_builder-original.png",
+        "originalSha256":  "12F5EBDF28F4394FED1FFD6ECF5C6AB9AADCB4D079BDEE7849BEA3AD1554B5E0",
+        "runtimeAsset":  "assets/images/activity_cards/game_word_builder-v2.png",
+        "runtimeSha256":  "00CD804E60F1E415CB2A5CDF97E776BD8E4F8A8A96229C89D336F4C58833CBC8",
+        "edited":  true
+    },
+    {
+        "zipEntry":  "lessons/lessons_blending sounds.png",
+        "originalCopy":  "tools/retired_menu_art/lesson_blending_sounds-original.png",
+        "originalSha256":  "55E6CC43C273DDF5768ABFD7F5BD4E34D7D69DC47B7FB5A7D4DEEEF8C3A91FEA",
+        "runtimeAsset":  "assets/images/activity_cards/lesson_blending_sounds-v2.png",
+        "runtimeSha256":  "310C720E047ECC301D940702270E43C684AF3C7B9157E812B4F3AF06DE4A757C",
+        "edited":  true
+    },
+    {
+        "zipEntry":  "lessons/lessons_cvc word.png",
+        "originalCopy":  "assets/images/activity_cards/lesson_cvc_words.png",
+        "originalSha256":  "CDABE9911CF69E27187BBABB4FCE9AF4B7525DA4E468185E6EAE2BFA89D15706",
+        "runtimeAsset":  "assets/images/activity_cards/lesson_cvc_words.png",
+        "runtimeSha256":  "CDABE9911CF69E27187BBABB4FCE9AF4B7525DA4E468185E6EAE2BFA89D15706",
+        "edited":  false
+    },
+    {
+        "zipEntry":  "lessons/lessons_letter sounds.png",
+        "originalCopy":  "assets/images/activity_cards/lesson_letter_sounds.png",
+        "originalSha256":  "A46EA59C3A09130638B3ABD5AC6BE2F2DDAF1BBB39041A79045B9D7C92C19C2F",
+        "runtimeAsset":  "assets/images/activity_cards/lesson_letter_sounds.png",
+        "runtimeSha256":  "A46EA59C3A09130638B3ABD5AC6BE2F2DDAF1BBB39041A79045B9D7C92C19C2F",
+        "edited":  false
+    },
+    {
+        "zipEntry":  "lessons/lessons_short vowel.png",
+        "originalCopy":  "assets/images/activity_cards/lesson_short_vowel.png",
+        "originalSha256":  "6D9C1B51E7231939DBF3479B476B2B009C069424577337571B4BF0FDF779658A",
+        "runtimeAsset":  "assets/images/activity_cards/lesson_short_vowel.png",
+        "runtimeSha256":  "6D9C1B51E7231939DBF3479B476B2B009C069424577337571B4BF0FDF779658A",
+        "edited":  false
+    },
+    {
+        "zipEntry":  "lessons/lesson_letter recognition.png",
+        "originalCopy":  "assets/images/activity_cards/lesson_letter_recognition.png",
+        "originalSha256":  "7AE20785E6B2DB4B8F1A38C9A78DA691B4EE6B1190956066226DD935C55B89FD",
+        "runtimeAsset":  "assets/images/activity_cards/lesson_letter_recognition.png",
+        "runtimeSha256":  "7AE20785E6B2DB4B8F1A38C9A78DA691B4EE6B1190956066226DD935C55B89FD",
+        "edited":  false
+    }
+]

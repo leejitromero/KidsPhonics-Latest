@@ -1,0 +1,23 @@
+﻿[
+    {
+        "source":  "C:/Users/leeji/Downloads/update bg.png",
+        "target":  "assets/images/update_scene/home_classrooms.png",
+        "bytes":  2252603,
+        "sha256":  "972B3C6BC3F4DD35E41D68EC8B5B261F0DE54A2A97BB320BCB8421E5B7A197D7",
+        "unchanged":  true
+    },
+    {
+        "source":  "C:/Users/leeji/Downloads/boy_automatic_voicefeedback.mp3",
+        "target":  "assets/audio/home_intro/boy_automatic_voicefeedback.mp3",
+        "bytes":  78795,
+        "sha256":  "74A7D2E5E74B9E3EF919D8A6B11623082E8290AE4ACC9DCD107444317ECC648D",
+        "unchanged":  true
+    },
+    {
+        "source":  "C:/Users/leeji/Downloads/girl_automatic_voicefeedback.mp3",
+        "target":  "assets/audio/home_intro/girl_automatic_voicefeedback.mp3",
+        "bytes":  80467,
+        "sha256":  "F083DA3BC0E6A7491AD62EB7DA516361B41BDDD8091412126385DDC2F215E1CD",
+        "unchanged":  true
+    }
+]

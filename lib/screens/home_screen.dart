@@ -1,35 +1,83 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../controllers/scene_voice_controller.dart';
+import '../data/home_village.dart';
+import '../data/home_narration.dart';
+import '../data/letter_data.dart';
+import '../data/updated_scene.dart';
 import '../providers/app_provider.dart';
 import '../theme/kids_ui.dart';
-import '../widgets/adventure_background.dart';
-import '../widgets/home_flight_menu.dart';
+import '../widgets/day_cycle_background.dart';
+import '../widgets/home_character_visit.dart';
+import '../widgets/kids_navigation_bar.dart';
+import '../widgets/main_navigation_scope.dart';
+import '../widgets/main_navigation_shell.dart';
 import '../widgets/learner_widgets.dart';
+import '../widgets/scene_dialogue.dart';
+import '../widgets/school_home_scene.dart';
+import '../widgets/student_character_picker.dart';
+import '../widgets/student_wave.dart';
 import 'games_screen.dart';
 import 'lessons_screen.dart';
 import 'parent_screen.dart';
 import 'progress_screen.dart';
 import 'letter_mastery_check_screen.dart';
-import '../data/letter_data.dart';
-
-import '../widgets/home_recommendation_panel.dart';
-import '../widgets/quick_check_recommendation.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, this.announceTitle = false});
+  // Only loading requests the opening cue; returning from a room does not.
+  final bool announceTitle;
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
-  late final _entrance = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 3600));
-  bool _foreground = true;
-  bool _introQueued = false;
-  int _voiceRequest = 0;
+  late final _visit = AnimationController(
+      vsync: this, duration: HomeCharacterVisitTiming.duration);
+  SceneVoiceController? _voice;
   AppProvider? _provider;
+  HomeCategory? _selected;
+  bool _navigating = false, _foreground = true;
+  int _visitRequest = 0;
+  String? _preparedCharacter;
+  Timer? _idleTimer;
+  final _navigation = GlobalKey<MainNavigationShellState>();
+  bool _tabActive = true;
+  Animation<double>? _routeAnimation;
+  Animation<double>? _secondaryAnimation;
+  bool _idlePromptPlayed = false, _idlePromptSpeaking = false;
+  int _girlPromptIndex = 0;
+  int _boyPromptIndex = 0;
+  String _idlePromptText = '';
+  bool _wasCurrent = false;
+  bool _titleComplete = false, _titleSpeaking = false;
+  int _titleRequest = 0;
+  bool get _openingTitle => widget.announceTitle && !_titleComplete;
+  bool get _busy => _selected != null || _navigating || _openingTitle;
+  bool get _current =>
+      mounted &&
+      _foreground &&
+      _tabActive &&
+      (ModalRoute.isCurrentOf(context) ?? true);
+
+  void _tabChanged(KidsDestination destination) {
+    setState(() => _tabActive = destination == KidsDestination.home);
+    if (!_tabActive) {
+      _cancelIdlePrompt(stopVoice: true);
+      _voice?.stop();
+      _cancelVisit();
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) => _syncIdleRoute());
+  }
+
+  Future<void> _selectTab(KidsDestination destination) async {
+    if (_busy || !_provider!.isReady) return;
+    _cancelIdlePrompt(stopVoice: true);
+    await _navigation.currentState?.select(destination);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -38,220 +86,336 @@ class _HomeScreenState extends State<HomeScreen>
         WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed;
   }
 
+  int get _decodeWidth => (MediaQuery.sizeOf(context).width *
+          MediaQuery.devicePixelRatioOf(context))
+      .ceil()
+      .clamp(1, 512);
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _provider = context.watch<AppProvider>();
-    _syncEntrance();
-    final current = ModalRoute.isCurrentOf(context) ?? true;
-    // A muted opening must not become a delayed intro when voice is enabled.
-    if (current && !_provider!.voiceEnabled) _introQueued = true;
-    if (!_foreground ||
-        !_provider!.voiceEnabled ||
-        _provider!.timeLimitReached) {
-      _stopHomeVoice();
-    } else if (!current) {
-      if (_provider!.phonicsAudio.currentPhrase == 'home-intro') {
-        _stopHomeVoice();
+    final p = _provider = context.watch<AppProvider>();
+    _voice ??= SceneVoiceController(p,
+        isCurrent: () => _current, replayOnResume: false);
+    final animation = ModalRoute.of(context)?.animation;
+    if (_routeAnimation != animation) {
+      _routeAnimation?.removeStatusListener(_routeStatus);
+      _routeAnimation = animation;
+      animation?.addStatusListener(_routeStatus);
+    }
+    final secondary = ModalRoute.of(context)?.secondaryAnimation;
+    if (_secondaryAnimation != secondary) {
+      _secondaryAnimation?.removeStatusListener(_routeStatus);
+      _secondaryAnimation = secondary;
+      secondary?.addStatusListener(_routeStatus);
+    }
+    if (_preparedCharacter != p.studentCharacter) {
+      _preparedCharacter = p.studentCharacter;
+      unawaited(precacheImage(
+          ResizeImage(AssetImage(StudentWave.assetFor(p.studentCharacter)),
+              width: 2172),
+          context,
+          onError: (_, __) {}));
+      for (final asset in [
+        '$sceneAssets/${p.studentCharacter}_1.png',
+        ...studentWalkingFrames(p.studentCharacter, left: true),
+        ...studentWalkingFrames(p.studentCharacter, left: false),
+      ]) {
+        unawaited(precacheImage(
+            ResizeImage(AssetImage(asset), width: _decodeWidth), context,
+            onError: (_, __) {}));
       }
-    } else if (!_introQueued) {
-      _introQueued = true;
-      final request = _voiceRequest;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && request == _voiceRequest) unawaited(_playVoice('intro'));
-      });
+    }
+    if (!_foreground ||
+        (!(ModalRoute.isCurrentOf(context) ?? true) && !_navigating) ||
+        p.timeLimitReached ||
+        (_selected == HomeCategory.games && !p.gameAccess)) {
+      _cancelVisit();
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) => _syncIdleRoute());
+  }
+
+  void _routeStatus(AnimationStatus _) => _syncIdleRoute();
+
+  void _syncIdleRoute() {
+    if (!mounted) return;
+    if (!_current) {
+      _wasCurrent = false;
+      _cancelIdlePrompt(stopVoice: true);
+      return;
+    }
+    if (!_wasCurrent) _idlePromptPlayed = false;
+    _wasCurrent = true;
+    if (_openingTitle) {
+      if (!_titleSpeaking &&
+          _provider!.isReady &&
+          (_routeAnimation == null || _routeAnimation!.isCompleted) &&
+          (_secondaryAnimation == null || _secondaryAnimation!.isDismissed)) {
+        unawaited(_announceTitle());
+      }
+      return;
+    }
+    _scheduleIdlePrompt();
+  }
+
+  Future<void> _announceTitle() async {
+    final request = ++_titleRequest;
+    _titleSpeaking = true;
+    await _voice!.play('home-title');
+    if (!mounted || request != _titleRequest) return;
+    _titleSpeaking = false;
+    if (!_current) return;
+    setState(() => _titleComplete = true);
+    // The idle greeting has its own countdown after the chorus completes.
+    _syncIdleRoute();
+  }
+
+  bool get _canPrompt =>
+      _current &&
+      !_busy &&
+      _provider!.isReady &&
+      _provider!.voiceEnabled &&
+      !_provider!.timeLimitReached &&
+      !_idlePromptPlayed &&
+      !_voice!.playing &&
+      (_routeAnimation == null || _routeAnimation!.isCompleted) &&
+      (_secondaryAnimation == null || _secondaryAnimation!.isDismissed);
+
+  void _scheduleIdlePrompt({Duration delay = const Duration(seconds: 5)}) {
+    if (!mounted) return;
+    if (!_canPrompt) {
+      _idleTimer?.cancel();
+      _idleTimer = null;
+      return;
+    }
+    _idleTimer ??= Timer(delay, () {
+      _idleTimer = null;
+      unawaited(_playIdlePrompt());
+    });
+  }
+
+  Future<void> _playIdlePrompt() async {
+    if (!_canPrompt) return;
+    // Another owned sound may still be finishing; never interrupt it.
+    if (_provider!.phonicsAudio.currentPhrase != null) {
+      _scheduleIdlePrompt(delay: const Duration(seconds: 1));
+      return;
+    }
+    final girl = _provider!.studentCharacter == 'girl';
+    final prompt = girl
+        ? girlAutomaticPrompts[_girlPromptIndex]
+        : boyAutomaticPrompts[_boyPromptIndex];
+    setState(() {
+      _idlePromptPlayed = true;
+      _idlePromptSpeaking = true;
+      _idlePromptText = prompt.text;
+      if (girl) {
+        _girlPromptIndex = (_girlPromptIndex + 1) % girlAutomaticPrompts.length;
+      } else {
+        _boyPromptIndex = (_boyPromptIndex + 1) % boyAutomaticPrompts.length;
+      }
+    });
+    await _voice!.play(prompt.phrase);
+    if (mounted && _idlePromptSpeaking) {
+      setState(() => _idlePromptSpeaking = false);
     }
   }
 
-  void _stopHomeVoice() {
-    _voiceRequest++;
-    final audio = _provider?.phonicsAudio;
-    if (audio?.currentPhrase?.startsWith('home-') ?? false) {
-      unawaited(audio!.stop());
+  void _cancelIdlePrompt({bool stopVoice = false}) {
+    _idleTimer?.cancel();
+    _idleTimer = null;
+    if (stopVoice && _idlePromptSpeaking) {
+      _idlePromptSpeaking = false;
+      _voice?.stop();
     }
   }
 
-  Future<void> _playVoice(String name) async {
+  void _interact(PointerDownEvent _) {
+    _cancelIdlePrompt(stopVoice: true);
+    _scheduleIdlePrompt();
+  }
+
+  void _cancelVisit() {
+    if (_selected == null) return;
+    _visitRequest++;
+    _voice?.stop();
+    _visit.stop(canceled: true);
+    setState(() => _selected = null);
+    _visit.value = 0;
+  }
+
+  bool _canEnter(HomeCategory category) =>
+      _current &&
+      !_provider!.timeLimitReached &&
+      (category != HomeCategory.games || _provider!.gameAccess);
+
+  Future<void> _selectCategory(
+      BuildContext navigationContext, HomeCategory category) async {
     final p = _provider!;
-    final request = ++_voiceRequest;
-    await p.ready;
-    bool active() =>
-        mounted &&
-        _foreground &&
-        request == _voiceRequest &&
-        p.voiceEnabled &&
-        !p.timeLimitReached;
-    if (!active()) return;
-    await p.audio.stop();
-    if (!active()) return;
-    await p.phonicsAudio.playInstruction('home-$name');
+    if (_busy || !p.isReady || !_canEnter(category)) return;
+    if (!category.hasHouse) {
+      await _selectTab(category == HomeCategory.progress
+          ? KidsDestination.progress
+          : KidsDestination.parents);
+      return;
+    }
+    _cancelIdlePrompt(stopVoice: true);
+    final request = ++_visitRequest;
+    setState(() => _selected = category);
+    if (category.hasHouse) {
+      // Destination skies warm in the cache while the student speaks and walks.
+      for (final asset in DayCycleBackground.framesFor(
+          category == HomeCategory.lessons ? 'lesson' : 'games')) {
+        unawaited(precacheImage(
+            ResizeImage(AssetImage(asset),
+                width: (MediaQuery.sizeOf(context).width *
+                        MediaQuery.devicePixelRatioOf(context))
+                    .ceil()
+                    .clamp(1, 942)),
+            context,
+            onError: (_, __) {}));
+      }
+      await _voice!.play(
+          'home-${p.studentCharacter}-${category == HomeCategory.lessons ? 'learn' : 'play'}');
+    }
+    if (!mounted || request != _visitRequest || !_canEnter(category)) return;
+    if (category.hasHouse && !MediaQuery.disableAnimationsOf(context)) {
+      try {
+        await _visit.forward(from: 0).orCancel;
+      } on TickerCanceled {
+        return;
+      }
+    }
+    if (!mounted || request != _visitRequest || !_canEnter(category)) return;
+    if (!navigationContext.mounted) return;
+    setState(() => _navigating = true);
+    await LearnerNavigation.open(navigationContext, _destination(category),
+        fadeTransition: true);
+    if (!mounted) return;
+    _cancelVisit();
+    setState(() => _navigating = false);
+    _syncIdleRoute();
   }
 
-  void _skipIntro() {
-    _introQueued = true;
-    _stopHomeVoice();
-    _entrance.value = 1;
+  Widget _destination(HomeCategory category) => switch (category) {
+        HomeCategory.lessons => const LessonsScreen(),
+        HomeCategory.games => const GamesScreen(),
+        HomeCategory.progress => const ProgressScreen(),
+        HomeCategory.parents => const ParentScreen(),
+      };
+
+  Future<void> _continueLearning(BuildContext navigationContext) async {
+    if (_busy ||
+        !_provider!.isReady ||
+        !_current ||
+        _provider!.timeLimitReached) {
+      return;
+    }
+    _cancelIdlePrompt(stopVoice: true);
+    setState(() => _navigating = true);
+    await LearnerNavigation.open(
+        navigationContext,
+        LetterMasteryCheckScreen(
+            letter:
+                letterContent(_provider!.recommendedAdventureLetter ?? 'A')),
+        cloudTransition: true);
+    if (mounted) {
+      setState(() => _navigating = false);
+      _syncIdleRoute();
+    }
   }
 
-  void _syncEntrance() {
-    if (MediaQuery.disableAnimationsOf(context)) {
-      _entrance.value = 1;
-    } else if (_foreground && TickerMode.valuesOf(context).enabled) {
-      if (_entrance.value < 1 && !_entrance.isAnimating) _entrance.forward();
-    } else {
-      _entrance.stop();
+  Future<void> _editCharacter() async {
+    if (_busy || !_provider!.isReady || !_current) return;
+    _cancelIdlePrompt(stopVoice: true);
+    setState(() => _navigating = true);
+    await showDialog<void>(
+        context: context, builder: (_) => const StudentCharacterPicker());
+    if (mounted) {
+      setState(() => _navigating = false);
+      _syncIdleRoute();
     }
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     _foreground = state == AppLifecycleState.resumed;
-    if (!_foreground) _stopHomeVoice();
-    _syncEntrance();
-  }
-
-  void _open(Widget screen, {String? voice}) {
-    _skipIntro();
-    if (voice != null) unawaited(_playVoice(voice));
-    LearnerNavigation.open(context, screen, cloudTransition: true);
+    if (!_foreground) {
+      _titleRequest++;
+      _titleSpeaking = false;
+      _cancelIdlePrompt(stopVoice: true);
+      _wasCurrent = false;
+      _cancelVisit();
+    } else {
+      // Let the voice controller receive the resume event before playing.
+      WidgetsBinding.instance.addPostFrameCallback((_) => _syncIdleRoute());
+    }
   }
 
   @override
   void dispose() {
-    _stopHomeVoice();
+    _titleRequest++;
+    _visitRequest++;
+    _idleTimer?.cancel();
+    _routeAnimation?.removeStatusListener(_routeStatus);
+    _secondaryAnimation?.removeStatusListener(_routeStatus);
+    _voice?.dispose();
     WidgetsBinding.instance.removeObserver(this);
-    _entrance.dispose();
+    _visit.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final p = context.watch<AppProvider>();
-    final next = p.recommendedAdventureLetter;
-    final scale = MediaQuery.textScalerOf(context).scale(1);
-    return Theme(
-        data: KidsUi.theme,
-        child: Scaffold(
-            body: AdventureBackground(
-                child: SafeArea(
-                    child: Stack(children: [
-          LayoutBuilder(
-              builder: (_, box) => SingleChildScrollView(
-                  child: Center(
-                      child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                              maxWidth: 520, minHeight: box.maxHeight),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                HomeFlightMenu(
-                                    entrance: _entrance,
-                                    minHeight: box.maxHeight - 180 * scale,
-                                    onLessons: () => _open(
-                                        const LessonsScreen(),
-                                        voice: 'lessons'),
-                                    onGames: p.gameAccess
-                                        ? () => _open(const GamesScreen(),
-                                            voice: 'games')
-                                        : null,
-                                    onProgress: () => _open(
-                                        const ProgressScreen(),
-                                        voice: 'progress'),
-                                    onParents: () => _open(const ParentScreen(),
-                                        voice: 'parents')),
-                                Padding(
-                                    key: const ValueKey('home-footer'),
-                                    padding: const EdgeInsets.fromLTRB(
-                                        14, 6, 14, 14),
-                                    child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: [
-                                          HomeEntrance(
-                                              animation: _entrance,
-                                              begin: .56,
-                                              end: .82,
-                                              child: QuickCheckRecommendation(
-                                                  onStart: () => _open(
-                                                      LetterMasteryCheckScreen(
-                                                          letter: letterContent(
-                                                              next ?? 'A'))))),
-                                          const SizedBox(height: 8),
-                                          LayoutBuilder(builder: (_, badgeBox) {
-                                            final badges = [
-                                              (
-                                                Icons.emoji_events_rounded,
-                                                'Level ${p.level}',
-                                                const Color(0xFF99500E)
-                                              ),
-                                              (
-                                                Icons.bolt_rounded,
-                                                '${p.xp} XP',
-                                                const Color(0xFF682DAE)
-                                              ),
-                                              (
-                                                Icons.star_rounded,
-                                                '${p.stars} Stars',
-                                                const Color(0xFF1468AF)
-                                              ),
-                                              (
-                                                Icons
-                                                    .local_fire_department_rounded,
-                                                '${p.streak} Day Streak',
-                                                const Color(0xFFC33D30)
-                                              ),
-                                            ];
-                                            return Wrap(
-                                                alignment: WrapAlignment.center,
-                                                spacing: 6,
-                                                runSpacing: 6,
-                                                children: [
-                                                  for (var i = 0;
-                                                      i < badges.length;
-                                                      i++)
-                                                    SizedBox(
-                                                        height: scale > 1.3
-                                                            ? null
-                                                            : 40,
-                                                        width: scale > 1.3
-                                                            ? badgeBox.maxWidth
-                                                            : (badgeBox.maxWidth -
-                                                                    18) /
-                                                                4,
-                                                        child: HomeEntrance(
-                                                            animation:
-                                                                _entrance,
-                                                            begin:
-                                                                .72 + i * .04,
-                                                            end: .88 + i * .04,
-                                                            child: HomeStatusBadge(
-                                                                compact: true,
-                                                                icon: badges[i]
-                                                                    .$1,
-                                                                label: badges[i]
-                                                                    .$2,
-                                                                color: badges[i]
-                                                                    .$3)))
-                                                ]);
-                                          }),
-                                        ])),
-                              ]))))),
-          Positioned(
-              top: 4,
-              right: 8,
-              child: AnimatedBuilder(
-                  animation: _entrance,
-                  builder: (_, child) => _entrance.value < 1
-                      ? TextButton(
-                          key: const ValueKey('home-skip-intro'),
-                          style: TextButton.styleFrom(
-                              backgroundColor: const Color(0xDDFFFFFF),
-                              foregroundColor: const Color(0xFF58269D),
-                              minimumSize: const Size(64, 48)),
-                          onPressed: _skipIntro,
-                          child: const Text('Skip intro'))
-                      : const SizedBox.shrink())),
-        ])))));
+    return MainNavigationShell(
+        key: _navigation,
+        onChanged: _tabChanged,
+        navigationBuilder: (navigationContext) => KidsNavigationBar(
+            current: MainNavigationScope.maybeOf(navigationContext)!.current,
+            enabled: (!_tabActive || !_busy) && p.isReady,
+            onSelected: _selectTab),
+        homeBuilder: (navigationContext) => Theme(
+            data: KidsUi.theme,
+            child: Scaffold(
+                backgroundColor: const Color(0xFFF6CC8C),
+                resizeToAvoidBottomInset: false,
+                body: Listener(
+                    onPointerDown: _interact,
+                    behavior: HitTestBehavior.translucent,
+                    child: ListenableBuilder(
+                        listenable: _voice!,
+                        builder: (_, __) => SchoolHomeScene(
+                            character: p.studentCharacter,
+                            name: p.studentName,
+                            letter: p.recommendedAdventureLetter,
+                            progressLabel: '',
+                            level: p.level,
+                            stars: p.stars,
+                            xp: p.xp,
+                            streak: p.streak,
+                            gameAccess: p.gameAccess,
+                            busy: _busy || !p.isReady,
+                            visit: _visit,
+                            selected: _selected,
+                            reserveNavigation: true,
+                            studentSpeech: _voice!.playing &&
+                                    (_idlePromptSpeaking ||
+                                        (_selected?.hasHouse ?? false))
+                                ? SceneDialogue(
+                                    text: _idlePromptSpeaking
+                                        ? _idlePromptText
+                                        : _selected == HomeCategory.lessons
+                                            ? 'Let’s learn!'
+                                            : 'Let’s play!',
+                                    art:
+                                        'dialogue_box_${p.studentCharacter == 'girl' ? 4 : 1}.png')
+                                : null,
+                            onSelect: (category) => unawaited(
+                                _selectCategory(navigationContext, category)),
+                            onCharacter: () => unawaited(_editCharacter()),
+                            onSettings: () => unawaited(_editCharacter()),
+                            onContinue: () => unawaited(
+                                _continueLearning(navigationContext))))))));
   }
 }

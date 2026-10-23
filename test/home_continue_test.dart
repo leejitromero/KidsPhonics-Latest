@@ -38,7 +38,8 @@ void main() {
       ));
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
-      await tester.ensureVisible(find.byKey(const ValueKey('home-parents')));
+      await tester
+          .ensureVisible(find.byKey(const ValueKey('home-start-adventure')));
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
       expect(find.byKey(const ValueKey('home-lessons')), findsOneWidget);
@@ -86,8 +87,13 @@ void main() {
       expect(find.byKey(const ValueKey('continue-learning')), findsNothing);
       expect(find.text('Continue Learning'), findsNothing);
       expect(find.text('Explore Lessons'), findsNothing);
-      expect(find.text('Practice Letter $target'), findsOneWidget);
-      expect(find.text('Start Quick Check'), findsOneWidget);
+      expect(
+          tester
+              .widget<Semantics>(
+                  find.byKey(const ValueKey('home-practice-label')))
+              .properties
+              .label,
+          'Practice This Letter $target');
       expect(
           find.byKey(const ValueKey('home-start-adventure')), findsOneWidget);
       expect(p.overallMasteredCount, 0);

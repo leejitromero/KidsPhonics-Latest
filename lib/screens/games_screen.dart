@@ -1,10 +1,14 @@
 import '../widgets/game_design.dart';
+import '../data/games_menu_art.dart';
 import '../data/game_session_order.dart';
 import '../widgets/game_zone_card.dart';
-import '../widgets/game_zone_welcome.dart';
+import '../widgets/games_menu_header.dart';
+import '../widgets/main_navigation_scope.dart';
+import '../widgets/main_navigation_shell.dart';
+import '../widgets/student_character_picker.dart';
 import '../theme/kids_ui.dart';
 import 'package:flutter/material.dart';
-import '../widgets/game_theme_background.dart';
+import '../widgets/school_room_body.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
 import '../data/letter_data.dart';
@@ -34,6 +38,43 @@ class GamesScreen extends StatefulWidget {
 class _GamesScreenState extends State<GamesScreen> {
   bool _opening = false;
   String _category = 'All Games';
+  final _scroll = ScrollController();
+  final Map<String, double> _scrollPositions = {};
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  void _filter(String category) {
+    if (_opening || category == _category) return;
+    _scrollPositions[_category] = _scroll.hasClients ? _scroll.offset : 0;
+    setState(() => _category = category);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _scroll.hasClients) {
+        _scroll.jumpTo((_scrollPositions[category] ?? 0)
+            .clamp(0, _scroll.position.maxScrollExtent));
+      }
+    });
+  }
+
+  Future<void> _editProfile() async {
+    if (_opening || !context.read<AppProvider>().isReady) return;
+    setState(() => _opening = true);
+    await showDialog<void>(
+        context: context, builder: (_) => const StudentCharacterPicker());
+    if (mounted) setState(() => _opening = false);
+  }
+
+  Future<void> _back() async {
+    if (_opening) return;
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    } else {
+      await navigateKidsTab(context, KidsDestination.home);
+    }
+  }
 
   static String _categoryFor(String title) => switch (title) {
         'Flappy Letters' || 'Alphabet Order' => 'Letters',
@@ -42,7 +83,8 @@ class _GamesScreenState extends State<GamesScreen> {
       };
   Future<void> _play(String title, Widget Function(Difficulty) builder,
       String Function(Difficulty) detail) async {
-    if (_opening || !context.read<AppProvider>().gameAccess) {
+    final p = context.read<AppProvider>();
+    if (_opening || !p.isReady || !p.gameAccess || p.timeLimitReached) {
       return;
     }
     setState(() => _opening = true);
@@ -51,10 +93,13 @@ class _GamesScreenState extends State<GamesScreen> {
           await chooseGameDifficulty(context, title, detail, lessonStyle: true);
       if (!mounted ||
           difficulty == null ||
-          !context.read<AppProvider>().gameAccess) {
+          !p.isReady ||
+          !p.gameAccess ||
+          p.timeLimitReached) {
         return;
       }
-      await LearnerNavigation.open(context, builder(difficulty));
+      await LearnerNavigation.open(context, builder(difficulty),
+          fadeTransition: true);
     } finally {
       if (mounted) setState(() => _opening = false);
     }
@@ -67,12 +112,11 @@ class _GamesScreenState extends State<GamesScreen> {
           Widget Function(Difficulty) builder,
           String Function(Difficulty) detail) =>
       GameZoneCard(
-          imageAsset: title == 'Rhyming Words'
-              ? 'assets/images/lesson_logos/rhyming_words.webp'
-              : 'assets/images/game_logos/${switch (title) {
-                  'Speak & Recognize' => 'speak_and_recognize',
-                  _ => title.toLowerCase().replaceAll(' ', '_'),
-                }}.webp',
+          key: ValueKey(title),
+          imageAsset: gamesMenuArt[title]!,
+          character: context.read<AppProvider>().studentCharacter,
+          completed: title == 'Rhyming Words' &&
+              context.read<AppProvider>().rhymingWordsDone,
           accent: switch (title) {
             'Flappy Letters' || 'Speak & Recognize' => const Color(0xFFFF408F),
             'Sound Match' || 'Missing Vowel' => const Color(0xFF00ABED),
@@ -82,100 +126,105 @@ class _GamesScreenState extends State<GamesScreen> {
           },
           title: title,
           description: description,
-          onPressed: _opening ? null : () => _play(title, builder, detail));
+          onPressed: _opening ||
+                  !context.read<AppProvider>().isReady ||
+                  context.read<AppProvider>().timeLimitReached
+              ? null
+              : () => _play(title, builder, detail));
   @override
   Widget build(BuildContext context) {
-    if (!context.select<AppProvider, bool>((p) => p.gameAccess)) {
+    if (!context.watch<AppProvider>().gameAccess) {
       return _zonePage(child: const Text('Games are turned off by a parent.'));
     }
     return _zonePage(
         child: Column(children: [
       _categories(),
-      const SizedBox(height: 16),
-      _gameRows([
+      const SizedBox(height: 10),
+      Expanded(
+          child: _gameRows([
         _card(
             'Flappy Letters',
-            'Fly through A–Z!',
+            'Fly through A\u2013Z!',
             Icons.flight_rounded,
             (d) => FlappyLettersScreen(difficulty: d),
             (d) => switch (d) {
-                  Difficulty.easy => 'Slow speed · 26 letters',
-                  Difficulty.medium => 'Normal speed · 26 letters',
-                  Difficulty.hard => 'Faster speed · 26 letters',
+                  Difficulty.easy => 'Slow speed - 26 letters',
+                  Difficulty.medium => 'Normal speed - 26 letters',
+                  Difficulty.hard => 'Faster speed - 26 letters',
                 }),
         _card(
             'Sound Match',
-            'Match the sound.',
+            'Match the sound!',
             Icons.hearing,
             (d) => SoundMatchScreen(difficulty: d),
             (d) =>
-                '${soundRoundsForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} rounds · 3 choices'),
+                '${soundRoundsForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} rounds - 3 choices'),
         _card(
             'Memory Flip',
-            'Match pairs.',
+            'Match pairs!',
             Icons.grid_view,
             (d) => MemoryGameScreen(difficulty: d),
             (d) => '${memoryPairsForDifficulty(d).length} pairs'),
         _card(
             'Phonics Quiz',
-            'Listen and choose.',
+            'Listen and choose!',
             Icons.quiz_outlined,
             (d) => PhonicsQuizScreen(difficulty: d),
             (d) =>
                 '${quizQuestionsForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} questions'),
         _card(
             'Word Builder',
-            'Build a word.',
+            'Build a word!',
             Icons.extension_outlined,
             (d) => WordBuilderScreen(difficulty: d),
             (d) =>
-                '${wordPuzzlesForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} words · Fill missing letters'),
+                '${wordPuzzlesForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} words - Fill missing letters'),
         _card(
             'Speak & Recognize',
-            'Say the word.',
+            'Say the word!',
             Icons.mic_none,
             (d) => VoiceRecognitionScreen(difficulty: d),
             (d) =>
                 '${voiceWords[d]!.length.clamp(0, GameSessionOrder.roundLength(d))} words'),
         _card(
             'Alphabet Order',
-            'Put letters in order.',
+            'Put letters in order!',
             Icons.sort_by_alpha,
             (d) => AlphabetOrderScreen(difficulty: d),
             (d) => switch (d) {
-                  Difficulty.easy => 'A–F · 6 letters',
-                  Difficulty.medium => 'A–M · 13 letters',
-                  Difficulty.hard => 'A–Z · 26 letters'
+                  Difficulty.easy => 'A-F - 6 letters',
+                  Difficulty.medium => 'A-M - 13 letters',
+                  Difficulty.hard => 'A-Z - 26 letters'
                 }),
         _card(
             'Missing Vowel',
-            'Find the vowel.',
+            'Find the vowel!',
             Icons.text_fields,
             (d) => MissingVowelScreen(difficulty: d),
             (d) =>
                 '${vowelPuzzlesFor(d).length.clamp(0, GameSessionOrder.roundLength(d))} words'),
         _card(
             'Picture Match',
-            'Match the picture.',
+            'Match the picture!',
             Icons.image_outlined,
             (d) => PictureWordMatchScreen(difficulty: d),
             (d) =>
-                '${pictureRoundsFor(d).length.clamp(0, GameSessionOrder.roundLength(d))} words · ${pictureRoundsFor(d).first.options.length} pictures'),
+                '${pictureRoundsFor(d).length.clamp(0, GameSessionOrder.roundLength(d))} words - ${pictureRoundsFor(d).first.options.length} pictures'),
         _card(
             'Rumbled Words',
-            'Put letters together.',
+            'Arrange the letters!',
             Icons.shuffle_rounded,
             (d) => RumbledWordsScreen(difficulty: d),
             (d) =>
-                '${rumbledWordsFor(d).length.clamp(0, GameSessionOrder.roundLength(d))} words · ${rumbledWordLengthLabel(d)} · 1 hint per word'),
+                '${rumbledWordsFor(d).length.clamp(0, GameSessionOrder.roundLength(d))} words - ${rumbledWordLengthLabel(d)} - 1 hint per word'),
         _card(
             'Rhyming Words',
-            'Find words that rhyme.',
+            'Find rhyming words!',
             Icons.music_note_rounded,
             (d) => RhymingWordsScreen(difficulty: d),
             (d) =>
-                '${GameSessionOrder.roundLength(d)} jars · 3 rhymes per jar'),
-      ]),
+                '${GameSessionOrder.roundLength(d)} jars - 3 rhymes per jar'),
+      ])),
     ]));
   }
 
@@ -183,35 +232,24 @@ class _GamesScreenState extends State<GamesScreen> {
       data: KidsUi.theme,
       child: GameDesign(
           child: Scaffold(
-              backgroundColor: const Color(0xFFF9F6FF),
-              body: GameThemeBackground(
-                child: SafeArea(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(12, 8, 12, 20),
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 720),
-                          child: Column(
+              body: SchoolRoomBody(
+                  room: SchoolRoom.games,
+                  navigationDestination: KidsDestination.home,
+                  navigationOnRoute: true,
+                  child: LayoutBuilder(
+                      builder: (context, box) => Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Row(children: [
-                                  ForestIconButton(
-                                      tooltip: 'Back',
-                                      icon: Icons.arrow_back_rounded,
-                                      onPressed: () =>
-                                          Navigator.maybePop(context)),
-                                  const SizedBox(width: 12),
-                                  const Expanded(
-                                      child: GameZoneWelcome(showTitle: false)),
-                                ]),
+                                GamesMenuHeader(
+                                    compact: box.maxHeight < 340,
+                                    character: context
+                                        .watch<AppProvider>()
+                                        .studentCharacter,
+                                    onBack: _opening ? null : _back,
+                                    onEdit: _opening ? null : _editProfile),
                                 const SizedBox(height: 8),
-                                child,
-                              ])),
-                    ),
-                  ),
-                ),
-              ))));
+                                Expanded(child: child),
+                              ]))))));
 
   Widget _categories() => SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -243,7 +281,8 @@ class _GamesScreenState extends State<GamesScreen> {
                   shape: const StadiumBorder(),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 9, vertical: 10),
-                  onSelected: (_) => setState(() => _category = entry.key))),
+                  key: ValueKey('games-filter-${entry.key}'),
+                  onSelected: _opening ? null : (_) => _filter(entry.key))),
       ]));
 
   Widget _gameRows(List<Widget> allCards) {
@@ -252,30 +291,23 @@ class _GamesScreenState extends State<GamesScreen> {
             _category == 'All Games' ||
             _categoryFor((card as GameZoneCard).title) == _category)
         .toList();
-    return LayoutBuilder(builder: (context, box) {
-      final oneColumn =
-          box.maxWidth < 300 || MediaQuery.textScalerOf(context).scale(16) > 24;
-      if (oneColumn) return Column(children: cards);
-      final columns = box.maxWidth >= 600 ? 3 : 2;
-      return Column(
-        children: [
-          for (var i = 0; i < cards.length; i += columns)
-            IntrinsicHeight(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  for (var j = 0; j < columns; j++) ...[
-                    if (j > 0) const SizedBox(width: 12),
-                    Expanded(
-                        child: i + j < cards.length
-                            ? cards[i + j]
-                            : const SizedBox.shrink()),
-                  ],
-                ],
-              ),
-            ),
-        ],
-      );
-    });
+    return Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 560),
+            child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2),
+                child: GridView.builder(
+                    key: const PageStorageKey('games-grid'),
+                    controller: _scroll,
+                    padding: const EdgeInsets.only(top: 2, bottom: 12),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: GamesFrameArt.cardAspectRatio),
+                    itemCount: cards.length,
+                    itemBuilder: (_, index) => cards[index]))));
   }
 }

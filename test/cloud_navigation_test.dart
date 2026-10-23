@@ -24,10 +24,12 @@ class _FrameBundle extends CachingAssetBundle {
 
 void main() {
   for (final size in [const Size(390, 844), const Size(800, 600)]) {
-    testWidgets('cloud curtain covers navigation and reverse at $size',
+    testWidgets('supplied curtain covers navigation and reverse at $size',
         (t) async {
-      await t.binding.setSurfaceSize(size);
-      addTearDown(() => t.binding.setSurfaceSize(null));
+      t.view.physicalSize = size;
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.resetPhysicalSize);
+      addTearDown(t.view.resetDevicePixelRatio);
       final bundle = _FrameBundle();
       var actions = 0;
       Widget app() => DefaultAssetBundle(
@@ -61,7 +63,7 @@ void main() {
         await t.pump();
       }
       expect(find.byType(CloudScreenTransition), findsOneWidget);
-      expect(bundle.reads, 4);
+      expect(bundle.reads, cloudTransitionAssets.length);
       await t.pump(const Duration(milliseconds: 120));
       expect(find.byKey(const ValueKey('cloud-transition')), findsOneWidget);
       expect(find.text('Destination').hitTestable(), findsNothing);
@@ -74,6 +76,16 @@ void main() {
       final transition =
           t.widget<CloudScreenTransition>(find.byType(CloudScreenTransition));
       expect(transition.animation.value, closeTo(.525, .02));
+      final closingFrame = t.widget<Image>(find
+          .descendant(
+              of: find.byKey(const ValueKey('cloud-transition')),
+              matching: find.byType(Image))
+          .first);
+      expect(closingFrame.image, transition.frames.last);
+      expect(
+          find.byWidgetPredicate((widget) =>
+              widget is ColoredBox && widget.color == const Color(0xFF27083D)),
+          findsOneWidget);
       expect(find.text('Destination').hitTestable(), findsNothing);
       await t.pumpAndSettle();
       expect(find.byKey(const ValueKey('cloud-transition')), findsNothing);
@@ -106,7 +118,7 @@ void main() {
   for (final reduced in [true, false]) {
     testWidgets(
         reduced
-            ? 'reduced motion skips the clouds and decode'
+            ? 'reduced motion skips the curtain and decode'
             : 'missing frames fall back to normal navigation', (t) async {
       t.binding.platformDispatcher.accessibilityFeaturesTestValue =
           FakeAccessibilityFeatures(disableAnimations: reduced);
@@ -139,7 +151,7 @@ void main() {
         final route = ModalRoute.of(t.element(find.text('Destination')))!;
         expect(route.transitionDuration, Duration.zero);
       } else {
-        expect(bundle.reads, 4);
+        expect(bundle.reads, cloudTransitionAssets.length);
       }
       expect(t.takeException(), isNull);
       await t.pumpWidget(const SizedBox());

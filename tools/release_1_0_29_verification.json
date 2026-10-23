@@ -1,0 +1,43 @@
+{
+  "version": "1.0.29+30",
+  "verifiedUtc": "2026-10-20T07:49:36.759385+00:00",
+  "APK": "output/apk/KidsPhonics-1.0.29-build30.apk",
+  "capturedSourceInputs": 1009,
+  "sourceInputsUnchanged": true,
+  "registeredAssetsVerified": 820,
+  "bundledAssetsMatchSource": 820,
+  "suppliedGameRecordingsVerified": 11,
+  "suppliedLessonRecordingsVerified": 10,
+  "retiredIntroRecordingsAbsent": 5,
+  "ApkBytes": 487876646,
+  "ApkSHA256": "7C04D49851579E9DD4B5664A32C98706CE8545CCEA7E70F1B30288EA83214DE7",
+  "physicalDeviceTested": false,
+  "signatureVerified": true,
+  "updateCertificateMatchesPreviousRelease": true,
+  "signerCertificateSHA256": "e51915ff388c75d5cb980d40ecb354a5379806fee2b3dc67a36ab4e701774f69",
+  "packageMetadata": "package: name='com.example.kidsphonics' versionCode='30' versionName='1.0.29' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+  "androidVersionName": "1.0.29",
+  "androidVersionCode": 30,
+  "androidArchitectures": [
+    "armeabi-v7a",
+    "arm64-v8a",
+    "x86_64"
+  ],
+  "updates": [
+    "Progress reference redesign and tracking",
+    "Compact Quick Check layout",
+    "Eleven game instruction recordings and matching captions",
+    "Game guide profiles and dialogue"
+  ],
+  "validationLogs": [
+    "build/progress_reference_verified_tests.log",
+    "build/progress_reference_layout_recheck.log",
+    "build/progress_reference_flow_recheck.log",
+    "build/progress_reference_activation_checks.log",
+    "build/progress_reference_completion_analysis.log",
+    "build/quick_check_compact_layout_tests.log",
+    "build/quick_check_compact_regression_tests.log",
+    "build/game_instruction_recordings_tests.log",
+    "build/game_instruction_recordings_regression_tests.log"
+  ]
+}

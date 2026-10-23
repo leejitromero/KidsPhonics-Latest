@@ -26,6 +26,9 @@ void main() {
   });
 
   Future<AppProvider> open(WidgetTester t, {GlobalKey? boundary}) async {
+    t.platformDispatcher.accessibilityFeaturesTestValue =
+        const FakeAccessibilityFeatures(disableAnimations: true);
+    addTearDown(t.platformDispatcher.clearAccessibilityFeaturesTestValue);
     SharedPreferences.setMockInitialValues({
       'screenTimeDateV2': '2026-10-07',
       'screenTimeUsedSecondsV2': 4020,
@@ -72,8 +75,7 @@ void main() {
       expect(t.takeException(), isNull);
       for (final title in [
         'Learning & Play',
-        'Sound & Voice',
-        'Background Theme',
+        'App Settings',
         'Parent Access',
         'Data / Reset'
       ]) {
@@ -92,7 +94,8 @@ void main() {
     Future<void> toggle(String label, {bool value = false}) async {
       final tile = find.byWidgetPredicate(
           (w) => w is ParentSettingToggle && w.title == label);
-      await t.ensureVisible(tile);
+      await t.scrollUntilVisible(tile, 150,
+          scrollable: find.byType(Scrollable).first);
       await t.pumpAndSettle();
       await t.runAsync(
           () async => t.widget<ParentSettingToggle>(tile).onChanged!(value));
@@ -111,13 +114,7 @@ void main() {
     await t.tap(find.text('45 minutes').last);
     await t.pumpAndSettle();
     expect(p.screenTime.dailyLimitMinutes, 45);
-    await toggle('Voice Assistance');
-    expect(p.voiceEnabled, isFalse);
-    await toggle('Sound Effects');
-    expect(p.sfxEnabled, isFalse);
-    await toggle('Background Music');
-    expect(p.musicEnabled, isFalse);
-    expect(t.widget<Slider>(find.byType(Slider)).onChanged, isNull);
+    expect(find.text('Voice Assistance'), findsNothing);
     await t.scrollUntilVisible(find.text('Change Parent PIN'), 200,
         scrollable: find.byType(Scrollable).first);
     await t.ensureVisible(find.text('Change Parent PIN'));
@@ -162,7 +159,7 @@ void main() {
       });
       for (final (name, title) in [
         ('time', null),
-        ('audio', 'Sound & Voice'),
+        ('app_settings', 'App Settings'),
         ('access', 'Parent Access')
       ]) {
         if (title != null) {

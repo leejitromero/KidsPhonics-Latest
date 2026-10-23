@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kidsphonics/providers/app_provider.dart';
 import 'package:kidsphonics/screens/progress_screen.dart';
+import 'package:kidsphonics/widgets/progress_letter_frame_design.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show close;
 
@@ -106,11 +107,17 @@ void main() {
 
   testWidgets('treasure shelf and badge details preserve actual rewards',
       (t) async {
+    await t.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => t.binding.setSurfaceSize(null));
     final p = await open(t);
     await tab(t, 2);
     for (final label in ['Level 5', '94 Stars', '950 XP']) {
+      await t.scrollUntilVisible(find.text(label), 150,
+          scrollable: find.byType(Scrollable).first);
       expect(find.text(label), findsOneWidget);
     }
+    // Treasure is after the badge collection; return to its start.
+    await tab(t, 2);
     final badgesHeading = find.textContaining('My Badges');
     await t.scrollUntilVisible(badgesHeading, 150,
         scrollable: find.byType(Scrollable).first);
@@ -172,6 +179,55 @@ void main() {
         await t.pumpAndSettle();
         expect(t.takeException(), isNull);
       }
+      await close(t, p);
+    });
+  }
+
+  for (final (size, scale) in [
+    (const Size(320, 568), 1.0),
+    (const Size(320, 568), 2.0),
+    (const Size(390, 844), 1.0),
+    (const Size(800, 1024), 1.3),
+  ]) {
+    testWidgets('supplied frame and buttons contain all text at $size x$scale',
+        (t) async {
+      await t.binding.setSurfaceSize(size);
+      t.platformDispatcher.textScaleFactorTestValue = scale;
+      addTearDown(() {
+        t.binding.setSurfaceSize(null);
+        t.platformDispatcher.clearTextScaleFactorTestValue();
+      });
+      final p = await open(t);
+      await tab(t, 1);
+      final frame = find.byType(ProgressLetterSummaryFrame);
+      await t.scrollUntilVisible(
+          find.byKey(const ValueKey('progress-summary-frame-content')), 100,
+          scrollable: find.byType(Scrollable).first);
+      await t.pumpAndSettle();
+      final inner = t.getRect(
+          find.byKey(const ValueKey('progress-summary-frame-content')));
+      for (final text in find
+          .descendant(of: frame, matching: find.byType(Text))
+          .evaluate()) {
+        final bounds = t.getRect(find.byWidget(text.widget));
+        expect(inner.inflate(.01).contains(bounds.topLeft), true);
+        expect(inner.inflate(.01).contains(bounds.bottomRight), true);
+      }
+      for (final button in t.widgetList<ProgressLetterFilterButton>(
+          find.byType(ProgressLetterFilterButton))) {
+        final target = find.widgetWithText(ChoiceChip, button.label);
+        await t.ensureVisible(target);
+        await t.pumpAndSettle();
+        final bounds = t.getRect(target);
+        final text = t.getRect(
+            find.descendant(of: target, matching: find.text(button.label)));
+        expect(bounds.deflate(3).contains(text.topLeft), true);
+        expect(bounds.deflate(3).contains(text.bottomRight), true);
+        expect(bounds.left, greaterThanOrEqualTo(0));
+        expect(bounds.right, lessThanOrEqualTo(size.width));
+      }
+      expect((p.xp, p.stars, p.overallMasteredCount), (950, 94, 0));
+      expect(t.takeException(), isNull);
       await close(t, p);
     });
   }

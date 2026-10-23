@@ -587,11 +587,12 @@ void main() {
       await p.markLetterViewed('B');
       await p.recordLetterPractice('A', true);
       await p.completeLetterAssessment('A', 4, 5);
+      await p.completeAdventure('A', List.filled(5, true), 'lesson-count-a');
     });
     await t.pumpWidget(ChangeNotifierProvider.value(
         value: p, child: const MaterialApp(home: LessonsScreen())));
     await t.pumpAndSettle();
-    expect(find.text('1 / 26 Mastered'), findsOneWidget);
+    expect(find.text('1 / 26 Mastered'), findsNWidgets(2));
     expect(find.text('1 / 5 Mastered'), findsOneWidget);
     expect(find.text('Letter Recognition'), findsOneWidget);
     expect(p.masteredLetterCount, 1);

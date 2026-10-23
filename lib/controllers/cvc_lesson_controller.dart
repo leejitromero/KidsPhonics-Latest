@@ -8,10 +8,14 @@ enum CvcPhase { intro, picture, individual, slowBlend, fastBlend, complete }
 /// Every user action invalidates older playback and pending animation delays.
 class CvcLessonController extends ChangeNotifier {
   CvcLessonController(
-      {required this.play, required this.stop, this.voiceEnabled = true});
+      {required this.play,
+      required this.stop,
+      this.voiceEnabled = true,
+      this.playIntroduction});
 
   final Future<bool> Function(String phrase) play;
   final Future<void> Function() stop;
+  Future<bool> Function()? playIntroduction;
   bool voiceEnabled;
   int index = 0, highlighted = -1;
   CvcPhase phase = CvcPhase.picture;
@@ -83,8 +87,14 @@ class CvcLessonController extends ChangeNotifier {
     _show(introduction ? CvcPhase.intro : CvcPhase.picture);
     await stop();
     if (!_current(generation)) return;
-    if (introduction && !await _cue('cvc-intro', generation)) {
-      return;
+    if (introduction) {
+      if (playIntroduction != null) {
+        if (!await playIntroduction!()) return;
+      } else {
+        if (!await _cue('cvc-intro-1', generation)) return;
+        if (!await _cue('cvc-intro-2', generation)) return;
+      }
+      if (!_current(generation)) return;
     }
     _show(CvcPhase.picture);
     if (!await _cue(word.wordAudio, generation)) return;

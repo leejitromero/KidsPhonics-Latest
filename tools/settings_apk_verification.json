@@ -1,0 +1,16 @@
+{
+  "version": "1.0.21+22",
+  "verifiedUtc": "2026-10-16T04:36:58.1726463Z",
+  "APK": "build/app/outputs/flutter-apk/app-release.apk",
+  "ApkBytes": 462844893,
+  "ApkSHA256": "B2DBA017F3ADE8EDEACFDC2ED0A2C68DD18FF00C55992D56693A61AFCECF6356",
+  "signatureVerified": true,
+  "signerCertificateSHA256": "e51915ff388c75d5cb980d40ecb354a5379806fee2b3dc67a36ab4e701774f69",
+  "updateCertificateMatchesPreviousRelease": true,
+  "packageMetadata": "package: name='com.example.kidsphonics' versionCode='22' versionName='1.0.21' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+  "scopedTestsPassed": 91,
+  "analysis": "11 items; no issues",
+  "physicalDeviceTested": false,
+  "bundledAssetsMatchSource": 785,
+  "nativeAppInfoChannelBundled": true
+}
