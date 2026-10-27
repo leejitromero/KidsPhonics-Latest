@@ -69,7 +69,7 @@ void main() {
     expectSelection(t, tab);
   }
 
-  test('original ZIP PNGs remain unchanged; new base matches supplied frame',
+  test('current ZIP buttons remain unchanged; new base matches supplied frame',
       () async {
     final report = jsonDecode(File('tools/custom_navigation_assets.json')
         .readAsStringSync()
@@ -83,7 +83,8 @@ void main() {
           .where((asset) => asset != KidsNavigationArt.base),
       'assets/images/custom_navigation/wooden frame.png'
     });
-    for (final entry in report) {
+    for (final entry
+        in report.where((e) => KidsNavigationArt.assets.contains(e['path']))) {
       final bytes = File(entry['path'] as String).readAsBytesSync();
       expect(sha256.convert(bytes).toString().toUpperCase(), entry['sha256']);
       final codec = await ui.instantiateImageCodec(bytes);

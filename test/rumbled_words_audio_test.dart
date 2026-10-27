@@ -8,6 +8,7 @@ import 'package:kidsphonics/widgets/word_game_layout.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show mount, close;
 import 'quiz_audio_harness.dart';
+import 'rumbled_words_swap_helpers.dart';
 
 String shownWord(WidgetTester t) =>
     t.widget<WordGameLayout>(find.byType(WordGameLayout)).word;
@@ -36,41 +37,29 @@ Future<void> flushAudio(WidgetTester t) async {
   }
 }
 
-List<String> options(WidgetTester t, int length) => [
-      for (var i = 0; i < length; i++)
-        t
-            .widget<Text>(find.descendant(
-                of: find.byKey(ValueKey('word-tile-$i')),
-                matching: find.byType(Text)))
-            .data!
-    ];
-
 bool highlighted(WidgetTester t, int slot) {
   final box =
       t.widget<AnimatedContainer>(find.byKey(ValueKey('word-highlight-$slot')));
   return (box.decoration! as BoxDecoration).color == const Color(0xFFFFE36B);
 }
 
-Future<void> spell(WidgetTester t, QuizAudioHarness audio, String word) async {
-  final tiles = options(t, word.length);
-  final used = <int>{};
-  for (var slot = 0; slot < word.length; slot++) {
-    final index = List.generate(tiles.length, (i) => i)
-        .firstWhere((i) => !used.contains(i) && tiles[i] == word[slot]);
-    used.add(index);
-    final starts = audio.starts.length;
-    t
-        .widget<ElevatedButton>(find.byKey(ValueKey('word-tile-$index')))
-        .onPressed!();
-    await t.pump();
-    await audioStarted(t, audio, starts + 1);
+Future<int> spell(WidgetTester t, QuizAudioHarness audio, String word) async {
+  var count = audio.starts.length;
+  await arrangeBoard(t, word, afterTap: (letter) async {
+    await audioStarted(t, audio, ++count);
     expect(audio.starts.last,
-        endsWith('/sounds/sound-${word[slot].toLowerCase()}.mp3'));
-    if (slot < word.length - 1) {
-      await t.runAsync(() => audio.completeSound(word[slot]));
-      await flushAudio(t);
-    }
-  }
+        endsWith('/letters/letter-${letter.toLowerCase()}.mp3'));
+    await t.runAsync(() => audio.completeLetterName(letter));
+    await flushAudio(t);
+  });
+  expect(find.text('Correct!'), findsNothing);
+  expect(t.state<GameSessionUi>(find.byType(RumbledWordsScreen)).scoredAttempts,
+      0);
+  t
+      .widget<OutlinedButton>(find.byKey(const ValueKey('word-check')))
+      .onPressed!();
+  await t.pump();
+  return count;
 }
 
 void main() {
@@ -81,41 +70,39 @@ void main() {
   });
 
   testWidgets(
-      'options sound, each letter highlights, word finishes before next',
+      'options spell, each letter highlights, word finishes before next',
       (t) async {
     final audio = QuizAudioHarness()..install();
     final p = await mount(t, const RumbledWordsScreen());
-    await audio.finishGameIntro(t, 'rumbled_word.mp3');
+    await flushAudio(t);
+    expect(audio.starts, isEmpty);
     await t.runAsync(() => p.toggleSfx());
     await t.pump();
     final task = shownWord(t);
     final word = task.toUpperCase();
-    await spell(t, audio, word);
+    final selectionCount = await spell(t, audio, word);
     expect(find.text('Correct!'), findsOneWidget);
-    expect(find.text('Check'), findsNothing);
+    expect(find.text('Check Word'), findsOneWidget);
     expect(find.text('Next'), findsNothing);
     expect(t.widget<AudioButton>(find.byType(AudioButton)).enabled, isFalse);
     expect(
         t
-            .widget<OutlinedButton>(find.byKey(const ValueKey('word-erase')))
+            .widget<OutlinedButton>(find.byKey(const ValueKey('word-check')))
             .onPressed,
         isNull);
-    // The final option must finish before the completed-word sequence starts.
-    await t.pump(const Duration(seconds: 2));
-    expect(audio.starts.length, word.length);
-    await t.runAsync(() => audio.completeSound(word[word.length - 1]));
+    expect(find.byKey(const ValueKey('word-erase')), findsNothing);
     for (var slot = 0; slot < word.length; slot++) {
-      await audioStarted(t, audio, word.length + slot + 1);
+      await audioStarted(t, audio, selectionCount + slot + 1);
       expect(audio.starts.last,
-          endsWith('/sounds/sound-${word[slot].toLowerCase()}.mp3'));
+          endsWith('/letters/letter-${word[slot].toLowerCase()}.mp3'));
       for (var i = 0; i < word.length; i++) {
         expect(highlighted(t, i), i == slot);
       }
       await t.pump(const Duration(seconds: 2));
       expect(shownWord(t), task);
-      await t.runAsync(() => audio.completeSound(word[slot]));
+      await t.runAsync(() => audio.completeLetterName(word[slot]));
     }
-    await audioStarted(t, audio, word.length * 2 + 1);
+    await audioStarted(t, audio, selectionCount + word.length + 1);
     final asset = PhonicsAudioService.assetForPhrase(task)!;
     expect(audio.starts.last, endsWith('/$asset'));
     for (var slot = 0; slot < word.length; slot++) {

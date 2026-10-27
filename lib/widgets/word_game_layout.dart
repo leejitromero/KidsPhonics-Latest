@@ -7,9 +7,11 @@ class WordGameLayout extends StatelessWidget {
       {super.key,
       required this.word,
       required this.children,
+      this.pictureAsset,
       this.pictureExtent});
   final String word;
   final List<Widget> children;
+  final String? pictureAsset;
 
   /// Lets a word-building board reserve room for its larger interactive tiles.
   final double? pictureExtent;
@@ -28,8 +30,9 @@ class WordGameLayout extends StatelessWidget {
                 ]),
                 borderRadius: BorderRadius.circular(28),
               ),
-              child:
-                  Center(child: GameWordPicture(word: word, size: imageSize))),
+              child: Center(
+                  child: GameWordPicture(
+                      word: word, size: imageSize, asset: pictureAsset))),
           const SizedBox(height: 6),
           Expanded(
               child: LayoutBuilder(
@@ -50,15 +53,17 @@ class WordGameLayout extends StatelessWidget {
 }
 
 class WordChoiceGrid extends StatelessWidget {
-  const WordChoiceGrid({super.key, required this.children});
+  const WordChoiceGrid({super.key, required this.children, this.columns});
   final List<Widget> children;
+  final int? columns;
   @override
   Widget build(BuildContext context) => LayoutBuilder(builder: (_, box) {
         final scale = MediaQuery.textScalerOf(context).scale(20) / 20;
         final minimum = 48.0 * scale;
-        final columns = ((box.maxWidth + 8) / (minimum + 8))
-            .floor()
-            .clamp(1, children.length.clamp(1, 5));
+        final columns = this.columns?.clamp(1, children.length.clamp(1, 5)) ??
+            ((box.maxWidth + 8) / (minimum + 8))
+                .floor()
+                .clamp(1, children.length.clamp(1, 5));
         final side = ((box.maxWidth - 8 * (columns - 1)) / columns)
             .clamp(0.0, 60.0 * scale);
         return Center(

@@ -1,0 +1,21 @@
+{
+  "checkedUtc": "2026-10-25T23:42:34.433Z",
+  "sourceFiles": 1436,
+  "originalChanged": [],
+  "isolatedChanged": [],
+  "originalArtifacts": 5,
+  "artifactChanged": [],
+  "missing": [],
+  "qaBackupFilesVerified": 1433,
+  "backupChanged": [],
+  "addedSinceQAChanged": [],
+  "signingKeyUnchanged": true,
+  "priorGitStatusPreserved": true,
+  "newStatus": [
+    "?? output/release-candidates/20261026-qa-corrected-1792970978643/SHA256SUMS.txt"
+  ],
+  "unexpectedStatus": [],
+  "originalAssetsChecked": 863,
+  "androidFilesChecked": 31,
+  "passed": true
+}

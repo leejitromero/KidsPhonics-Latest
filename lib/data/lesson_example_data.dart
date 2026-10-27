@@ -13,7 +13,7 @@ class LessonExample {
       gameWordFor(word)?.frames ??
       [
         for (final suffix in ['', '1', '2'])
-          'assets/images/lesson_frames/${slug}_$letter$suffix.webp',
+          'assets/images/lesson_frames/${slug}_$letter$suffix.png',
       ];
 
   String? get soundNote => switch (letter) {

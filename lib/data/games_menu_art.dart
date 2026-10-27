@@ -14,7 +14,5 @@ const gamesMenuArt = {
 };
 
 abstract final class GamesFrameArt {
-  static const frame = 'assets/images/games_menu/games_card_frame.png';
-  static const nativeAspectRatio = 1536 / 1024;
   static const cardAspectRatio = 1.05;
 }

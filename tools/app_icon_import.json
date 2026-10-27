@@ -1,0 +1,13 @@
+{
+  "path": "assets/images/app_icon.png",
+  "previousSha256": "57D0281C11693087534CA7FEBA8249BDAD3939EB0EB8571330555A7BA37C8015",
+  "sha256": "C7F13E7E6A794D19233C5CB4C0E8DDF32F255675519260FC57B4E19430512D39",
+  "bytes": 2344357,
+  "source": "exec-9520cd90-d7cc-4a5a-ad12-fce68d68f5d7.png",
+  "reason": "User approved replacing the old launcher icon with the purple Lessons and blue Games mascots, KidPhonics book, ABC heading and audio symbol.",
+  "generator": "dart run flutter_launcher_icons",
+  "scope": "Android legacy and adaptive launcher icons only.",
+  "originalGeneratedSource": "exec-05dbd79a-9a5b-45d2-b56e-7800ce5aeef5.png",
+  "originalApprovedSha256": "4ED96328D160482D893059E3420C43AD40F2E69940C9E579DCFAC5228829D86F",
+  "backgroundFix": "tools/icon_lock_background_fix.json"
+}

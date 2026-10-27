@@ -1,0 +1,311 @@
+{
+  "reviewedUtc": "2026-10-24T00:22:22.421336+00:00",
+  "baselineApkBytes": 553799167,
+  "baselineApkSHA256": "EFEA193B5FFDF1CAEA1D8376F18ED6565DE02FBE5EFBB4B69E2F6EAB404C8489",
+  "assets": [
+    {
+      "path": "assets/images/activity_cards/game_alphabet_order-v2.png",
+      "bytes": 2078382,
+      "sha256": "CB04AB1824992711463A3A453DDF0E785CC70A8ACD01992AE617EBB1E685F4B5",
+      "reason": "Superseded composite menu card; current menus use gamesMenuArt and lessonMenuArt and paint their own cards."
+    },
+    {
+      "path": "assets/images/activity_cards/game_flappy_letters.png",
+      "bytes": 1980756,
+      "sha256": "78C2F229485A2B6B4765ECF072BD1E3D507F02A11DAB1A6E7A0940FFF9A2F3F8",
+      "reason": "Superseded composite menu card; current menus use gamesMenuArt and lessonMenuArt and paint their own cards."
+    },
+    {
+      "path": "assets/images/activity_cards/game_memory_flip.png",
+      "bytes": 2006805,
+      "sha256": "A3D9A5855F9BD3BA6DF01436CD0B20F404063F8EB36D2C6F3D5BAEF2901B6AC1",
+      "reason": "Superseded composite menu card; current menus use gamesMenuArt and lessonMenuArt and paint their own cards."
+    },
+    {
+      "path": "assets/images/activity_cards/game_missing_vowel.png",
+      "bytes": 1914040,
+      "sha256": "17DB531B8A370934258D118037219B33F25F3B81F40B1AFCF543C736A2281823",
+      "reason": "Superseded composite menu card; current menus use gamesMenuArt and lessonMenuArt and paint their own cards."
+    },
+    {
+      "path": "assets/images/activity_cards/game_phonics_quiz.png",
+      "bytes": 2018229,
+      "sha256": "F07C84D2C9C528F7091CC46A0E3367AD8D81578381CE3D90B57C947BB7AB01FC",
+      "reason": "Superseded composite menu card; current menus use gamesMenuArt and lessonMenuArt and paint their own cards."
+    },
+    {
+      "path": "assets/images/activity_cards/game_picture_match.png",
+      "bytes": 1958416,
+      "sha256": "44BBD9CB4898A48AF7FBD80745F3B9400EED32506EACE8D18E70C3FB5D27C3A0",
+      "reason": "Superseded composite menu card; current menus use gamesMenuArt and lessonMenuArt and paint their own cards."
+    },
+    {
+      "path": "assets/images/activity_cards/game_rhyming_words.png",
+      "bytes": 1946808,
+      "sha256": "DADA8B5D0B225EF774083D21CCDB33D2736F4DBFF7237AD79D633C8AB971E4FE",
+      "reason": "Superseded composite menu card; current menus use gamesMenuArt and lessonMenuArt and paint their own cards."
+    },
+    {
+      "path": "assets/images/activity_cards/game_rumbled_words.png",
+      "bytes": 2043840,
+      "sha256": "EDBC933EEB1B075E0B3D363AE9B363CDF8B63E009ED5E25970F0E56C3C5679CA",
+      "reason": "Superseded composite menu card; current menus use gamesMenuArt and lessonMenuArt and paint their own cards."
+    },
+    {
+      "path": "assets/images/activity_cards/game_sound_match.png",
+      "bytes": 2039373,
+      "sha256": "818C2FD312ED816A42C8D2CDBCDEB03DB1ACC9594BDD9B9DA234A8AC58549DE2",
+      "reason": "Superseded composite menu card; current menus use gamesMenuArt and lessonMenuArt and paint their own cards."
+    },
+    {
+      "path": "assets/images/activity_cards/game_speak_and_recognize.png",
+      "bytes": 1942022,
+      "sha256": "27912DE0CF8B4D0C40ADCA1445ED30827B6C1149CBF1B11E77515F74D47A42BF",
+      "reason": "Superseded composite menu card; current menus use gamesMenuArt and lessonMenuArt and paint their own cards."
+    },
+    {
+      "path": "assets/images/activity_cards/game_word_builder-v2.png",
+      "bytes": 2095709,
+      "sha256": "00CD804E60F1E415CB2A5CDF97E776BD8E4F8A8A96229C89D336F4C58833CBC8",
+      "reason": "Superseded composite menu card; current menus use gamesMenuArt and lessonMenuArt and paint their own cards."
+    },
+    {
+      "path": "assets/images/activity_cards/lesson_blending_sounds-v2.png",
+      "bytes": 2161683,
+      "sha256": "310C720E047ECC301D940702270E43C684AF3C7B9157E812B4F3AF06DE4A757C",
+      "reason": "Superseded composite menu card; current menus use gamesMenuArt and lessonMenuArt and paint their own cards."
+    },
+    {
+      "path": "assets/images/activity_cards/lesson_cvc_words.png",
+      "bytes": 2094277,
+      "sha256": "CDABE9911CF69E27187BBABB4FCE9AF4B7525DA4E468185E6EAE2BFA89D15706",
+      "reason": "Superseded composite menu card; current menus use gamesMenuArt and lessonMenuArt and paint their own cards."
+    },
+    {
+      "path": "assets/images/activity_cards/lesson_letter_recognition.png",
+      "bytes": 2093996,
+      "sha256": "7AE20785E6B2DB4B8F1A38C9A78DA691B4EE6B1190956066226DD935C55B89FD",
+      "reason": "Superseded composite menu card; current menus use gamesMenuArt and lessonMenuArt and paint their own cards."
+    },
+    {
+      "path": "assets/images/activity_cards/lesson_letter_sounds.png",
+      "bytes": 2031837,
+      "sha256": "A46EA59C3A09130638B3ABD5AC6BE2F2DDAF1BBB39041A79045B9D7C92C19C2F",
+      "reason": "Superseded composite menu card; current menus use gamesMenuArt and lessonMenuArt and paint their own cards."
+    },
+    {
+      "path": "assets/images/activity_cards/lesson_short_vowel.png",
+      "bytes": 2077980,
+      "sha256": "6D9C1B51E7231939DBF3479B476B2B009C069424577337571B4BF0FDF779658A",
+      "reason": "Superseded composite menu card; current menus use gamesMenuArt and lessonMenuArt and paint their own cards."
+    },
+    {
+      "path": "assets/images/custom_navigation/wooden frame.png",
+      "bytes": 756323,
+      "sha256": "1C3E2FFC0EB742CE7F052BD19C9255F1B3207D52C39ADD1FD4615E40169C449A",
+      "reason": "Superseded dock artwork; KidsNavigationArt.base uses wooden_frame_home.png."
+    },
+    {
+      "path": "assets/images/games_menu/games_card_frame.png",
+      "bytes": 1465644,
+      "sha256": "2C4FCBCA59E02FAFB1B03C787C8EE8EAE52CA1FD3B0908570E8EBF5FBAD0C4D4",
+      "reason": "GameZoneCard paints the compact glossy cards; only a legacy constant and artwork test use this frame."
+    },
+    {
+      "path": "assets/images/new_ui/cloud-transition-1.webp",
+      "bytes": 483976,
+      "sha256": "D8FA8285FDED86BF5EBFE0D3811367A5D2D585B1BDAEAC1747EED20D696D0CA9",
+      "reason": "Retired transition; CloudPageRoute uses screen_transitions/curtain_1.png through curtain_5.png."
+    },
+    {
+      "path": "assets/images/new_ui/cloud-transition-2.webp",
+      "bytes": 633300,
+      "sha256": "F13798F1A1D9EAEF2D9BCA9B2BDB9BBAC07E6AEBD01CCB84510914EECDC453F0",
+      "reason": "Retired transition; CloudPageRoute uses screen_transitions/curtain_1.png through curtain_5.png."
+    },
+    {
+      "path": "assets/images/new_ui/cloud-transition-3.webp",
+      "bytes": 874674,
+      "sha256": "9AD2DEA15CCEBF5984DD7DD72EE4FCCAC55AECA59AD6A654DB7B34B42A82B200",
+      "reason": "Retired transition; CloudPageRoute uses screen_transitions/curtain_1.png through curtain_5.png."
+    },
+    {
+      "path": "assets/images/new_ui/cloud-transition-4.webp",
+      "bytes": 1052812,
+      "sha256": "52C33769BBCB35354D762704360EC4D3B62F6E5D4C2115F5091BFD921CBBF8C6",
+      "reason": "Retired transition; CloudPageRoute uses screen_transitions/curtain_1.png through curtain_5.png."
+    },
+    {
+      "path": "assets/images/new_ui/lessons_banner.webp",
+      "bytes": 1248400,
+      "sha256": "64B4DBC557160414F38EC39BF89D7EAF9653DA1A14D0601D55CBF79570FB307B",
+      "reason": "Retired menu banner; current lesson header uses lesson_header/banner_lessons.png."
+    },
+    {
+      "path": "assets/images/school_adventure_v1/generation_prompts.json",
+      "bytes": 4316,
+      "sha256": "4518A15C74E042D64B34927A1CAC81116F21AB7E186B577E9D7FBB23023F7AC3",
+      "reason": "Unreferenced early design concept, not registered in the app bundle."
+    },
+    {
+      "path": "assets/images/school_adventure_v1/student_boy.png",
+      "bytes": 1789405,
+      "sha256": "EA95DFB186E4A674251F6BAF72330868AFF10170C0F7A9AB2A4CF51E1828FCB8",
+      "reason": "Unreferenced early design concept, not registered in the app bundle."
+    },
+    {
+      "path": "assets/images/school_adventure_v1/student_girl.png",
+      "bytes": 1944793,
+      "sha256": "ABD764BF9AAC2F9A3B873DAFCF2127CB5F553D239120A734821C589730AC0C36",
+      "reason": "Unreferenced early design concept, not registered in the app bundle."
+    },
+    {
+      "path": "assets/images/school_home/games_mascot.png",
+      "bytes": 1482414,
+      "sha256": "C0497B5E9D847245AFEBAC7920D2412246F9431378D7190C8DBE50764ADFC950",
+      "reason": "Retired still mascot; current home uses five supplied mascotTalkingFrames per guide."
+    },
+    {
+      "path": "assets/images/school_home/lessons_mascot.png",
+      "bytes": 1620731,
+      "sha256": "292A010173993EA18FDDC73213197989D31F138DA727E557800BDE35ADB4DC32",
+      "reason": "Retired still mascot; current home uses five supplied mascotTalkingFrames per guide."
+    },
+    {
+      "path": "assets/images/screen_frames/games/g1.webp",
+      "bytes": 1722894,
+      "sha256": "2E80BCA77EF9E350C6C15F0AE9D8437D7FB4250229F58EA902B0F506C4460BEC",
+      "reason": "Retired menu frames; current menus use rounded cards and supplied day-cycle backgrounds."
+    },
+    {
+      "path": "assets/images/screen_frames/games/g2.webp",
+      "bytes": 1725208,
+      "sha256": "19B8D62314376018143B96BD42E7218638F5856D570ABECE12AE6AED2D8FC391",
+      "reason": "Retired menu frames; current menus use rounded cards and supplied day-cycle backgrounds."
+    },
+    {
+      "path": "assets/images/screen_frames/games/g3.webp",
+      "bytes": 1751068,
+      "sha256": "D24029F8455941D6A5BCD1417EBC81173D72676A343EC3DC86A6A84C2DD4D7CE",
+      "reason": "Retired menu frames; current menus use rounded cards and supplied day-cycle backgrounds."
+    },
+    {
+      "path": "assets/images/screen_frames/games/g4.webp",
+      "bytes": 1718806,
+      "sha256": "10D2A4F1BC93FE39122F0BF9A38D1CCF7180942A02164E55C8457C1E1C723932",
+      "reason": "Retired menu frames; current menus use rounded cards and supplied day-cycle backgrounds."
+    },
+    {
+      "path": "assets/images/screen_frames/lessons/leson1.webp",
+      "bytes": 1825384,
+      "sha256": "252438F4B2EC344177913A21E71017B1704C7C1D8DCF3391BB0AA579F527DA3D",
+      "reason": "Retired menu frames; current menus use rounded cards and supplied day-cycle backgrounds."
+    },
+    {
+      "path": "assets/images/screen_frames/lessons/leson2.webp",
+      "bytes": 1827360,
+      "sha256": "9599E75FC8D80975E41862579B405F9A40BE211116D40CB122248E2356BE775E",
+      "reason": "Retired menu frames; current menus use rounded cards and supplied day-cycle backgrounds."
+    },
+    {
+      "path": "assets/images/screen_frames/lessons/leson3.webp",
+      "bytes": 1841404,
+      "sha256": "DD2BF60E28C51AEB3AE85745E8AC17B5FBAC5C4E58CD388315D87E9F056529FB",
+      "reason": "Retired menu frames; current menus use rounded cards and supplied day-cycle backgrounds."
+    },
+    {
+      "path": "assets/images/screen_frames/lessons/leson4.webp",
+      "bytes": 1867136,
+      "sha256": "D2746686FE089A62A695E6497AAA2BBE08BB9E8D558A00D19C4C4F03D53B7E62",
+      "reason": "Retired menu frames; current menus use rounded cards and supplied day-cycle backgrounds."
+    },
+    {
+      "path": "assets/images/update_scene/games_button.png",
+      "bytes": 1728061,
+      "sha256": "46572F2D668E11A3E7E00C0DC4F4AA753687055674315F0540F58F363E70B6A5",
+      "reason": "Retired menu button; SchoolHomeScene.buttonAssets uses home_buttons/button_lessons.png and button_games.png."
+    },
+    {
+      "path": "assets/images/update_scene/lesson_button.png",
+      "bytes": 1802318,
+      "sha256": "75885511CDC100F30290BBC9E54E72D2BFD32244BF356C3FBC1EA58FED468BBD",
+      "reason": "Retired menu button; SchoolHomeScene.buttonAssets uses home_buttons/button_lessons.png and button_games.png."
+    }
+  ],
+  "sources": [
+    {
+      "path": "lib/data/activity_card_art.dart",
+      "bytes": 1440,
+      "sha256": "922A78290E80B395FB2C447B55A7926450626325A928D2898B71D65EF560C9D5",
+      "reason": "Retired presentation code with no application entry-point path; obsolete test imports will be updated to current menus."
+    },
+    {
+      "path": "lib/widgets/activity_artwork.dart",
+      "bytes": 1076,
+      "sha256": "5BF74E145787BD9358E598569A99A88CE993C5D60D622A1D77F693E7C9168949",
+      "reason": "Retired presentation code with no application entry-point path; obsolete test imports will be updated to current menus."
+    },
+    {
+      "path": "lib/widgets/category_house.dart",
+      "bytes": 21926,
+      "sha256": "6262BBA2C9C715507124141766A1A01357CCA37306D32EB673D45ECEE332120E",
+      "reason": "Retired presentation code with no application entry-point path; obsolete test imports will be updated to current menus."
+    },
+    {
+      "path": "lib/widgets/game_zone_welcome.dart",
+      "bytes": 2240,
+      "sha256": "EDB757329BA38BB6624E24996185DE34DE4D34CC8A24C91591432F2BEA9C7CBE",
+      "reason": "Retired presentation code with no application entry-point path; obsolete test imports will be updated to current menus."
+    },
+    {
+      "path": "lib/widgets/home_flight_menu.dart",
+      "bytes": 15313,
+      "sha256": "DDB2D9661387BE777D54B17F74754C3E77AE711958E8DBE435D0FE7230929720",
+      "reason": "Retired presentation code with no application entry-point path; obsolete test imports will be updated to current menus."
+    },
+    {
+      "path": "lib/widgets/home_playground_mascot.dart",
+      "bytes": 6252,
+      "sha256": "4F2A533454C382C5FE54E5284483D140A0C4DAD9C0DA08784D633C899951EA97",
+      "reason": "Retired presentation code with no application entry-point path; obsolete test imports will be updated to current menus."
+    },
+    {
+      "path": "lib/widgets/home_village_footer.dart",
+      "bytes": 14100,
+      "sha256": "1E33A7A3F24294AA0FC764173229CA688A7054E66144577676980E2E65D673D0",
+      "reason": "Retired presentation code with no application entry-point path; obsolete test imports will be updated to current menus."
+    },
+    {
+      "path": "lib/widgets/home_village_menu.dart",
+      "bytes": 13249,
+      "sha256": "EA1C3E1B680641EDBB6D778E0D5021D9D165D56C075E13F4DE1F8FBEE4E3F15D",
+      "reason": "Retired presentation code with no application entry-point path; obsolete test imports will be updated to current menus."
+    },
+    {
+      "path": "lib/widgets/mastery_illustration.dart",
+      "bytes": 6268,
+      "sha256": "D7798362DE9636D19EB313FBA6486DE5CF3A5C9E51808B02B1B7F0A951F54F82",
+      "reason": "Retired presentation code with no application entry-point path; obsolete test imports will be updated to current menus."
+    },
+    {
+      "path": "lib/widgets/overall_mastery_panel.dart",
+      "bytes": 5640,
+      "sha256": "624B85173079885FB24C51E9F3D102081273B076A5ED080C2A18A5111747D0B5",
+      "reason": "Retired presentation code with no application entry-point path; obsolete test imports will be updated to current menus."
+    }
+  ],
+  "retainedAfterFurtherReview": [
+    {
+      "path": "assets/fonts/Nunito-Medium.ttf",
+      "bytes": 125628,
+      "sha256": "1F6452D3509DB129D3468088C1C952F1A844B6DC865703A09595FC53700A6251",
+      "reason": "GoogleFonts.nunitoTextTheme dynamically discovers Medium/SemiBold assets from AssetManifest; preserve original bytes."
+    },
+    {
+      "path": "assets/fonts/Nunito-SemiBold.ttf",
+      "bytes": 125512,
+      "sha256": "F165190D31319DC6384C83FDD014ED983630541B21D005B5CAADF1D74FBD513D",
+      "reason": "GoogleFonts.nunitoTextTheme dynamically discovers Medium/SemiBold assets from AssetManifest; preserve original bytes."
+    }
+  ]
+}

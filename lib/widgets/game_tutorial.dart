@@ -187,17 +187,17 @@ class _TutorialDialogState extends State<_TutorialDialog> {
             (
               Icons.volume_up_rounded,
               'Listen first',
-              'Tap the speaker to hear the sound or word.'
+              'Listen to the word and the beginning, middle, or ending sound question. Use the speakers to listen again.'
             ),
             (
               Icons.touch_app_rounded,
-              'Choose a letter',
-              'Tap the letter that matches what you heard.'
+              'Choose, then check',
+              'Hear the letter sounds, choose your answer, then tap Check Answer. Only your submitted answer is scored.'
             ),
             (
               Icons.check_circle_rounded,
               'Learn and continue',
-              'Watch the answer feedback. The next task appears automatically after a correct answer.'
+              'See and hear the correct sound before the next question. Review Mistakes at the end is practice and keeps your original score.'
             ),
           ],
         GameTutorial.speechPractice => [
@@ -238,17 +238,17 @@ class _TutorialDialogState extends State<_TutorialDialog> {
             (
               Icons.volume_up_rounded,
               'Hear the picture word',
-              'Look at the picture and listen to the word.'
+              'Look at the picture and listen to the word. Hint fixes the first letter once per word.'
             ),
             (
-              Icons.touch_app_rounded,
-              'Tap and hear the letters',
-              'Put the letters in order. Tap Erase or a chosen letter to change it.'
+              Icons.swipe_rounded,
+              'Drag into place',
+              'Tap a letter to make it float, then drag it into place. The other letters slide aside. Tap the selected letter again to cancel.'
             ),
             (
               Icons.auto_awesome_rounded,
-              'Watch and listen',
-              'A correct word lights up letter by letter, then you hear the whole word. The next task starts automatically.'
+              'Check your word',
+              'Tap Check Word when ready. Keep arranging if it is wrong. A correct word lights up and plays before the next task starts.'
             ),
           ],
         GameTutorial.missingVowel => [
@@ -433,18 +433,24 @@ class _VisualExample extends StatelessWidget {
           TutorialExampleTiles(
               letters: const ['CAT', 'HAT'], complete: completed)
         ]),
-      GameTutorial.wordBuilder ||
-      GameTutorial.missingVowel ||
       GameTutorial.rumbledWords =>
         Column(mainAxisSize: MainAxisSize.min, children: [
           picture('Cat'),
           const SizedBox(height: 5),
           TutorialExampleTiles(
-              letters: tutorial == GameTutorial.rumbledWords && step == 1
-                  ? const ['T', 'C', 'A']
-                  : ['C', step == 0 ? '_' : 'A', 'T'],
-              selected:
-                  step == 1 && tutorial != GameTutorial.rumbledWords ? 1 : -1,
+              letters: step < 2 ? const ['C', 'T', 'A'] : const ['C', 'A', 'T'],
+              selected: step == 1 ? 2 : -1,
+              complete: completed),
+          if (step == 1) const Icon(Icons.swipe_rounded, color: GameDesign.ink),
+        ]),
+      GameTutorial.wordBuilder ||
+      GameTutorial.missingVowel =>
+        Column(mainAxisSize: MainAxisSize.min, children: [
+          picture('Cat'),
+          const SizedBox(height: 5),
+          TutorialExampleTiles(
+              letters: ['C', step == 0 ? '_' : 'A', 'T'],
+              selected: step == 1 ? 1 : -1,
               complete: completed)
         ]),
       GameTutorial.alphabetOrder => TutorialExampleTiles(

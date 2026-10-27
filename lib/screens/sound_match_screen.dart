@@ -26,7 +26,6 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
 
   Map<String, bool?> _picks = {}; // letter -> correct?
   bool _roundDone = false;
-  bool _roundScored = false;
   bool _retryBusy = false;
   Timer? _feedbackTimer;
 
@@ -81,7 +80,6 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
         _roundIndex++;
         _picks = {};
         _roundDone = false;
-        _roundScored = false;
         _retryBusy = false;
         _opts = _shuffledOpts;
       });
@@ -98,7 +96,6 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
 
       _picks = {};
       _roundDone = false;
-      _roundScored = false;
       _retryBusy = false;
       _opts = _shuffledOpts;
     });
@@ -121,25 +118,19 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
     }
 
     final isCorrect = letter == _round.correctLetter;
-    final firstAttempt = !_roundScored;
     setState(() {
       _picks[letter] = isCorrect;
       _roundDone = isCorrect;
-      _roundScored = true;
       _retryBusy = !isCorrect;
     });
-    // Guided corrections do not change the first-answer score or duplicate
-    // rewards. The learner still completes the current sound before advancing.
-    if (firstAttempt) {
-      recordGameAnswer(correct: isCorrect);
-    }
+    // Count valid retries consistently with the other practice games. The
+    // completed-round guard still prevents duplicate correct-answer rewards.
+    recordGameAnswer(correct: isCorrect);
     if (isCorrect) {
       await playGameCorrect();
       if (!mounted) return;
-      if (firstAttempt) {
-        awardGameXp((5 * widget.difficulty.xpMultiplier).round());
-        awardGameStar();
-      }
+      awardGameXp((5 * widget.difficulty.xpMultiplier).round());
+      awardGameStar();
       _feedbackTimer =
           Timer(const Duration(milliseconds: 1000), _finishFeedback);
     } else {

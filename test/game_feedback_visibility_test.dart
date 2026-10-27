@@ -1,3 +1,4 @@
+import 'phonics_quiz_test_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -137,12 +138,12 @@ void main() {
         .widget<GameAnswerButton>(find.byWidgetPredicate((w) =>
             w is GameAnswerButton && w.label == letterChoiceLabel(answer)))
         .onPressed!();
-    await t.pump();
+    await submitQuiz(t);
     t.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
     await t.pump(const Duration(seconds: 2));
     expect(t.widget<WordGameLayout>(find.byType(WordGameLayout)).word, word);
     t.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
-    await t.pump(const Duration(milliseconds: 300));
+    await finishMutedQuizFeedback(t);
     expect(t.widget<WordGameLayout>(find.byType(WordGameLayout)).word,
         isNot(word));
     await close(t, p);

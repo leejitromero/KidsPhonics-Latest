@@ -3,7 +3,7 @@ class GameInstructionScript {
   final String key, text, asset;
 }
 
-/// Exact sentences supplied for the eleven recorded game instructions.
+/// Display instructions and the supplied game recording paths.
 const gameInstructionScripts = <String, GameInstructionScript>{
   'Flappy Letters': GameInstructionScript(
       'flappy-letters',
@@ -19,7 +19,7 @@ const gameInstructionScripts = <String, GameInstructionScript>{
       'audio/game_instructions/memory_flip.mp3'),
   'Phonics Quiz': GameInstructionScript(
       'phonics-quiz',
-      'Listen to the word and tap its first letter!',
+      'Listen to the word, choose your answer, then tap Check Answer!',
       'audio/game_instructions/phonics_quiz.mp3'),
   'Word Builder': GameInstructionScript(
       'word-builder',
@@ -43,7 +43,7 @@ const gameInstructionScripts = <String, GameInstructionScript>{
       'audio/game_instructions/picture_match.mp3'),
   'Rumbled Words': GameInstructionScript(
       'rumbled-words',
-      'Tap the letters in order to spell the word!',
+      'Tap a letter, drag it into place, then tap Check Word!',
       'audio/game_instructions/rumbled_word.mp3'),
   'Rhyming Words': GameInstructionScript(
       'rhyming-words',

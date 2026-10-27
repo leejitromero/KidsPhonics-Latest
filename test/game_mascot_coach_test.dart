@@ -5,95 +5,85 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kidsphonics/controllers/game_narration_controller.dart';
 import 'package:kidsphonics/widgets/game_mascot_coach.dart';
 
-import 'package:kidsphonics/data/letter_data.dart';
 import 'package:kidsphonics/models/difficulty.dart';
 import 'package:kidsphonics/screens/phonics_quiz_screen.dart';
 import 'package:kidsphonics/widgets/learner_widgets.dart';
-import 'package:kidsphonics/widgets/word_game_layout.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show mount, close;
 import 'quiz_audio_harness.dart';
+import 'phonics_quiz_test_helpers.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   testWidgets(
-      'quiz plays wrong and correct letter sounds before answer feedback',
+      'quiz intro, word, question, previews and feedback share one audio channel',
       (t) async {
-    SharedPreferences.setMockInitialValues({});
+    SharedPreferences.setMockInitialValues({'voice': true, 'sfx': false});
     mockProgressAudio();
     final audio = QuizAudioHarness()..install();
     final p =
         await mount(t, const PhonicsQuizScreen(difficulty: Difficulty.easy));
-    await t.runAsync(() => p.toggleSfx());
-    await t.pump();
-    final word = t.widget<WordGameLayout>(find.byType(WordGameLayout)).word;
-    final question = quizQuestionsForDifficulty(Difficulty.easy)
-        .firstWhere((q) => q.word.toUpperCase() == word.toUpperCase());
-    final answer = question.correctLetter;
-    final wrong = question.options.firstWhere((l) => l != answer);
-    final wrongChoice = t.widget<GameAnswerButton>(find.byWidgetPredicate(
-        (w) => w is GameAnswerButton && w.label == letterChoiceLabel(wrong)));
-    wrongChoice.onPressed!();
-    await t.pump();
-    final controller =
-        t.widget<GameMascotCoach>(find.byType(GameMascotCoach)).controller;
-    for (var i = 0;
-        i < 40 &&
-            !audio.starts.any(
-                (s) => s.endsWith('/sounds/sound-${wrong.toLowerCase()}.mp3'));
-        i++) {
-      await t.runAsync(
-          () => Future<void>.delayed(const Duration(milliseconds: 10)));
-      await t.pump();
+    Future<void> waitStarts(int count) async {
+      for (var i = 0; i < 100 && audio.starts.length < count; i++) {
+        await t.runAsync(
+            () => Future<void>.delayed(const Duration(milliseconds: 10)));
+        await t.pump();
+      }
+      expect(audio.starts, hasLength(count));
     }
+
+    final q = shownQuiz(t);
+    await waitStarts(1);
+    expect(audio.starts.last, endsWith('/game_instructions/phonics_quiz.mp3'));
+    await t.runAsync(
+        () => audio.completeSource('/game_instructions/phonics_quiz.mp3'));
+    await waitStarts(2);
+    expect(audio.starts.last,
+        endsWith('/cvc_lesson/word-${q.word.toLowerCase()}.mp3'));
+    await t.runAsync(() =>
+        audio.completeSource('/cvc_lesson/word-${q.word.toLowerCase()}.mp3'));
+    await waitStarts(3);
+    expect(
+        audio.starts.last, endsWith('/game_instructions/quiz_beginning.mp3'));
+    await t.runAsync(
+        () => audio.completeSource('/game_instructions/quiz_beginning.mp3'));
+    final wrong = q.options.firstWhere((letter) => letter != q.correctLetter);
+    await t.tap(find.byKey(ValueKey('quiz-sound-$wrong')));
+    await waitStarts(4);
     expect(audio.starts.last,
         endsWith('/sounds/sound-${wrong.toLowerCase()}.mp3'));
-    await t.pump(const Duration(seconds: 1));
-    expect(t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult,
-        isFalse);
-    expect(p.stars, 0);
     await t.runAsync(() => audio.completeSound(wrong));
-    for (var i = 0; i < 30 && controller.feedback != null; i++) {
-      await t.runAsync(
-          () => Future<void>.delayed(const Duration(milliseconds: 10)));
-      await t.pump();
-    }
-    await t.pump(const Duration(milliseconds: 800));
-    expect(t.widget<WordGameLayout>(find.byType(WordGameLayout)).word, word);
+    await selectQuiz(t, wrong);
+    expect(
+        t.state<GameSessionUi>(find.byType(PhonicsQuizScreen)).scoredAttempts,
+        0);
     expect(
         t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult, isNull);
-    final choice = t.widget<GameAnswerButton>(find.byWidgetPredicate(
-        (w) => w is GameAnswerButton && w.label == letterChoiceLabel(answer)));
-    choice.onPressed!();
-    await t.pump();
-    final coach = t.widget<GameMascotCoach>(find.byType(GameMascotCoach));
-    expect(coach.controller.feedback, '${letterChoiceLabel(answer)} sound');
-    for (var i = 0;
-        i < 40 &&
-            !audio.starts.any(
-                (s) => s.endsWith('/sounds/sound-${answer.toLowerCase()}.mp3'));
-        i++) {
-      await t.runAsync(
-          () => Future<void>.delayed(const Duration(milliseconds: 10)));
-      await t.pump();
-    }
-    expect(audio.sources.last,
-        endsWith('/sounds/sound-${answer.toLowerCase()}.mp3'));
-    expect(audio.sources.where((s) => s.contains('/praise-')), isEmpty);
+    await submitQuiz(t);
+    await waitStarts(5);
+    expect(t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult,
+        isFalse);
+    expect(audio.starts.last,
+        endsWith('/cvc_lesson/word-${q.word.toLowerCase()}.mp3'));
     await t.pump(const Duration(seconds: 2));
-    expect(t.widget<WordGameLayout>(find.byType(WordGameLayout)).word, word);
-    await t.runAsync(() => audio.completeSound(answer));
-    for (var i = 0; i < 30 && coach.controller.feedback != null; i++) {
+    expect(shownQuiz(t).id, q.id);
+    await t.runAsync(() =>
+        audio.completeSource('/cvc_lesson/word-${q.word.toLowerCase()}.mp3'));
+    await waitStarts(6);
+    expect(audio.starts.last,
+        endsWith('/sounds/sound-${q.correctLetter.toLowerCase()}.mp3'));
+    await t.pump(const Duration(seconds: 2));
+    expect(shownQuiz(t).id, q.id);
+    await t.runAsync(() => audio.completeSound(q.correctLetter));
+    for (var i = 0; i < 12; i++) {
       await t.runAsync(
           () => Future<void>.delayed(const Duration(milliseconds: 10)));
       await t.pump();
     }
-    expect(coach.controller.feedback, isNull);
-    expect(coach.controller.speaking, isFalse);
-    expect(audio.sources.where((s) => s.contains('/game_narration/')), isEmpty);
-    expect(
-        t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult, isTrue);
-    await t.pump(const Duration(milliseconds: 1500));
+    await t.pump(const Duration(milliseconds: 850));
+    expect(shownQuiz(t).word, isNot(q.word));
+    expect(p.stars, 0);
+    expect(audio.sources.where((s) => s.contains('/praise-')), isEmpty);
     await close(t, p);
   });
   testWidgets(

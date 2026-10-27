@@ -59,6 +59,10 @@ class QuizAudioHarness {
     await completeSource(suffix);
   }
 
+  Future<void> completeLetterName(String letter) async {
+    await completeSource('/letters/letter-${letter.toLowerCase()}.mp3');
+  }
+
   /// Verify the entry recording, then count the activity's audio separately.
   Future<void> finishGameIntro(WidgetTester t, String filename) async {
     final suffix = '/game_instructions/$filename';

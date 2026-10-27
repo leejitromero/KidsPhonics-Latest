@@ -35,9 +35,13 @@ class _GameMascotCoachState extends State<GameMascotCoach>
 
   void _sync() {
     final request = ++_syncRequest;
-    final voice = context.read<AppProvider>().voiceEnabled;
+    final provider = context.read<AppProvider>();
+    final voice = provider.voiceEnabled;
     final active = _foreground &&
         widget.enabled &&
+        TickerMode.valuesOf(context).enabled &&
+        provider.gameAccess &&
+        !provider.timeLimitReached &&
         (ModalRoute.isCurrentOf(context) ?? true);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted || request != _syncRequest) return;

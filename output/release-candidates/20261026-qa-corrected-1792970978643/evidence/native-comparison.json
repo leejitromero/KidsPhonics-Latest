@@ -1,0 +1,38 @@
+﻿[
+    {
+        "path":  "lib/arm64-v8a/libapp.so",
+        "originalSHA256":  "0337698236d7f37a04d49a128b2b1c8489473b47283834a05225d238e8c59326",
+        "candidateSHA256":  "c85895d1bd0d8d96253c49edb5bfb8fdbf22d0137119f864ca710f4b00e6dc17",
+        "identical":  false
+    },
+    {
+        "path":  "lib/arm64-v8a/libflutter.so",
+        "originalSHA256":  "0d3ca63fa946d4264b2fc5281d92ed4d4016dd2cf174214e76bfc7c507a0a59e",
+        "candidateSHA256":  "0d3ca63fa946d4264b2fc5281d92ed4d4016dd2cf174214e76bfc7c507a0a59e",
+        "identical":  true
+    },
+    {
+        "path":  "lib/armeabi-v7a/libapp.so",
+        "originalSHA256":  "264aa6f2be5ae7b55ab0a7a3d8bdce075501fef58183c22614881bbdd6df099d",
+        "candidateSHA256":  "d028a58ea78d82dffffdfbfeb20f4a11d0816f7a0286d60f4ad1c6ef5f993735",
+        "identical":  false
+    },
+    {
+        "path":  "lib/armeabi-v7a/libflutter.so",
+        "originalSHA256":  "43ce1c13e5b51c540c7292904181b506656ea5372b35df92c2102d765d236c55",
+        "candidateSHA256":  "43ce1c13e5b51c540c7292904181b506656ea5372b35df92c2102d765d236c55",
+        "identical":  true
+    },
+    {
+        "path":  "lib/x86_64/libapp.so",
+        "originalSHA256":  "d007fcd87d4885d3f247cfdf7188129fb7ba89972fe94ba8b92218889011d379",
+        "candidateSHA256":  "f53dc8dc62c7e016a866c38f3684cbfd0de298edcbc13939504a2c0b7df7607e",
+        "identical":  false
+    },
+    {
+        "path":  "lib/x86_64/libflutter.so",
+        "originalSHA256":  "8a386135dddb0038522701bb3c649cfa4447b0dfd6948600b1bbf1946b7db122",
+        "candidateSHA256":  "8a386135dddb0038522701bb3c649cfa4447b0dfd6948600b1bbf1946b7db122",
+        "identical":  true
+    }
+]

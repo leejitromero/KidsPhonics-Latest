@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,29 +20,71 @@ void main() {
     SharedPreferences.setMockInitialValues({'voice': false});
   });
 
-  test('supplied composition stays unchanged and exports have 8K dimensions',
+  test('launcher and Games lock have transparent backgrounds, not black plates',
+      () async {
+    for (final path in [
+      'assets/images/app_icon.png',
+      'assets/images/games_locl.png',
+      'android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png',
+    ]) {
+      final codec =
+          await ui.instantiateImageCodec(File(path).readAsBytesSync());
+      final frame = await codec.getNextFrame();
+      try {
+        final image = frame.image;
+        final pixels =
+            (await image.toByteData(format: ui.ImageByteFormat.rawRgba))!;
+        int alpha(int x, int y) =>
+            pixels.getUint8((y * image.width + x) * 4 + 3);
+        for (final (x, y) in [
+          (0, 0),
+          (image.width - 1, 0),
+          (0, image.height - 1),
+          (image.width - 1, image.height - 1),
+        ]) {
+          expect(alpha(x, y), 0,
+              reason: '$path must not have opaque corner plates.');
+        }
+        expect(alpha(image.width ~/ 2, image.height ~/ 2), greaterThan(240),
+            reason: 'Keep the actual illustration visible.');
+        if (path.endsWith('games_locl.png')) {
+          expect(alpha(image.width ~/ 2, image.height ~/ 4), 0,
+              reason: 'The classroom should show through the shackle opening.');
+        }
+      } finally {
+        frame.image.dispose();
+        codec.dispose();
+      }
+    }
+    expect(
+        File('android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml')
+            .readAsStringSync(),
+        contains('android:inset="16%"'),
+        reason:
+            'The artwork should fill the launcher mask without the old wide cyan frame.');
+  });
+
+  test(
+      'current runtime Home artwork stays byte-identical at its approved dimensions',
       () {
     const hashes = {
-      'morning':
-          '2ece0982a9657d277b989fcde86cd2c6db74934625066ebd89fcf4b89b171c04',
-      'sunset':
-          '6dfe0eea3002a1f5445ea1f5a64138e14d6bc6f55714b0158cacee2b3f87667e',
-      'night':
-          '45030644d37c844d1b1fb61bad684dd682942d9ddcd80ba06b509510da076d01',
+      'new_bgmornig':
+          '07ea266057db487a6a45890335e69b1b0b90dd5bc2081d78add71df3aa5ff0d1',
+      'new_bg_sunset':
+          '6da868d628bfc6f47160d41f891929ab5e28a3f4c454155d4c7cab1790b7831f',
+      'new_bg_night':
+          'c10e614dae6f4b5fdebe3d3a38fe812fec5a0ca5168ab9d76b66da1fba8abc77',
     };
     for (final entry in hashes.entries) {
       final source = File('assets/images/home_classroom/${entry.key}.png');
       expect(sha256.convert(source.readAsBytesSync()).toString(), entry.value);
-      final file =
-          File('output/home_classroom/8k/${entry.key}-8k.png').openSync();
-      try {
-        final header = ByteData.sublistView(file.readSync(24));
-        expect(header.getUint32(16), 5120);
-        expect(header.getUint32(20), 7680);
-      } finally {
-        file.closeSync();
-      }
+      final header = ByteData.sublistView(source.readAsBytesSync());
+      expect(header.getUint32(16), 1024);
+      expect(header.getUint32(20), 1536);
     }
+    expect(DayCycleBackground.framesFor('home'), [
+      for (final name in hashes.keys) 'assets/images/home_classroom/$name.png'
+    ]);
   });
 
   for (final (id, destination) in [

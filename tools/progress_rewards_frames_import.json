@@ -1,0 +1,26 @@
+﻿[
+    {
+        "source":  "C:\\Users\\leeji\\KidsPhonicsProject\\screen animations\\frame_alphabet_milstone.png",
+        "path":  "assets/images/progress_collection/frame_alphabet_milstone.png",
+        "sha256":  "A1F220C77D750E091DDF09273B35542C3BCCD813F07A23B71147BF3439883D69",
+        "bytes":  1205776
+    },
+    {
+        "source":  "C:\\Users\\leeji\\KidsPhonicsProject\\screen animations\\frame_mybadge.png",
+        "path":  "assets/images/progress_collection/frame_mybadge.png",
+        "sha256":  "9A000413A29D2D266C9D47F055CE6941030C3E3CD6BCFC4E2F1DC95FD2D6AF25",
+        "bytes":  1179699
+    },
+    {
+        "source":  "C:\\Users\\leeji\\KidsPhonicsProject\\screen animations\\frame_rewards_contain.png",
+        "path":  "assets/images/progress_collection/frame_rewards_contain.png",
+        "sha256":  "3A10A968662A702383071C1FFC2C4C378788BB5D54DF5B5519CCDA1353120AE0",
+        "bytes":  1346618
+    },
+    {
+        "source":  "C:\\Users\\leeji\\KidsPhonicsProject\\screen animations\\frame_mytreasure.png",
+        "path":  "assets/images/progress_collection/frame_mytreasure.png",
+        "sha256":  "A644AA3D8E600B4B2FA9ADD51F72343BC57FD94B3E0202D185E7E561001466B0",
+        "bytes":  1422469
+    }
+]

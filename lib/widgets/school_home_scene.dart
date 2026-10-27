@@ -179,10 +179,6 @@ class SchoolHomeScene extends StatelessWidget {
                                     : studentRect;
                                 final rect = Rect.lerp(studentRect, stop,
                                     HomeCharacterVisitTiming.movement(t))!;
-                                final cloud =
-                                    HomeCharacterVisitTiming.clouds(t);
-                                final opacity =
-                                    1 - ((cloud - .35) / .5).clamp(0.0, 1.0);
                                 return Positioned.fromRect(
                                     rect: rect,
                                     child: Stack(
@@ -192,7 +188,7 @@ class SchoolHomeScene extends StatelessWidget {
                                               child: Opacity(
                                                   key: const ValueKey(
                                                       'home-student-visibility'),
-                                                  opacity: opacity,
+                                                  opacity: 1,
                                                   child: Semantics(
                                                       button: true,
                                                       enabled: !busy,
@@ -221,15 +217,9 @@ class SchoolHomeScene extends StatelessWidget {
                                                                           milliseconds:
                                                                               130))
                                                               : StudentWave(character: character, animate: !busy || t > 0 && !walking))))),
-                                          if (cloud > 0)
-                                            Positioned.fill(
-                                                child: HomeCharacterCloud(
-                                                    key: const ValueKey(
-                                                        'home-character-cloud'),
-                                                    progress: cloud)),
                                         ]));
                               }),
-                        // Characters and their clouds always paint behind the guides.
+                        // The student always paints behind the guides.
                         for (final category in [
                           HomeCategory.lessons,
                           HomeCategory.games

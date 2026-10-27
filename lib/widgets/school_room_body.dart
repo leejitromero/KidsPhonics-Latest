@@ -22,12 +22,14 @@ class SchoolRoomBody extends StatelessWidget {
       {super.key,
       required this.room,
       required this.child,
+      this.showNavigation = true,
       this.navigationOnRoute = false,
       this.navigationDestination});
   final SchoolRoom room;
   final Widget child;
   final KidsDestination? navigationDestination;
   final bool navigationOnRoute;
+  final bool showNavigation;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class SchoolRoomBody extends StatelessWidget {
           _ => null,
         };
     final media = MediaQuery.of(context);
-    final footer = section == null
+    final footer = section == null || !showNavigation
         ? 0.0
         : KidsNavigationGeometry.reservedHeight(media.size, media.padding);
     final navigation = MainNavigationScope.maybeOf(context);
@@ -60,7 +62,9 @@ class SchoolRoomBody extends StatelessWidget {
                           key: ValueKey('room-${room.name}-content'),
                           padding: EdgeInsets.zero,
                           child: child))))),
-      if (section != null && (navigation == null || navigationOnRoute))
+      if (showNavigation &&
+          section != null &&
+          (navigation == null || navigationOnRoute))
         Positioned(
             left: 0,
             right: 0,
@@ -68,7 +72,7 @@ class SchoolRoomBody extends StatelessWidget {
             child: KidsNavigationBar(
                 current: section,
                 onSelected: (tab) => navigateKidsTab(context, tab))),
-      if (section == null)
+      if (showNavigation && section == null)
         Positioned(
             right: 12,
             bottom: 12,

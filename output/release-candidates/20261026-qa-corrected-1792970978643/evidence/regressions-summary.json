@@ -1,0 +1,13 @@
+{
+  "completed": true,
+  "completion": {
+    "success": true,
+    "type": "done",
+    "time": 86362
+  },
+  "passed": 37,
+  "failed": 0,
+  "skipped": 0,
+  "hiddenDone": 12,
+  "failures": []
+}

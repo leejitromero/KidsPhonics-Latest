@@ -1,12 +1,16 @@
 import 'package:flutter/services.dart';
 
-/// Reads the installed package so About matches the actual Android APK.
+/// Reads the installed package, displaying only its public major/minor version.
 class AppBuildInfo {
   const AppBuildInfo({this.version, this.build});
   final String? version, build;
-  String get label => version == null
-      ? 'Version information unavailable'
-      : 'Version $version${build == null ? '' : ' (build $build)'}';
+  String get label {
+    final installed = version;
+    if (installed == null) return 'Version information unavailable';
+    final publicVersion =
+        installed.split('+').first.split('.').take(2).join('.');
+    return 'Version $publicVersion';
+  }
 
   static Future<AppBuildInfo> load() async {
     try {

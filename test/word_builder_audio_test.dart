@@ -34,7 +34,7 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     mockProgressAudio();
   });
-  testWidgets('wrong and correct options finish phonemes before feedback',
+  testWidgets('wrong and correct options finish letter names before feedback',
       (t) async {
     final audio = QuizAudioHarness()..install();
     final p =
@@ -47,11 +47,11 @@ void main() {
     await t.pump();
     await flushAudio(t);
     expect(audio.starts.last,
-        endsWith('/sounds/sound-${wrong.toLowerCase()}.mp3'));
+        endsWith('/letters/letter-${wrong.toLowerCase()}.mp3'));
     expect(find.byKey(const ValueKey('flying-builder-letter')), findsNothing);
     expect(slot(t, 0), '_');
     expect(t.widget<AudioButton>(find.byType(AudioButton)).enabled, isFalse);
-    await t.runAsync(() => audio.completeSound(wrong));
+    await t.runAsync(() => audio.completeLetterName(wrong));
     await flushAudio(t);
     await t.pump(const Duration(milliseconds: 350));
     final answer = task.correctLetters.first;
@@ -59,14 +59,14 @@ void main() {
     await t.pump();
     await flushAudio(t);
     expect(audio.starts.last,
-        endsWith('/sounds/sound-${answer.toLowerCase()}.mp3'));
+        endsWith('/letters/letter-${answer.toLowerCase()}.mp3'));
     await t.pump(const Duration(milliseconds: 600));
     expect(slot(t, 0), answer);
     expect(p.stars, 0);
     expect(audio.sources.where((s) => s.contains('/praise-')), isEmpty);
     await t.pump(const Duration(seconds: 2));
     expect(puzzle(t, Difficulty.easy).word, task.word);
-    await t.runAsync(() => audio.completeSound(answer));
+    await t.runAsync(() => audio.completeLetterName(answer));
     await flushAudio(t);
     expect(p.stars, 1);
     expect(audio.sources.where((s) => s.contains('/praise-')), isEmpty);

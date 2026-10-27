@@ -5,7 +5,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:kidsphonics/data/activity_card_art.dart';
 import 'package:kidsphonics/data/lesson_menu_art.dart';
 import 'package:kidsphonics/data/games_menu_art.dart';
 import 'package:kidsphonics/screens/games_screen.dart';
@@ -66,7 +65,7 @@ void main() {
   test('Word Builder and Alphabet Order have transparent outer corners',
       () async {
     for (final title in ['Word Builder', 'Alphabet Order']) {
-      final bytes = await rootBundle.load(gameCardArt[title]!);
+      final bytes = await rootBundle.load(gamesMenuArt[title]!);
       final codec = await ui.instantiateImageCodec(bytes.buffer.asUint8List());
       final frame = await codec.getNextFrame();
       final rgba =
@@ -114,7 +113,7 @@ void main() {
         await _capture(tester, boundary, screenshotName);
 
         final titles = games
-            ? gameCardArt.keys.toList()
+            ? gamesMenuArt.keys.toList()
             : [
                 'Letter Recognition',
                 'Letter Sounds A-Z',

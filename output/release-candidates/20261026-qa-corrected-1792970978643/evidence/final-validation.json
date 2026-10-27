@@ -1,0 +1,15 @@
+﻿{
+    "apk":  "C:\\Users\\leeji\\KidsPhonicsProject\\newphonics\\Kidsphonics-latest\\output\\release-candidates\\20261026-qa-corrected-1792970978643\\KidsPhonics-1.0.37+38-QA-corrected-universal-CANDIDATE.apk",
+    "apkSHA256":  "e9918d69415208828360468e4135d90164fb54fa9e25306fde804576323acb96",
+    "apkBytes":  515866438,
+    "docx":  "C:\\Users\\leeji\\KidsPhonicsProject\\newphonics\\Kidsphonics-latest\\output\\release-candidates\\20261026-qa-corrected-1792970978643\\KidsPhonics_Corrected_Universal_APK_Report.docx",
+    "docxBytes":  6039,
+    "docxSHA256":  "22d8477f6c23eae0d81af70ea57c62b1d62bb5a19ae0432ab8fcc1081d0536a6",
+    "xmlPartsValidated":  7,
+    "reportContentVerified":  true,
+    "tables":  2,
+    "realDeviceTesting":  "PENDING",
+    "installed":  false,
+    "published":  false,
+    "visualWordRendering":  "Not performed; OOXML/content validated"
+}

@@ -20,7 +20,8 @@ import 'package:kidsphonics/widgets/category_navigation.dart';
 import 'package:kidsphonics/widgets/kids_navigation_bar.dart';
 import 'package:kidsphonics/widgets/day_cycle_background.dart';
 import 'package:kidsphonics/widgets/school_home_scene.dart';
-import 'package:kidsphonics/widgets/scene_controls.dart';
+import 'package:kidsphonics/widgets/cloud_page_route.dart';
+import 'package:kidsphonics/widgets/progress_journey_view.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show mount, close;
 
@@ -185,8 +186,13 @@ void main() {
       final games = t.getRect(find.byKey(const ValueKey('home-games')));
       expect(lesson.center.dx, lessThan(student.center.dx));
       expect(games.center.dx, greaterThan(student.center.dx));
-      expect(student.bottom, lessThan(lesson.top));
-      expect(student.bottom, lessThan(games.top));
+      expect(student.overlaps(lesson), isFalse);
+      expect(student.overlaps(games), isFalse);
+      expect(lesson.overlaps(games), isFalse);
+      for (final target in [lesson, games]) {
+        expect(target.width, greaterThanOrEqualTo(48));
+        expect(target.height, greaterThanOrEqualTo(48 - .001));
+      }
       await capture(t, key, 'home_${size.width.toInt()}');
       for (final page in [
         const LessonsScreen(),
@@ -207,8 +213,13 @@ void main() {
         expect(find.byType(KidsNavigationBar),
             mainSection ? findsOneWidget : findsNothing);
         expect(find.byType(AppBar), findsNothing);
-        expect(find.byType(LearnerProfileCard),
+        expect(find.byType(ProgressJourneyView),
             page is ProgressScreen ? findsOneWidget : findsNothing);
+        if (page is ProgressScreen) {
+          expect(find.byKey(const ValueKey('progress-tab-0')), findsOneWidget);
+          expect(find.text('My Journey'), findsWidgets);
+          expect(p.overallMasteredCount, 0);
+        }
         final room = switch (page) {
           LessonsScreen() => 'lessons',
           GamesScreen() => 'games',
@@ -246,6 +257,9 @@ void main() {
       addTearDown(t.view.resetDevicePixelRatio);
       final p = await mount(t, const HomeScreen());
       await loadArt(t);
+      await t.runAsync(() => prepareCloudTransition(
+          t.element(find.byType(HomeScreen)),
+          cloudTransitionImages(t.element(find.byType(HomeScreen)))));
       await t.pump(const Duration(milliseconds: 1200));
       final start = t.getRect(find.byKey(const ValueKey('home-student')));
       await t.tap(find.byKey(ValueKey('home-${left ? 'lessons' : 'games'}')));
@@ -283,7 +297,7 @@ void main() {
       expect(find.byType(SchoolHomeScene), findsOneWidget);
       await t.pump(const Duration(milliseconds: 120));
       await t.pump();
-      // The character remains at the stop during the cloud and route fade.
+      // The character remains at the stop while the screen curtain closes.
       expect(
           t
               .widget<SchoolHomeScene>(
@@ -293,15 +307,32 @@ void main() {
           left ? 'lessons' : 'games');
       await t.pump(const Duration(milliseconds: 351));
       await t.pump();
-      await t.pump(const Duration(milliseconds: 350));
+      for (var i = 0;
+          i < 100 && find.byType(CloudScreenTransition).evaluate().isEmpty;
+          i++) {
+        await t.runAsync(
+            () => Future<void>.delayed(const Duration(milliseconds: 5)));
+        await t.pump();
+      }
+      await t.pump();
+      await t.pump(const Duration(milliseconds: 1850));
+      expect(find.byKey(const ValueKey('cloud-transition')), findsNothing);
       expect(left ? find.byType(LessonsScreen) : find.byType(GamesScreen),
           findsOneWidget);
       await t.tap(find.byKey(const ValueKey('main-nav-progress')));
-      await t.pump();
-      await t.pump(const Duration(milliseconds: 170));
-      await t.pump();
-      await t.pump(const Duration(milliseconds: 500));
+      for (var i = 0;
+          i < 80 && find.byType(CloudScreenTransition).evaluate().isNotEmpty;
+          i++) {
+        await t.pump(const Duration(milliseconds: 50));
+        await t.runAsync(() => Future<void>.delayed(Duration.zero));
+      }
       expect(find.byType(ProgressScreen), findsOneWidget);
+      expect(find.byType(CloudScreenTransition), findsNothing,
+          reason: t
+              .widgetList<CloudScreenTransition>(
+                  find.byType(CloudScreenTransition))
+              .map((w) => '${w.animation.value}/${w.animation.status}')
+              .join(', '));
       await t.tap(find.byKey(const ValueKey('main-nav-home')));
       await t.pump();
       await t.pump(const Duration(milliseconds: 170));

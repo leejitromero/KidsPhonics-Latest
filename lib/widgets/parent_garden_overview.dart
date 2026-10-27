@@ -7,6 +7,7 @@ import 'learning_progress_widgets.dart';
 import '../screens/progress_screen.dart';
 import 'learner_widgets.dart';
 import 'quick_check_recommendation.dart';
+import 'parent_report_frames.dart';
 
 const _forestInk = Color(0xFF123D32);
 
@@ -36,9 +37,9 @@ class ParentGardenOverview extends StatelessWidget {
         style: const TextStyle(color: _forestInk, fontFamily: 'Nunito'),
         child:
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          GardenCard(
+          ParentReportFrame(
+              kind: ParentReportKind.overview,
               title: 'This Week at a Glance',
-              icon: Icons.calendar_month_rounded,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -142,7 +143,7 @@ class _Stats extends StatelessWidget {
   Widget build(BuildContext context) => LayoutBuilder(builder: (_, box) {
         final scale = MediaQuery.textScalerOf(context).scale(16) / 16;
         final columns = box.maxWidth >= 440 * scale ? 4 : 2;
-        final width = (box.maxWidth - (columns - 1) * 6) / columns;
+        final width = (box.maxWidth - (columns - 1) * 6 - .01) / columns;
         return Wrap(spacing: 6, runSpacing: 6, children: [
           for (final (icon, value, label, color) in items)
             Container(

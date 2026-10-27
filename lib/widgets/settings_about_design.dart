@@ -47,83 +47,105 @@ class SettingsAboutDialog extends StatelessWidget {
               ]),
           clipBehavior: Clip.antiAlias,
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-            _AboutHeader(onClose: () => Navigator.pop(context)),
             Flexible(
                 child: SingleChildScrollView(
                     key: const ValueKey('settings-about-content'),
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _AboutSurface(
-                              child: Row(children: [
-                            const _AboutIcon(icon: Icons.settings_rounded),
-                            const SizedBox(width: 10),
-                            Expanded(
-                                child: FutureBuilder<AppBuildInfo>(
-                                    future: info,
-                                    builder: (_, snapshot) => Text(
-                                        snapshot.data?.label ??
-                                            'Loading app version…',
-                                        key: const ValueKey(
-                                            'settings-app-version'),
-                                        style: const TextStyle(
-                                            fontFamily: 'Nunito',
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w800,
-                                            color: _aboutInk)))),
-                          ])),
-                          _AboutSection(
-                              title: 'Your saved learning',
-                              text:
-                                  'Your profile, progress, rewards, and settings are saved on this device. Clearing app data or uninstalling may remove them.',
-                              illustration: _AboutIcon(
-                                  child: Image.asset(
-                                      HomeBannerArt.portrait(character),
-                                      fit: BoxFit.contain,
-                                      cacheWidth: 180,
-                                      excludeFromSemantics: true))),
-                          const _AboutSection(
-                              title: 'Speech activities',
-                              text:
-                                  'Speech activities use your device’s microphone and speech recognition. An internet connection may be needed.',
-                              illustration:
-                                  _AboutIcon(icon: Icons.mic_rounded)),
-                          _AboutSurface(
-                              child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                const _AboutCopy(
-                                    title: 'Credits',
+                    child: Column(children: [
+                      _AboutHeader(onClose: () => Navigator.pop(context)),
+                      Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                _AboutSurface(
+                                    child: Row(children: [
+                                  const _AboutIcon(
+                                      icon: Icons.settings_rounded),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                      child: FutureBuilder<AppBuildInfo>(
+                                          future: info,
+                                          builder: (_, snapshot) => Text(
+                                              snapshot.data?.label ??
+                                                  'Loading app version…',
+                                              key: const ValueKey(
+                                                  'settings-app-version'),
+                                              style: const TextStyle(
+                                                  fontFamily: 'Nunito',
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w800,
+                                                  color: _aboutInk)))),
+                                ])),
+                                const _AboutSection(
+                                    title: 'What is KidsPhonics?',
                                     text:
-                                        'KidsPhonics artwork, recordings, and learning materials. Nunito and Fredoka: SIL Open Font License.'),
-                                const SizedBox(height: 10),
-                                OutlinedButton.icon(
-                                    key: const ValueKey(
-                                        'settings-about-licenses'),
-                                    onPressed: withButtonSound(onLicenses),
-                                    style: OutlinedButton.styleFrom(
-                                        foregroundColor: _aboutInk,
-                                        backgroundColor:
-                                            const Color(0xFFDBF1FF),
-                                        side: const BorderSide(
-                                            color: Color(0xFFA8DFFF),
-                                            width: 1.5),
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 12, vertical: 10),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(15))),
-                                    icon: const Icon(Icons.description_rounded,
-                                        color: Color(0xFF168BF1)),
-                                    label: const Text('Open-source licenses',
-                                        style: TextStyle(
-                                            fontFamily: 'Nunito',
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w900))),
+                                        'KidsPhonics is an interactive learning app for Grade 1 learners. It helps children practice letters, letter sounds, and basic reading through lessons and fun games.',
+                                    illustration: _AboutIcon(
+                                        icon: Icons.auto_stories_rounded)),
+                                const _AboutSection(
+                                    title: 'Learning Features',
+                                    text:
+                                        'Explore letters, sounds, short vowels, alphabet pictures, CVC words, and blending activities. Play learning games and track progress as your child practices.',
+                                    illustration: _AboutIcon(
+                                        icon: Icons.extension_rounded)),
+                                _AboutSection(
+                                    title: 'Your saved learning',
+                                    text:
+                                        'Your profile, progress, rewards, and settings are saved on this device. Clearing app data or uninstalling may remove them.',
+                                    illustration: _AboutIcon(
+                                        child: Image.asset(
+                                            HomeBannerArt.portrait(character),
+                                            fit: BoxFit.contain,
+                                            cacheWidth: 180,
+                                            excludeFromSemantics: true))),
+                                const _AboutSection(
+                                    title: 'Speech activities',
+                                    text:
+                                        'Speech activities use your device’s microphone and speech recognition. An internet connection may be needed.',
+                                    illustration:
+                                        _AboutIcon(icon: Icons.mic_rounded)),
+                                _AboutSurface(
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                      const _AboutCopy(
+                                          title: 'Developers & Credits',
+                                          text:
+                                              'Developed by JJCM.\n\nArtwork, recordings, and learning materials from the KidsPhonics project. Nunito and Fredoka fonts are used under the SIL Open Font License.'),
+                                      const SizedBox(height: 10),
+                                      OutlinedButton.icon(
+                                          key: const ValueKey(
+                                              'settings-about-licenses'),
+                                          onPressed:
+                                              withButtonSound(onLicenses),
+                                          style: OutlinedButton.styleFrom(
+                                              foregroundColor: _aboutInk,
+                                              backgroundColor:
+                                                  const Color(0xFFDBF1FF),
+                                              side: const BorderSide(
+                                                  color: Color(0xFFA8DFFF),
+                                                  width: 1.5),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 12,
+                                                      vertical: 10),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15))),
+                                          icon: const Icon(
+                                              Icons.description_rounded,
+                                              color: Color(0xFF168BF1)),
+                                          label: const Text(
+                                              'Open-source licenses',
+                                              style: TextStyle(
+                                                  fontFamily: 'Nunito',
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w900))),
+                                    ])),
                               ])),
-                        ]))),
+                    ]))),
             CustomPaint(
                 painter: const _AboutClouds(),
                 child: Padding(

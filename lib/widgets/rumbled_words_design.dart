@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'button_sound.dart';
 import 'game_design.dart';
 import '../models/difficulty.dart';
+import 'floating_choice.dart';
 
 class RumbledRoundHeader extends StatelessWidget {
   const RumbledRoundHeader(
@@ -62,30 +64,194 @@ class RumbledRoundHeader extends StatelessWidget {
   }
 }
 
-/// A centered board that keeps the same tile size for slots and letter choices.
-class RumbledTileGrid extends StatelessWidget {
-  const RumbledTileGrid(
+/// Keeps the whole word readable from left to right without wrapping letters.
+class RumbledLetterRow extends StatefulWidget {
+  const RumbledLetterRow(
       {super.key,
-      required this.side,
-      required this.columns,
+      required this.maxSide,
       required this.gap,
+      required this.tileIds,
+      required this.selectedIndex,
+      required this.enabled,
+      required this.fixedFirst,
+      required this.onMove,
+      required this.onDraggingChanged,
       required this.children});
-  final double side, gap;
-  final int columns;
+  final double maxSide, gap;
   final List<Widget> children;
+  final List<int> tileIds;
+  final int? selectedIndex;
+  final bool enabled, fixedFirst;
+  final void Function(int from, int to) onMove;
+  final ValueChanged<bool> onDraggingChanged;
 
   @override
-  Widget build(BuildContext context) => Center(
-      child: SizedBox(
-          width: columns * side + (columns - 1) * gap + .01,
-          child: Wrap(
-              spacing: gap,
-              runSpacing: gap,
-              alignment: WrapAlignment.center,
-              children: [
-                for (final child in children)
-                  SizedBox(width: side, height: side, child: child)
-              ])));
+  State<RumbledLetterRow> createState() => _RumbledLetterRowState();
+}
+
+class _RumbledLetterRowState extends State<RumbledLetterRow>
+    with WidgetsBindingObserver {
+  final _boardKey = GlobalKey();
+  int? _dragIndex, _hoverIndex;
+  Offset _dragPosition = Offset.zero, _grabOffset = Offset.zero;
+  bool _validDrop = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  void _cancelDrag() {
+    if (_dragIndex == null) return;
+    _dragIndex = _hoverIndex = null;
+    _validDrop = false;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) widget.onDraggingChanged(false);
+    });
+  }
+
+  @override
+  void didUpdateWidget(RumbledLetterRow oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!widget.enabled) _cancelDrag();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed && _dragIndex != null) {
+      setState(_cancelDrag);
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  Offset _local(Offset global) =>
+      (_boardKey.currentContext!.findRenderObject() as RenderBox)
+          .globalToLocal(global);
+
+  void _finishDrag({bool cancelled = false}) {
+    final from = _dragIndex;
+    final to = _hoverIndex;
+    final accept = !cancelled && widget.enabled && _validDrop;
+    setState(() {
+      _dragIndex = _hoverIndex = null;
+      _validDrop = false;
+    });
+    widget.onDraggingChanged(false);
+    if (from != null && to != null && accept && from != to) {
+      widget.onMove(from, to);
+    }
+  }
+
+  int _previewPosition(int index) {
+    final from = _dragIndex, to = _hoverIndex;
+    if (from == null || to == null) return index;
+    if (from < to && index > from && index <= to) return index - 1;
+    if (from > to && index >= to && index < from) return index + 1;
+    return index;
+  }
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(builder: (_, box) {
+        if (widget.children.isEmpty) return const SizedBox.shrink();
+        final count = widget.children.length;
+        final side = ((box.maxWidth - (count - 1) * widget.gap) / count)
+            .clamp(0.0, widget.maxSide);
+        final stride = side + widget.gap;
+        final left =
+            (box.maxWidth - (count * side + (count - 1) * widget.gap)) / 2;
+        const top = 10.0;
+        final reduced = MediaQuery.disableAnimationsOf(context);
+        final duration =
+            reduced ? Duration.zero : const Duration(milliseconds: 240);
+        final order = [
+          for (var i = 0; i < count; i++)
+            if (i != _dragIndex) i,
+          if (_dragIndex != null) _dragIndex!
+        ];
+        return SizedBox(
+            key: _boardKey,
+            height: side + top,
+            child: Stack(clipBehavior: Clip.none, children: [
+              for (final i in order)
+                AnimatedPositioned(
+                    key: ValueKey(widget.tileIds[i]),
+                    duration: _dragIndex == i ? Duration.zero : duration,
+                    curve: Curves.easeInOutCubic,
+                    left: _dragIndex == i
+                        ? _dragPosition.dx
+                        : left + _previewPosition(i) * stride,
+                    top: _dragIndex == i ? _dragPosition.dy : top,
+                    width: side,
+                    height: side,
+                    child: GestureDetector(
+                        key: ValueKey('word-drag-$i'),
+                        behavior: HitTestBehavior.translucent,
+                        dragStartBehavior: DragStartBehavior.down,
+                        onPanStart: widget.enabled &&
+                                widget.selectedIndex == i &&
+                                !(widget.fixedFirst && i == 0)
+                            ? (details) {
+                                // Start from the tile's visible position, even
+                                // if a hint or previous drop is still settling.
+                                final position =
+                                    _local(details.globalPosition) -
+                                        details.localPosition;
+                                setState(() {
+                                  _dragIndex = _hoverIndex = i;
+                                  _dragPosition = position;
+                                  _grabOffset =
+                                      _local(details.globalPosition) - position;
+                                  _validDrop = true;
+                                });
+                                widget.onDraggingChanged(true);
+                              }
+                            : null,
+                        onPanUpdate: widget.enabled && widget.selectedIndex == i
+                            ? (details) {
+                                if (_dragIndex != i) return;
+                                final pointer = _local(details.globalPosition);
+                                setState(() {
+                                  _dragPosition = pointer - _grabOffset;
+                                  _validDrop = pointer.dx >= left - side / 2 &&
+                                      pointer.dx <=
+                                          box.maxWidth - left + side / 2 &&
+                                      pointer.dy >= -side / 2 &&
+                                      pointer.dy <= side * 1.5 + top;
+                                  _hoverIndex = _validDrop
+                                      ? ((pointer.dx - left - side / 2) /
+                                              stride)
+                                          .round()
+                                          .clamp(widget.fixedFirst ? 1 : 0,
+                                              count - 1)
+                                      : i;
+                                });
+                              }
+                            : null,
+                        onPanEnd: widget.enabled && widget.selectedIndex == i
+                            ? (_) => _finishDrag()
+                            : null,
+                        onPanCancel: widget.enabled && widget.selectedIndex == i
+                            ? () => _finishDrag(cancelled: true)
+                            : null,
+                        child: AnimatedSlide(
+                            duration: duration,
+                            offset: widget.selectedIndex == i && !reduced
+                                ? const Offset(0, -.07)
+                                : Offset.zero,
+                            child: FloatingChoice(
+                                enabled: widget.enabled &&
+                                    widget.selectedIndex == i &&
+                                    _dragIndex != i,
+                                seed: widget.tileIds[i],
+                                child: widget.children[i])))),
+            ]));
+      });
 }
 
 /// Glossy rounded controls with live labels and the game's original callbacks.
@@ -148,7 +314,7 @@ class RumbledActionButton extends StatelessWidget {
           style: OutlinedButton.styleFrom(
               minimumSize: Size.zero,
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               foregroundColor: cream ? GameDesign.ink : Colors.white,
               disabledForegroundColor:
                   cream ? const Color(0xFF6B5782) : const Color(0xFFDDEBEA),
@@ -157,11 +323,11 @@ class RumbledActionButton extends StatelessWidget {
           child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Row(mainAxisSize: MainAxisSize.min, children: [
-                Icon(icon, size: 28),
-                const SizedBox(width: 10),
+                Icon(icon, size: 22),
+                const SizedBox(width: 6),
                 Text(label,
                     style: const TextStyle(
-                        fontSize: 23,
+                        fontSize: 19,
                         fontFamily: 'Nunito',
                         fontWeight: FontWeight.w900))
               ]))));

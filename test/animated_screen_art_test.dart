@@ -9,20 +9,22 @@ import 'package:kidsphonics/screens/games_screen.dart';
 import 'package:kidsphonics/screens/parent_screen.dart';
 import 'package:kidsphonics/widgets/parent_pin_form.dart';
 import 'package:kidsphonics/widgets/animated_screen_art.dart';
+import 'package:kidsphonics/widgets/day_cycle_background.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show mount, close;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  test('all current sky frames are bundled at their original dimensions',
+  test('current Home day-cycle frames are bundled at their original dimensions',
       () async {
-    expect(skyFrames.length, 5);
-    for (final asset in skyFrames) {
+    final frames = DayCycleBackground.framesFor('home');
+    expect(frames.length, 3);
+    for (final asset in frames) {
       final bytes = await rootBundle.load(asset);
       final codec = await ui.instantiateImageCodec(bytes.buffer.asUint8List());
       final frame = await codec.getNextFrame();
-      expect(frame.image.width, 941, reason: asset);
-      expect(frame.image.height, 1672, reason: asset);
+      expect(frame.image.width, 1024, reason: asset);
+      expect(frame.image.height, 1536, reason: asset);
       frame.image.dispose();
       codec.dispose();
     }
@@ -82,7 +84,7 @@ void main() {
   });
 
   for (final (name, frames) in [
-    ('Sky', skyFrames),
+    ('Games', gameFrames),
     ('Lessons', lessonFrames)
   ]) {
     testWidgets('$name plays at the slower pace and respects motion settings',

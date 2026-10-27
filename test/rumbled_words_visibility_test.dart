@@ -8,8 +8,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kidsphonics/models/difficulty.dart';
 import 'package:kidsphonics/screens/rumbled_words_screen.dart';
 import 'package:kidsphonics/widgets/word_game_layout.dart';
+import 'package:kidsphonics/widgets/game_word_picture.dart';
 import 'learner_ui_test.dart' show mount, close;
 import 'learning_progress_test.dart' show mockProgressAudio;
+import 'rumbled_words_swap_helpers.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +33,7 @@ void main() {
     for (final (size, scale) in [
       (const Size(320, 568), 1.0),
       (const Size(390, 844), 1.0),
+      (const Size(480, 1066), 1.0),
       (const Size(800, 1024), 1.0),
       (const Size(320, 568), 1.8),
     ]) {
@@ -66,11 +69,14 @@ void main() {
         }
 
         void checkBounds() {
+          final picture = t.getRect(find.byType(GameWordPicture));
+          expect(picture.height, greaterThanOrEqualTo(length > 5 ? 80 : 104));
+          expect(picture.bottom, lessThan(rect('word-letter-board').top));
+          expect(picture.top, greaterThanOrEqualTo(24));
           final controls = [
-            for (var i = 0; i < length; i++) 'word-slot-$i',
             'word-hint',
             'word-hear',
-            'word-erase',
+            'word-check',
             for (var i = 0; i < length; i++) 'word-tile-$i',
           ];
           for (final key in controls) {
@@ -81,20 +87,28 @@ void main() {
             expect(bounds.top, greaterThanOrEqualTo(24), reason: key);
             expect(bounds.bottom, lessThanOrEqualTo(size.height - 24),
                 reason: key);
-            expect(bounds.height, greaterThanOrEqualTo(32), reason: key);
+            expect(bounds.height,
+                greaterThanOrEqualTo(key.startsWith('word-tile-') ? 24 : 32),
+                reason: key);
+            if (['word-hint', 'word-hear'].contains(key)) {
+              expect(bounds.height, lessThanOrEqualTo(44.1), reason: key);
+            }
           }
-          expect(rect('word-answer-board').bottom,
-              lessThan(rect('word-hint').top));
-          if ((rect('word-hint').top - rect('word-hear').top).abs() < 1) {
-            expect(rect('word-hint').right, lessThan(rect('word-hear').left));
-            expect(rect('word-hear').right, lessThan(rect('word-erase').left));
-          } else {
-            expect(rect('word-hint').bottom, lessThan(rect('word-hear').top));
-            expect(rect('word-hear').bottom, lessThan(rect('word-erase').top));
-          }
-          expect(rect('word-erase').bottom,
+          expect(rect('word-hear').bottom,
               lessThan(rect('word-letter-board').top));
+          expect(rect('word-hint').right, lessThan(rect('word-hear').left));
+          expect(rect('word-letter-board').bottom,
+              lessThan(rect('word-check').top));
           for (var i = 0; i < length; i++) {
+            final tile = rect('word-tile-$i');
+            expect(tile.center.dy, closeTo(rect('word-tile-0').center.dy, .1),
+                reason: 'All letters stay on one reading line');
+            expect(rect('word-letter-board').contains(tile.topLeft), isTrue);
+            expect(
+                rect('word-letter-board').contains(tile.bottomRight), isTrue);
+            if (i > 0) {
+              expect(tile.left, greaterThan(rect('word-tile-${i - 1}').right));
+            }
             final letter = find.descendant(
                 of: find.byKey(ValueKey('word-tile-$i')),
                 matching: find.byType(Text));
@@ -112,7 +126,8 @@ void main() {
         }
 
         checkBounds();
-        if (size.width == 390 && const bool.fromEnvironment('CAPTURE_UI')) {
+        if ((size.width == 390 || size.width == 480) &&
+            const bool.fromEnvironment('CAPTURE_UI')) {
           await t.runAsync(() async {
             await Future.wait(t.widgetList<Image>(find.byType(Image)).map(
                 (im) => precacheImage(im.image, boundary.currentContext!)));
@@ -125,55 +140,40 @@ void main() {
             final bytes =
                 await picture.toByteData(format: ui.ImageByteFormat.png);
             final file = File(
-                'build/ui_previews/rumbled_visibility_${difficulty.name}.png');
+                'build/ui_previews/rumbled_compact_${difficulty.name}_${size.width.toInt()}.png');
             await file.parent.create(recursive: true);
             await file.writeAsBytes(bytes!.buffer.asUint8List());
             picture.dispose();
           });
         }
-        // A selected tile still moves back through both original erase paths.
-        await t.tap(find.byKey(const ValueKey('word-tile-0')));
+        expect(find.byKey(const ValueKey('word-answer-board')), findsNothing);
+        expect(find.byKey(const ValueKey('word-erase')), findsNothing);
+        final before = boardLetters(t, length);
+        await tapBoardLetter(t, 0);
+        expect(
+            find.text('Drag the floating letter into place.'), findsOneWidget);
+        await tapBoardLetter(t, 0);
+        expect(boardLetters(t, length), before);
+        await t.tap(find.byKey(const ValueKey('word-check')));
         await t.pump();
         expect(
-            t
-                .widget<ElevatedButton>(
-                    find.byKey(const ValueKey('word-slot-0')))
-                .onPressed,
-            isNotNull);
-        await t.tap(find.byKey(const ValueKey('word-slot-0')));
-        await t.pump();
-        expect(
-            t
-                .widget<OutlinedButton>(
-                    find.byKey(const ValueKey('word-erase')))
-                .onPressed,
-            isNull);
-        await t.tap(find.byKey(const ValueKey('word-tile-0')));
-        await t.pump();
-        await t.tap(find.byKey(const ValueKey('word-erase')));
-        await t.pump();
-        expect(
-            t
-                .widget<ElevatedButton>(
-                    find.byKey(const ValueKey('word-tile-0')))
-                .onPressed,
-            isNotNull);
+            find.text('Try again! Drag a letter into place.'), findsOneWidget);
+        expect(boardLetters(t, length), before);
+        checkBounds();
         await t.tap(find.byKey(const ValueKey('word-hint')));
         await t.pumpAndSettle();
-        expect(find.text('Hint used'), findsOneWidget);
+        expect(find.text('Hint used: first letter fixed'), findsOneWidget);
         expect(
             t
                 .widget<OutlinedButton>(find.byKey(const ValueKey('word-hint')))
                 .onPressed,
             isNull);
-        checkBounds();
-        for (var i = 0; i < length; i++) {
-          await t.tap(find.byKey(ValueKey('word-tile-$i')));
-          await t.pump();
-        }
-        await t.pump(const Duration(milliseconds: 200));
-        expect(find.text('Try again! Tap Erase or a letter to change it.'),
-            findsOneWidget);
+        expect(
+            t
+                .widget<ElevatedButton>(
+                    find.byKey(const ValueKey('word-tile-0')))
+                .onPressed,
+            isNull);
         checkBounds();
         expect(p.xp, 0);
         await close(t, p);

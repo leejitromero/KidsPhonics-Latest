@@ -1,4 +1,4 @@
-import '../widgets/button_sound.dart';
+import 'dart:async';
 import '../widgets/game_design.dart';
 import '../data/game_session_order.dart';
 import '../widgets/game_word_picture.dart';
@@ -43,9 +43,22 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
   final Map<int, GlobalKey> _pictureKeys = {};
   late final AnimationController _flight;
   OverlayEntry? _flightEntry;
+  Timer? _feedbackTimer;
+
+  void _finishFeedback() {
+    if (!mounted || resultOpen) return;
+    // Keep the answer visible while the game is covered or unavailable.
+    if (!canAdvanceGameFeedback || !TickerMode.valuesOf(context).enabled) {
+      _feedbackTimer =
+          Timer(const Duration(milliseconds: 250), _finishFeedback);
+      return;
+    }
+    _next();
+  }
 
   @override
   void dispose() {
+    _feedbackTimer?.cancel();
     _flightEntry?.remove();
     _flight.dispose();
     super.dispose();
@@ -139,6 +152,10 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
       awardGameXp((8 * widget.difficulty.xpMultiplier).round());
       awardGameStar();
       await _flyToFrame(_round.options.indexOf(emoji));
+      if (!mounted) return;
+      // Let the picture land, then leave time to read the correct feedback.
+      _feedbackTimer =
+          Timer(const Duration(milliseconds: 1200), _finishFeedback);
     } else {
       // Wrong — play wrong.mp3 tone, show red flash, then clear so child can retry
       playGameWrong();
@@ -149,6 +166,7 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
 
   void _next() {
     if (!_answered || _flying || resultOpen) return;
+    _feedbackTimer?.cancel();
     if (_index < _rounds.length - 1) {
       setState(() {
         _index++;
@@ -162,15 +180,18 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
     }
   }
 
-  void _restart() => setState(() {
-        _index = 0;
-        _rounds = _newSession();
-        _picked = null;
-        _answered = false;
-        _landed = false;
+  void _restart() {
+    _feedbackTimer?.cancel();
+    setState(() {
+      _index = 0;
+      _rounds = _newSession();
+      _picked = null;
+      _answered = false;
+      _landed = false;
 
-        _shuffleIdx();
-      });
+      _shuffleIdx();
+    });
+  }
 
   void _showResults() {
     if (resultOpen) return;
@@ -306,11 +327,6 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
                               if (_picked != null)
                                 GameFeedback(
                                     correct: _picked == _round.correctEmoji),
-                              if (_answered)
-                                ElevatedButton(
-                                    onPressed: withButtonSound(
-                                        resultOpen || _flying ? null : _next),
-                                    child: const Text('Next')),
                             ]))))),
       );
 }

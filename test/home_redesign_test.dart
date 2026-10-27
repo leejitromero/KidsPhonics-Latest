@@ -51,7 +51,16 @@ void main() {
             .properties
             .label,
         'Practice This Letter B');
-    expect(find.text('Letter B'), findsNWidgets(2));
+    expect(
+        t
+            .widget<Text>(
+                find.byKey(const ValueKey('home-practice-letter-text')))
+            .data,
+        'Letter B');
+    final scene = t.widget<SchoolHomeScene>(find.byType(SchoolHomeScene));
+    expect(scene.letter, 'B');
+    expect((scene.xp, scene.stars), (p.xp, p.stars));
+    expect(p.overallMasteredCount, 1);
     expect(t.widget<SchoolHomeScene>(find.byType(SchoolHomeScene)).selected,
         isNull);
     expect(find.byKey(const ValueKey('welcome-next')), findsNothing);
@@ -77,7 +86,12 @@ void main() {
             .properties
             .label,
         'Review letters');
-    expect(find.text('Letters'), findsNWidgets(2));
+    expect(
+        t
+            .widget<Text>(
+                find.byKey(const ValueKey('home-practice-letter-text')))
+            .data,
+        'Letters');
     expect(scene.xp, p.xp);
     expect(scene.stars, p.stars);
     expect(p.overallMasteredCount, 26);

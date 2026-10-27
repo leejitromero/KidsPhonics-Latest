@@ -3,11 +3,20 @@ import '../data/game_word_data.dart';
 import 'picture_frame_animation.dart';
 
 class GameWordPicture extends StatelessWidget {
-  const GameWordPicture({super.key, required this.word, this.size = 150});
+  const GameWordPicture(
+      {super.key, required this.word, this.size = 150, this.asset});
   final String word;
+  final String? asset;
   final double size;
   @override
   Widget build(BuildContext context) {
+    if (asset != null) {
+      return Semantics(
+          image: true,
+          label: word,
+          child: Image.asset(asset!,
+              width: size, height: size, fit: BoxFit.contain, cacheWidth: 480));
+    }
     final content = gameWordFor(word);
     if (content == null) return Text(word);
     return Semantics(

@@ -1,18 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 import 'package:kidsphonics/data/home_village.dart';
 import 'package:kidsphonics/screens/home_screen.dart';
 import 'package:kidsphonics/screens/lessons_screen.dart';
 import 'package:kidsphonics/screens/games_screen.dart';
 import 'package:kidsphonics/widgets/animated_screen_art.dart';
 import 'package:kidsphonics/widgets/home_character_visit.dart';
+import 'package:kidsphonics/widgets/cloud_page_route.dart';
 import 'package:kidsphonics/widgets/kids_navigation_bar.dart';
 import 'package:kidsphonics/widgets/school_home_scene.dart';
 import 'package:kidsphonics/widgets/student_wave.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show mount, close;
-import 'updated_scene_test.dart' show capture, loadArt;
+import 'updated_scene_test.dart' show capture;
+
+Future<void> waitForHomeCurtain(WidgetTester t) async {
+  for (var i = 0;
+      i < 100 && find.byType(CloudScreenTransition).evaluate().isEmpty;
+      i++) {
+    await t
+        .runAsync(() => Future<void>.delayed(const Duration(milliseconds: 5)));
+    await t.pump();
+  }
+  expect(find.byType(CloudScreenTransition), findsOneWidget,
+      reason:
+          'visit=${t.widget<SchoolHomeScene>(find.byType(SchoolHomeScene)).visit.value}, '
+          'busy=${t.widget<SchoolHomeScene>(find.byType(SchoolHomeScene)).busy}, '
+          'lessons=${find.byType(LessonsScreen).evaluate().length}');
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -37,8 +54,14 @@ void main() {
         addTearDown(t.view.resetPhysicalSize);
         addTearDown(t.view.resetDevicePixelRatio);
         final key = GlobalKey();
-        final p = await mount(
-            t, RepaintBoundary(key: key, child: const HomeScreen()));
+        final p = await mount(t, const HomeScreen());
+        final app = t.widget<MaterialApp>(find.byType(MaterialApp));
+        await t.pumpWidget(ChangeNotifierProvider.value(
+            value: p, child: RepaintBoundary(key: key, child: app)));
+        await t.pump();
+        await t.runAsync(() => prepareCloudTransition(
+            t.element(find.byType(HomeScreen)),
+            cloudTransitionImages(t.element(find.byType(HomeScreen)))));
         final student = find.byKey(const ValueKey('home-student'));
         final start = t.getRect(student);
         final mascot = find.byKey(ValueKey('home-${category.name}-mascot'));
@@ -92,7 +115,8 @@ void main() {
         expect(art.fit, BoxFit.contain);
         expect(halfway.width, closeTo(start.width, .001));
         expect(halfway.height, closeTo(start.height, .001));
-        expect(find.byType(HomeCharacterCloud), findsNothing);
+        expect(
+            find.byKey(const ValueKey('home-character-cloud')), findsNothing);
 
         await t.pump(const Duration(milliseconds: 550));
         final stopped = t.getRect(student);
@@ -119,23 +143,32 @@ void main() {
         }
         await t.pump(const Duration(milliseconds: 399));
         expect(t.getRect(student), stopped);
-        expect(find.byType(HomeCharacterCloud), findsNothing);
+        expect(
+            find.byKey(const ValueKey('home-character-cloud')), findsNothing);
         expect(find.byType(LessonsScreen), findsNothing);
         expect(find.byType(GamesScreen), findsNothing);
 
-        await t.pump(const Duration(milliseconds: 376));
+        await t.pump(const Duration(milliseconds: 2));
+        await waitForHomeCurtain(t);
+        final transition =
+            t.widget<CloudScreenTransition>(find.byType(CloudScreenTransition));
+        final route =
+            ModalRoute.of(t.element(find.byType(CloudScreenTransition)))!;
+        expect(route.transitionDuration, HomeCharacterVisitTiming.curtain);
+        expect(route.transitionDuration.inMilliseconds,
+            greaterThanOrEqualTo(1500));
+        await t.pump(const Duration(milliseconds: 360));
         expect(t.getRect(student), stopped);
-        expect(find.byType(HomeCharacterCloud), findsOneWidget);
+        expect(
+            find.byKey(const ValueKey('home-character-cloud')), findsNothing);
         final opacity = t
             .widget<Opacity>(
                 find.byKey(const ValueKey('home-student-visibility')))
             .opacity;
-        expect(opacity, inExclusiveRange(0, 1));
-        expect(find.byType(LessonsScreen), findsNothing);
-        expect(find.byType(GamesScreen), findsNothing);
+        expect(opacity, 1);
+        expect(find.byKey(const ValueKey('cloud-transition')), findsOneWidget);
         if (size.width == 390) {
-          await loadArt(t);
-          await capture(t, key, 'boy_${category.name}_cloud');
+          await capture(t, key, 'home_${category.name}_curtain_closing');
         }
         // Busy targets cannot start a second journey or reverse the approach.
         expect(
@@ -144,27 +177,35 @@ void main() {
         expect(
             t.widget<InkWell>(find.byKey(const ValueKey('home-games'))).onTap,
             isNull);
-        await t.pump(const Duration(milliseconds: 374));
-        expect(find.byType(LessonsScreen), findsNothing);
-        expect(find.byType(GamesScreen), findsNothing);
-        await t.pump(const Duration(milliseconds: 2));
-        await t.pump();
-        await t.pump(const Duration(milliseconds: 350));
         final destination = left ? LessonsScreen : GamesScreen;
+        expect(find.byType(destination).hitTestable(), findsNothing);
+        await t.pump(const Duration(milliseconds: 540));
+        expect(transition.animation.value, closeTo(.5, .02));
+        expect(find.byType(destination).hitTestable(), findsNothing);
+        if (size.width == 390) {
+          await capture(t, key, 'home_${category.name}_curtain_closed');
+        }
+        await t.pump(const Duration(milliseconds: 500));
+        if (size.width == 390) {
+          await capture(t, key, 'home_${category.name}_curtain_opening');
+        }
+        await t.pump(const Duration(milliseconds: 450));
+        expect(find.byKey(const ValueKey('cloud-transition')), findsNothing);
         expect(find.byType(destination), findsOneWidget);
         Navigator.of(t.element(find.byType(destination))).pop();
         await t.pump();
-        await t.pump(const Duration(milliseconds: 350));
+        await t.pump(const Duration(milliseconds: 1850));
         await t.pump();
         expect(t.getRect(student), start);
-        expect(find.byType(HomeCharacterCloud), findsNothing);
+        expect(
+            find.byKey(const ValueKey('home-character-cloud')), findsNothing);
         expect(t.takeException(), isNull);
         await close(t, p);
       });
     }
   }
 
-  for (final elapsed in [1250, 1800]) {
+  for (final elapsed in [1250, 1450]) {
     testWidgets('backgrounding cancels the journey at ${elapsed}ms', (t) async {
       final p = await mount(t, const HomeScreen());
       await t.tap(find.byKey(const ValueKey('home-lessons')));
@@ -175,7 +216,7 @@ void main() {
       t.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
       await t.pump();
       expect(find.byType(LessonsScreen), findsNothing);
-      expect(find.byType(HomeCharacterCloud), findsNothing);
+      expect(find.byKey(const ValueKey('home-character-cloud')), findsNothing);
       expect(
           t.widget<SchoolHomeScene>(find.byType(SchoolHomeScene)).busy, false);
       expect(t.takeException(), isNull);
@@ -192,7 +233,7 @@ void main() {
     await t.tap(find.byKey(const ValueKey('home-lessons')));
     await t.pumpAndSettle();
     expect(find.byType(LessonsScreen), findsOneWidget);
-    expect(find.byType(HomeCharacterCloud), findsNothing);
+    expect(find.byKey(const ValueKey('home-character-cloud')), findsNothing);
     expect(t.takeException(), isNull);
     await close(t, p);
   });

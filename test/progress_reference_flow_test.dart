@@ -9,6 +9,7 @@ import 'package:kidsphonics/screens/letter_sounds_screen.dart';
 import 'package:kidsphonics/screens/cvc_words_screen.dart';
 import 'package:kidsphonics/screens/blending_sounds_screen.dart';
 import 'package:kidsphonics/widgets/progress_reference_design.dart';
+import 'package:kidsphonics/widgets/progress_journey_frames.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show mount, close;
 
@@ -48,6 +49,15 @@ void main() {
       final data = t.widget<ProgressSkillRow>(row);
       expect((data.current, data.total), (current, total));
     }
+    final summary = find.byType(ProgressLearningSummaryFrame);
+    await t.scrollUntilVisible(summary.hitTestable(), 120,
+        scrollable: find.byType(Scrollable).first);
+    final overview = t.widget<ProgressLearningSummaryFrame>(summary);
+    expect(
+        (overview.exploredLetters, overview.practicedLessons, overview.stars),
+        (p.exploredLetterCount, p.practicedLessonCount, p.stars));
+    expect(t.widget<ProgressStreakFrame>(find.byType(ProgressStreakFrame)).days,
+        p.streak);
     await t.tap(find.byKey(const ValueKey('progress-tab-2')));
     await t.pumpAndSettle();
     final goal = find.byKey(const ValueKey('progress-badge-CVC Explorer'));

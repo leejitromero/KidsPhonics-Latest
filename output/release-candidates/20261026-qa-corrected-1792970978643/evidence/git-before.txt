@@ -1,0 +1,182 @@
+ M android/app/src/main/res/drawable-hdpi/ic_launcher_foreground.png
+ M android/app/src/main/res/drawable-mdpi/ic_launcher_foreground.png
+ M android/app/src/main/res/drawable-xhdpi/ic_launcher_foreground.png
+ M android/app/src/main/res/drawable-xxhdpi/ic_launcher_foreground.png
+ M android/app/src/main/res/drawable-xxxhdpi/ic_launcher_foreground.png
+ M android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+ M android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+ M android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+ M android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+ M android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+ M android/app/src/main/res/values/colors.xml
+ D assets/images/activity_cards/game_alphabet_order-v2.png
+ D assets/images/activity_cards/game_flappy_letters.png
+ D assets/images/activity_cards/game_memory_flip.png
+ D assets/images/activity_cards/game_missing_vowel.png
+ D assets/images/activity_cards/game_phonics_quiz.png
+ D assets/images/activity_cards/game_picture_match.png
+ D assets/images/activity_cards/game_rhyming_words.png
+ D assets/images/activity_cards/game_rumbled_words.png
+ D assets/images/activity_cards/game_sound_match.png
+ D assets/images/activity_cards/game_speak_and_recognize.png
+ D assets/images/activity_cards/game_word_builder-v2.png
+ D assets/images/activity_cards/lesson_blending_sounds-v2.png
+ D assets/images/activity_cards/lesson_cvc_words.png
+ D assets/images/activity_cards/lesson_letter_recognition.png
+ D assets/images/activity_cards/lesson_letter_sounds.png
+ D assets/images/activity_cards/lesson_short_vowel.png
+ M assets/images/app_icon.png
+ D assets/images/app_mascot.gif
+ D assets/images/app_mascot.png
+ D "assets/images/custom_navigation/wooden frame.png"
+ D assets/images/games_menu/games_card_frame.png
+ D assets/images/new_ui/cloud-transition-1.webp
+ D assets/images/new_ui/cloud-transition-2.webp
+ D assets/images/new_ui/cloud-transition-3.webp
+ D assets/images/new_ui/cloud-transition-4.webp
+ D assets/images/new_ui/lessons_banner.webp
+ D assets/images/school_adventure_v1/generation_prompts.json
+ D assets/images/school_adventure_v1/student_boy.png
+ D assets/images/school_adventure_v1/student_girl.png
+ D assets/images/school_home/games_mascot.png
+ D assets/images/school_home/lessons_mascot.png
+ D assets/images/screen_frames/games/g1.webp
+ D assets/images/screen_frames/games/g2.webp
+ D assets/images/screen_frames/games/g3.webp
+ D assets/images/screen_frames/games/g4.webp
+ D assets/images/screen_frames/lessons/leson1.webp
+ D assets/images/screen_frames/lessons/leson2.webp
+ D assets/images/screen_frames/lessons/leson3.webp
+ D assets/images/screen_frames/lessons/leson4.webp
+ D assets/images/update_scene/games_button.png
+ D assets/images/update_scene/lesson_button.png
+ M docs/GAME_AUDIO_REFRESH.md
+ M docs/SETTINGS_SCREEN.md
+ M docs/SOUND_MATCH_UI.md
+ D lib/data/activity_card_art.dart
+ M lib/data/games_menu_art.dart
+ M lib/data/lesson_example_data.dart
+ M lib/main.dart
+ M lib/models/difficulty.dart
+ M lib/screens/memory_game_screen.dart
+ M lib/screens/missing_vowel_screen.dart
+ M lib/screens/parent_screen.dart
+ M lib/screens/rumbled_words_screen.dart
+ M lib/screens/sound_match_screen.dart
+ M lib/screens/voice_recognition_screen.dart
+ M lib/screens/word_builder_screen.dart
+ M lib/services/app_build_info.dart
+ D lib/widgets/activity_artwork.dart
+ D lib/widgets/category_house.dart
+ M lib/widgets/flappy_letters_design.dart
+ M lib/widgets/game_mascot_coach.dart
+ D lib/widgets/game_zone_welcome.dart
+ D lib/widgets/home_flight_menu.dart
+ D lib/widgets/home_playground_mascot.dart
+ D lib/widgets/home_village_footer.dart
+ D lib/widgets/home_village_menu.dart
+ M lib/widgets/learner_widgets.dart
+ D lib/widgets/mastery_illustration.dart
+ D lib/widgets/overall_mastery_panel.dart
+ M lib/widgets/parent_garden_activity.dart
+ M lib/widgets/parent_garden_overview.dart
+ M lib/widgets/parent_pin_design.dart
+ M lib/widgets/parent_pin_form.dart
+ M lib/widgets/progress_journey_view.dart
+ M lib/widgets/progress_reference_design.dart
+ M lib/widgets/rumbled_words_design.dart
+ M lib/widgets/school_room_body.dart
+ M lib/widgets/settings_about_design.dart
+ M lib/widgets/word_game_layout.dart
+ M pubspec.yaml
+ M test/activity_card_refresh_test.dart
+ M test/activity_refresh_test.dart
+ M test/animated_screen_art_test.dart
+ M test/asset_usage_audit_test.dart
+ M test/flappy_letters_game_test.dart
+ M test/games_reference_test.dart
+ M test/home_classroom_reference_test.dart
+ M test/home_mascot_menu_test.dart
+ M test/home_redesign_test.dart
+ M test/kids_navigation_test.dart
+ M test/learner_ui_test.dart
+ M test/lesson_assets_test.dart
+ M test/parent_activity_design_test.dart
+ M test/parent_pin_reference_test.dart
+ M test/progress_collection_design_test.dart
+ M test/progress_reference_flow_test.dart
+ M test/quiz_audio_harness.dart
+ M test/rumbled_words_audio_test.dart
+ M test/rumbled_words_lifecycle_test.dart
+ M test/rumbled_words_visibility_test.dart
+ M test/settings_screen_test.dart
+ M test/speech_practice_test.dart
+ M test/updated_scene_test.dart
+ M test/word_builder_audio_test.dart
+ M tools/asset_usage_audit.json
+ M tools/latest_apk_verification.json
+ M tools/verify_release_apk.ps1
+?? assets/audio/flip.mp3
+?? assets/audio/win.mp3
+?? assets/images/loading_screen/loading_s1.png
+?? assets/images/loading_screen/loading_s2.png
+?? assets/images/loading_screen/loading_s3.png
+?? assets/images/loading_screen/loading_s4.png
+?? assets/images/loading_screen/loading_s5.png
+?? assets/images/loading_screen/loading_s6.png
+?? assets/images/loading_screen/loading_s7.png
+?? assets/images/new_ui/airplane.webp
+?? assets/images/new_ui/correct_frame.png
+?? assets/images/new_ui/missing_vowel_next.png
+?? assets/images/parent_reports/frame_dailybreakdown.png
+?? assets/images/parent_reports/frame_overview.png
+?? assets/images/parent_reports/frame_rewrds.png
+?? assets/images/parent_reports/frame_weeklyact.png
+?? assets/images/progress_collection/frame_alphabet_milstone.png
+?? assets/images/progress_collection/frame_mybadge.png
+?? assets/images/progress_collection/frame_mytreasure.png
+?? assets/images/progress_collection/frame_rewards_contain.png
+?? assets/images/progress_collection/frame_streak.png
+?? assets/images/progress_collection/frame_summary.png
+?? assets/images/progress_collection/phonics_skills_frame.png
+?? docs/UNUSED_ASSET_CLEANUP.md
+?? lib/widgets/game_feedback_art.dart
+?? lib/widgets/loading_screen_art.dart
+?? lib/widgets/parent_report_frames.dart
+?? lib/widgets/parent_rewards_frame.dart
+?? lib/widgets/progress_journey_frames.dart
+?? lib/widgets/progress_phonics_skills_frame.dart
+?? lib/widgets/progress_rewards_frames.dart
+?? output/research-review/KidsPhonics_APK_Optimization_Analysis.docx
+?? output/research-review/KidsPhonics_Actual_Technical_Audit_Report.docx
+?? output/research-review/KidsPhonics_Research_Paper_Review.docx
+?? test/cleanup_font_loading_test.dart
+?? test/flappy_artwork_regression_test.dart
+?? test/game_feedback_art_test.dart
+?? test/game_function_regression_test.dart
+?? test/phonics_skills_frame_test.dart
+?? test/progress_journey_frames_test.dart
+?? test/progress_rewards_frames_test.dart
+?? test/review_lesson_regression_test.dart
+?? test/runtime_asset_cleanup_test.dart
+?? tools/app_icon_import.json
+?? tools/clean_unused_runtime_assets.ps1
+?? tools/compare_cleanup_tests.py
+?? tools/game_feedback_art_import.json
+?? tools/loading_screen_import.json
+?? tools/parent_report_frames_import.json
+?? tools/phonics_jit_3_source_snapshot.json
+?? tools/phonics_jit_3_verification.json
+?? tools/phonics_jit_v2_1_source_snapshot.json
+?? tools/phonics_jit_v2_1_verification.json
+?? tools/phonics_jit_v3_source_snapshot.json
+?? tools/phonics_jit_v3_verification.json
+?? tools/phonics_skills_frame_import.json
+?? tools/progress_journey_frames_import.json
+?? tools/progress_rewards_frames_import.json
+?? tools/release_1_0_34_source_snapshot.json
+?? tools/release_1_0_34_verification.json
+?? tools/runtime_asset_cleanup.json
+?? tools/runtime_asset_cleanup_review.json
+?? tools/runtime_cleanup_baseline_tests.json
+?? tools/runtime_cleanup_test_comparison.json

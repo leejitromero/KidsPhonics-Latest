@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kidsphonics/data/home_village.dart';
+import 'package:kidsphonics/data/updated_scene.dart';
 import 'package:kidsphonics/screens/home_screen.dart';
 import 'package:kidsphonics/screens/lessons_screen.dart';
 import 'package:kidsphonics/screens/games_screen.dart';
@@ -71,8 +72,8 @@ void main() {
       ...SchoolHomeScene.buttonAssets,
       StudentWave.assetFor('boy'),
       StudentWave.assetFor('girl'),
-      'assets/images/school_home/lessons_mascot.png',
-      'assets/images/school_home/games_mascot.png',
+      ...mascotTalkingFrames(false),
+      ...mascotTalkingFrames(true),
     ]) {
       final codec = await ui.instantiateImageCodec(
           (await rootBundle.load(asset)).buffer.asUint8List());
@@ -118,7 +119,9 @@ void main() {
         expect(t.getRect(target).width, greaterThanOrEqualTo(48));
         // Allow sub-pixel rounding when converting a positioned rect.
         expect(t.getRect(target).height, greaterThanOrEqualTo(48 - .001));
-        expect(student.bottom, lessThan(t.getRect(target).top));
+        expect(student.overlaps(t.getRect(target)), isFalse,
+            reason: 'Side-by-side artwork must not cover a tap target');
+        expect(target.hitTestable(), findsOneWidget);
       }
       expect(find.byKey(const ValueKey('category-navigation')), findsNothing);
       expect(find.byKey(const ValueKey('home-progress')), findsNothing);

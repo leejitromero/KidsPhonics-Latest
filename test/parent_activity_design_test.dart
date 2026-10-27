@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kidsphonics/providers/app_provider.dart';
 import 'package:kidsphonics/screens/parent_screen.dart';
+import 'package:kidsphonics/widgets/parent_report_frames.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show close;
 
@@ -96,12 +97,79 @@ void main() {
         t.platformDispatcher.clearAccessibilityFeaturesTestValue();
       });
       final p = await open(t);
+      // Decode the original artwork before checking for paint/layout errors.
+      await t.runAsync(() async {
+        await Future.wait(t.widgetList<Image>(find.byType(Image)).map((image) =>
+            precacheImage(image.image, t.element(find.byType(ParentScreen)))));
+      });
+      await t.pumpAndSettle();
       expect(t.takeException(), isNull);
       for (final title in ['Recent Activity', 'Daily Breakdown', 'Rewards']) {
         await t.scrollUntilVisible(find.text(title), 200,
             scrollable: find.byType(Scrollable).first);
         await t.pumpAndSettle();
         expect(t.takeException(), isNull, reason: title);
+        if (title == 'Rewards') {
+          final frame =
+              t.getRect(find.byKey(const ValueKey('parent-rewards-frame')));
+          for (final label in [
+            'Rewards',
+            'Milestones and badges.',
+            'View All',
+            'Level',
+            'XP',
+            'Stars',
+            '1 / 8 Achievements'
+          ]) {
+            final rect = t.getRect(find.text(label));
+            expect(frame.inflate(.1).contains(rect.topLeft), isTrue,
+                reason: label);
+            expect(frame.inflate(.1).contains(rect.bottomRight), isTrue,
+                reason: label);
+          }
+          final button = t.getSize(find.widgetWithText(TextButton, 'View All'));
+          expect(button.height, greaterThanOrEqualTo(48 - .01));
+          expect(button.width, greaterThanOrEqualTo(48));
+        }
+        if (title == 'Daily Breakdown') {
+          final firstDay = find.byKey(const ValueKey('parent-day-2026-10-07'));
+          await t.ensureVisible(firstDay);
+          await t.pumpAndSettle();
+          await t.tap(find
+              .descendant(of: firstDay, matching: find.byType(ListTile))
+              .first);
+          await t.pumpAndSettle();
+          expect(t.takeException(), isNull, reason: 'Expanded daily details');
+          final detail = t.getRect(find.text(
+              'Questions Answered: 12\nCorrect Answers: 9\nActivities Completed: 0\nOverall Activity Accuracy: 75%'));
+          final frame = t
+              .getRect(find.byKey(const ValueKey('parent-report-daily-frame')));
+          expect(frame.contains(detail.topLeft), isTrue);
+          expect(frame.contains(detail.bottomRight), isTrue);
+        }
+      }
+      await t.tap(find.byKey(const ValueKey('parent-tab-0')));
+      await t.pumpAndSettle();
+      await t.runAsync(() async {
+        await precacheImage(const AssetImage(ParentReportFrame.overviewAsset),
+            t.element(find.byType(ParentScreen)));
+      });
+      await t.pumpAndSettle();
+      expect(t.takeException(), isNull, reason: 'Overview artwork');
+      final overview =
+          t.getRect(find.byKey(const ValueKey('parent-report-overview-frame')));
+      for (final text in [
+        'This Week at a Glance',
+        'Newly mastered',
+        'Questions answered',
+        'Activities completed',
+        'Answer accuracy'
+      ]) {
+        final bounds = t.getRect(find.text(text));
+        expect(overview.inflate(.1).contains(bounds.topLeft), isTrue,
+            reason: text);
+        expect(overview.inflate(.1).contains(bounds.bottomRight), isTrue,
+            reason: text);
       }
       await close(t, p);
     });
@@ -129,15 +197,23 @@ void main() {
     expect(breakdown.top, greaterThanOrEqualTo(0));
     expect(breakdown.bottom, lessThan(600));
     final day = find.byKey(const ValueKey('parent-day-2026-10-05'));
+    final frame = find.byKey(const ValueKey('parent-report-daily-frame'));
+    final collapsedHeight = t.getSize(frame).height;
     await t.ensureVisible(day);
     await t.pumpAndSettle();
     await t
         .tap(find.descendant(of: day, matching: find.byType(ListTile)).first);
     await t.pumpAndSettle();
+    expect(t.getSize(frame).height, greaterThan(collapsedHeight));
     expect(
         find.text(
             'Questions Answered: 106\nCorrect Answers: 72\nActivities Completed: 12\nOverall Activity Accuracy: 68%'),
         findsOneWidget);
+    final details = t.getRect(find.text(
+        'Questions Answered: 106\nCorrect Answers: 72\nActivities Completed: 12\nOverall Activity Accuracy: 68%'));
+    final expandedFrame = t.getRect(frame);
+    expect(expandedFrame.contains(details.topLeft), isTrue);
+    expect(expandedFrame.contains(details.bottomRight), isTrue);
     await t.scrollUntilVisible(find.text('View All'), 200,
         scrollable: find.byType(Scrollable).first);
     await t.ensureVisible(find.text('View All'));
@@ -226,7 +302,9 @@ void main() {
         ('rewards', 'Rewards')
       ]) {
         if (title != null) {
-          await t.ensureVisible(find.text(title));
+          await t.ensureVisible(find.byKey(ValueKey(name == 'daily'
+              ? 'parent-report-daily-frame'
+              : 'parent-rewards-frame')));
         }
         await t.pumpAndSettle();
         await t.runAsync(() async {

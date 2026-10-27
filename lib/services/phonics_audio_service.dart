@@ -7,6 +7,7 @@ import '../data/cvc_lesson_data.dart';
 import '../data/blending_lesson_data.dart';
 import '../data/lesson_instruction_scripts.dart';
 import '../data/game_instruction_scripts.dart';
+import '../data/phonics_quiz_prompts.dart';
 import 'local_audio_focus.dart';
 import '../data/lesson_example_data.dart';
 import 'background_music_service.dart';
@@ -74,6 +75,8 @@ class PhonicsAudioService {
   };
 
   static String? assetForPhrase(String phrase) {
+    final quizPrompt = phonicsQuizPromptAsset(phrase);
+    if (quizPrompt != null) return quizPrompt;
     if (phrase.startsWith('alphabet-picture-')) {
       return alphabetPictureAudioAsset(phrase);
     }

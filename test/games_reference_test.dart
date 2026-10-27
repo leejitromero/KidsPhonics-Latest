@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -64,22 +63,12 @@ void main() {
     await t.pumpAndSettle();
   }
 
-  test('frame has real transparency in its center and outside', () async {
-    final codec = await ui
-        .instantiateImageCodec(File(GamesFrameArt.frame).readAsBytesSync());
-    final picture = (await codec.getNextFrame()).image;
-    expect((picture.width, picture.height), (1536, 1024));
-    final rgba =
-        (await picture.toByteData(format: ui.ImageByteFormat.rawRgba))!;
-    expect(
-        rgba.getUint8(
-            ((picture.height ~/ 2) * picture.width + picture.width ~/ 2) * 4 +
-                3),
-        0);
-    expect(rgba.getUint8(3), 0);
-    expect(rgba.getUint8((80 * picture.width + 768) * 4 + 3), greaterThan(200));
-    picture.dispose();
-    codec.dispose();
+  test('retired card frame is absent and current game artwork remains', () {
+    expect(File('assets/images/games_menu/games_card_frame.png').existsSync(),
+        isFalse);
+    for (final asset in gamesMenuArt.values) {
+      expect(File(asset).lengthSync(), greaterThan(1000), reason: asset);
+    }
   });
   for (final scenario in [
     (size: const Size(320, 568), scale: 1.0),
@@ -153,7 +142,8 @@ void main() {
               ? (image.image as ResizeImage).imageProvider
               : image.image;
           if (provider is AssetImage) {
-            expect(provider.assetName, isNot(GamesFrameArt.frame));
+            expect(provider.assetName,
+                isNot('assets/images/games_menu/games_card_frame.png'));
           }
         }
         final art = t.widget<Image>(find.byKey(ValueKey('game-art-$title')));

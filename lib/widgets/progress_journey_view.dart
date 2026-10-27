@@ -18,6 +18,9 @@ import 'progress_collection_design.dart';
 import 'progress_design.dart';
 import 'progress_reference_design.dart';
 import 'progress_letter_frame_design.dart';
+import 'progress_phonics_skills_frame.dart';
+import 'progress_journey_frames.dart';
+import 'progress_rewards_frames.dart';
 import 'recommended_practice_card.dart';
 import 'school_room_body.dart';
 
@@ -190,16 +193,7 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
       ]));
 
   List<Widget> _journey(AppProvider p) => [
-        ProgressSurface(
-            child: Column(children: [
-          const ProgressSectionLabel(
-              'My Phonics Skills', Icons.bar_chart_rounded),
-          const SizedBox(height: 4),
-          const Align(
-              alignment: Alignment.centerLeft,
-              child: Text('Tap a skill to continue learning.',
-                  style: TextStyle(fontSize: 11))),
-          const SizedBox(height: 8),
+        ProgressPhonicsSkillsFrame(children: [
           for (final (id, title, unit, count, total, color, icon, action) in [
             (
               'letters',
@@ -251,7 +245,7 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
               Icons.extension_rounded,
               () => _open(const BlendingSoundsScreen())
             ),
-          ]) ...[
+          ])
             ProgressSkillRow(
                 key: ValueKey('journey-skill-$id'),
                 title: title,
@@ -261,51 +255,16 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
                 color: color,
                 icon: icon,
                 onPressed: p.timeLimitReached ? null : action),
-            if (id != 'blending') const SizedBox(height: 6),
-          ],
-        ])),
+        ]),
         const SizedBox(height: 10),
         _recommendation(p),
         const SizedBox(height: 10),
         LayoutBuilder(builder: (_, box) {
-          final streak = ProgressSurface(
-              color: const Color(0xFFFFEAF1),
-              child: Column(children: [
-                const ProgressSectionLabel(
-                    'My Streak', Icons.local_fire_department_rounded,
-                    color: Color(0xFFE84F77)),
-                const SizedBox(height: 8),
-                Text('${p.streak} ${p.streak == 1 ? 'day' : 'days'}',
-                    style: const TextStyle(
-                        fontSize: 27,
-                        fontWeight: FontWeight.w900,
-                        color: Color(0xFFE64667))),
-                const SizedBox(height: 3),
-                const Text('Answer or practice speaking each day.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 11)),
-              ]));
-          final summary = ProgressSurface(
-              color: const Color(0xFFE9F6FF),
-              child: Column(children: [
-                const ProgressSectionLabel(
-                    'My Learning Summary', Icons.star_rounded,
-                    color: Color(0xFF087ECA)),
-                const SizedBox(height: 10),
-                _stats([
-                  (
-                    '${p.exploredLetterCount}',
-                    'letters explored',
-                    Icons.auto_stories_rounded
-                  ),
-                  (
-                    '${p.practicedLessonCount} / 6',
-                    'lesson types practiced',
-                    Icons.check_circle_rounded
-                  ),
-                  ('${p.stars}', 'stars earned', Icons.star_rounded)
-                ]),
-              ]));
+          final streak = ProgressStreakFrame(days: p.streak);
+          final summary = ProgressLearningSummaryFrame(
+              exploredLetters: p.exploredLetterCount,
+              practicedLessons: p.practicedLessonCount,
+              stars: p.stars);
           return box.maxWidth < 480 ||
                   MediaQuery.textScalerOf(context).scale(1) > 1.3
               ? Column(children: [streak, const SizedBox(height: 10), summary])
@@ -346,34 +305,6 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
             letter == null ? Icons.abc_rounded : Icons.play_arrow_rounded,
         buttonLabel: letter == null ? 'Choose a Letter' : 'Start Quick Check');
   }
-
-  Widget _stats(List<(String, String, IconData)> values) =>
-      LayoutBuilder(builder: (_, box) {
-        final scale = MediaQuery.textScalerOf(context).scale(1);
-        final columns =
-            (box.maxWidth / (78 * scale)).floor().clamp(1, values.length);
-        return Wrap(
-            spacing: 6,
-            runSpacing: 8,
-            alignment: WrapAlignment.center,
-            children: [
-              for (final (value, label, icon) in values)
-                SizedBox(
-                    width: (box.maxWidth - (columns - 1) * 6) / columns,
-                    child: Column(children: [
-                      Icon(icon, color: _statColor(label), size: 25),
-                      Text(value,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: _statColor(label),
-                              fontSize: 23,
-                              fontWeight: FontWeight.w900)),
-                      Text(label,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 11)),
-                    ])),
-            ]);
-      });
 
   Color _statColor(String label) => switch (label) {
         'New' => const Color(0xFF827294),
@@ -564,63 +495,26 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
   List<Widget> _rewards(AppProvider p) {
     final badges = p.progressBadges;
     return [
-      ProgressSurface(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Row(children: [
-          const Expanded(
-              child: ProgressSectionLabel('My Badges', Icons.star_rounded)),
-          Text('${badges.where((b) => b.earned).length} / ${badges.length}',
-              style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                  color: Color(0xFFE4388E)))
-        ]),
-        const SizedBox(height: 4),
-        const Text('Complete learning goals to unlock your badges.',
-            style: TextStyle(fontSize: 12)),
-      ])),
+      ProgressRewardsHeader(
+          earned: badges.where((b) => b.earned).length, total: badges.length),
       const SizedBox(height: 10),
       for (var i = 0; i < badges.length; i++) ...[
         if (badges[i].milestone && (i == 0 || !badges[i - 1].milestone))
           const Padding(
               padding: EdgeInsets.symmetric(vertical: 8),
-              child: ProgressSurface(
-                  child: ProgressSectionLabel(
-                      'Alphabet Milestones', Icons.emoji_events_rounded))),
+              child: ProgressRewardsHeader()),
         ProgressBadgeCard(
             badge: badges[i],
             index: i,
             onPressed: () => _badgeDetail(badges[i])),
         const SizedBox(height: 8),
       ],
-      ProgressSurface(
-          color: const Color(0xFFFFF0CE),
-          child: Column(children: [
-            const ProgressSectionLabel(
-                'My Treasure', Icons.emoji_events_rounded),
-            const SizedBox(height: 10),
-            _stats([
-              (
-                'Level ${p.level}',
-                'learning level',
-                Icons.emoji_events_rounded
-              ),
-              ('${p.stars} Stars', 'earned', Icons.star_rounded),
-              ('${p.xp} XP', 'experience', Icons.bolt_rounded)
-            ]),
-            const SizedBox(height: 12),
-            ProgressValueBar(
-                current: p.xp % 200, total: 200, color: progressPurple),
-            const SizedBox(height: 5),
-            Text('${200 - p.xp % 200} XP to Level ${p.level + 1}',
-                style: const TextStyle(fontSize: 12)),
-            const SizedBox(height: 5),
-            const Text(
-                'Badges celebrate progress; viewing them does not award extra XP or stars.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 11)),
-          ])),
+      ProgressTreasureFrame(
+          level: p.level,
+          stars: p.stars,
+          xp: p.xp,
+          progressBar: ProgressValueBar(
+              current: p.xp % 200, total: 200, color: progressPurple)),
     ];
   }
 

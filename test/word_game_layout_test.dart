@@ -33,11 +33,11 @@ void main() {
       final p = await mount(t, page);
       expect(find.byType(Scrollable), findsNothing);
       final picture = t.getSize(find.byType(GameWordPicture));
-      pictureSize ??= picture;
-      if (page is RumbledWordsScreen) {
-        // Spelling reserves more room for its paired answer and letter boards.
+      if (page is RumbledWordsScreen || page is PhonicsQuizScreen) {
+        // These games reserve room for spelling or sound-preview controls.
         expect(picture.width, greaterThanOrEqualTo(64));
       } else {
+        pictureSize ??= picture;
         expect(picture, pictureSize);
         expect(picture.width, greaterThanOrEqualTo(200));
       }

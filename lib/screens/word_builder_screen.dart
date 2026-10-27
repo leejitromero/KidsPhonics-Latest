@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../widgets/game_feedback_art.dart';
 
 import '../data/game_session_order.dart';
 import '../widgets/word_game_layout.dart';
@@ -89,7 +90,7 @@ class _WordBuilderScreenState extends State<WordBuilderScreen>
       _feedback = isCorrect;
     });
     gameNarration.cancel();
-    final sound = gameNarration.letterSound(letter);
+    final sound = gameNarration.letterName(letter);
     final request = gameNarration.generation;
 
     if (isCorrect) {
@@ -317,22 +318,24 @@ class _WordBuilderScreenState extends State<WordBuilderScreen>
         const SizedBox(height: 6),
         SizedBox(
             height: 36,
-            child: Center(
-                child: Semantics(
-              liveRegion: true,
-              child: Text(
-                  _feedback == null
-                      ? ''
-                      : _feedback!
-                          ? 'Correct!'
-                          : 'Nice try! Keep practicing.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: _feedback == true
-                          ? const Color(0xFF167769)
-                          : const Color(0xFFB63D50))),
-            ))),
+            child: _feedback == true
+                ? const GameCorrectFrame(height: 36)
+                : Center(
+                    child: Semantics(
+                    liveRegion: true,
+                    child: Text(
+                        _feedback == null
+                            ? ''
+                            : _feedback!
+                                ? 'Correct!'
+                                : 'Nice try! Keep practicing.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: _feedback == true
+                                ? const Color(0xFF167769)
+                                : const Color(0xFFB63D50))),
+                  ))),
       ]));
 }

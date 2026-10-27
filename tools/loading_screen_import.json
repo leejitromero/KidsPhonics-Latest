@@ -1,0 +1,56 @@
+{
+  "sourceZip": "C:\\Users\\leeji\\KidsPhonicsProject\\screen animations\\new_loading_screen.zip",
+  "sourceZipSha256": "A766E7D0A2EF4FCE48564BCF30D26CF7A4E9116306DC88C411ECD96D6F19320A",
+  "frames": [
+    {
+      "path": "assets/images/loading_screen/loading_s1.png",
+      "bytes": 1955929,
+      "sha256": "7771C5A0CA9780F6E7E607F5CEE19731A1E796576D364A2C2D7957BB1204C1F6"
+    },
+    {
+      "path": "assets/images/loading_screen/loading_s2.png",
+      "bytes": 1931524,
+      "sha256": "54634D58A9B8E73E8D9DE8A351881E9D1D71CE708BA3A931E293C71823B73F03"
+    },
+    {
+      "path": "assets/images/loading_screen/loading_s3.png",
+      "bytes": 1920408,
+      "sha256": "C8E2C18964F76B6B2165282D7646E92D5E6D4B0120F086637B75E5D6B4CDAF5A"
+    },
+    {
+      "path": "assets/images/loading_screen/loading_s4.png",
+      "bytes": 1949104,
+      "sha256": "BE789F682ED04AC68F2ED23A40E58340489F4F35638BBEF4ECA9F2C93CF31065"
+    },
+    {
+      "path": "assets/images/loading_screen/loading_s5.png",
+      "bytes": 1913634,
+      "sha256": "3A204EB74B95F0F97B1FC2C1155585B7A4F717066CDFDC1CEE9708295240DB74"
+    },
+    {
+      "path": "assets/images/loading_screen/loading_s6.png",
+      "bytes": 1932581,
+      "sha256": "6E88BEBDCE540461508DAF8E100CFA8D5E6448CF07472C7CAD0EC7E086F60DE4"
+    },
+    {
+      "path": "assets/images/loading_screen/loading_s7.png",
+      "bytes": 1954747,
+      "sha256": "3B73D1702BC1971F63F45E2C369BFBCAAA62C80F21433FB3BC898932C8F35F3A"
+    }
+  ],
+  "retired": [
+    {
+      "path": "assets/images/app_mascot.png",
+      "bytes": 357937,
+      "sha256": "E1CBE2EB7FE82EE6ED5EFCE91580278C3CFC8BF49749AB9D5AB70FF54FDEEF24"
+    },
+    {
+      "path": "assets/images/app_mascot.gif",
+      "bytes": 586285,
+      "sha256": "BD393FFEB2D04D2ABCC1E09648C6C319823AA3AA94BDFFF2EC0A99D050F0996B"
+    }
+  ],
+  "frameDurationMs": 180,
+  "fit": "contain",
+  "reason": "User supplied seven new loading frames to replace the previous loading mascot."
+}

@@ -133,27 +133,34 @@ void main() {
 
   for (final entry in pages.entries) {
     testWidgets(
-        '${entry.key}: exact sentence stays with its recording; one intro',
+        '${entry.key}: current instructions and matching recorded intro',
         (t) async {
       await t.binding.setSurfaceSize(const Size(390, 844));
       addTearDown(() => t.binding.setSurfaceSize(null));
       final p = await mount(t, entry.value);
       final s = gameInstructionScripts[entry.key]!;
-      await until(
-          t, () => audio.starts.any((path) => path.endsWith('/${s.asset}')));
+      final hasCurrentRecording = entry.key != 'Rumbled Words';
+      if (hasCurrentRecording) {
+        await until(
+            t, () => audio.starts.any((path) => path.endsWith('/${s.asset}')));
+      } else {
+        await drain(t);
+      }
       expect(caption(t), s.text);
       fits(t);
       await t.pump(const Duration(seconds: 5));
       expect(caption(t), s.text);
       expect(audio.starts.where((path) => path.endsWith('/${s.asset}')),
-          hasLength(1));
-      await t.runAsync(() => audio.completeSource('/${s.asset}'));
+          hasLength(hasCurrentRecording ? 1 : 0));
+      if (hasCurrentRecording) {
+        await t.runAsync(() => audio.completeSource('/${s.asset}'));
+      }
       await drain(t);
       await t.runAsync(() => p.setStudentCharacter('girl', ''));
       await drain(t);
       expect(caption(t), s.text);
       expect(audio.starts.where((path) => path.endsWith('/${s.asset}')),
-          hasLength(1));
+          hasLength(hasCurrentRecording ? 1 : 0));
       expect((p.xp, p.stars), (0, 0));
       expect(t.takeException(), isNull);
       await finish(t, p);

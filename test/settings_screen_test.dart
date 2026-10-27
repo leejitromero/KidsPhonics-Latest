@@ -25,6 +25,17 @@ import 'package:shared_preferences_platform_interface/shared_preferences_platfor
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   const appInfoChannel = MethodChannel('kidsphonics/app_info');
+  setUpAll(() async {
+    // Use the bundled application's font metrics for accessibility layout.
+    await (FontLoader('Nunito')
+          ..addFont(rootBundle.load('assets/fonts/Nunito-Regular.ttf'))
+          ..addFont(rootBundle.load('assets/fonts/Nunito-Medium.ttf'))
+          ..addFont(rootBundle.load('assets/fonts/Nunito-SemiBold.ttf'))
+          ..addFont(rootBundle.load('assets/fonts/Nunito-Bold.ttf'))
+          ..addFont(rootBundle.load('assets/fonts/Nunito-ExtraBold.ttf'))
+          ..addFont(rootBundle.load('assets/fonts/Nunito-Black.ttf')))
+        .load();
+  });
   setUp(() {
     GoogleFonts.config.allowRuntimeFetching = false;
     mockProgressAudio();
@@ -170,7 +181,13 @@ void main() {
 
   test('About reads the installed version and handles unavailable native info',
       () async {
-    expect((await AppBuildInfo.load()).label, 'Version 2.4.6 (build 57)');
+    final info = await AppBuildInfo.load();
+    expect(info.label, 'Version 2.4');
+    expect((info.version, info.build), ('2.4.6', '57'));
+    expect(const AppBuildInfo(version: '1.0.34', build: '35').label,
+        'Version 1.0');
+    expect(const AppBuildInfo(version: '1.0.35+36', build: '36').label,
+        'Version 1.0');
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(appInfoChannel,
             (_) async => throw PlatformException(code: 'unavailable'));
@@ -503,8 +520,11 @@ void main() {
     await reveal(t, const ValueKey('settings-about'));
     await t.tap(find.byKey(const ValueKey('settings-about')));
     await t.pumpAndSettle();
-    expect(find.text('Version 2.4.6 (build 57)'), findsOneWidget);
-    expect(find.text('Credits'), findsOneWidget);
+    expect(find.text('Version 2.4'), findsOneWidget);
+    expect(find.text('What is KidsPhonics?'), findsOneWidget);
+    expect(find.text('Learning Features'), findsOneWidget);
+    expect(find.text('Developers & Credits'), findsOneWidget);
+    expect(find.textContaining('Developed by JJCM.'), findsOneWidget);
     await t.tap(find.text('Close'));
     await t.pumpAndSettle();
     expect(t.takeException(), isNull);
@@ -517,6 +537,8 @@ void main() {
     (const Size(768, 1024), 1.0),
     (const Size(844, 390), 1.0),
     (const Size(320, 568), 2.5),
+    (const Size(390, 844), 2.5),
+    (const Size(844, 390), 2.5),
   ]) {
     testWidgets('Simple About fits $size at text $scale and opens licenses',
         (t) async {
@@ -529,18 +551,29 @@ void main() {
       await reveal(t, const ValueKey('settings-about'));
       await t.tap(find.byKey(const ValueKey('settings-about')));
       await t.pumpAndSettle();
-      expect(find.text('Version 2.4.6 (build 57)'), findsOneWidget);
+      expect(find.text('Version 2.4'), findsOneWidget);
       expect(find.text('Your saved learning'), findsOneWidget);
       expect(find.text('Speech activities'), findsOneWidget);
-      expect(find.text('Credits'), findsOneWidget);
+      expect(find.text('What is KidsPhonics?'), findsOneWidget);
+      expect(find.text('Learning Features'), findsOneWidget);
+      expect(find.text('Developers & Credits'), findsOneWidget);
+      expect(find.textContaining('Developed by JJCM.'), findsOneWidget);
       final about = find.byKey(const ValueKey('settings-about-dialog'));
       expect(
           find.descendant(of: about, matching: find.byIcon(Icons.eco_rounded)),
           findsNothing);
       expect(find.text('Close').hitTestable(), findsOneWidget);
+      final closeButton = find.descendant(
+          of: about, matching: find.widgetWithText(TextButton, 'Close'));
+      final closeBounds = t.getRect(closeButton);
+      expect(closeBounds.top, greaterThanOrEqualTo(24));
+      expect(closeBounds.bottom, lessThanOrEqualTo(size.height - 24));
       expect(t.takeException(), isNull);
       if (scale == 1 && [390.0, 768.0].contains(size.width)) {
         await capture(t, boundary, 'settings_about_${size.width.toInt()}');
+      }
+      if (size.width == 320 && scale == 2.5) {
+        await capture(t, boundary, 'settings_about_large_text_320');
       }
       final licenses = find.byKey(const ValueKey('settings-about-licenses'));
       await Scrollable.ensureVisible(t.element(licenses), alignment: .5);
@@ -551,6 +584,10 @@ void main() {
       Navigator.of(t.element(find.byType(LicensePage))).pop();
       await t.pumpAndSettle();
       expect(about, findsOneWidget);
+      expect(closeButton.hitTestable(), findsOneWidget);
+      await Scrollable.ensureVisible(t.element(find.byTooltip('Close About')),
+          alignment: 0);
+      await t.pumpAndSettle();
       await t.tap(find.byTooltip('Close About'));
       await t.pumpAndSettle();
       expect(about, findsNothing);

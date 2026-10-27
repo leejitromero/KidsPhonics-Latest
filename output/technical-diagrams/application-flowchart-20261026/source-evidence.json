@@ -1,0 +1,86 @@
+{
+  "date": "2026-10-26",
+  "applicationVersion": "1.0.37+38",
+  "sourceFiles": [
+    {
+      "path": "lib/main.dart",
+      "sha256": "a2a77682b0dbe78b667d4f40860c2817bdf980ae6737492541698072f699b5ce"
+    },
+    {
+      "path": "lib/screens/welcome_screen.dart",
+      "sha256": "89c3e6f90aba563f32deea7dfd1ae1edb23b7e3b25cdba18b59c7529a354d550"
+    },
+    {
+      "path": "lib/widgets/student_character_picker.dart",
+      "sha256": "4a623641f462e7fe916be6ae7c1e77627084cec4bacdfe896907e3ed9e534769"
+    },
+    {
+      "path": "lib/widgets/main_navigation_scope.dart",
+      "sha256": "e82e17cc96a693b906db5a2b77d2f40d39d8431117400840471c3a96e199e62e"
+    },
+    {
+      "path": "lib/widgets/main_navigation_shell.dart",
+      "sha256": "d0d71f73fdb20eeedbecf40eab92596067e7a865ed4e3163d809437c5c51a5cb"
+    },
+    {
+      "path": "lib/screens/home_screen.dart",
+      "sha256": "83c4d2261b6c9600f7da081e9fab8f7b80d6f9501e3bd53d27d5fc5abb754f62"
+    },
+    {
+      "path": "lib/screens/lessons_screen.dart",
+      "sha256": "2ad2aee316c27f7cf9017a4f3248202d0abe5a5de8bd7e23e598ed0762a84274"
+    },
+    {
+      "path": "lib/screens/games_screen.dart",
+      "sha256": "14664b347e00edd342fc24c0b9a7a2ccfd78efdbfd59797e37be8d8a6a91ffab"
+    },
+    {
+      "path": "lib/screens/letter_mastery_check_screen.dart",
+      "sha256": "23f708167ebd598fd819e8f21a47584ee2a200cb968daafe8fce65e3bac69193"
+    },
+    {
+      "path": "lib/screens/letter_introduction_screen.dart",
+      "sha256": "454c72304f699068f8e19fec2b9d0e3b5c7764f2ebed641aadbc849dd252b0e1"
+    },
+    {
+      "path": "lib/models/letter_adventure.dart",
+      "sha256": "c30c747cd58a9056cb0822c728e1c58f9c982c1295b9b39f3d494836620098ff"
+    },
+    {
+      "path": "lib/widgets/progress_journey_view.dart",
+      "sha256": "50e014ab804f4bea1d476c6927ce92738523591024a8c401085cec346475ad7a"
+    },
+    {
+      "path": "lib/screens/parent_screen.dart",
+      "sha256": "8118915553e7e225b2805f191fbce77bba98240c1364923a01baad2122a27b83"
+    },
+    {
+      "path": "lib/widgets/parent_pin_form.dart",
+      "sha256": "4a9a1decd394ba82a0ac81d2aea9b3a60228de512a83178585f0c9c5f0ec0635"
+    },
+    {
+      "path": "lib/services/parent_auth_service.dart",
+      "sha256": "d1c69dc716cf0e8d2dada0e8b7e6c3517c69325c2a5716c924867d43f6fcbee3"
+    },
+    {
+      "path": "lib/screens/settings_screen.dart",
+      "sha256": "623d73b1ccbb2d0c6c1cac88f03e1f2dfe4795acf875016568e8a551b8e470f4"
+    },
+    {
+      "path": "lib/widgets/time_limit_overlay.dart",
+      "sha256": "ea12181abb06a750320c1c9a2f7a011909b859d9c1bc6d8b66bcb11dbe920ca0"
+    },
+    {
+      "path": "lib/services/screen_time_service.dart",
+      "sha256": "1e32af7cabb0278538603136bb9c5f8986a575130c3772610ad519340331566d"
+    },
+    {
+      "path": "lib/providers/app_provider.dart",
+      "sha256": "ef4508f9b206358ea25916d89a8b4653271eea7c33a9a36a64b2296a25aefa7b"
+    },
+    {
+      "path": "pubspec.yaml",
+      "sha256": "673b7abc69b480bfceedce1287588ea076a0a69526fe8bb059cbc99030b05eb1"
+    }
+  ]
+}

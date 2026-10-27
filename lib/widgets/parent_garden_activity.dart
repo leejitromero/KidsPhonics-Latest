@@ -5,11 +5,12 @@ import '../models/weekly_learning_summary.dart';
 import '../providers/app_provider.dart';
 import 'button_sound.dart';
 import 'learning_progress_widgets.dart';
+import 'parent_report_frames.dart';
+import 'parent_rewards_frame.dart';
 
 const _cream = Color(0xFFF2FFD0);
 const _muted = Color(0xFFCEE5D7);
 const _gold = Color(0xFFFFD84C);
-const _green = Color(0xFF53E987);
 
 /// The Activity garden uses one calendar window for bars, totals and details.
 class ParentGardenActivity extends StatefulWidget {
@@ -30,178 +31,164 @@ class _ParentGardenActivityState extends State<ParentGardenActivity> {
             fontFamily: 'Nunito', color: Colors.white, fontSize: 14),
         child:
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          _GardenActivityCard(
+          ParentReportFrame(
+              kind: ParentReportKind.weekly,
+              title: 'Weekly Activity',
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                const _CardHeading(
-                    icon: Icons.bar_chart_rounded,
-                    title: 'Weekly Activity',
-                    subtitle: 'The last 7 days.',
-                    period: true),
-                const SizedBox(height: 8),
-                _Inset(
-                    child: Row(children: [
-                  const _Badge(
-                      icon: Icons.local_fire_department_rounded,
-                      color: Color(0xFFFF9850),
-                      size: 32),
-                  const SizedBox(width: 8),
-                  Expanded(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                        Text('${p.streak}-Day Learning Streak',
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w900)),
-                        const SizedBox(height: 3),
-                        Text(
-                            p.streak == 0
-                                ? 'A little practice can start a new streak.'
-                                : 'Keep it up! Consistency builds great habits.',
-                            style:
-                                const TextStyle(color: _muted, fontSize: 11)),
-                      ])),
-                  const SizedBox(width: 6),
-                  const Icon(Icons.auto_awesome_rounded,
-                      color: _gold, size: 20),
-                ])),
-                const SizedBox(height: 8),
-                const Text('Questions Answered · Last 7 days',
-                    style: TextStyle(color: _muted, fontSize: 12)),
-                if (!week.hasActivity)
-                  const Padding(
-                      padding: EdgeInsets.only(top: 8),
-                      child: Text('No learning activity recorded this week.',
-                          style: TextStyle(color: _cream))),
-                _WeekBars(week: week),
-                const SizedBox(height: 6),
-                _Inset(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                      const Row(children: [
-                        Icon(Icons.article_rounded, color: _cream, size: 20),
-                        SizedBox(width: 8),
-                        Expanded(
-                            child: Text('This Week · Last 7 days',
+                    const Text('The last 7 days.',
+                        style: TextStyle(
+                            color: ParentReportFrame.muted, fontSize: 12)),
+                    const SizedBox(height: 8),
+                    _Inset(
+                        child: Row(children: [
+                      const _Badge(
+                          icon: Icons.local_fire_department_rounded,
+                          color: Color(0xFFFF9850),
+                          size: 32),
+                      const SizedBox(width: 8),
+                      Expanded(
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                            Text('${p.streak}-Day Learning Streak',
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w900)),
+                            const SizedBox(height: 3),
+                            Text(
+                                p.streak == 0
+                                    ? 'A little practice can start a new streak.'
+                                    : 'Keep it up! Consistency builds great habits.',
+                                style: const TextStyle(
+                                    color: ParentReportFrame.muted,
+                                    fontSize: 11)),
+                          ])),
+                      const SizedBox(width: 6),
+                      const Icon(Icons.auto_awesome_rounded,
+                          color: _gold, size: 20),
+                    ])),
+                    const SizedBox(height: 8),
+                    const Text('Questions Answered · Last 7 days',
+                        style: TextStyle(
+                            color: ParentReportFrame.muted, fontSize: 12)),
+                    if (!week.hasActivity)
+                      const Padding(
+                          padding: EdgeInsets.only(top: 8),
+                          child: Text(
+                              'No learning activity recorded this week.',
+                              style: TextStyle(color: ParentReportFrame.ink))),
+                    _WeekBars(week: week),
+                    const SizedBox(height: 6),
+                    _Inset(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                          const Row(children: [
+                            Icon(Icons.article_rounded,
+                                color: ParentReportFrame.ink, size: 20),
+                            SizedBox(width: 8),
+                            Expanded(
+                                child: Text('This Week · Last 7 days',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w900)))
+                          ]),
+                          const SizedBox(height: 6),
+                          _StatTiles(items: [
+                            (
+                              Icons.quiz_rounded,
+                              '${week.questionsAnswered}',
+                              'Questions Answered',
+                              const Color(0xFF7261BD)
+                            ),
+                            (
+                              Icons.check_circle_rounded,
+                              '${week.correctAnswers}',
+                              'Correct Answers',
+                              const Color(0xFF239B62)
+                            ),
+                            (
+                              Icons.extension_rounded,
+                              '${week.activitiesCompleted}',
+                              'Activities Completed',
+                              const Color(0xFFA16E32)
+                            ),
+                            (
+                              Icons.track_changes_rounded,
+                              week.accuracy == null
+                                  ? 'Not yet'
+                                  : accuracyLabel(week.accuracy),
+                              'Overall Accuracy',
+                              const Color(0xFF247B9D)
+                            ),
+                          ]),
+                        ])),
+                    const SizedBox(height: 8),
+                    _Inset(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                          const Text('Speech Practice',
+                              style: TextStyle(
+                                  color: ParentReportFrame.ink,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w900)),
+                          Text(
+                              '${week.speechAttempts} attempts · ${week.speechRecognized} words recognized · ${week.speechActivitiesCompleted} activities completed',
+                              style: const TextStyle(
+                                  color: ParentReportFrame.ink, fontSize: 12)),
+                          const Text(
+                              'Recognized-word matching is separate from phonics answer accuracy and does not score pronunciation.',
+                              style: TextStyle(
+                                  color: ParentReportFrame.muted,
+                                  fontSize: 12)),
+                        ])),
+                    const SizedBox(height: 8),
+                    _Inset(
+                        child: ListTile(
+                            dense: true,
+                            minTileHeight: 48,
+                            contentPadding: EdgeInsets.zero,
+                            leading: const _Badge(
+                                icon: Icons.schedule_rounded,
+                                color: Color(0xFF9A75E6),
+                                size: 30),
+                            title: const Text('Recent Activity',
                                 style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w900)))
-                      ]),
-                      const SizedBox(height: 6),
-                      _StatTiles(items: [
-                        (
-                          Icons.quiz_rounded,
-                          '${week.questionsAnswered}',
-                          'Questions Answered',
-                          const Color(0xFF7261BD)
-                        ),
-                        (
-                          Icons.check_circle_rounded,
-                          '${week.correctAnswers}',
-                          'Correct Answers',
-                          const Color(0xFF239B62)
-                        ),
-                        (
-                          Icons.extension_rounded,
-                          '${week.activitiesCompleted}',
-                          'Activities Completed',
-                          const Color(0xFFA16E32)
-                        ),
-                        (
-                          Icons.track_changes_rounded,
-                          week.accuracy == null
-                              ? 'Not yet'
-                              : accuracyLabel(week.accuracy),
-                          'Overall Accuracy',
-                          const Color(0xFF247B9D)
-                        ),
-                      ]),
-                    ])),
-                const SizedBox(height: 8),
-                _Inset(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                      const Text('Speech Practice',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w900)),
-                      Text(
-                          '${week.speechAttempts} attempts · ${week.speechRecognized} words recognized · ${week.speechActivitiesCompleted} activities completed',
-                          style: const TextStyle(color: _cream, fontSize: 12)),
-                      const Text(
-                          'Recognized-word matching is separate from phonics answer accuracy and does not score pronunciation.',
-                          style: TextStyle(color: _muted, fontSize: 12)),
-                    ])),
-                const SizedBox(height: 8),
-                _Inset(
-                    child: ListTile(
-                        dense: true,
-                        minTileHeight: 48,
-                        contentPadding: EdgeInsets.zero,
-                        leading: const _Badge(
-                            icon: Icons.schedule_rounded,
-                            color: Color(0xFF9A75E6),
-                            size: 30),
-                        title: const Text('Recent Activity',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w900)),
-                        subtitle: const Text('Daily totals · Last 7 days',
-                            style: TextStyle(color: _muted, fontSize: 12)),
-                        trailing: const Icon(Icons.chevron_right_rounded,
-                            color: Colors.white),
-                        onTap: withButtonSound(() {
-                          final target = _daily.currentContext;
-                          if (target != null) {
-                            Scrollable.ensureVisible(target,
-                                alignment: 0,
-                                duration:
-                                    MediaQuery.disableAnimationsOf(context)
+                                    color: ParentReportFrame.ink,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w900)),
+                            subtitle: const Text('Daily totals · Last 7 days',
+                                style: TextStyle(
+                                    color: ParentReportFrame.muted,
+                                    fontSize: 12)),
+                            trailing: const Icon(Icons.chevron_right_rounded,
+                                color: ParentReportFrame.ink),
+                            onTap: withButtonSound(() {
+                              final target = _daily.currentContext;
+                              if (target != null) {
+                                Scrollable.ensureVisible(target,
+                                    alignment: 0,
+                                    duration: MediaQuery.disableAnimationsOf(
+                                            context)
                                         ? Duration.zero
                                         : const Duration(milliseconds: 300));
-                          }
-                        }))),
-              ])),
-          _GardenActivityCard(
+                              }
+                            }))),
+                  ])),
+          ParentReportFrame(
               key: _daily,
+              kind: ParentReportKind.daily,
+              title: 'Daily Breakdown',
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const _CardHeading(
-                        icon: Icons.calendar_month_rounded,
-                        title: 'Daily Breakdown',
-                        period: true),
-                    const SizedBox(height: 6),
                     for (final day in week.days.reversed) _DayRow(day: day),
                   ])),
           _RewardsCard(provider: p),
         ]));
   }
-}
-
-class _GardenActivityCard extends StatelessWidget {
-  const _GardenActivityCard({super.key, required this.child});
-  final Widget child;
-  @override
-  Widget build(BuildContext context) => Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xEF216B43), Color(0xF208493A)]),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFF93BB72), width: 1.5),
-          boxShadow: const [
-            BoxShadow(
-                color: Color(0x33385521), blurRadius: 10, offset: Offset(0, 4))
-          ]),
-      child: child);
 }
 
 class _Inset extends StatelessWidget {
@@ -211,7 +198,7 @@ class _Inset extends StatelessWidget {
   Widget build(BuildContext context) => Container(
       padding: const EdgeInsets.all(7),
       decoration: BoxDecoration(
-          color: const Color(0x553D9B72),
+          color: const Color(0xFFDFF0D1),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: const Color(0x447FC995))),
       child: child);
@@ -237,65 +224,6 @@ class _Badge extends StatelessWidget {
                   end: Alignment.bottomRight,
                   colors: [Color.lerp(color, Colors.white, .2)!, color])),
           child: Icon(icon, color: _cream, size: size * .62)));
-}
-
-class _CardHeading extends StatelessWidget {
-  const _CardHeading(
-      {required this.icon,
-      required this.title,
-      this.subtitle,
-      this.period = false,
-      this.action});
-  final IconData icon;
-  final String title;
-  final String? subtitle;
-  final bool period;
-  final Widget? action;
-  @override
-  Widget build(BuildContext context) => LayoutBuilder(builder: (context, box) {
-        final scale = MediaQuery.textScalerOf(context).scale(14) / 14;
-        final stacked = box.maxWidth < 290 * scale;
-        final accessory = action ?? (period ? const _PeriodLabel() : null);
-        return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(children: [
-            _Badge(icon: icon, size: 30),
-            const SizedBox(width: 8),
-            Expanded(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                  Text(title,
-                      style: const TextStyle(
-                          color: _cream,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w900)),
-                  if (subtitle != null)
-                    Text(subtitle!,
-                        style: const TextStyle(color: _muted, fontSize: 12)),
-                ])),
-            if (!stacked && accessory != null) ...[
-              const SizedBox(width: 8),
-              accessory
-            ],
-          ]),
-          if (stacked && accessory != null)
-            Padding(padding: const EdgeInsets.only(top: 5), child: accessory),
-        ]);
-      });
-}
-
-class _PeriodLabel extends StatelessWidget {
-  const _PeriodLabel();
-  @override
-  Widget build(BuildContext context) => Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-          color: const Color(0x333BC578),
-          border: Border.all(color: const Color(0xFF74A883)),
-          borderRadius: BorderRadius.circular(24)),
-      child: const Text('Last 7 days',
-          style: TextStyle(
-              color: Colors.white, fontSize: 11, fontWeight: FontWeight.w800)));
 }
 
 class _WeekBars extends StatelessWidget {
@@ -325,8 +253,8 @@ class _WeekBars extends StatelessWidget {
                                       color: maximum > 0 &&
                                               day.activity.questionsAnswered ==
                                                   maximum
-                                          ? _gold
-                                          : Colors.white))),
+                                          ? const Color(0xFF916000)
+                                          : ParentReportFrame.ink))),
                           const SizedBox(height: 3),
                           Container(
                               key: ValueKey(
@@ -376,7 +304,8 @@ class _WeekBars extends StatelessWidget {
                               fit: BoxFit.scaleDown,
                               child: Text('${day.date.month}/${day.date.day}',
                                   style: const TextStyle(
-                                      fontSize: 11, color: _muted))),
+                                      fontSize: 11,
+                                      color: ParentReportFrame.muted))),
                         ]))),
         ]));
   }
@@ -393,7 +322,7 @@ class _StatTiles extends StatelessWidget {
             : box.maxWidth >= 150 * scale
                 ? 2
                 : 1;
-        final width = (box.maxWidth - (columns - 1) * 6) / columns;
+        final width = (box.maxWidth - (columns - 1) * 6 - .01) / columns;
         return Wrap(spacing: 6, runSpacing: 6, children: [
           for (final (icon, value, label, color) in items)
             Semantics(
@@ -440,24 +369,26 @@ class _DayRow extends StatelessWidget {
         : accuracyLabel(day.accuracy);
     final dateLabel = Text(date,
         style: const TextStyle(
-            color: Colors.white, fontSize: 13, fontWeight: FontWeight.w800));
+            color: ParentReportFrame.ink,
+            fontSize: 13,
+            fontWeight: FontWeight.w800));
     final meter = _DailyAccuracy(value: day.accuracy, label: accuracy);
     final counts = Text(
         '${data.questionsAnswered} questions · ${data.activitiesCompleted} ${data.activitiesCompleted == 1 ? 'activity' : 'activities'}'
         '${data.speechAttempts == 0 ? '' : ' · ${data.speechAttempts} speech attempts'}',
-        style: const TextStyle(color: _muted, fontSize: 11));
+        style: const TextStyle(color: ParentReportFrame.muted, fontSize: 11));
     return Container(
         margin: const EdgeInsets.only(bottom: 4),
         decoration: BoxDecoration(
-            color: const Color(0x44012420),
+            color: const Color(0xFFE2F0D3),
             borderRadius: BorderRadius.circular(12)),
         child: ExpansionTile(
           key: ValueKey('parent-day-${localDateKey(day.date)}'),
           minTileHeight: 48,
           visualDensity: const VisualDensity(vertical: -1),
           dense: true,
-          iconColor: _cream,
-          collapsedIconColor: _muted,
+          iconColor: ParentReportFrame.ink,
+          collapsedIconColor: ParentReportFrame.muted,
           tilePadding: const EdgeInsets.symmetric(horizontal: 10),
           childrenPadding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
           shape: const Border(),
@@ -480,7 +411,8 @@ class _DayRow extends StatelessWidget {
                 child: Text(
                     'Questions Answered: ${data.questionsAnswered}\nCorrect Answers: ${data.correctAnswers}\n'
                     'Activities Completed: ${data.activitiesCompleted}\nOverall Activity Accuracy: $accuracy',
-                    style: const TextStyle(color: Colors.white, fontSize: 14)))
+                    style: const TextStyle(
+                        color: ParentReportFrame.ink, fontSize: 14)))
           ],
         ));
   }
@@ -499,13 +431,14 @@ class _DailyAccuracy extends StatelessWidget {
                 child: LinearProgressIndicator(
                     minHeight: 6,
                     value: value ?? 0,
-                    color: _green,
-                    backgroundColor: const Color(0xFF436D5B)))),
+                    color: const Color(0xFF239B62),
+                    backgroundColor: const Color(0xFFBBD0AE)))),
         const SizedBox(width: 6),
         Flexible(
             flex: 4,
             child: Text(label,
-                style: const TextStyle(color: _muted, fontSize: 11))),
+                style: const TextStyle(
+                    color: ParentReportFrame.muted, fontSize: 11))),
       ]);
 }
 
@@ -569,56 +502,13 @@ class _RewardsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final total = provider.quickCheckAchievements.length;
-    return _GardenActivityCard(
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      _CardHeading(
-          icon: Icons.emoji_events_rounded,
-          title: 'Rewards',
-          subtitle: 'Milestones and badges.',
-          action: OutlinedButton(
-              onPressed: withButtonSound(() => _showAchievements(context)),
-              style: OutlinedButton.styleFrom(
-                  foregroundColor: _cream,
-                  side: const BorderSide(color: Color(0xFF72A581))),
-              child: const Text('View All'))),
-      const SizedBox(height: 8),
-      _StatTiles(items: [
-        (
-          Icons.workspace_premium_rounded,
-          '${provider.level}',
-          'Level',
-          const Color(0xFF407D55)
-        ),
-        (Icons.bolt_rounded, '${provider.xp}', 'XP', const Color(0xFF407D55)),
-        (
-          Icons.star_rounded,
-          '${provider.stars}',
-          'Stars',
-          const Color(0xFF407D55)
-        ),
-      ]),
-      const SizedBox(height: 8),
-      Text(
-          '${provider.quickCheckAchievements.where((a) => a.unlocked).length} / $total Achievements',
-          style: const TextStyle(fontWeight: FontWeight.w800)),
-      const SizedBox(height: 6),
-      ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: LinearProgressIndicator(
-              value: total == 0
-                  ? 0
-                  : provider.quickCheckAchievements
-                          .where((a) => a.unlocked)
-                          .length /
-                      total,
-              minHeight: 6,
-              color: _green,
-              backgroundColor: const Color(0xFF456E59))),
-      const SizedBox(height: 10),
-      const Text(
-          'Rewards celebrate your practice. Mastery comes from letter quick checks.',
-          style: TextStyle(color: _muted, fontSize: 12)),
-    ]));
+    return ParentRewardsFrame(
+      level: provider.level,
+      xp: provider.xp,
+      stars: provider.stars,
+      earned: provider.quickCheckAchievements.where((a) => a.unlocked).length,
+      total: total,
+      onViewAll: withButtonSound(() => _showAchievements(context)),
+    );
   }
 }

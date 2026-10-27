@@ -45,11 +45,19 @@ void main() {
         ...soundRoundsForDifficulty(d),
         ...quizQuestionsForDifficulty(d)
       ]) {
-        hasWordAudio(q.voiceHint);
+        if (q is QuizQuestion) {
+          expect(
+              File('assets/${PhonicsAudioService.assetForPhrase(q.wordAudioKey)}')
+                  .existsSync(),
+              isTrue);
+        } else {
+          hasWordAudio(q.voiceHint);
+        }
         expect(q.voiceHint, q.word);
         expect(q.options.toSet(), hasLength(q.options.length));
         expect(q.options.where((o) => o == q.correctLetter), hasLength(1));
-        expect(q.question, contains('Listen'));
+        expect(q.question,
+            q is QuizQuestion ? contains('What sound') : contains('Listen'));
         if (q.correctLetter == 'K') expect(q.options, isNot(contains('C')));
         if (q.correctLetter == 'J') expect(q.options, isNot(contains('G')));
         if (q.correctLetter == 'S') expect(q.options, isNot(contains('C')));

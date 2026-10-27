@@ -1,4 +1,4 @@
-import '../widgets/button_sound.dart';
+import '../widgets/game_feedback_art.dart';
 import '../widgets/game_design.dart';
 import '../data/game_session_order.dart';
 import '../widgets/word_game_layout.dart';
@@ -33,7 +33,10 @@ class MissingVowelScreen extends StatefulWidget {
 }
 
 class _MissingVowelScreenState extends State<MissingVowelScreen>
-    with GameSessionUi<MissingVowelScreen>, WidgetsBindingObserver {
+    with
+        SingleTickerProviderStateMixin,
+        GameSessionUi<MissingVowelScreen>,
+        WidgetsBindingObserver {
   int _index = 0;
   String? _picked;
   bool _answered = false;
@@ -43,6 +46,12 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
   Set<int> _glowing = {};
   Timer? _glowTimer;
   Completer<void>? _glowDone;
+  final _blankKey = GlobalKey();
+  final Map<String, GlobalKey> _choiceKeys = {};
+  late final AnimationController _vowelFlight;
+  OverlayEntry? _vowelEntry;
+  bool _vowelLanded = false;
+  int _flightRun = 0;
 
   late List<VowelPuzzle> _puzzles = _newSession();
   List<VowelPuzzle> _newSession() => GameSessionOrder.next(
@@ -56,7 +65,80 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
   @override
   void initState() {
     super.initState();
+    _vowelFlight = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 500));
     WidgetsBinding.instance.addObserver(this);
+  }
+
+  void _clearVowelFlight() {
+    _flightRun++;
+    _vowelFlight.stop(canceled: true);
+    _vowelEntry?.remove();
+    _vowelEntry = null;
+  }
+
+  Future<void> _flyVowel(String vowel) async {
+    final run = ++_flightRun;
+    final overlay = Overlay.of(context);
+    final overlayBox = overlay.context.findRenderObject() as RenderBox;
+    Rect? bounds(GlobalKey key) {
+      final object = key.currentContext?.findRenderObject();
+      return object is RenderBox && object.hasSize
+          ? MatrixUtils.transformRect(
+              object.getTransformTo(overlayBox), Offset.zero & object.size)
+          : null;
+    }
+
+    final choice = bounds(_choiceKeys[vowel]!);
+    final start = choice == null
+        ? null
+        : Rect.fromCenter(
+            center: choice.center,
+            width: choice.shortestSide * .5,
+            height: choice.shortestSide * .65);
+    final reducedMotion = MediaQuery.disableAnimationsOf(context);
+    // Feedback can resize the fitted controls, so target the updated blank.
+    await WidgetsBinding.instance.endOfFrame;
+    if (!mounted || run != _flightRun) return;
+    final end = bounds(_blankKey);
+    if (!reducedMotion && start != null && end != null) {
+      _vowelEntry = OverlayEntry(
+          builder: (_) => AnimatedBuilder(
+              animation: _vowelFlight,
+              builder: (_, __) {
+                if (!canAdvanceGameFeedback ||
+                    !TickerMode.valuesOf(context).enabled) {
+                  return const SizedBox.shrink();
+                }
+                final progress =
+                    Curves.easeInOutCubic.transform(_vowelFlight.value);
+                return Positioned.fromRect(
+                    rect: Rect.lerp(start, end, progress)!,
+                    child: IgnorePointer(
+                        child: ExcludeSemantics(
+                            child: Material(
+                                color: Colors.transparent,
+                                child: FittedBox(
+                                    fit: BoxFit.contain,
+                                    child: Text(vowel,
+                                        key: const ValueKey('flying-vowel'),
+                                        style: const TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.w900,
+                                            color: GameDesign.ink)))))));
+              }));
+      overlay.insert(_vowelEntry!);
+      try {
+        await _vowelFlight.forward(from: 0).orCancel;
+      } on TickerCanceled {
+        return;
+      }
+      if (!mounted || run != _flightRun) return;
+      _vowelEntry?.remove();
+      _vowelEntry = null;
+    }
+    setState(() => _vowelLanded = true);
   }
 
   @override
@@ -163,7 +245,11 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state != AppLifecycleState.resumed) {
-      setState(() => _stopSounds(keepPending: true));
+      setState(() {
+        _stopSounds(keepPending: true);
+        _clearVowelFlight();
+        _vowelLanded = _picked != null;
+      });
     } else {
       _scheduleSounds();
     }
@@ -173,6 +259,8 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _stopSounds();
+    _clearVowelFlight();
+    _vowelFlight.dispose();
     super.dispose();
   }
 
@@ -182,7 +270,9 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
     final isCorrect = vowel == _puzzle.vowel;
     setState(() {
       _picked = vowel;
+      _vowelLanded = false;
     });
+    unawaited(_flyVowel(vowel));
 
     recordGameAnswer(correct: isCorrect);
     if (isCorrect) {
@@ -197,18 +287,26 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
       playGameWrong();
       await Future.delayed(const Duration(milliseconds: 700));
       await Future.delayed(const Duration(milliseconds: 600));
-      if (mounted) setState(() => _picked = null);
+      if (mounted) {
+        _clearVowelFlight();
+        setState(() {
+          _picked = null;
+          _vowelLanded = false;
+        });
+      }
     }
   }
 
   void _next() {
     if (!_answered || resultOpen) return;
+    _clearVowelFlight();
     if (_index < _puzzles.length - 1) {
       _stopSounds();
       setState(() {
         _index++;
         _picked = null;
         _answered = false;
+        _vowelLanded = false;
         _soundStep = 0;
         _pendingSound = true;
       });
@@ -220,10 +318,12 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
 
   void _restart() => setState(() {
         _stopSounds();
+        _clearVowelFlight();
         _index = 0;
         _puzzles = _newSession();
         _picked = null;
         _answered = false;
+        _vowelLanded = false;
         _soundStep = 0;
         _pendingSound = true;
         _scheduleSounds();
@@ -266,74 +366,100 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
         hasProgress: scoredAttempts > 0 && !resultOpen,
         current: _index + 1,
         total: _puzzles.length,
-        child: WordGameLayout(word: _puzzle.word, children: [
-          const SizedBox(height: 4),
-          ForestPanel(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Semantics(
-                  label: _puzzle.display,
-                  child: ExcludeSemantics(
-                      child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Row(mainAxisSize: MainAxisSize.min, children: [
-                            for (var i = 0; i < _puzzle.word.length; i++)
-                              AnimatedContainer(
-                                  key: ValueKey('vowel-sound-$i'),
-                                  duration:
-                                      MediaQuery.disableAnimationsOf(context)
-                                          ? Duration.zero
-                                          : const Duration(milliseconds: 140),
-                                  margin:
-                                      const EdgeInsets.symmetric(horizontal: 3),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 3),
-                                  decoration: BoxDecoration(
-                                      color: _glowing.contains(i)
-                                          ? const Color(0xFFFFE36B)
-                                          : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: _glowing.contains(i)
-                                          ? const [
-                                              BoxShadow(
-                                                  color: Color(0xBBFFD23F),
-                                                  blurRadius: 10)
-                                            ]
-                                          : const []),
-                                  child: Text(_puzzle.display.split(' ')[i],
-                                      style: const TextStyle(
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.w900)))
-                          ]))))),
-          const SizedBox(height: 8),
-          AudioButton(
-              label: 'Listen Again',
-              controlBuilder: (context, onPlay, playing, label) =>
-                  ForestAudioButton(
-                      label: 'Listen Again',
-                      icon: Icons.replay_rounded,
-                      onPressed: onPlay == null || _reading || !_introFinished
-                          ? null
-                          : _repeatSounds),
-              phrase:
-                  _puzzle.word[0] + _puzzle.word.substring(1).toLowerCase()),
-          const SizedBox(height: 8),
-          WordChoiceGrid(
-              children: _vowels
-                  .map((option) => GameAnswerButton(
-                      compact: true,
-                      label: option,
-                      selected: _picked == option,
-                      result:
-                          _picked == option ? option == _puzzle.vowel : null,
-                      onPressed: _answered || _picked != null || resultOpen
-                          ? null
-                          : () => _pick(option)))
-                  .toList()),
-          if (_picked != null) GameFeedback(correct: _picked == _puzzle.vowel),
-          if (_answered)
-            ElevatedButton(
-                onPressed: withButtonSound(resultOpen ? null : _next),
-                child: const Text('Next')),
-        ]),
+        child: WordGameLayout(
+            word: _puzzle.word,
+            pictureExtent: MediaQuery.sizeOf(context).height < 650 &&
+                    MediaQuery.textScalerOf(context).scale(16) / 16 > 1.3
+                ? 80
+                : null,
+            children: [
+              const SizedBox(height: 4),
+              ForestPanel(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Semantics(
+                      label: _vowelLanded && _picked != null
+                          ? _puzzle.display.replaceFirst('_', _picked!)
+                          : _puzzle.display,
+                      child: ExcludeSemantics(
+                          child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    for (var i = 0; i < _puzzle.word.length; i++)
+                                      AnimatedContainer(
+                                          key: ValueKey('vowel-sound-$i'),
+                                          duration: MediaQuery.disableAnimationsOf(context)
+                                              ? Duration.zero
+                                              : const Duration(
+                                                  milliseconds: 140),
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 3),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 5, vertical: 3),
+                                          decoration: BoxDecoration(
+                                              color: _glowing.contains(i)
+                                                  ? const Color(0xFFFFE36B)
+                                                  : Colors.transparent,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              boxShadow: _glowing.contains(i)
+                                                  ? const [
+                                                      BoxShadow(
+                                                          color:
+                                                              Color(0xBBFFD23F),
+                                                          blurRadius: 10)
+                                                    ]
+                                                  : const []),
+                                          child: _puzzle.display.split(' ')[i] == '_'
+                                              ? SizedBox(
+                                                  key: _blankKey,
+                                                  width: 30,
+                                                  child: Center(
+                                                      child: Text(
+                                                          _vowelLanded ? _picked! : '_',
+                                                          key: const ValueKey('vowel-blank-letter'),
+                                                          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w900))))
+                                              : Text(_puzzle.display.split(' ')[i], style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w900)))
+                                  ]))))),
+              const SizedBox(height: 8),
+              AudioButton(
+                  label: 'Listen Again',
+                  controlBuilder: (context, onPlay, playing, label) =>
+                      ForestAudioButton(
+                          label: 'Listen Again',
+                          icon: Icons.replay_rounded,
+                          onPressed:
+                              onPlay == null || _reading || !_introFinished
+                                  ? null
+                                  : _repeatSounds),
+                  phrase: _puzzle.word[0] +
+                      _puzzle.word.substring(1).toLowerCase()),
+              const SizedBox(height: 8),
+              WordChoiceGrid(
+                  columns: 5,
+                  children: _vowels
+                      .map((option) => GameAnswerButton(
+                          buttonKey: _choiceKeys.putIfAbsent(
+                              option, () => GlobalKey()),
+                          compact: true,
+                          label: option,
+                          selected: _picked == option,
+                          result: _picked == option
+                              ? option == _puzzle.vowel
+                              : null,
+                          onPressed: _answered || _picked != null || resultOpen
+                              ? null
+                              : () => _pick(option)))
+                      .toList()),
+              if (_picked != null)
+                GameFeedback(correct: _picked == _puzzle.vowel),
+              if (_answered)
+                Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: MissingVowelNextButton(
+                        onPressed: resultOpen ? null : _next)),
+            ]),
       );
 }

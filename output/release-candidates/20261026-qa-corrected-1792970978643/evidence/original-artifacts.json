@@ -1,0 +1,27 @@
+[
+  {
+    "path": "build/app/outputs/apk/debug/app-debug.apk",
+    "bytes": 586293157,
+    "sha256": "051757247d6d463d47f0206ce6b76872ab2e5127084d911a4ca3b0812e0ca4fe"
+  },
+  {
+    "path": "build/app/outputs/apk/debug/output-metadata.json",
+    "bytes": 409,
+    "sha256": "424f5662b99dfdd8006373e2ba7e32e7f360846e8ecf9897eb5cac4a8a826397"
+  },
+  {
+    "path": "build/app/outputs/apk/release/app-release.apk",
+    "bytes": 514566052,
+    "sha256": "c547c630a238bdffad758eab9fb50729858b55290008e342bcdf09aee4aa24bc"
+  },
+  {
+    "path": "build/app/outputs/apk/release/output-metadata.json",
+    "bytes": 715,
+    "sha256": "4cd77a39f2decc328360e722fa898c3dbd1c60ec01f4abecbaf53d259a496d2b"
+  },
+  {
+    "path": "build/app/outputs/flutter-apk/app-release.apk",
+    "bytes": 514566052,
+    "sha256": "c547c630a238bdffad758eab9fb50729858b55290008e342bcdf09aee4aa24bc"
+  }
+]

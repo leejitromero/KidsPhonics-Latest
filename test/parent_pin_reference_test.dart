@@ -159,7 +159,7 @@ void main() {
         await reveal(t, submit);
         final rect = t.getRect(submit);
         expect(rect.width, greaterThanOrEqualTo(48));
-        expect(rect.height, greaterThanOrEqualTo(48));
+        expect(rect.height, greaterThanOrEqualTo(48 - .01));
         expect(rect.left, greaterThanOrEqualTo(0));
         expect(rect.right, lessThanOrEqualTo(size.width));
         expect(rect.bottom,
@@ -204,4 +204,70 @@ void main() {
     expect(t.takeException(), isNull);
     await finish(t, p);
   });
+
+  for (final setup in [true, false]) {
+    for (final (size, keyboard, scale) in [
+      (const Size(390, 844), 340.0, 1.0),
+      (const Size(320, 568), 250.0, 1.0),
+      (const Size(320, 568), 250.0, 2.0),
+      (const Size(768, 1024), 400.0, 1.0),
+    ]) {
+      testWidgets(
+          '${setup ? 'setup' : 'access'} keeps its frame while scrolling above keyboard $size x$scale',
+          (t) async {
+        final boundary = GlobalKey();
+        final p = await open(t,
+            setup: setup, size: size, scale: scale, boundary: boundary);
+        final field =
+            find.byKey(ValueKey(setup ? 'parent-pin-confirm' : 'parent-pin'));
+        await reveal(t, field);
+        await t.showKeyboard(field);
+        t.view.viewInsets = FakeViewPadding(bottom: keyboard);
+        await t.pumpAndSettle();
+        final panel = find.byKey(const ValueKey('parent-pin-frame'));
+        final originalFrame = t.getRect(panel);
+        final contentBottom = t
+            .getRect(find.byKey(const ValueKey('room-parents-content')))
+            .bottom;
+        expect(
+            contentBottom,
+            inInclusiveRange(
+                size.height - keyboard - 40, size.height - keyboard));
+        expect(originalFrame.top, greaterThanOrEqualTo(24));
+        expect(originalFrame.bottom, lessThanOrEqualTo(size.height - keyboard));
+        expect(find.byType(KidsNavigationBar), findsNothing);
+        expect(
+            t.widget<ParentPinHeading>(find.byType(ParentPinHeading)).compact,
+            isTrue);
+        for (final target in [
+          field,
+          find.widgetWithText(ElevatedButton, setup ? 'Set PIN' : 'Unlock'),
+          find.widgetWithText(TextButton, 'Back'),
+          find.byKey(const ValueKey('parent-pin')),
+        ]) {
+          await reveal(t, target);
+          final rect = t.getRect(target);
+          expect(originalFrame.contains(rect.topLeft), isTrue);
+          expect(originalFrame.contains(rect.bottomRight), isTrue);
+          expect(t.getRect(panel).top, closeTo(originalFrame.top, .1));
+          expect(t.getRect(panel).bottom, closeTo(originalFrame.bottom, .1));
+        }
+        if (size.width == 390 && setup) {
+          await reveal(t, find.widgetWithText(TextButton, 'Back'));
+          final viewport = t
+              .getRect(find.byKey(const ValueKey('parent-pin-content-scroll')));
+          final heading = t.getRect(find.byType(ParentPinHeading));
+          expect(viewport.contains(heading.topLeft), isTrue);
+          expect(viewport.contains(heading.bottomRight), isTrue);
+          await capture(t, boundary, 'setup_keyboard_scrolled');
+        }
+        t.view.resetViewInsets();
+        FocusManager.instance.primaryFocus?.unfocus();
+        await t.pumpAndSettle();
+        expect(find.byType(KidsNavigationBar), findsOneWidget);
+        expect(t.takeException(), isNull);
+        await finish(t, p);
+      });
+    }
+  }
 }

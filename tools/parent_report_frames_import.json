@@ -1,0 +1,29 @@
+{
+  "note": "Original supplied PNGs copied without image modification. Transparent margins excluded only during rendering.",
+  "files": [
+    {
+      "source": "C:\\Users\\leeji\\KidsPhonicsProject\\screen animations\\frame_dailybreakdown.png",
+      "asset": "assets/images/parent_reports/frame_dailybreakdown.png",
+      "sha256": "d807283e3a839d59fd6d336b09ffc11da57dc987e31e25c7c3c7bff02815ca32",
+      "bytes": 1761151
+    },
+    {
+      "source": "C:\\Users\\leeji\\KidsPhonicsProject\\screen animations\\frame_overview.png",
+      "asset": "assets/images/parent_reports/frame_overview.png",
+      "sha256": "e5940edcdbed79513c77d8551500f335062fac3d07825e02824d4ff4512f6543",
+      "bytes": 1571368
+    },
+    {
+      "source": "C:\\Users\\leeji\\KidsPhonicsProject\\screen animations\\frame_weeklyact.png",
+      "asset": "assets/images/parent_reports/frame_weeklyact.png",
+      "sha256": "939c42af575964af371cd95f53029c55e1fa116776a21b3abddf1cbe9296ed7a",
+      "bytes": 1769352
+    },
+    {
+      "source": "C:\\Users\\leeji\\KidsPhonicsProject\\screen animations\\frame_rewrds.png",
+      "asset": "assets/images/parent_reports/frame_rewrds.png",
+      "sha256": "f0cdb6169ecd34ee85919efda1e62b14d86991382d1fbb161d995e9880d432ee",
+      "bytes": 1677999
+    }
+  ]
+}

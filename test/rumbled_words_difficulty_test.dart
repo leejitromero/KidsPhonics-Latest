@@ -101,7 +101,7 @@ void main() {
       expect(rumbledWordsFor(difficulty).map((w) => w.word), contains(word));
       for (var i = 0; i < word.length; i++) {
         expect(find.byKey(ValueKey('word-tile-$i')), findsOneWidget);
-        expect(find.byKey(ValueKey('word-slot-$i')), findsOneWidget);
+        expect(find.byKey(ValueKey('word-slot-$i')), findsNothing);
       }
       expect(find.byKey(ValueKey('word-tile-${word.length}')), findsNothing);
       expect(tester.takeException(), isNull);

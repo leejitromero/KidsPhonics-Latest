@@ -28,6 +28,9 @@ import 'package:kidsphonics/screens/voice_recognition_screen.dart';
 import 'package:kidsphonics/widgets/learner_widgets.dart';
 import 'package:kidsphonics/widgets/game_word_picture.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
+import 'rumbled_words_swap_helpers.dart';
+import 'phonics_quiz_test_helpers.dart';
+import 'package:kidsphonics/widgets/phonics_quiz_design.dart';
 
 Future<AppProvider> mount(WidgetTester t, Widget page) async {
   late AppProvider p;
@@ -62,12 +65,19 @@ Future<void> choose(WidgetTester t, String label) async {
   await t
       .tap(find.descendant(of: choice, matching: find.byType(ElevatedButton)));
   await t.pump();
+  if (find.byType(PhonicsQuizQuestionView).evaluate().isNotEmpty) {
+    await submitQuiz(t);
+  }
   await t.runAsync(() async {
     await Future<void>.delayed(Duration.zero);
   });
 }
 
 Future<void> advance(WidgetTester t, {bool automatic = false}) async {
+  if (find.byType(PhonicsQuizQuestionView).evaluate().isNotEmpty) {
+    await finishMutedQuizFeedback(t);
+    return;
+  }
   await t.pump(Duration(milliseconds: automatic ? 1600 : 1400));
   if (!automatic) {
     await t.ensureVisible(find.text('Next'));
@@ -360,7 +370,7 @@ void main() {
           .toList(),
       8,
       15,
-      false
+      true
     ),
     (
       'position',
@@ -401,9 +411,7 @@ void main() {
             t.widget<AudioButton>(find.byType(AudioButton).first).phrase;
         final word = phrase.toUpperCase();
         final answer = switch (name) {
-          'quiz' => letterChoiceLabel(quizQuestionsForDifficulty(d)
-              .firstWhere((q) => q.word.toUpperCase() == word)
-              .correctLetter),
+          'quiz' => letterChoiceLabel(shownQuiz(t).correctLetter),
           'sound' => letterChoiceLabel(
               phrase.replaceFirst('lesson-sound-', '').toUpperCase()),
           'vowel' => vowelPuzzlesFor(d).firstWhere((q) => q.word == word).vowel,
@@ -425,6 +433,10 @@ void main() {
         await choose(t, answer);
         expect(t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult,
             isTrue);
+        if (name == 'picture') {
+          await t.pump(const Duration(milliseconds: 800));
+          await t.pump();
+        }
         await advance(t, automatic: automatic);
       }
       await flushWrites(t);
@@ -529,8 +541,7 @@ void main() {
         attempts);
     await close(t, p);
   });
-  testWidgets(
-      'sound match retries keep first-answer scores across five questions',
+  testWidgets('sound match counts retries and rewards completed questions once',
       (t) async {
     final p =
         await mount(t, const SoundMatchScreen(difficulty: Difficulty.easy));
@@ -561,13 +572,13 @@ void main() {
       await advance(t, automatic: true);
     }
     await flushWrites(t);
-    expect(find.text('Score: 3 / 5'), findsOneWidget);
+    expect(find.text('Score: 5 / 5'), findsOneWidget);
     expect(find.text('Score: 5 / 7'), findsNothing);
-    expect(find.text('Activity Accuracy: 60%'), findsOneWidget);
+    expect(find.text('Activity Accuracy: 71%'), findsOneWidget);
     expect(
-        find.textContaining('Attempts: 5 • Wrong attempts: 2'), findsOneWidget);
-    expect(p.xp, 25);
-    expect(p.stars, 3);
+        find.textContaining('Attempts: 7 • Wrong attempts: 2'), findsOneWidget);
+    expect(p.xp, 35);
+    expect(p.stars, 5);
     await t.ensureVisible(find.text('Play Again'));
     await t.tap(find.text('Play Again'));
     await t.pumpAndSettle();
@@ -620,13 +631,7 @@ void main() {
     await waitForWidget(t, find.text('Open game'));
     await t.tap(find.text('Open game'));
     await t.pumpAndSettle();
-    final firstWord =
-        t.widget<AudioButton>(find.byType(AudioButton).first).phrase;
-    await choose(
-        t,
-        letterChoiceLabel(quizQuestionsForDifficulty(Difficulty.easy)
-            .firstWhere((q) => q.word == firstWord)
-            .correctLetter));
+    await choose(t, letterChoiceLabel(shownQuiz(t).correctLetter));
     await t.tap(find.byTooltip('Back'));
     await t.pumpAndSettle();
     expect(find.text('Leave this game?'), findsOneWidget);
@@ -641,8 +646,7 @@ void main() {
     expect(find.byType(PhonicsQuizScreen), findsNothing);
     await close(t, p);
   });
-  testWidgets(
-      'quiz retries a wrong answer and advances automatically after correct answers',
+  testWidgets('quiz submits once and advances after correct and wrong answers',
       (t) async {
     final p = await mount(
         t,
@@ -656,38 +660,28 @@ void main() {
     await t.pumpAndSettle();
     await t.runAsync(() => p.toggleVoice());
     await t.pumpAndSettle();
-    final questions = quizQuestionsForDifficulty(Difficulty.easy);
     final roundCount = GameSessionOrder.roundLength(Difficulty.easy);
     for (var i = 0; i < roundCount; i++) {
-      final word = t.widget<AudioButton>(find.byType(AudioButton).first).phrase;
-      final q = questions.firstWhere((q) => q.word == word);
+      final q = shownQuiz(t);
       expect(find.text('Next'), findsNothing);
-      if (i == 0) {
-        final wrong = q.options.firstWhere((x) => x != q.correctLetter);
-        final button = t.widget<GameAnswerButton>(find.byWidgetPredicate((w) =>
-            w is GameAnswerButton && w.label == letterChoiceLabel(wrong)));
-        button.onPressed!();
-        button.onPressed!();
-        await t.pump();
-        final session =
-            t.state(find.byType(PhonicsQuizScreen)) as GameSessionUi;
-        expect(session.scoredAttempts, 1);
-        expect(t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult,
-            isFalse);
-        await t.pump(const Duration(milliseconds: 800));
-        expect(
-            t.widget<AudioButton>(find.byType(AudioButton).first).phrase, word);
-        expect(t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult,
-            isNull);
-      }
-      await choose(t, letterChoiceLabel(q.correctLetter));
-      await advance(t, automatic: true);
+      await selectQuiz(
+          t,
+          i == 0
+              ? q.options.firstWhere((x) => x != q.correctLetter)
+              : q.correctLetter);
+      await submitQuiz(t);
+      await submitQuiz(t);
+      expect(
+          (t.state(find.byType(PhonicsQuizScreen)) as GameSessionUi)
+              .scoredAttempts,
+          i + 1);
+      await finishMutedQuizFeedback(t);
     }
     await flushWrites(t);
-    expect(find.text('Score: $roundCount / $roundCount'), findsOneWidget);
-    expect(find.textContaining('Attempts: ${roundCount + 1}'), findsOneWidget);
-    expect(p.xp, roundCount * 5 + 20);
-    expect(p.stars, roundCount);
+    expect(find.text('Score: ${roundCount - 1} / $roundCount'), findsOneWidget);
+    expect(find.textContaining('Attempts: $roundCount'), findsOneWidget);
+    expect(p.xp, (roundCount - 1) * 5 + 20);
+    expect(p.stars, roundCount - 1);
     final back = t.widget<OutlinedButton>(
         find.widgetWithText(OutlinedButton, 'Choose Next Game'));
     back.onPressed!();
@@ -712,64 +706,37 @@ void main() {
         final shownWord =
             t.widget<GameWordPicture>(find.byType(GameWordPicture).first).word;
         final round = rounds.firstWhere((w) => w.word == shownWord);
-        final hint = find.byKey(const ValueKey('word-hint'));
-        expect(t.widget<FilledButton>(hint).onPressed, isNotNull);
-        await t.ensureVisible(hint);
-        await t.tap(hint);
-        await t.pump();
-        expect(t.widget<FilledButton>(hint).onPressed, isNull);
-        expect(find.text('Starts with ${round.word[0]}'), findsOneWidget);
         final word = round.word.toUpperCase();
-        final letters = [
-          for (var i = 0; i < word.length; i++)
-            t
-                .widget<Text>(find.descendant(
-                    of: find.byKey(ValueKey('word-tile-$i')),
-                    matching: find.byType(Text)))
-                .data!
-        ];
-        expect(letters.join(), isNot(word));
+        final hint = find.byKey(const ValueKey('word-hint'));
+        expect(t.widget<OutlinedButton>(hint).onPressed, isNotNull);
+        expect(boardLetters(t, word.length).join(), isNot(word));
         if (roundIndex == 0) {
-          // A wrong arrangement must be editable without spending another hint.
-          for (var i = 0; i < word.length; i++) {
-            await t.ensureVisible(find.byKey(ValueKey('word-tile-$i')));
-            await t.tap(find.byKey(ValueKey('word-tile-$i')));
-            await t.pump();
-          }
+          final before = boardLetters(t, word.length);
+          await t.tap(find.byKey(const ValueKey('word-check')));
           await t.pump();
-          expect(find.text('Try again! Tap Erase or a letter to change it.'),
+          expect(find.text('Try again! Drag a letter into place.'),
               findsOneWidget);
-          expect(t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult,
-              isFalse);
-          for (var i = word.length - 1; i >= 0; i--) {
-            final erase = find.byKey(const ValueKey('word-erase'));
-            await t.ensureVisible(erase);
-            await t.tap(erase);
-            await t.pump();
-            expect(
-                t
-                    .widget<ElevatedButton>(
-                        find.byKey(ValueKey('word-tile-$i')))
-                    .onPressed,
-                isNotNull);
-          }
+          expect(boardLetters(t, word.length), before);
           expect(
               t
                   .widget<OutlinedButton>(
-                      find.byKey(const ValueKey('word-erase')))
+                      find.byKey(const ValueKey('word-check')))
                   .onPressed,
               isNull);
         }
-        final used = <int>{};
-        for (final letter in word.split('')) {
-          final index = List.generate(letters.length, (i) => i)
-              .firstWhere((i) => !used.contains(i) && letters[i] == letter);
-          used.add(index);
-          final tile = find.byKey(ValueKey('word-tile-$index'));
-          await t.ensureVisible(tile);
-          await t.tap(tile);
-          await t.pump();
-        }
+        await t.tap(hint);
+        await t.pump();
+        expect(t.widget<OutlinedButton>(hint).onPressed, isNull);
+        expect(find.text('Hint used: first letter fixed'), findsOneWidget);
+        expect(boardLetters(t, word.length).first, word[0]);
+        expect(
+            t
+                .widget<ElevatedButton>(
+                    find.byKey(const ValueKey('word-tile-0')))
+                .onPressed,
+            isNull);
+        await arrangeBoard(t, word);
+        await t.tap(find.byKey(const ValueKey('word-check')));
         await t.pump();
         expect(find.text('Correct!'), findsOneWidget);
         expect(find.text('Next'), findsNothing);
@@ -792,7 +759,7 @@ void main() {
       await t.pumpAndSettle();
       expect(
           t
-              .widget<FilledButton>(find.byKey(const ValueKey('word-hint')))
+              .widget<OutlinedButton>(find.byKey(const ValueKey('word-hint')))
               .onPressed,
           isNotNull);
       await close(t, p);

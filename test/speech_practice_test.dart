@@ -14,6 +14,7 @@ class FakeSpeech extends SpeechPracticeService {
   List<String> supportedLocales = ['en_US'];
   int requests = 0, starts = 0, stops = 0, settings = 0;
   void Function(String, bool)? result;
+  void Function(String)? status, error;
   @override
   Future<SpeechMicrophonePermission> requestPermission() async {
     requests++;
@@ -24,7 +25,14 @@ class FakeSpeech extends SpeechPracticeService {
   Future<bool> initialize(
           {required void Function(String) onStatus,
           required void Function(String) onError}) async =>
-      true;
+      _initialize(onStatus, onError);
+  bool _initialize(
+      void Function(String) onStatus, void Function(String) onError) {
+    status = onStatus;
+    error = onError;
+    return true;
+  }
+
   @override
   Future<List<String>> locales() async => supportedLocales;
   @override
@@ -83,6 +91,57 @@ void main() {
       await t.pump(const Duration(milliseconds: 20));
     }
   }
+
+  for (final ending in ['status', 'empty result', 'error']) {
+    testWidgets(
+        '$ending reports no speech without a wrong answer and can retry',
+        (t) async {
+      final speech = FakeSpeech();
+      final p = await mount(t, VoiceRecognitionScreen(speech: speech));
+      await start(t);
+      if (ending == 'status') {
+        speech.status!('done');
+      } else if (ending == 'error') {
+        speech.error!('error_no_match');
+      } else {
+        speech.result!('', true);
+      }
+      await t.pump();
+      expect(find.text('No speech detected. Try again.'), findsOneWidget);
+      expect(p.getWeeklySummary().speechAttempts, 0);
+      expect((p.xp, p.stars), (0, 0));
+      await start(t);
+      expect(speech.requests, 1);
+      expect(speech.starts, 2);
+      final word =
+          t.widget<SpeechPictureCard>(find.byType(SpeechPictureCard)).word;
+      speech.result!(word, true);
+      await t.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 20)));
+      await t.pump();
+      expect(find.text('No speech detected. Try again.'), findsNothing);
+      expect(p.getWeeklySummary().speechAttempts, 1);
+      await close(t, p);
+    });
+  }
+
+  testWidgets('a final recognized word arriving after done still counts once',
+      (t) async {
+    final speech = FakeSpeech();
+    final p = await mount(t, VoiceRecognitionScreen(speech: speech));
+    await start(t);
+    speech.status!('notListening');
+    final word =
+        t.widget<SpeechPictureCard>(find.byType(SpeechPictureCard)).word;
+    speech.result!(word, true);
+    speech.result!(word, true);
+    await t
+        .runAsync(() => Future<void>.delayed(const Duration(milliseconds: 20)));
+    await t.pump();
+    expect(find.text('No speech detected. Try again.'), findsNothing);
+    expect(p.getWeeklySummary().speechAttempts, 1);
+    await close(t, p);
+  });
 
   testWidgets('permission denial can be retried without reopening the game',
       (t) async {

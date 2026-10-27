@@ -288,37 +288,6 @@ class _HeardStitches extends CustomPainter {
   bool shouldRepaint(_HeardStitches oldDelegate) => false;
 }
 
-class SpeechTipCard extends StatelessWidget {
-  const SpeechTipCard({super.key, required this.tip, this.firstVisit = false});
-  final String tip;
-  final bool firstVisit;
-  @override
-  Widget build(BuildContext context) => ForestPanel(
-      key: const ValueKey('speech-tip-card'),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-      child: Row(children: [
-        const Icon(Icons.lightbulb_rounded, size: 35, color: Color(0xFFFFB900)),
-        const SizedBox(width: 10),
-        Expanded(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(tip,
-              style: const TextStyle(
-                  color: GameDesign.ink,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w800)),
-          if (firstVisit) ...[
-            const SizedBox(height: 4),
-            const Text(
-                'KidsPhonics uses the microphone only for Speak & Recognize.',
-                style: TextStyle(fontSize: 11, color: GameDesign.ink)),
-            const Text('Your voice is used to recognize the word you say.',
-                style: TextStyle(fontSize: 11, color: GameDesign.ink))
-          ],
-        ])),
-      ]));
-}
-
 class _HappyStar extends CustomPainter {
   const _HappyStar();
   @override

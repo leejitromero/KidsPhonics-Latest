@@ -10,6 +10,7 @@ import '../providers/app_provider.dart';
 import '../theme/kids_ui.dart';
 import '../widgets/day_cycle_background.dart';
 import '../widgets/home_character_visit.dart';
+import '../widgets/cloud_page_route.dart';
 import '../widgets/kids_navigation_bar.dart';
 import '../widgets/main_navigation_scope.dart';
 import '../widgets/main_navigation_shell.dart';
@@ -263,6 +264,10 @@ class _HomeScreenState extends State<HomeScreen>
     final request = ++_visitRequest;
     setState(() => _selected = category);
     if (category.hasHouse) {
+      if (!MediaQuery.disableAnimationsOf(context)) {
+        unawaited(
+            prepareCloudTransition(context, cloudTransitionImages(context)));
+      }
       // Destination skies warm in the cache while the student speaks and walks.
       for (final asset in DayCycleBackground.framesFor(
           category == HomeCategory.lessons ? 'lesson' : 'games')) {
@@ -290,7 +295,9 @@ class _HomeScreenState extends State<HomeScreen>
     if (!navigationContext.mounted) return;
     setState(() => _navigating = true);
     await LearnerNavigation.open(navigationContext, _destination(category),
-        fadeTransition: true);
+        fadeTransition: !category.hasHouse,
+        cloudTransition: category.hasHouse,
+        curtainDuration: HomeCharacterVisitTiming.curtain);
     if (!mounted) return;
     _cancelVisit();
     setState(() => _navigating = false);

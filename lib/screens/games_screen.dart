@@ -167,7 +167,7 @@ class _GamesScreenState extends State<GamesScreen> {
             (d) => '${memoryPairsForDifficulty(d).length} pairs'),
         _card(
             'Phonics Quiz',
-            'Listen and choose!',
+            'Listen, choose, and check!',
             Icons.quiz_outlined,
             (d) => PhonicsQuizScreen(difficulty: d),
             (d) =>
@@ -212,7 +212,7 @@ class _GamesScreenState extends State<GamesScreen> {
                 '${pictureRoundsFor(d).length.clamp(0, GameSessionOrder.roundLength(d))} words - ${pictureRoundsFor(d).first.options.length} pictures'),
         _card(
             'Rumbled Words',
-            'Arrange the letters!',
+            'Drag letters to make a word!',
             Icons.shuffle_rounded,
             (d) => RumbledWordsScreen(difficulty: d),
             (d) =>

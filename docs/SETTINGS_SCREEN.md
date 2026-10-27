@@ -18,9 +18,16 @@ scrollable above the navigation, including with large accessibility text.
   instructions and never changes onboarding completion or learning progress.
 - **Help & Tutorials:** existing Lessons/Games guides and microphone help. Device
   settings only opens when the user presses its button.
-- **About KidsPhonics:** installed Android version/build, local-save explanation,
-  credits and open-source licenses. Unavailable native version information has a
+- **About KidsPhonics:** public major/minor version (for example `Version 1.0`),
+  What is KidsPhonics?, Learning Features, local-save explanation, speech activity
+  information, Developers & Credits (JJCM), and open-source licenses. Unavailable native version information has a
   readable fallback rather than a hardcoded version.
+
+The About label hides the internal patch and build numbers. Android package
+version metadata stays intact for updates. Future APK deliveries should use a
+public filename such as `KidsPhonics-v1.0.apk`, and omit internal build numbers
+from the user-facing message. Use a separate dated output folder when needed to
+preserve previous deliveries with the same public filename.
 
 Game access, daily limits, PIN changes and progress reset remain in Parents.
 Leaving Parents for Settings ends the authenticated parent session. The Parents

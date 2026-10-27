@@ -11,12 +11,14 @@ class ParentPinForm extends StatefulWidget {
       {super.key,
       required this.auth,
       required this.onBack,
+      this.keyboardOpen = false,
       this.changePin = false,
       this.onSuccess});
   final ParentAuthService auth;
   final VoidCallback onBack;
   final VoidCallback? onSuccess;
   final bool changePin;
+  final bool keyboardOpen;
   @override
   State<ParentPinForm> createState() => _ParentPinFormState();
 }
@@ -149,94 +151,115 @@ class _ParentPinFormState extends State<ParentPinForm> {
 
   Widget _referenceForm({required bool setup, required bool locked}) =>
       LayoutBuilder(builder: (context, box) {
-        final compact =
-            box.maxHeight < 500 || MediaQuery.viewInsetsOf(context).bottom > 0;
+        final compact = box.maxHeight < 500 ||
+            widget.keyboardOpen ||
+            MediaQuery.viewInsetsOf(context).bottom > 0;
         return Center(
-            child: SingleChildScrollView(
+            child: Padding(
                 padding: EdgeInsets.all(compact ? 8 : 12),
                 child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 480),
                     child: ParentPinPanel(
-                        child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                          ParentPinHeading(setup: setup, compact: compact),
-                          const SizedBox(height: 16),
-                          _referenceField(
-                              setup ? 'Enter 4-digit PIN' : 'Enter Parent PIN',
-                              _pin,
-                              allowVisibility: setup),
-                          if (setup)
-                            _referenceField('Confirm PIN', _confirm,
-                                allowVisibility: true),
-                          if (locked)
-                            Text(
-                                'Too many attempts. Try again shortly. (${widget.auth.lockoutSeconds}s)',
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                    fontFamily: 'Nunito',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w800,
-                                    color: Color(0xFFB12C35))),
-                          if (_error != null && !locked)
-                            Text(_error!,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                    fontFamily: 'Nunito',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w800,
-                                    color: Color(0xFFB12C35))),
-                          const SizedBox(height: 12),
-                          Center(
-                              child: ConstrainedBox(
-                                  constraints:
-                                      const BoxConstraints(maxWidth: 310),
-                                  child: ParentPinPrimaryButton(
-                                      setup: setup,
-                                      label: setup ? 'Set PIN' : 'Unlock',
-                                      onPressed: withButtonSound(
-                                          locked || _busy ? null : _submit)))),
-                          const SizedBox(height: 12),
-                          Center(
-                              child: SizedBox(
-                                  width: 168,
-                                  child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(28),
-                                          gradient: const LinearGradient(
-                                              begin: Alignment.topCenter,
-                                              end: Alignment.bottomCenter,
-                                              colors: [Color(0xFFFFFFF8), Color(0xFFE1F5D5)]),
-                                          boxShadow: const [
-                                            BoxShadow(
-                                                color: Color(0x334D8D39),
-                                                blurRadius: 3,
-                                                offset: Offset(0, 3))
-                                          ]),
-                                      child: TextButton(
-                                          onPressed: withButtonSound(
-                                              _busy ? null : widget.onBack),
-                                          style: TextButton.styleFrom(
-                                              foregroundColor: parentPinInk,
-                                              minimumSize: const Size(48, 48),
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 12,
-                                                      vertical: 7),
-                                              side: const BorderSide(color: Color(0xFFA7DC8B), width: 2),
-                                              shape: const StadiumBorder()),
-                                          child: const Text('Back', style: TextStyle(fontFamily: 'Nunito', fontWeight: FontWeight.w900, fontSize: 20)))))),
-                        ])))));
+                        key: const ValueKey('parent-pin-frame'),
+                        compact: compact,
+                        child: SingleChildScrollView(
+                            key: const ValueKey('parent-pin-content-scroll'),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 2, vertical: 4),
+                            child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  ParentPinHeading(
+                                      setup: setup, compact: compact),
+                                  SizedBox(height: compact ? 8 : 16),
+                                  _referenceField(
+                                      setup
+                                          ? 'Enter 4-digit PIN'
+                                          : 'Enter Parent PIN',
+                                      _pin,
+                                      compact: compact,
+                                      allowVisibility: setup),
+                                  if (setup)
+                                    _referenceField('Confirm PIN', _confirm,
+                                        compact: compact,
+                                        allowVisibility: true),
+                                  if (locked)
+                                    Text(
+                                        'Too many attempts. Try again shortly. (${widget.auth.lockoutSeconds}s)',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w800,
+                                            color: Color(0xFFB12C35))),
+                                  if (_error != null && !locked)
+                                    Text(_error!,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w800,
+                                            color: Color(0xFFB12C35))),
+                                  SizedBox(height: compact ? 8 : 12),
+                                  Center(
+                                      child: ConstrainedBox(
+                                          constraints: const BoxConstraints(
+                                              maxWidth: 310),
+                                          child: ParentPinPrimaryButton(
+                                              compact: compact,
+                                              setup: setup,
+                                              label:
+                                                  setup ? 'Set PIN' : 'Unlock',
+                                              onPressed: withButtonSound(
+                                                  locked || _busy
+                                                      ? null
+                                                      : _submit)))),
+                                  SizedBox(height: compact ? 8 : 12),
+                                  Center(
+                                      child: SizedBox(
+                                          width: 168,
+                                          child: DecoratedBox(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(28),
+                                                  gradient:
+                                                      const LinearGradient(
+                                                          begin: Alignment.topCenter,
+                                                          end: Alignment.bottomCenter,
+                                                          colors: [
+                                                        Color(0xFFFFFFF8),
+                                                        Color(0xFFE1F5D5)
+                                                      ]),
+                                                  boxShadow: const [
+                                                    BoxShadow(
+                                                        color:
+                                                            Color(0x334D8D39),
+                                                        blurRadius: 3,
+                                                        offset: Offset(0, 3))
+                                                  ]),
+                                              child: TextButton(
+                                                  onPressed: withButtonSound(_busy
+                                                      ? null
+                                                      : widget.onBack),
+                                                  style: TextButton.styleFrom(
+                                                      foregroundColor:
+                                                          parentPinInk,
+                                                      minimumSize: const Size(48, 48),
+                                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                                                      side: const BorderSide(color: Color(0xFFA7DC8B), width: 2),
+                                                      shape: const StadiumBorder()),
+                                                  child: const Text('Back', style: TextStyle(fontFamily: 'Nunito', fontWeight: FontWeight.w900, fontSize: 20)))))),
+                                ]))))));
       });
 
   Widget _referenceField(String label, TextEditingController controller,
-      {required bool allowVisibility}) {
+      {required bool allowVisibility, bool compact = false}) {
     final enabled = !_busy && widget.auth.lockoutSeconds == 0;
     final visible = allowVisibility && _visiblePins.contains(controller);
     return ParentPinFieldPanel(
         label: label,
+        compact: compact,
         child: Semantics(
             label: label,
             child: TextField(
@@ -252,9 +275,9 @@ class _ParentPinFormState extends State<ParentPinForm> {
                 maxLength: 4,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 cursorColor: const Color(0xFF6FC34F),
-                style: const TextStyle(
+                style: TextStyle(
                     fontFamily: 'Nunito',
-                    fontSize: 20,
+                    fontSize: compact ? 18 : 20,
                     height: 1.2,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 7,
@@ -263,8 +286,9 @@ class _ParentPinFormState extends State<ParentPinForm> {
                     counterText: '',
                     filled: true,
                     fillColor: const Color(0xFFFEFFFB),
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 13),
+                    contentPadding: EdgeInsets.symmetric(
+                        horizontal: compact ? 14 : 16,
+                        vertical: compact ? 10 : 13),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(28),
                         borderSide: const BorderSide(

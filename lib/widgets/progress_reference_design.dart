@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/progress_badge.dart';
 import 'button_sound.dart';
 import 'progress_design.dart';
+import 'progress_rewards_frames.dart';
 
 class ProgressSurface extends StatelessWidget {
   const ProgressSurface(
@@ -137,7 +138,7 @@ class ProgressSkillRow extends StatelessWidget {
   final VoidCallback? onPressed;
   @override
   Widget build(BuildContext context) => Material(
-      color: Colors.white.withValues(alpha: .85),
+      color: Colors.transparent,
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
           onTap: withButtonSound(onPressed),
@@ -171,6 +172,7 @@ class ProgressSkillRow extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                     child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                       Text(title,
@@ -183,13 +185,17 @@ class ProgressSkillRow extends StatelessWidget {
                 const SizedBox(width: 8),
                 SizedBox(
                     width: 62,
-                    child: Column(children: [
-                      Text('$current / $total',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w900)),
-                      Text(unit,
-                          style: const TextStyle(
-                              fontSize: 10, color: Color(0xFF645583))),
+                    child: Column(mainAxisSize: MainAxisSize.min, children: [
+                      FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text('$current / $total',
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w900))),
+                      FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(unit,
+                              style: const TextStyle(
+                                  fontSize: 10, color: Color(0xFF645583)))),
                     ])),
                 const SizedBox(width: 4),
                 Icon(Icons.chevron_right_rounded, color: color, size: 18),
@@ -271,51 +277,54 @@ class ProgressBadgeCard extends StatelessWidget {
       Icons.local_fire_department_rounded
     ];
     final color = colors[index % colors.length];
-    final medal = SizedBox(
-        width: 62,
-        height: 74,
-        child: Stack(alignment: Alignment.center, children: [
-          Positioned.fill(child: CustomPaint(painter: _BadgeShield(color))),
-          if (index < 5 && index != 1)
-            Padding(
-                padding: const EdgeInsets.all(10),
-                child: Image.asset(
-                    [
-                      'assets/images/lesson_logos/letter_recognition.webp',
-                      'assets/images/letters/a.webp',
-                      'assets/images/lessons_menu/cvc_words.webp',
-                      'assets/images/lessons_menu/blending_sounds.webp',
-                      'assets/images/home_banner/fire.png',
-                    ][index],
-                    fit: BoxFit.contain,
-                    excludeFromSemantics: true))
-          else if (index == 1)
-            const Text('A E I\nO U',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    height: 1.05,
-                    fontWeight: FontWeight.w900))
-          else
-            Icon(icons[index % icons.length],
-                color: Colors.white,
-                size: 34,
-                shadows: const [
-                  Shadow(color: Color(0x5556337A), offset: Offset(0, 2))
-                ]),
-          const Positioned(
-              top: 0,
-              child:
-                  Icon(Icons.star_rounded, color: Color(0xFFFFCE38), size: 19)),
-        ]));
+    final medal = Center(
+        child: SizedBox(
+            width: 52,
+            height: 62,
+            child: Stack(alignment: Alignment.center, children: [
+              if (index < 5 && index != 1)
+                Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: Image.asset(
+                        [
+                          'assets/images/lesson_logos/letter_recognition.webp',
+                          'assets/images/letters/a.webp',
+                          'assets/images/lessons_menu/cvc_words.webp',
+                          'assets/images/lessons_menu/blending_sounds.webp',
+                          'assets/images/home_banner/fire.png',
+                        ][index],
+                        fit: BoxFit.contain,
+                        excludeFromSemantics: true))
+              else if (index == 1)
+                const FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text('A E I\nO U',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: progressPurple,
+                            fontSize: 14,
+                            height: 1.05,
+                            fontWeight: FontWeight.w900)))
+              else
+                Icon(icons[index % icons.length],
+                    color: color,
+                    size: 34,
+                    shadows: const [
+                      Shadow(color: Color(0x5556337A), offset: Offset(0, 2))
+                    ]),
+            ])));
     final details =
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text(badge.title,
-          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900)),
+          style: const TextStyle(
+              fontSize: 17,
+              height: 1.15,
+              fontWeight: FontWeight.w900,
+              color: progressInk)),
       const SizedBox(height: 4),
       Text(badge.description,
-          style: const TextStyle(fontSize: 12, color: Color(0xFF685583))),
+          style: const TextStyle(
+              fontSize: 12, height: 1.3, color: Color(0xFF685583))),
       const SizedBox(height: 9),
       Row(children: [
         Expanded(
@@ -338,9 +347,30 @@ class ProgressBadgeCard extends StatelessWidget {
                 key: ValueKey('progress-badge-${badge.id}'),
                 onTap: withButtonSound(onPressed),
                 borderRadius: BorderRadius.circular(24),
-                child: ProgressSurface(child: LayoutBuilder(builder: (_, box) {
-                  final largeText =
-                      MediaQuery.textScalerOf(context).scale(16) > 22;
+                child: LayoutBuilder(builder: (context, box) {
+                  final width = box.maxWidth * .61;
+                  final contentHeight = rewardTextHeight(
+                          context,
+                          badge.title,
+                          const TextStyle(
+                              fontSize: 17,
+                              height: 1.15,
+                              fontWeight: FontWeight.w900),
+                          width) +
+                      4 +
+                      rewardTextHeight(context, badge.description,
+                          const TextStyle(fontSize: 12, height: 1.3), width) +
+                      9 +
+                      math.max(
+                          8,
+                          rewardTextHeight(
+                              context,
+                              '${badge.count} / ${badge.target}',
+                              const TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.w900),
+                              width));
+                  final height = math.max(
+                      box.maxWidth * 578 / 2060, (contentHeight + 2) / .68);
                   final lock = Icon(
                       badge.earned
                           ? Icons.verified_rounded
@@ -349,62 +379,38 @@ class ProgressBadgeCard extends StatelessWidget {
                           ? progressGreen
                           : const Color(0xFF9081B6),
                       size: 23);
-                  return largeText
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                              Row(children: [medal, const Spacer(), lock]),
-                              details
-                            ])
-                      : Row(children: [
-                          medal,
-                          const SizedBox(width: 12),
-                          Expanded(child: details),
-                          const SizedBox(width: 8),
-                          lock,
-                          const Icon(Icons.chevron_right_rounded,
-                              size: 20, color: progressPurple)
-                        ]);
-                })))));
+                  return SizedBox(
+                      height: height,
+                      child: Stack(fit: StackFit.expand, children: [
+                        const ProgressRewardArtwork(
+                            name: 'frame_rewards_contain'),
+                        Positioned(
+                            left: box.maxWidth * .085,
+                            top: height * .24,
+                            width: box.maxWidth * .14,
+                            height: height * .48,
+                            child: medal),
+                        Positioned(
+                            key: ValueKey('rewards-card-content-${badge.id}'),
+                            left: box.maxWidth * .275,
+                            top: height * .16,
+                            width: width,
+                            height: height * .68,
+                            child: Center(child: details)),
+                        Positioned(
+                            left: box.maxWidth * .90,
+                            top: height * .28,
+                            width: box.maxWidth * .06,
+                            height: height * .44,
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  FittedBox(child: lock),
+                                  const FittedBox(
+                                      child: Icon(Icons.chevron_right_rounded,
+                                          size: 20, color: progressPurple))
+                                ])),
+                      ]));
+                }))));
   }
-}
-
-class _BadgeShield extends CustomPainter {
-  const _BadgeShield(this.color);
-  final Color color;
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final path = Path();
-    for (var i = 0; i < 6; i++) {
-      final angle = -math.pi / 2 + i * math.pi / 3;
-      final point = center +
-          Offset(math.cos(angle) * size.width * .53,
-              math.sin(angle) * size.height * .47);
-      if (i == 0) {
-        path.moveTo(point.dx, point.dy);
-      } else {
-        path.lineTo(point.dx, point.dy);
-      }
-    }
-    path.close();
-    canvas.drawShadow(path, color.withValues(alpha: .5), 3, false);
-    canvas.drawPath(
-        path,
-        Paint()
-          ..shader = LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color.lerp(color, Colors.white, .45)!, color])
-              .createShader(Offset.zero & size));
-    canvas.drawPath(
-        path,
-        Paint()
-          ..color = Colors.white
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 3);
-  }
-
-  @override
-  bool shouldRepaint(_BadgeShield oldDelegate) => oldDelegate.color != color;
 }

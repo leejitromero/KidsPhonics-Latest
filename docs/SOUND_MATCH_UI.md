@@ -4,7 +4,7 @@ Sound Match uses a transparent magical sound orb instead of a word illustration.
 
 Every difficulty shows three distinct choices, including the correct letter, in blue, orange and green. Difficulty still selects the session's content and reward multiplier. A mistake briefly shakes the selected choice and displays Try Again, allowing the learner to hear and answer the same sound again. Correct choices bounce and light the orb with golden stars before advancing.
 
-Only the first answer in each round contributes to the existing score, daily accuracy and rewards. Guided corrections do not add attempts, XP or stars. This keeps saved results comparable and prevents repeated taps from duplicating rewards.
+Each accepted choice, including a retry, contributes to attempts and daily accuracy, consistently with the other practice games. A completed question contributes one correct item and earns its existing XP and star once, even after a correction. Repeated taps during feedback and on previously selected choices remain blocked. The result shows completed items separately from accuracy across all attempts; existing saved history is preserved.
 
 Regular phones show the orb, audio control and all three large choices without scrolling. Short screens, landscape and larger text can scroll while retaining readable controls and touch targets.
 

@@ -1,0 +1,23 @@
+{
+  "name": "candidate",
+  "path": "C:\\Users\\leeji\\KidsPhonicsProject\\newphonics\\Kidsphonics-latest\\output\\release-candidates\\20261026-qa-corrected-1792970978643\\KidsPhonics-1.0.37+38-QA-corrected-universal-CANDIDATE.apk",
+  "bytes": 515866438,
+  "sha256": "e9918d69415208828360468e4135d90164fb54fa9e25306fde804576323acb96",
+  "package": "com.example.kidsphonics",
+  "versionCode": "38",
+  "versionName": "1.0.37",
+  "minSdk": "24",
+  "targetSdk": "36",
+  "nativeCode": "native-code: 'arm64-v8a' 'armeabi-v7a' 'x86_64'",
+  "signerCertificateSHA256": "e51915ff388c75d5cb980d40ecb354a5379806fee2b3dc67a36ab4e701774f69",
+  "signatureVerified": true,
+  "badgingVerified": true,
+  "isolatedBuildArtifact": "C:\\Users\\leeji\\AppData\\Local\\Temp\\kidsphonics-corrected-release-1792970978643\\working-copy\\build\\app\\outputs\\flutter-apk\\app-release.apk",
+  "persistentDirectory": "C:/Users/leeji/KidsPhonicsProject/newphonics/Kidsphonics-latest/output/release-candidates/20261026-qa-corrected-1792970978643",
+  "sizeDecimalMB": 515.866438,
+  "sizeMiB": 491.96857261657715,
+  "candidate": true,
+  "installed": false,
+  "published": false,
+  "copiedUtc": "2026-10-25T23:42:22.529Z"
+}

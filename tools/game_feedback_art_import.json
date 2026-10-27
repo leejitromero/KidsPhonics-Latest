@@ -1,0 +1,14 @@
+﻿[
+    {
+        "original":  "C:\\Users\\leeji\\KidsPhonicsProject\\screen animations\\correct frame.png",
+        "path":  "assets/images/new_ui/correct_frame.png",
+        "sha256":  "981DD18872F3243574385E8FA2D16F98DF3AFAD8EB74CB87A083DFD43DDC247F",
+        "bytes":  952389
+    },
+    {
+        "original":  "C:\\Users\\leeji\\KidsPhonicsProject\\screen animations\\nextbutton.png",
+        "path":  "assets/images/new_ui/missing_vowel_next.png",
+        "sha256":  "C50BE6842241430B14CCDA6C9A1D9059C1280BB76DA27DF27F0FF3BCE28DBF8A",
+        "bytes":  1300355
+    }
+]

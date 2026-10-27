@@ -1,0 +1,32 @@
+﻿[
+    {
+        "name":  "original",
+        "path":  "C:/Users/leeji/KidsPhonicsProject/newphonics/Kidsphonics-latest/build/app/outputs/flutter-apk/app-release.apk",
+        "bytes":  514566052,
+        "sha256":  "c547c630a238bdffad758eab9fb50729858b55290008e342bcdf09aee4aa24bc",
+        "package":  "com.example.kidsphonics",
+        "versionCode":  "38",
+        "versionName":  "1.0.37",
+        "minSdk":  "24",
+        "targetSdk":  "36",
+        "nativeCode":  "native-code: \u0027arm64-v8a\u0027 \u0027armeabi-v7a\u0027 \u0027x86_64\u0027",
+        "signerCertificateSHA256":  "e51915ff388c75d5cb980d40ecb354a5379806fee2b3dc67a36ab4e701774f69",
+        "signatureVerified":  true,
+        "badgingVerified":  true
+    },
+    {
+        "name":  "candidate",
+        "path":  "C:\\Users\\leeji\\AppData\\Local\\Temp\\kidsphonics-corrected-release-1792970978643\\working-copy\\build\\app\\outputs\\flutter-apk\\app-release.apk",
+        "bytes":  515866438,
+        "sha256":  "e9918d69415208828360468e4135d90164fb54fa9e25306fde804576323acb96",
+        "package":  "com.example.kidsphonics",
+        "versionCode":  "38",
+        "versionName":  "1.0.37",
+        "minSdk":  "24",
+        "targetSdk":  "36",
+        "nativeCode":  "native-code: \u0027arm64-v8a\u0027 \u0027armeabi-v7a\u0027 \u0027x86_64\u0027",
+        "signerCertificateSHA256":  "e51915ff388c75d5cb980d40ecb354a5379806fee2b3dc67a36ab4e701774f69",
+        "signatureVerified":  true,
+        "badgingVerified":  true
+    }
+]

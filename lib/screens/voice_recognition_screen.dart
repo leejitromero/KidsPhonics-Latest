@@ -225,11 +225,28 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
         _isAvailable = await _speech.initialize(
           onStatus: (status) {
             if (mounted && (status == 'done' || status == 'notListening')) {
-              setState(() => _isListening = false);
+              final noSpeech = _isListening &&
+                  !_evaluatedThisListen &&
+                  _recognized.trim().isEmpty;
+              setState(() {
+                _isListening = false;
+                if (noSpeech) _speechMessage = 'No speech detected. Try again.';
+              });
             }
           },
           onError: (error) {
             if (!mounted || !_canListen) return;
+            if (error == 'error_no_match' || error == 'error_speech_timeout') {
+              if (!_evaluatedThisListen) {
+                _listenGeneration++;
+                setState(() {
+                  _isListening = false;
+                  _requestingPermission = false;
+                  _speechMessage = 'No speech detected. Try again.';
+                });
+              }
+              return;
+            }
             _listenGeneration++;
             setState(() {
               _isListening = false;
@@ -317,8 +334,12 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
   }
 
   void _evaluate(String recognized) async {
-    if (!_canListen || _evaluatedThisListen || recognized.trim().isEmpty) {
-      if (mounted) setState(() => _isListening = false);
+    if (!_canListen || _evaluatedThisListen) return;
+    if (recognized.trim().isEmpty) {
+      setState(() {
+        _isListening = false;
+        _speechMessage = 'No speech detected. Try again.';
+      });
       return;
     }
     _evaluatedThisListen = true;
@@ -331,6 +352,7 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
     setState(() {
       _isCorrect = isCorrect;
       _isListening = false;
+      _speechMessage = null;
     });
 
     scoredAttempts++;
@@ -400,13 +422,6 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
   @override
   int get totalGameItems => _words.length;
 
-  String get _tip => switch (widget.difficulty) {
-        Difficulty.easy => 'Listen to the spelling, then say the word clearly.',
-        Difficulty.medium => 'Take your time. Listen, then say the whole word.',
-        Difficulty.hard =>
-          'Great listening! This is a hard level.\nTake your time and say the word clearly.',
-      };
-
   @override
   Widget build(BuildContext context) {
     final voiceEnabled = context.watch<AppProvider>().voiceEnabled;
@@ -435,10 +450,12 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
           (scoredAttempts > 0 || _isListening || _isSpelling) && !resultOpen,
       onLeave: _interrupt,
       child: LayoutBuilder(builder: (_, box) {
-        final cardHeight =
-            (box.maxHeight * (_isInitialized ? .46 : .39)).clamp(180.0, 400.0);
+        final cardHeight = (box.maxHeight * .40).clamp(160.0, 280.0);
         return SingleChildScrollView(
-          clipBehavior: Clip.none,
+          key: const ValueKey('speech-content-scroll'),
+          // Keep scrolling pictures and controls below the instruction bubble.
+          clipBehavior: Clip.hardEdge,
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             SpeechPictureCard(
@@ -447,7 +464,7 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
                 spelling: _isSpelling,
                 activeLetter: _spellingIndex,
                 readingWord: _readingWord),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
             Center(
                 child: FractionallySizedBox(
                     widthFactor: .72,
@@ -462,26 +479,29 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
                                 !resultOpen
                             ? _hearWord
                             : null))),
-            SizedBox(
-                height: 24,
-                child: Center(
-                    child: !voiceEnabled || _isSpelling
-                        ? Row(mainAxisSize: MainAxisSize.min, children: [
-                            const Icon(Icons.info_rounded,
-                                size: 15, color: Color(0xFF806A92)),
-                            const SizedBox(width: 6),
-                            Text(
+            if (!voiceEnabled || _isSpelling)
+              Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.info_rounded,
+                            size: 15, color: Color(0xFF806A92)),
+                        const SizedBox(width: 6),
+                        Flexible(
+                            child: Text(
                                 !voiceEnabled
                                     ? 'Audio is turned off.'
                                     : _readingWord
                                         ? 'Listen to the whole word.'
                                         : 'Listen to the spelling.',
+                                textAlign: TextAlign.center,
                                 style: const TextStyle(
                                     fontSize: 12,
                                     color: Color(0xFF806A92),
-                                    fontWeight: FontWeight.w700)),
-                          ])
-                        : const SizedBox.shrink())),
+                                    fontWeight: FontWeight.w700))),
+                      ])),
+            if (voiceEnabled && !_isSpelling) const SizedBox(height: 8),
             SpeechMicrophoneButton(
                 listening: _isListening,
                 onPressed: _requestingPermission ||
@@ -525,21 +545,19 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
                           label: const Text('Open Device Settings')),
                   ])),
             ],
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             SpeechHeardCard(heard: _recognized, correct: _isCorrect),
             if (_isCorrect != null) ...[
               const SizedBox(height: 8),
               Center(
                   child: ForestAudioButton(
+                      key: const ValueKey('speech-next-word'),
                       label: 'Next Word',
                       icon: Icons.arrow_forward_rounded,
                       onPressed: _isListening || _isSpelling || resultOpen
                           ? null
                           : _nextWord)),
             ],
-            const SizedBox(height: 12),
-            SpeechTipCard(tip: _tip, firstVisit: !_isInitialized),
-            const SizedBox(height: 4),
           ]),
         );
       }),

@@ -15,7 +15,22 @@ Follow-up completed 2026-10-09: installed the separately supplied Violin recordi
 
 The game catalog already resolves each word to one `assets/audio/game_words/<slug>.mp3` recording through `PhonicsAudioService`. Replacing those files updates all game playback of those words, including spelling/replay flows, without maintaining separate audio copies per game. Rumbled Words keeps its existing word-length difficulty rules while using the same recordings.
 
+Spelling follow-up (2026-10-25): Word Builder and Rumbled Words use the supplied letter-name recordings when selecting spelling tiles. Rumbled Words also spells the completed word with letter names, then plays its supplied whole-word recording before advancing. This avoids treating introductory single-letter phonemes as the sounds of vowel groups or silent letters. Sound Match, Phonics Quiz, and Missing Vowel retain their sound-focused playback. Manual word controls stop on backgrounding, route covers, time-limit covers, muting, or blocked game access and permit explicit replay after returning. The restored `win.mp3` and `flip.mp3` are explicitly included in the asset bundle.
+
 The ZIP contains whole-word recordings. Existing correct/wrong effects, letter-name and letter-sound recordings retain their roles; no new generic congratulatory/error phrases were supplied. The separate CVC/Blending narration set remains intact.
+
+Rumbled Words follow-up (2026-10-27): letters stay on one horizontal board. Tap a
+letter to lift it with a gentle floating animation, then drag it into position.
+Nearby letters slide aside and keep their relative order (CTA -> CAT). Dropping
+outside the board cancels the move; tapping the selected letter cancels selection.
+Check Word submits the arrangement; dragging and Hint do not count as answers. A failed check
+keeps the board editable and cannot be submitted again until its letters change.
+The one-use Hint moves the first letter into place and locks that position.
+Correct checks retain the existing rewards, letter-name highlights, whole-word
+recording, automatic progression, and interruption recovery. Duplicate letters
+remain separate positions. The caption and How to Play describe drag insertion. The
+old `rumbled_word.mp3` intro remains unchanged in the bundle but is not played
+by this screen, because it describes the former tap-to-fill interaction.
 
 ## Mapping and pictures
 

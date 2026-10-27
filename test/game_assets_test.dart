@@ -45,12 +45,20 @@ void main() {
       expect(words, isNot(contains('UMBRELLA')));
       for (final round in [
         ...soundRoundsForDifficulty(d),
-        ...quizQuestionsForDifficulty(d)
       ]) {
         expect(words, contains(round.word.toUpperCase()));
         expect(
             round.options.where((o) => o == round.correctLetter), hasLength(1));
         expect(round.options.toSet(), hasLength(d.index + 3));
+      }
+      for (final question in quizQuestionsForDifficulty(d)) {
+        expect(question.word, matches(RegExp(r'^[A-Z]{3}$')));
+        expect(question.options.toSet(), hasLength(3));
+        expect(File(question.pictureAsset!).existsSync(), isTrue);
+        expect(
+            File('assets/${PhonicsAudioService.assetForPhrase(question.wordAudioKey)}')
+                .existsSync(),
+            isTrue);
       }
       for (final p in pictureRoundsFor(d)) {
         for (final option in p.options) {

@@ -1,0 +1,56 @@
+{
+  "version": "1.0.35+36",
+  "verifiedUtc": "2026-10-24T00:06:28.727686+00:00",
+  "APK": "output/apk/phonics_jit_3.apk",
+  "capturedSourceInputs": 1100,
+  "sourceInputsUnchanged": true,
+  "registeredAssetsVerified": 886,
+  "bundledAssetsMatchSource": 886,
+  "suppliedGameRecordingsVerified": 11,
+  "suppliedLessonRecordingsVerified": 10,
+  "retiredIntroRecordingsAbsent": 5,
+  "ApkBytes": 553799167,
+  "ApkSHA256": "EFEA193B5FFDF1CAEA1D8376F18ED6565DE02FBE5EFBB4B69E2F6EAB404C8489",
+  "physicalDeviceTested": false,
+  "signatureVerified": true,
+  "updateCertificateMatchesPreviousRelease": true,
+  "signerCertificateSHA256": "e51915ff388c75d5cb980d40ecb354a5379806fee2b3dc67a36ab4e701774f69",
+  "packageMetadata": "package: name='com.example.kidsphonics' versionCode='36' versionName='1.0.35' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+  "androidVersionName": "1.0.35",
+  "androidVersionCode": 36,
+  "androidArchitectures": [
+    "armeabi-v7a",
+    "arm64-v8a",
+    "x86_64"
+  ],
+  "alphabetPicturesAssetsVerified": {
+    "pictures": 78,
+    "sentences": 26,
+    "instructions": 2
+  },
+  "suppliedUIArtworkVerified": [
+    "assets/images/new_ui/correct_frame.png",
+    "assets/images/new_ui/missing_vowel_next.png",
+    "assets/images/progress_collection/phonics_skills_frame.png",
+    "assets/images/progress_collection/frame_streak.png",
+    "assets/images/progress_collection/frame_summary.png",
+    "assets/images/progress_collection/frame_alphabet_milstone.png",
+    "assets/images/progress_collection/frame_mybadge.png",
+    "assets/images/progress_collection/frame_rewards_contain.png",
+    "assets/images/progress_collection/frame_mytreasure.png"
+  ],
+  "publicVersion": "1.0",
+  "updates": [
+    "Approved About KidsPhonics text and JJCM credits with a public version label",
+    "Supplied My Streak and My Learning Summary frames",
+    "Supplied My Badges, Alphabet Milestones, shared badge card and My Treasure frames",
+    "Previously delivered lessons, game and UI improvements"
+  ],
+  "validationLogs": [
+    "build/about_jjcm_content_checks.log",
+    "build/progress_journey_frames_checks.log",
+    "build/rewards_frames_final_checks.log",
+    "build/rewards_frames_analysis.log",
+    "build/rewards_screen_preview.log"
+  ]
+}

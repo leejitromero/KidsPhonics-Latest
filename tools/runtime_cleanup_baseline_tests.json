@@ -1,0 +1,102 @@
+{
+  "passed": 940,
+  "failed": 24,
+  "failures": [
+    {
+      "file": "test/animated_screen_art_test.dart",
+      "test": "all current sky frames are bundled at their original dimensions"
+    },
+    {
+      "file": "test/animated_screen_art_test.dart",
+      "test": "Sky plays at the slower pace and respects motion settings"
+    },
+    {
+      "file": "test/asset_usage_audit_test.dart",
+      "test": "reviewed cleanup files are absent and no unused media remain"
+    },
+    {
+      "file": "test/asset_usage_audit_test.dart",
+      "test": "dynamic lesson, game, mascot and audio assets exist and remain bundled"
+    },
+    {
+      "file": "test/home_classroom_reference_test.dart",
+      "test": "supplied composition stays unchanged and exports have 8K dimensions"
+    },
+    {
+      "file": "test/home_mascot_menu_test.dart",
+      "test": "school positions and tap targets fit Size(320.0, 568.0)"
+    },
+    {
+      "file": "test/home_mascot_menu_test.dart",
+      "test": "school positions and tap targets fit Size(768.0, 1024.0)"
+    },
+    {
+      "file": "test/home_mascot_menu_test.dart",
+      "test": "school positions and tap targets fit Size(568.0, 320.0)"
+    },
+    {
+      "file": "test/home_redesign_test.dart",
+      "test": "recommendation follows saved Quick Checks without replaying intro"
+    },
+    {
+      "file": "test/home_redesign_test.dart",
+      "test": "all mastered letters show review while retaining saved rewards"
+    },
+    {
+      "file": "test/learner_ui_test.dart",
+      "test": "rumbled Difficulty.easy hints reset and words award once"
+    },
+    {
+      "file": "test/learner_ui_test.dart",
+      "test": "rumbled Difficulty.medium hints reset and words award once"
+    },
+    {
+      "file": "test/learner_ui_test.dart",
+      "test": "rumbled Difficulty.hard hints reset and words award once"
+    },
+    {
+      "file": "test/lesson_assets_test.dart",
+      "test": "every lesson has lossless WebP frames and distinct local audio tracks"
+    },
+    {
+      "file": "test/letter_mastery_check_test.dart",
+      "test": "A-Z content has real word/sound/image assets, valid blanks and unique options"
+    },
+    {
+      "file": "test/new_ui_layout_test.dart",
+      "test": "flappy_letters new design fits Size(320.0, 568.0) without large headers"
+    },
+    {
+      "file": "test/new_ui_layout_test.dart",
+      "test": "flappy_letters new design fits Size(390.0, 844.0) without large headers"
+    },
+    {
+      "file": "test/new_ui_layout_test.dart",
+      "test": "flappy_letters new design fits Size(800.0, 1024.0) without large headers"
+    },
+    {
+      "file": "test/settings_screen_test.dart",
+      "test": "Help reference and both guides fit Size(320.0, 568.0) at text 2.5"
+    },
+    {
+      "file": "test/stabilization_test.dart",
+      "test": "all declared asset directories exist and no declaration is duplicated"
+    },
+    {
+      "file": "test/updated_scene_test.dart",
+      "test": "courtyard and category pages fit 320.0"
+    },
+    {
+      "file": "test/updated_scene_test.dart",
+      "test": "courtyard and category pages fit 390.0"
+    },
+    {
+      "file": "test/updated_scene_test.dart",
+      "test": "courtyard and category pages fit 430.0"
+    },
+    {
+      "file": "test/updated_scene_test.dart",
+      "test": "courtyard and category pages fit 768.0"
+    }
+  ]
+}

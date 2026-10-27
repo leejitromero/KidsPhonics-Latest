@@ -23,6 +23,7 @@ foreach ($inputFile in $snapshot) {
 }
 $apk = [IO.Compression.ZipFile]::OpenRead($apkFile)
 $verified = 0
+$reactivatedLegacyAssets = @()
 try {
     $required = (Get-Content -LiteralPath (Join-Path $PSScriptRoot 'asset_usage_audit.json') -Raw | ConvertFrom-Json).required
     foreach ($path in $required) {
@@ -42,6 +43,13 @@ try {
     foreach ($manifest in @('removed_legacy_assets.json', 'removed_unused_assets.json')) {
         foreach ($item in (Get-Content -LiteralPath (Join-Path $PSScriptRoot $manifest) -Raw | ConvertFrom-Json)) {
             $path = $item.path.Replace('\', '/')
+            # Later supplied lesson artwork can reuse a previously retired path.
+            # Only accept active assets whose bytes passed source/APK checks above.
+            if ($manifest -eq 'removed_legacy_assets.json' -and
+                $required -contains $path -and $sourceHashes.ContainsKey($path)) {
+                $reactivatedLegacyAssets += $path
+                continue
+            }
             if ($null -ne $apk.GetEntry("assets/flutter_assets/$path")) { throw "Retired asset still bundled: $path" }
         }
     }
@@ -65,6 +73,7 @@ $report = [ordered]@{
     capturedInputsUnchangedAfterBuild = $true
     RequiredAssetsVerified = $required.Count
     AllBundledSourceAssetsVerified = $verified
+    ReactivatedLegacyAssetsVerified = $reactivatedLegacyAssets
     homeRecordingCount = @(Get-ChildItem -LiteralPath (Join-Path $projectRoot 'assets/audio/home_intro') -Filter '*.mp3' -File).Count
     dialogueArtworkCount = 4
     ApkBytes = (Get-Item -LiteralPath $apkFile).Length

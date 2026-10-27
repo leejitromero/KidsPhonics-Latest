@@ -6,8 +6,9 @@ const parentPinAccessArt = 'assets/images/parent_access/parent_access_lock.png';
 const parentPinSetupArt = 'assets/images/parent_access/parent_setup_lock.png';
 
 class ParentPinPanel extends StatelessWidget {
-  const ParentPinPanel({super.key, required this.child});
+  const ParentPinPanel({super.key, required this.child, this.compact = false});
   final Widget child;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -38,7 +39,7 @@ class ParentPinPanel extends StatelessWidget {
           child: CustomPaint(
               painter: const _PinClouds(),
               child:
-                  Padding(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18), child: child))));
+                  Padding(padding: EdgeInsets.symmetric(horizontal: compact ? 12 : 16, vertical: compact ? 12 : 18), child: child))));
 }
 
 class ParentPinHeading extends StatelessWidget {
@@ -48,50 +49,58 @@ class ParentPinHeading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = setup ? 'Set Up Parent PIN' : 'Parent Access';
-    const style = TextStyle(
+    final style = TextStyle(
         fontFamily: 'Nunito',
-        fontSize: 32,
+        fontSize: compact ? 26 : 32,
         height: 1.15,
         fontWeight: FontWeight.w900);
+    final illustration = SizedBox(
+        height: compact
+            ? 44
+            : setup
+                ? 112
+                : 142,
+        child: Image.asset(setup ? parentPinSetupArt : parentPinAccessArt,
+            key: ValueKey(
+                setup ? 'parent-pin-setup-art' : 'parent-pin-access-art'),
+            fit: BoxFit.contain,
+            cacheWidth: 480,
+            excludeFromSemantics: true));
+    final heading = FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(title,
+            textAlign: TextAlign.center,
+            style: style.copyWith(color: parentPinInk, shadows: const [
+              Shadow(color: Colors.white, offset: Offset(-3, 0)),
+              Shadow(color: Colors.white, offset: Offset(3, 0)),
+              Shadow(color: Colors.white, offset: Offset(0, -3)),
+              Shadow(color: Colors.white, offset: Offset(0, 3)),
+              Shadow(color: Colors.white, offset: Offset(-2, -2)),
+              Shadow(color: Colors.white, offset: Offset(2, -2)),
+              Shadow(color: Colors.white, offset: Offset(-2, 2)),
+              Shadow(color: Colors.white, offset: Offset(2, 2)),
+              Shadow(
+                  color: Color(0x554B943A), blurRadius: 2, offset: Offset(0, 3))
+            ])));
     return Column(children: [
-      SizedBox(
-          height: compact
-              ? 76
-              : setup
-                  ? 112
-                  : 142,
-          child: Image.asset(setup ? parentPinSetupArt : parentPinAccessArt,
-              key: ValueKey(
-                  setup ? 'parent-pin-setup-art' : 'parent-pin-access-art'),
-              fit: BoxFit.contain,
-              cacheWidth: 480,
-              excludeFromSemantics: true)),
-      const SizedBox(height: 8),
-      FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(title,
-              textAlign: TextAlign.center,
-              style: style.copyWith(color: parentPinInk, shadows: const [
-                Shadow(color: Colors.white, offset: Offset(-3, 0)),
-                Shadow(color: Colors.white, offset: Offset(3, 0)),
-                Shadow(color: Colors.white, offset: Offset(0, -3)),
-                Shadow(color: Colors.white, offset: Offset(0, 3)),
-                Shadow(color: Colors.white, offset: Offset(-2, -2)),
-                Shadow(color: Colors.white, offset: Offset(2, -2)),
-                Shadow(color: Colors.white, offset: Offset(-2, 2)),
-                Shadow(color: Colors.white, offset: Offset(2, 2)),
-                Shadow(
-                    color: Color(0x554B943A),
-                    blurRadius: 2,
-                    offset: Offset(0, 3))
-              ]))),
+      if (compact)
+        Row(children: [
+          SizedBox(width: 44, child: illustration),
+          const SizedBox(width: 8),
+          Expanded(child: heading),
+        ])
+      else ...[
+        illustration,
+        const SizedBox(height: 8),
+        heading,
+      ],
       if (setup) ...[
         const SizedBox(height: 6),
-        const Text('Choose a PIN that your child does not know.',
+        Text('Choose a PIN that your child does not know.',
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontFamily: 'Nunito',
-                fontSize: 15,
+                fontSize: compact ? 13 : 15,
                 height: 1.25,
                 color: parentPinInk,
                 fontWeight: FontWeight.w600)),
@@ -102,13 +111,17 @@ class ParentPinHeading extends StatelessWidget {
 
 class ParentPinFieldPanel extends StatelessWidget {
   const ParentPinFieldPanel(
-      {super.key, required this.label, required this.child});
+      {super.key,
+      required this.label,
+      required this.child,
+      this.compact = false});
   final String label;
   final Widget child;
+  final bool compact;
   @override
   Widget build(BuildContext context) => Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(10),
+      margin: EdgeInsets.only(bottom: compact ? 8 : 10),
+      padding: EdgeInsets.all(compact ? 8 : 10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(22),
           border: Border.all(color: const Color(0xFFAFDF8A), width: 2),
@@ -124,13 +137,13 @@ class ParentPinFieldPanel extends StatelessWidget {
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(label,
-                style: const TextStyle(
+                style: TextStyle(
                     fontFamily: 'Nunito',
-                    fontSize: 16,
+                    fontSize: compact ? 14 : 16,
                     height: 1.2,
                     fontWeight: FontWeight.w900,
                     color: parentPinInk))),
-        const SizedBox(height: 6),
+        SizedBox(height: compact ? 4 : 6),
         child,
       ]));
 }
@@ -140,10 +153,12 @@ class ParentPinPrimaryButton extends StatelessWidget {
       {super.key,
       required this.label,
       required this.onPressed,
+      this.compact = false,
       required this.setup});
   final String label;
   final VoidCallback? onPressed;
   final bool setup;
+  final bool compact;
   @override
   Widget build(BuildContext context) => Opacity(
       opacity: onPressed == null ? .5 : 1,
@@ -186,9 +201,9 @@ class ParentPinPrimaryButton extends StatelessWidget {
                     disabledForegroundColor: Colors.white,
                     elevation: 0,
                     shadowColor: Colors.transparent,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 12),
-                    minimumSize: const Size(48, 54),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 20, vertical: compact ? 8 : 12),
+                    minimumSize: Size(48, compact ? 48 : 54),
                     shape: const StadiumBorder()),
                 child: Row(children: [
                   if (setup) ...[
@@ -207,12 +222,12 @@ class ParentPinPrimaryButton extends StatelessWidget {
                   Expanded(
                       child: Text(label,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontFamily: 'Nunito',
-                              fontSize: 24,
+                              fontSize: compact ? 22 : 24,
                               height: 1.15,
                               fontWeight: FontWeight.w900,
-                              shadows: [
+                              shadows: const [
                                 Shadow(
                                     color: Color(0xFF0A6436),
                                     offset: Offset(0, 2),

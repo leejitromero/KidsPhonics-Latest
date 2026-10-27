@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-27",
+  "scope": "Only launcher icon background/inset and Games-lock background. No game-access logic, layout, learning data or other artwork changes.",
+  "tool": "Built-in image_gen; transparent_background=true",
+  "adaptiveForegroundInsetBefore": 22,
+  "adaptiveForegroundInsetAfter": 16,
+  "assets": [
+    {
+      "path": "assets/images/app_icon.png",
+      "previousSha256": "4ED96328D160482D893059E3420C43AD40F2E69940C9E579DCFAC5228829D86F",
+      "sha256": "C7F13E7E6A794D19233C5CB4C0E8DDF32F255675519260FC57B4E19430512D39",
+      "bytes": 2344357,
+      "generatedSource": "exec-9520cd90-d7cc-4a5a-ad12-fce68d68f5d7.png",
+      "prompt": "Use case: background-extraction. Edit the supplied existing KidsPhonics app icon. Remove ONLY the BLACK OUTSIDE CORNER BACKGROUND outside the rounded golden icon boundary and replace it with genuine transparent alpha. Keep the entire golden rounded-square tile, cyan radiant interior, ABC at top, purple mascot left, blue headset mascot right, open book with exact 'Kid Phonics' lettering, yellow audio symbol, colors, textures, outlines and composition unchanged. This is precise background removal, not a redesign. Preserve square canvas and tight framing around the complete existing gold tile. All four outside corner regions must be fully transparent; no black rectangle, no new border or padding, no checkerboard painted into pixels, no white fringe. Keep the INSIDE cyan background fully opaque. Deliver the original-looking tile as a clean RGBA PNG."
+    },
+    {
+      "path": "assets/images/games_locl.png",
+      "previousSha256": "5347CA64DCA3070751BB9A052352A05719880D1E6F317ED083CFEBB05FA7F761",
+      "sha256": "66B0F2276843A963144AE7F3686E714F423E1E97C49C67BF3D9C6E9380C8DD68",
+      "bytes": 1547730,
+      "generatedSource": "exec-6d222db5-05f1-4e0a-9b8a-3f24e13dd6f8.png",
+      "prompt": "Use case: background-extraction. Precisely remove the black backdrop from the supplied glossy blue game-controller padlock illustration. Keep the EXACT existing golden padlock shackle, blue controller-shaped lock body, central golden star with its dark brown keyhole, cyan D-pad, red green yellow purple buttons, floating yellow stars and decorative yellow strokes. Preserve their existing shape, layout, colors, highlights and dark object outlines. Make all black background outside the illustration TRANSPARENT ALPHA, including the open space INSIDE the gold shackle, spaces between floating stars, and corners. The dark brown keyhole inside the star remains opaque because it belongs to the lock artwork. No redesign, new shape, border, shadow plate, black rectangle, white rectangle or painted checkerboard. Square RGBA PNG, retain the complete illustration with clean antialiased edges and no black fringe."
+    }
+  ],
+  "verification": {
+    "focusedChecksPassed": 12,
+    "visualPreviewChecksPassed": 2,
+    "analyzerIssues": 0,
+    "appIconCornerAlpha": 0,
+    "gameLockCornerAlpha": 0,
+    "gameLockShackleHoleAlpha": 0,
+    "previewDirectory": "build/icon_lock_fix_20261027",
+    "gamesLockPreview": "build/ui_previews/update_games_lock_transparent.png",
+    "apkBuilt": false,
+    "deviceTestedForThisChange": false
+  }
+}

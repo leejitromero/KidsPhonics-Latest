@@ -13,8 +13,8 @@ import '../models/difficulty.dart';
 import '../providers/app_provider.dart';
 import '../widgets/learner_widgets.dart';
 import '../widgets/word_game_layout.dart';
-import '../widgets/floating_choice.dart';
 import '../widgets/rumbled_words_design.dart';
+import '../widgets/game_feedback_art.dart';
 
 class RumbledWordsScreen extends StatefulWidget {
   const RumbledWordsScreen({super.key, this.difficulty = Difficulty.easy});
@@ -34,7 +34,10 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
       (w) => w.word,
       count: GameSessionOrder.roundLength(widget.difficulty));
   late List<String> _tiles;
-  final List<int> _selected = [];
+  late List<int> _tileIds;
+  int? _selectedTile;
+  bool _dragging = false;
+  bool _hasMoved = false;
   bool _hintUsed = false;
   bool? _correct;
   int _readingStep = 0;
@@ -45,6 +48,9 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
   Timer? _resumeTimer, _highlightTimer;
   Completer<void>? _highlightDone;
   bool get _finished => _correct == true || resultOpen;
+  bool get _gameActive =>
+      canAdvanceGameFeedback && TickerMode.valuesOf(context).enabled;
+  bool get _canEdit => !_finished && _gameActive;
   String get _word => _words[_index].word.toUpperCase();
 
   @override
@@ -62,43 +68,71 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
     _readingWord = false;
     _tiles = _word.split('')..shuffle();
     if (_tiles.join() == _word) _tiles.add(_tiles.removeAt(0));
-    _selected.clear();
+    _tileIds = List.generate(_tiles.length, (i) => i);
+    _selectedTile = null;
+    _dragging = false;
+    _hasMoved = false;
     _hintUsed = false;
     _correct = null;
   }
 
   void _tapTile(int index) {
-    if (_finished || _selected.contains(index) || !canAdvanceGameFeedback) {
-      return;
-    }
-    setState(() {
-      _selected.add(index);
-      _correct = null;
-    });
+    if (!_canEdit || _dragging || (_hintUsed && index == 0)) return;
+    final deselect = _selectedTile == index;
+    final letter = _tiles[index];
+    setState(() => _selectedTile = deselect ? null : index);
     gameNarration.cancel();
-    final sound = gameNarration.letterSound(_tiles[index]);
-    if (_selected.length == _tiles.length) unawaited(_check(sound));
+    if (!deselect) unawaited(gameNarration.letterName(letter));
   }
 
-  Future<void> _check(Future<void> selectionSound) async {
-    if (_finished || _selected.length != _tiles.length) return;
-    final correct = _selected.map((i) => _tiles[i]).join() == _word;
-    setState(() => _correct = correct);
+  void _moveTile(int from, int to) {
+    if (!_canEdit || (_hintUsed && (from == 0 || to == 0))) return;
+    final before = _tiles.join();
+    setState(() {
+      _tiles.insert(to, _tiles.removeAt(from));
+      _tileIds.insert(to, _tileIds.removeAt(from));
+      _selectedTile = null;
+      if (_tiles.join() != before) {
+        _hasMoved = true;
+        _correct = null;
+      }
+    });
+  }
+
+  void _useHint() {
+    if (!_canEdit || _dragging || _hintUsed) return;
+    gameNarration.cancel();
+    setState(() {
+      final source = _tiles.indexOf(_word[0]);
+      if (source != 0) {
+        _tiles[source] = _tiles[0];
+        _tiles[0] = _word[0];
+        final id = _tileIds[0];
+        _tileIds[0] = _tileIds[source];
+        _tileIds[source] = id;
+        _hasMoved = true;
+        _correct = null;
+      }
+      _hintUsed = true;
+      _selectedTile = null;
+    });
+  }
+
+  void _check() {
+    // A new arrangement is required before submitting a failed word again.
+    if (!_canEdit || _dragging || _correct != null) return;
+    gameNarration.cancel();
+    final correct = _tiles.join() == _word;
+    setState(() {
+      _selectedTile = null;
+      _correct = correct;
+    });
     recordGameAnswer(correct: correct);
     if (correct) {
       awardGameXp((8 * widget.difficulty.xpMultiplier).round());
       awardGameStar();
-    }
-    final round = _roundGeneration;
-    final selectionGeneration = gameNarration.generation;
-    // Let the final selected tile finish sounding before reading the built word.
-    await selectionSound;
-    if (!mounted || round != _roundGeneration) return;
-    if (correct) {
       unawaited(_readCompletedWord());
-    } else if (_correct == false &&
-        canAdvanceGameFeedback &&
-        selectionGeneration == gameNarration.generation) {
+    } else {
       unawaited(playGameWrong());
     }
   }
@@ -131,7 +165,7 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
     bool current() => mounted && round == _roundGeneration && !resultOpen;
     try {
       while (mounted && current() && _readingStep <= _word.length) {
-        if (!canAdvanceGameFeedback) return;
+        if (!_gameActive) return;
         gameNarration.updateEnvironment(
             enabled: provider.voiceEnabled, active: true);
         final wholeWord = _readingStep == _word.length;
@@ -142,19 +176,20 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
         final hold = _holdHighlight();
         final playback = wholeWord
             ? gameNarration.word(_words[_index].audioKey)
-            : gameNarration.letterSound(_word[_readingStep]);
+            : gameNarration.letterName(_word[_readingStep]);
         final audioGeneration = gameNarration.generation;
         await playback;
         await hold;
         if (!current()) return;
         // Replay the interrupted step after returning, including repeated letters.
-        if (!canAdvanceGameFeedback ||
-            audioGeneration != gameNarration.generation) {
+        if (!_gameActive || audioGeneration != gameNarration.generation) {
           return;
         }
         _readingStep++;
       }
-      if (current() && canAdvanceGameFeedback) _next();
+      if (current() && _gameActive) {
+        _next();
+      }
     } finally {
       _runningPlayback = false;
       if (current() && _correct == true) {
@@ -209,197 +244,77 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
             difficulty: widget.difficulty,
             current: _index + 1,
             total: _words.length),
-        instructions: 'Tap letters to spell the word.',
+        instructions: 'Tap a letter, drag it into place, then tap Check Word!',
         instructionPanel: GameMascotCoach(
             title: 'Rumbled Words',
-            instructions: 'Tap letters to spell the word.',
+            instructions:
+                'Tap a letter, drag it into place, then tap Check Word!',
             controller: gameNarration,
-            child: ConstrainedBox(
-                constraints: BoxConstraints(
-                    maxWidth:
-                        MediaQuery.sizeOf(context).height < 650 ? 220 : 340),
-                child: const GameInstructionGuide(gameTitle: 'Rumbled Words'))),
+            child: Center(
+                child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                        maxWidth: MediaQuery.sizeOf(context).height < 650
+                            ? 220
+                            : 340),
+                    child: const GameInstructionGuide(
+                        // The supplied recording describes the former tap-to-fill
+                        // game. Keep the current drag instructions visible.
+                        autoPlay: false,
+                        gameTitle: 'Rumbled Words')))),
         difficulty: widget.difficulty,
         current: _index + 1,
         total: _words.length,
         progressLabel: 'Word',
-        hasProgress:
-            (_selected.isNotEmpty || scoredAttempts > 0 || _hintUsed) &&
-                !resultOpen,
+        hasProgress: (_selectedTile != null ||
+                _hasMoved ||
+                scoredAttempts > 0 ||
+                _hintUsed) &&
+            !resultOpen,
         child: LayoutBuilder(builder: (context, box) {
           final compact = box.maxHeight < 440;
-          final columns =
-              _tiles.length <= 5 ? _tiles.length : (_tiles.length / 2).ceil();
-          final rows = (_tiles.length / columns).ceil();
-          final gap = compact
-              ? 3.0
-              : rows > 1
-                  ? 6.0
-                  : 8.0;
-          final padding = compact
-              ? 2.0
-              : rows > 1
-                  ? 6.0
-                  : 10.0;
-          final buttonHeight = compact
-              ? 44.0
-              : rows > 1
-                  ? 48.0
-                  : 54.0;
-          final extra = (_hintUsed ? 28.0 : 0.0) +
-              (_correct != null && !compact ? 44.0 : 0.0);
-          final textScale = MediaQuery.textScalerOf(context).scale(16) / 16;
-          // Short screens keep the same board/control/letters order, with the
-          // three controls sharing a row instead of shrinking the entire board.
-          final actionSpace = compact
-              ? buttonHeight + 40 * textScale
-              : 3 * buttonHeight + 24 * textScale;
-          final fixed = 4 * padding +
-              20 +
-              actionSpace +
-              36 +
-              (compact ? 5 : 7) * gap +
-              2 * (rows - 1) * gap +
-              extra;
-          final widthLimit =
-              (box.maxWidth - 2 * padding - 10 - (columns - 1) * gap) / columns;
-          final preferredSide = widthLimit.clamp(48.0, 80.0);
-          final side = ((box.maxHeight - 60 - fixed) / (2 * rows)).clamp(
-              (compact ? 48.0 : 56.0).clamp(0.0, preferredSide), preferredSide);
-          final picture = (box.maxHeight - fixed - 2 * rows * side - 6)
-              .clamp(compact && rows > 1 ? 32.0 : 64.0, 220.0);
-          Widget grid(List<Widget> children) => RumbledTileGrid(
-              side: side, columns: columns, gap: gap, children: children);
-          Widget action(double width, Widget child) => Center(
-              child: SizedBox(
-                  width: width.clamp(0.0, box.maxWidth), child: child));
+          final gap = compact ? 4.0 : 10.0;
+          final picture =
+              (box.maxHeight * (compact ? .30 : .38)).clamp(104.0, 220.0);
+          const buttonHeight = 44.0;
+          final message = _correct == false
+              ? 'Try again! Drag a letter into place.'
+              : _selectedTile != null
+                  ? 'Drag the floating letter into place.'
+                  : _hintUsed
+                      ? 'First letter fixed. Keep arranging!'
+                      : 'Tap a letter, then drag it.';
           return WordGameLayout(
               word: _words[_index].word,
               pictureExtent: picture,
               children: [
-                ForestPanel(
-                    key: const ValueKey('word-answer-board'),
-                    padding: EdgeInsets.all(padding),
-                    child: grid([
-                      for (var slot = 0; slot < _tiles.length; slot++)
-                        _tile(
-                            key: ValueKey('word-slot-$slot'),
-                            label: slot < _selected.length
-                                ? _tiles[_selected[slot]]
-                                : '_',
-                            filled: true,
-                            variant: 0,
-                            highlightKey: ValueKey('word-highlight-$slot'),
-                            highlighted: _readingWord || _activeLetter == slot,
-                            onTap: _finished || slot >= _selected.length
-                                ? null
-                                : () => setState(() {
-                                      _selected.removeAt(slot);
-                                      _correct = null;
-                                    })),
-                    ])),
-                SizedBox(height: gap),
-                if (compact)
-                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Expanded(
-                        flex: 3,
-                        child:
-                            Column(mainAxisSize: MainAxisSize.min, children: [
-                          RumbledActionButton(
-                              buttonKey: const ValueKey('word-hint'),
-                              height: buttonHeight,
-                              purple: true,
-                              label: 'Hint',
-                              icon: Icons.lightbulb_outline_rounded,
-                              onPressed: _hintUsed || _finished
-                                  ? null
-                                  : () => setState(() => _hintUsed = true)),
-                          SizedBox(
-                              height: 18,
+                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Expanded(
+                      flex: 2,
+                      child: RumbledActionButton(
+                          buttonKey: const ValueKey('word-hint'),
+                          height: buttonHeight,
+                          purple: true,
+                          label: 'Hint',
+                          icon: Icons.lightbulb_outline_rounded,
+                          onPressed: _hintUsed || !_canEdit || _dragging
+                              ? null
+                              : _useHint)),
+                  SizedBox(width: gap),
+                  Expanded(
+                      flex: 3,
+                      child: AudioButton(
+                          phrase: _words[_index].audioKey,
+                          enabled: !_finished,
+                          statusBuilder: (message) => SizedBox(
+                              height: 16,
                               child: FittedBox(
                                   fit: BoxFit.scaleDown,
-                                  child: Text(
-                                      _hintUsed ? 'Hint used' : '1 per word',
+                                  child: Text(message,
+                                      textAlign: TextAlign.center,
                                       style: const TextStyle(
-                                          fontSize: 13,
-                                          color: GameDesign.ink,
-                                          fontWeight: FontWeight.w900))))
-                        ])),
-                    SizedBox(width: gap),
-                    Expanded(
-                        flex: 4,
-                        child: AudioButton(
-                            phrase: _words[_index].audioKey,
-                            enabled: !_finished,
-                            statusBuilder: (message) => SizedBox(
-                                height: 18,
-                                child: FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(message,
-                                        style: const TextStyle(
-                                            fontSize: 14,
-                                            color: GameDesign.ink)))),
-                            controlBuilder: (context, onPlay, playing, label) =>
-                                RumbledActionButton(
-                                    buttonKey: const ValueKey('word-hear'),
-                                    label: label,
-                                    icon: playing
-                                        ? Icons.graphic_eq_rounded
-                                        : Icons.volume_up_rounded,
-                                    onPressed: onPlay,
-                                    height: buttonHeight))),
-                    SizedBox(width: gap),
-                    Expanded(flex: 3, child: _eraseButton(buttonHeight)),
-                  ])
-                else ...[
-                  action(
-                      290,
-                      Container(
-                          decoration: BoxDecoration(
-                              color: GameDesign.cream,
-                              borderRadius: BorderRadius.circular(40),
-                              border: Border.all(
-                                  color: const Color(0xFFFFD878), width: 2)),
-                          child: Row(children: [
-                            Expanded(
-                                child: RumbledActionButton(
-                                    buttonKey: const ValueKey('word-hint'),
-                                    height: buttonHeight,
-                                    purple: true,
-                                    onPressed: _hintUsed || _finished
-                                        ? null
-                                        : () =>
-                                            setState(() => _hintUsed = true),
-                                    icon: Icons.lightbulb_outline_rounded,
-                                    label: 'Hint')),
-                            Expanded(
-                                child: Padding(
-                                    padding: const EdgeInsets.all(6),
-                                    child: FittedBox(
-                                        fit: BoxFit.scaleDown,
-                                        child: Text(
-                                            _hintUsed
-                                                ? 'Hint used'
-                                                : '1 per word',
-                                            style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w900,
-                                                color: GameDesign.ink)))))
-                          ]))),
-                  SizedBox(height: gap),
-                  AudioButton(
-                      phrase: _words[_index].audioKey,
-                      enabled: !_finished,
-                      statusBuilder: (message) => SizedBox(
-                          height: 18,
-                          child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(message,
-                                  style: const TextStyle(
-                                      fontSize: 14, color: GameDesign.ink)))),
-                      controlBuilder: (context, onPlay, playing, label) =>
-                          action(
-                              310,
+                                          fontSize: 12,
+                                          color: GameDesign.ink)))),
+                          controlBuilder: (context, onPlay, playing, label) =>
                               RumbledActionButton(
                                   buttonKey: const ValueKey('word-hear'),
                                   label: label,
@@ -408,157 +323,137 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
                                       : Icons.volume_up_rounded,
                                   onPressed: onPlay,
                                   height: buttonHeight))),
-                ],
-                if (_hintUsed)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
+                ]),
+                Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
                     child: SizedBox(
-                        height: 24,
+                        height: 16,
                         child: FittedBox(
                             fit: BoxFit.scaleDown,
-                            child: Text('Starts with ${_word[0]}',
+                            child: Text(
+                                _hintUsed
+                                    ? 'Hint used: first letter fixed'
+                                    : '1 hint per word',
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w800)))),
-                  ),
-                SizedBox(height: gap),
-                if (!compact) action(230, _eraseButton(buttonHeight)),
-                SizedBox(height: gap),
-                if (compact)
-                  Container(
-                      height: 24,
-                      padding: const EdgeInsets.symmetric(horizontal: 6),
-                      decoration: BoxDecoration(
-                          color: GameDesign.cream,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                              color: const Color(0xFFFFD878), width: 2)),
-                      child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                              _correct == null
-                                  ? 'Tap a chosen letter to put it back.'
-                                  : _correct!
-                                      ? 'Correct!'
-                                      : 'Try again! Tap Erase or a letter to change it.',
-                              style: const TextStyle(
-                                  fontSize: 15,
-                                  color: GameDesign.ink,
-                                  fontWeight: FontWeight.w900))))
-                else
-                  const ForestPanel(
-                      leaves: false,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                      child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text('Tap a chosen letter to put it back.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w800)))),
+                                    fontSize: 12,
+                                    color: GameDesign.ink,
+                                    fontWeight: FontWeight.w800))))),
                 SizedBox(height: gap),
                 ForestPanel(
                     key: const ValueKey('word-letter-board'),
-                    padding: EdgeInsets.all(padding),
-                    child: grid([
-                      for (var i = 0; i < _tiles.length; i++)
-                        _tile(
-                            key: ValueKey('word-tile-$i'),
-                            label: _tiles[i],
-                            variant: const [4, 2, 3, 1, 0][i % 5],
-                            used: _selected.contains(i),
-                            onTap: _finished || _selected.contains(i)
-                                ? null
-                                : () => _tapTile(i)),
-                    ])),
+                    padding: const EdgeInsets.all(6),
+                    child: RumbledLetterRow(
+                        key: ValueKey('rumbled-board-$_roundGeneration'),
+                        maxSide: compact ? 56 : 72,
+                        gap: compact || _tiles.length > 7 ? 2 : 4,
+                        tileIds: _tileIds,
+                        selectedIndex: _selectedTile,
+                        enabled: _canEdit,
+                        fixedFirst: _hintUsed,
+                        onMove: _moveTile,
+                        onDraggingChanged: (dragging) {
+                          if (mounted && _dragging != dragging) {
+                            setState(() => _dragging = dragging);
+                          }
+                        },
+                        children: [
+                          for (var i = 0; i < _tiles.length; i++) _tile(i),
+                        ])),
                 SizedBox(height: gap),
-                if (_correct != null && !compact)
-                  Text(
-                      _correct!
-                          ? 'Correct!'
-                          : 'Try again! Tap Erase or a letter to change it.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w900,
-                          color: _correct!
-                              ? const Color(0xFF167769)
-                              : const Color(0xFFB45731))),
+                if (_correct == true)
+                  GameCorrectFrame(height: compact ? 28 : 36)
+                else
+                  Semantics(
+                      liveRegion: true,
+                      child: SizedBox(
+                          height: compact ? 28 : 36,
+                          child: ForestPanel(
+                              leaves: false,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 3),
+                              child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(message,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w800,
+                                          color: _correct == false
+                                              ? const Color(0xFFB45731)
+                                              : GameDesign.ink)))))),
+                SizedBox(height: gap),
+                Center(
+                    child: SizedBox(
+                        width: 220,
+                        child: RumbledActionButton(
+                            buttonKey: const ValueKey('word-check'),
+                            height: compact ? 44 : 48,
+                            label: 'Check Word',
+                            icon: Icons.check_circle_rounded,
+                            onPressed:
+                                _canEdit && !_dragging && _correct == null
+                                    ? _check
+                                    : null))),
                 const SizedBox(height: 4),
               ]);
         }),
       );
 
-  Widget _eraseButton(double height) {
-    final enabled = !_finished && _selected.isNotEmpty;
-    return RumbledActionButton(
-        buttonKey: const ValueKey('word-erase'),
-        label: 'Erase',
-        icon: Icons.backspace_rounded,
-        height: height,
-        cream: true,
-        onPressed: enabled
-            ? () => setState(() {
-                  _selected.removeLast();
-                  _correct = null;
-                })
-            : null);
+  Widget _tile(int index) {
+    final fixed = _hintUsed && index == 0;
+    final selected = _selectedTile == index;
+    final highlighted = _readingWord || _activeLetter == index;
+    final reducedMotion = MediaQuery.disableAnimationsOf(context);
+    return Semantics(
+        label: 'Letter ${_tiles[index]}, position ${index + 1}'
+            '${fixed ? ', fixed by hint' : ''}',
+        selected: selected,
+        child: AnimatedScale(
+            scale: highlighted && !reducedMotion ? 1.04 : 1,
+            duration: reducedMotion
+                ? Duration.zero
+                : const Duration(milliseconds: 160),
+            child: AnimatedContainer(
+                key: ValueKey('word-highlight-$index'),
+                duration: reducedMotion
+                    ? Duration.zero
+                    : const Duration(milliseconds: 160),
+                decoration: BoxDecoration(
+                    color: highlighted
+                        ? const Color(0xFFFFE36B)
+                        : selected
+                            ? const Color(0xFFB7F5EE)
+                            : Colors.transparent,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                        color: selected
+                            ? const Color(0xFF008A80)
+                            : highlighted
+                                ? const Color(0xFFFFB300)
+                                : Colors.transparent,
+                        width: 3)),
+                child: Stack(fit: StackFit.expand, children: [
+                  AnswerChoiceButton(
+                      buttonKey: ValueKey('word-tile-$index'),
+                      onPressed:
+                          !_canEdit || fixed ? null : () => _tapTile(index),
+                      variant: const [4, 2, 3, 1, 0][_tileIds[index] % 5],
+                      selected: selected || highlighted,
+                      child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(_tiles[index],
+                              style: const TextStyle(
+                                  color: GameDesign.ink,
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.w900)))),
+                  if (fixed)
+                    const Positioned(
+                        top: 0,
+                        right: 0,
+                        child: IgnorePointer(
+                            child: Icon(Icons.lock_rounded,
+                                size: 15, color: Color(0xFF167769)))),
+                ]))));
   }
-
-  Widget _tile(
-          {required Key key,
-          required String label,
-          VoidCallback? onTap,
-          bool filled = false,
-          bool used = false,
-          int variant = 0,
-          Key? highlightKey,
-          bool highlighted = false}) =>
-      AnimatedScale(
-        scale:
-            highlighted && !MediaQuery.disableAnimationsOf(context) ? 1.04 : 1,
-        duration: MediaQuery.disableAnimationsOf(context)
-            ? Duration.zero
-            : const Duration(milliseconds: 160),
-        child: AnimatedContainer(
-          key: highlightKey,
-          duration: MediaQuery.disableAnimationsOf(context)
-              ? Duration.zero
-              : const Duration(milliseconds: 160),
-          decoration: BoxDecoration(
-              color: highlighted ? const Color(0xFFFFE36B) : Colors.transparent,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                  color: highlighted
-                      ? const Color(0xFFFFB300)
-                      : Colors.transparent,
-                  width: 3),
-              boxShadow: highlighted
-                  ? const [BoxShadow(color: Color(0x99FFD23F), blurRadius: 12)]
-                  : const []),
-          child: SizedBox.expand(
-            child: FloatingChoice(
-                enabled: !filled && onTap != null && !_finished,
-                seed: label.codeUnitAt(0),
-                child: Opacity(
-                    opacity: used ? .38 : 1,
-                    child: AnswerChoiceButton(
-                      buttonKey: key,
-                      onPressed: onTap,
-                      variant: variant,
-                      selected: highlighted,
-                      child: LayoutBuilder(
-                          builder: (context, box) => FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(label,
-                                  style: TextStyle(
-                                      color: GameDesign.ink,
-                                      fontSize: (box.maxHeight * .9)
-                                          .clamp(28.0, 48.0),
-                                      fontWeight: FontWeight.w900)))),
-                    ))),
-          ),
-        ),
-      );
 }

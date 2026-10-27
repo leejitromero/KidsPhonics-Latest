@@ -28,6 +28,8 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
   late Ticker _ticker;
   late AppProvider _provider;
   int _narrationSync = 0;
+  int _feedbackGeneration = 0;
+  Future<void> _letterFeedback = Future.value();
   late final _narration = GameNarrationController(
       play: (phrase) async {
         if (!_provider.voiceEnabled) return false;
@@ -49,6 +51,47 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
           .clamp(0, _flapFrames.length - 1)]
       : 0;
 
+  bool get _feedbackActive =>
+      mounted &&
+      (ModalRoute.isCurrentOf(context) ?? true) &&
+      TickerMode.valuesOf(context).enabled &&
+      _provider.gameAccess &&
+      !_provider.timeLimitReached &&
+      (_game.state == FlightState.flying || _game.state == FlightState.won) &&
+      (WidgetsBinding.instance.lifecycleState == null ||
+          WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed);
+
+  void _cancelLetterFeedback() {
+    _feedbackGeneration++;
+    _narration.cancel();
+  }
+
+  void _queueLetterFeedback(String letter) {
+    final run = _feedbackGeneration;
+    // Preserve each name/sound pair when another pipe is cleared before the
+    // recordings finish. Each await uses the player's actual completion event.
+    _letterFeedback = _letterFeedback.then((_) async {
+      bool current() =>
+          mounted &&
+          run == _feedbackGeneration &&
+          _provider.voiceEnabled &&
+          _feedbackActive;
+      if (!current()) return;
+      _narration.updateEnvironment(enabled: true, active: true);
+      final name = _narration.letterName(letter);
+      final generation = _narration.generation;
+      await name;
+      if (!current() ||
+          generation != _narration.generation ||
+          _narration.audioUnavailable) {
+        return;
+      }
+      await _narration.letterSound(letter);
+    }).catchError((Object _) {
+      // An unavailable recording must not interrupt the flight controls.
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -62,11 +105,8 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
     super.didChangeDependencies();
     _provider = context.watch<AppProvider>();
     final request = ++_narrationSync;
-    final active = (ModalRoute.isCurrentOf(context) ?? true) &&
-        _game.state != FlightState.paused &&
-        (WidgetsBinding.instance.lifecycleState == null ||
-            WidgetsBinding.instance.lifecycleState ==
-                AppLifecycleState.resumed);
+    final active = _feedbackActive;
+    if (!active || !_provider.voiceEnabled) _feedbackGeneration++;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted || request != _narrationSync) return;
       _narration.updateEnvironment(
@@ -93,12 +133,12 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
         _successGlow = .7;
         _letter = letter;
         if (_provider.voiceEnabled) {
-          unawaited(_narration.letterName(letter));
+          _queueLetterFeedback(letter);
         }
       }
     });
     if (_game.lives < previousLives) {
-      _narration.cancel();
+      _cancelLetterFeedback();
       unawaited(_provider.phonicsAudio.stop());
       unawaited(_provider.audio.playWrong());
     }
@@ -111,6 +151,7 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
   void _pause() {
     if (!mounted) return;
     setState(_game.pause);
+    _cancelLetterFeedback();
     _narration.updateEnvironment(
         enabled: _provider.voiceEnabled, active: false);
     unawaited(_provider.phonicsAudio.stop());
@@ -137,6 +178,7 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
   }
 
   void _restart() {
+    _cancelLetterFeedback();
     unawaited(_provider.phonicsAudio.stop());
     unawaited(_provider.audio.stop());
     setState(() {
@@ -154,6 +196,7 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
     WidgetsBinding.instance.removeObserver(this);
     _ticker.dispose();
     _focus.dispose();
+    _cancelLetterFeedback();
     _narration.dispose();
     unawaited(_provider.phonicsAudio.stop());
     unawaited(_provider.audio.stop());

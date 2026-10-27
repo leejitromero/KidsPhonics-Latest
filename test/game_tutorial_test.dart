@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kidsphonics/widgets/game_tutorial.dart';
+import 'learning_progress_test.dart' show mockProgressAudio;
 
 void main() {
+  setUp(mockProgressAudio);
   testWidgets(
       'help cannot open while a game action is pending, including a stale tap',
       (tester) async {
@@ -68,12 +70,20 @@ void main() {
       await tester.tap(find.text('Next'));
       await settle();
       expect(find.text('Step 2 of 3'), findsOneWidget);
+      if (tutorial == GameTutorial.rumbledWords) {
+        expect(find.text('Drag into place'), findsOneWidget);
+        expect(find.textContaining('Tap Erase'), findsNothing);
+      }
       await tester.tap(find.text('Back'));
       await settle();
       expect(find.text('Step 1 of 3'), findsOneWidget);
       for (var i = 0; i < 2; i++) {
         await tester.tap(find.text('Next'));
         await settle();
+      }
+      if (tutorial == GameTutorial.rumbledWords) {
+        expect(find.text('Check your word'), findsOneWidget);
+        expect(find.textContaining('Tap Check Word'), findsOneWidget);
       }
       await tester.tap(find.text("Let's Play"));
       await settle();

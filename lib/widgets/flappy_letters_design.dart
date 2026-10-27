@@ -208,7 +208,7 @@ class FlappyFlightPanel extends StatelessWidget {
                               ? Duration.zero
                               : const Duration(milliseconds: 320),
                           child: Image.asset(
-                              'assets/images/home_mascots/airplane.webp',
+                              'assets/images/new_ui/airplane.webp',
                               key: const ValueKey('flappy-airplane-art'),
                               fit: BoxFit.contain,
                               cacheWidth: 720,

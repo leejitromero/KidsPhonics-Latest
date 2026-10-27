@@ -1,0 +1,14 @@
+﻿{
+    "svgXML":  "Passed",
+    "pngDimensions":  "5000x3800",
+    "pdfPages":  1,
+    "docxParts":  8,
+    "docxDiagramImages":  1,
+    "docxEmbeddedPNGHashMatches":  true,
+    "docxSectionSizes":  [
+                             "23811x16838",
+                             "11906x16838"
+                         ],
+    "docxTextCharacters":  6251,
+    "visualInspection":  "PNG visually reviewed; final Word application rendering not performed"
+}

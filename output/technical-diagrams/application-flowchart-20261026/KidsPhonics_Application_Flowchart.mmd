@@ -1,0 +1,60 @@
+flowchart TB
+    appStart(["Start KidsPhonics"]) --> loadLocal["Splash and load local data"]
+    loadLocal --> dataReady{"Saved data loaded?"}
+    dataReady -->|"No"| loadRetry["Show error and Retry"]
+    loadRetry --> loadLocal
+    dataReady -->|"Yes"| profileReady{"Learner setup complete?"}
+    profileReady -->|"No"| welcomeSetup[["Introduction, character and name"]]
+    welcomeSetup --> saveProfile["Save learner setup locally"]
+    saveProfile --> homeMenu["Home and navigation"]
+    profileReady -->|"Yes"| homeMenu
+    homeEntry((A)) --> homeMenu
+    homeMenu --> actionChoice{"Choose an action"}
+    actionChoice -->|"Close app"| appEnd(["End"])
+    subgraph learningArea ["Learning and practice"]
+        lessonEntry((C)) --> lessonsFlow[["Lessons: select, study and record practice"]]
+        lessonsFlow -->|"Back or navigation"| lessonsReturn((A))
+        quickEntry((B)) --> quickFlow[["Quick Check: five tasks and results"]]
+        quickFlow --> quickActions[["Continue, retry, review lesson or guided practice"]]
+        quickActions -->|"Back or navigation"| quickReturn((A))
+    end
+    subgraph gameArea ["Games"]
+        gamesAllowed{"Parent enabled games?"}
+        gamesAllowed -->|"No: locked"| gamesBlockedReturn((A))
+        gamesAllowed -->|"Yes"| gamesFlow[["Select game and difficulty; play and record applicable results"]]
+        gamesFlow --> gamesReturn((A))
+    end
+    subgraph trackingArea ["Progress"]
+        progressFlow[["View My Journey, My Letters and My Rewards"]]
+        progressFlow --> practiceChoice{"Practice action?"}
+        practiceChoice -->|"Letter"| practiceReturn((B))
+        practiceChoice -->|"Lesson"| lessonReturn((C))
+        practiceChoice -->|"Browse only"| progressReturn((A))
+    end
+    subgraph managementArea ["Parents and Settings"]
+        parentPin[["Set up or unlock Parent PIN"]] --> pinValid{"PIN accepted?"}
+        pinValid -->|"No: retry or lockout"| parentPin
+        pinValid -->|"Yes"| parentControls[["Parent Overview, Activity and protected controls"]]
+        parentControls --> parentSave["Save parent changes locally"]
+        parentSave --> parentsReturn((A))
+        settingsFlow[["Sound, display, profile, Help and About"]]
+        settingsFlow --> settingsSave["Save changed preferences locally"]
+        settingsSave --> settingsReturn((A))
+    end
+    actionChoice -->|"Lessons"| lessonEntry
+    actionChoice -->|"Quick Check"| quickEntry
+    actionChoice -->|"Games"| gamesAllowed
+    actionChoice -->|"Progress"| progressFlow
+    actionChoice -->|"Parents"| parentPin
+    actionChoice -->|"Settings"| settingsFlow
+    subgraph timeGuard ["Global daily time limit: can cover any screen"]
+        timeReached["Daily limit reached"] --> timePause["Pause covered screen"]
+        timePause --> timeUnlock[["Parent Unlock and valid PIN"]]
+        timeUnlock --> grantTime["Add time or allow today"]
+        grantTime --> resumeScreen["Resume the covered screen"]
+    end
+    style learningArea fill:#C2E5FF,stroke:#3DADFF
+    style gameArea fill:#CDF4D3,stroke:#66D575
+    style trackingArea fill:#DCCCFF,stroke:#874FFF
+    style managementArea fill:#D9D9D9,stroke:#B3B3B3
+    style timeGuard fill:#FFECBD,stroke:#FFC943

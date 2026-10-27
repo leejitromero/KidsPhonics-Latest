@@ -31,10 +31,13 @@ Future<bool> prepareCloudTransition(
 /// Closes the supplied curtain, switches screens under cover, then opens it.
 /// Reversing the route naturally plays the curtain in the opposite direction.
 class CloudPageRoute<T> extends PageRouteBuilder<T> {
-  CloudPageRoute({required Widget page, required List<ImageProvider> frames})
+  CloudPageRoute(
+      {required Widget page,
+      required List<ImageProvider> frames,
+      Duration duration = const Duration(milliseconds: 800)})
       : super(
-          transitionDuration: const Duration(milliseconds: 800),
-          reverseTransitionDuration: const Duration(milliseconds: 800),
+          transitionDuration: duration,
+          reverseTransitionDuration: duration,
           pageBuilder: (_, __, ___) => page,
           transitionsBuilder: (_, animation, __, child) =>
               CloudScreenTransition(

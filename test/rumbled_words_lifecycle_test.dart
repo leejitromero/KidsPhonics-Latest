@@ -18,14 +18,13 @@ void main() {
       (t) async {
     final audio = QuizAudioHarness()..install();
     final p = await mount(t, const RumbledWordsScreen());
-    await audio.finishGameIntro(t, 'rumbled_word.mp3');
+    await flushAudio(t);
     await t.runAsync(() => p.toggleSfx());
     await t.pump();
     final task = shownWord(t);
     final word = task.toUpperCase();
-    await spell(t, audio, word);
-    await t.runAsync(() => audio.completeSound(word[word.length - 1]));
-    await audioStarted(t, audio, word.length + 1);
+    final selectionCount = await spell(t, audio, word);
+    await audioStarted(t, audio, selectionCount + 1);
     final context = t.element(find.byType(RumbledWordsScreen));
     showDialog<void>(
         context: context,
@@ -34,25 +33,25 @@ void main() {
     await flushAudio(t);
     await t.pump(const Duration(seconds: 2));
     expect(shownWord(t), task);
-    expect(audio.starts.length, word.length + 1);
+    expect(audio.starts.length, selectionCount + 1);
     Navigator.of(context).pop();
     await t.pump(const Duration(milliseconds: 400));
-    await audioStarted(t, audio, word.length + 2);
+    await audioStarted(t, audio, selectionCount + 2);
     expect(highlighted(t, 0), isTrue);
     expect(audio.starts.last,
-        endsWith('/sounds/sound-${word[0].toLowerCase()}.mp3'));
+        endsWith('/letters/letter-${word[0].toLowerCase()}.mp3'));
 
     t.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
     t.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
     await t.pump();
     await flushAudio(t);
     await t.pump(const Duration(seconds: 3));
-    expect(audio.starts.length, word.length + 2);
+    expect(audio.starts.length, selectionCount + 2);
     expect(shownWord(t), task);
     t.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
     await t.pump();
     await t.pump(const Duration(milliseconds: 250));
-    await audioStarted(t, audio, word.length + 3);
+    await audioStarted(t, audio, selectionCount + 3);
     expect(highlighted(t, 0), isTrue);
     await close(t, p);
     p.phonicsAudio.dispose();

@@ -93,6 +93,9 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
   late int _secondsLeft;
   bool _started = false, _paused = false, _practice = false;
   bool _timeUpOpen = false, _foreground = true, _routeCurrent = true;
+  bool _tickersEnabled = true, _accessAllowed = true;
+  bool get _canRun =>
+      _foreground && _routeCurrent && _tickersEnabled && _accessAllowed;
   int get _roundSeconds => switch (widget.difficulty) {
         Difficulty.easy => 60,
         Difficulty.medium => 90,
@@ -100,7 +103,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
       };
 
   void _syncClock() {
-    if (_previewing && _foreground && _routeCurrent) {
+    if (_previewing && _canRun) {
       if (!_previewClock.isAnimating) _previewClock.forward();
     } else {
       _previewClock.stop();
@@ -109,8 +112,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
         !_previewing &&
         !_paused &&
         !_practice &&
-        _foreground &&
-        _routeCurrent &&
+        _canRun &&
         _secondsLeft > 0 &&
         _matchCount < _totalPairs &&
         !resultOpen) {
@@ -124,8 +126,11 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _routeCurrent = ModalRoute.isCurrentOf(context) ?? true;
+    _tickersEnabled = TickerMode.valuesOf(context).enabled;
+    final provider = context.watch<AppProvider>();
+    _accessAllowed = provider.gameAccess && !provider.timeLimitReached;
     _syncClock();
-    if (_routeCurrent && _secondsLeft == 0) {
+    if (_canRun && _secondsLeft == 0) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) _offerTimeUp();
       });
@@ -148,8 +153,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
         _timeUpOpen ||
         resultOpen ||
         _matchCount == _totalPairs ||
-        !_foreground ||
-        !_routeCurrent ||
+        !_canRun ||
         _paused) {
       return;
     }
@@ -336,7 +340,8 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
   int get _totalPairs => memoryPairsForDifficulty(widget.difficulty).length;
 
   void _tapCard(_MemCard card) async {
-    if (_previewing ||
+    if (!_canRun ||
+        _previewing ||
         _locked ||
         _paused ||
         (!_practice && _secondsLeft == 0) ||

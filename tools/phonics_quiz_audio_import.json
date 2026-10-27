@@ -1,0 +1,34 @@
+[
+  {
+    "source": "C:\\Users\\leeji\\Downloads\\main_intro.mp3",
+    "path": "assets/audio/game_instructions/phonics_quiz.mp3",
+    "bytes": 91751,
+    "sha256": "C9D9DF5E857F2C3145D9C909717E6EF9AD86DB5BF357510AE14B4254C8E67AEC",
+    "previousSha256": "E86A49AB347C6E7B569DA7C698D5DC0113276103026546654D84820A6D18DF37",
+    "nativePeakDbfs": -5.192
+  },
+  {
+    "source": "C:\\Users\\leeji\\Downloads\\beggining.mp3",
+    "path": "assets/audio/game_instructions/quiz_beginning.mp3",
+    "bytes": 58314,
+    "sha256": "03AE8D78BA7903DF3CF1AFD569A2972846BA87CEF57B390DC0A37323353F15FE",
+    "previousSha256": null,
+    "nativePeakDbfs": -6.467
+  },
+  {
+    "source": "C:\\Users\\leeji\\Downloads\\middle.mp3",
+    "path": "assets/audio/game_instructions/quiz_middle.mp3",
+    "bytes": 57061,
+    "sha256": "C1E89686A2B7E238CBBCA97CFA91659DDD33F28B8C9F213799460599FF858308",
+    "previousSha256": null,
+    "nativePeakDbfs": -5.695
+  },
+  {
+    "source": "C:\\Users\\leeji\\Downloads\\end.mp3",
+    "path": "assets/audio/game_instructions/quiz_end.mp3",
+    "bytes": 58314,
+    "sha256": "28552B474A80A0F8E0E1FBE038260E3B99B01E8F52B964D7E395B492B7F60BD3",
+    "previousSha256": null,
+    "nativePeakDbfs": -6.111
+  }
+]

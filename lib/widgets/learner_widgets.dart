@@ -1,5 +1,6 @@
 import 'answer_choice_button.dart';
 import 'game_design.dart';
+import 'game_feedback_art.dart';
 import 'game_leave_dialog.dart';
 import 'cloud_page_route.dart';
 import 'main_navigation_scope.dart';
@@ -307,6 +308,7 @@ class LearnerNavigation {
   static Future<void> open(BuildContext context, Widget page,
       {bool replace = false,
       bool cloudTransition = false,
+      Duration curtainDuration = const Duration(milliseconds: 800),
       bool fadeTransition = false,
       bool endParentSession = false}) async {
     final navigator = Navigator.of(context);
@@ -347,7 +349,8 @@ class LearnerNavigation {
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero);
         } else if (ready) {
-          route = CloudPageRoute<void>(page: page, frames: images);
+          route = CloudPageRoute<void>(
+              page: page, frames: images, duration: curtainDuration);
         }
       }
       // A learner activity must count toward the daily limit, including when
@@ -699,22 +702,26 @@ class GameFeedback extends StatelessWidget {
   final bool correct;
   final String? detail;
   @override
-  Widget build(BuildContext context) => Semantics(
-      liveRegion: true,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Icon(correct ? Icons.check_circle : Icons.favorite_outline,
-              color: correct ? KidsUi.correct : KidsUi.incorrect),
-          const SizedBox(width: 8),
-          Expanded(
-              child: Text(
-                  '${correct ? 'Correct!' : 'Nice try! Keep practicing.'}${detail == null ? '' : '\n$detail'}',
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: correct ? KidsUi.correct : KidsUi.incorrect))),
-        ]),
-      ));
+  Widget build(BuildContext context) => correct
+      ? Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: GameCorrectFrame(detail: detail))
+      : Semantics(
+          liveRegion: true,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Icon(correct ? Icons.check_circle : Icons.favorite_outline,
+                  color: correct ? KidsUi.correct : KidsUi.incorrect),
+              const SizedBox(width: 8),
+              Expanded(
+                  child: Text(
+                      '${correct ? 'Correct!' : 'Nice try! Keep practicing.'}${detail == null ? '' : '\n$detail'}',
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: correct ? KidsUi.correct : KidsUi.incorrect))),
+            ]),
+          ));
 }
 
 /// Future images need only provide an asset path; no game logic changes.
@@ -800,46 +807,59 @@ class AudioButton extends StatefulWidget {
 class _AudioButtonState extends State<AudioButton> with WidgetsBindingObserver {
   bool _playing = false;
   bool _heard = false;
+  bool _foreground = true;
   int _attempt = 0;
   AppProvider? _provider;
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    final state = WidgetsBinding.instance.lifecycleState;
+    _foreground = state == null || state == AppLifecycleState.resumed;
   }
 
-  void _cancelPlayback() {
+  bool get _environmentAvailable =>
+      _foreground &&
+      (ModalRoute.isCurrentOf(context) ?? true) &&
+      TickerMode.valuesOf(context).enabled &&
+      (_provider?.voiceEnabled ?? false) &&
+      !(_provider?.timeLimitReached ?? true) &&
+      (!GameDesign.active(context) || (_provider?.gameAccess ?? false));
+
+  void _cancelPlayback({String? phrase}) {
     if (!_playing) return;
     _attempt++;
     _playing = false;
     _message = null;
-    unawaited(_provider?.phonicsAudio.stop());
+    // A selected letter or another speaker may already own the shared channel.
+    if (_provider?.phonicsAudio.currentPhrase == (phrase ?? widget.phrase)) {
+      unawaited(_provider?.phonicsAudio.stop());
+    }
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _provider = context.read<AppProvider>();
-    if (widget.controlBuilder != null &&
-        (ModalRoute.isCurrentOf(context) == false ||
-            !_provider!.voiceEnabled)) {
+    _provider = context.watch<AppProvider>();
+    if (!_environmentAvailable) {
       _cancelPlayback();
     }
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (widget.controlBuilder != null &&
-        state != AppLifecycleState.resumed &&
-        _playing) {
-      setState(_cancelPlayback);
-    }
+    final foreground = state == AppLifecycleState.resumed;
+    if (foreground == _foreground) return;
+    setState(() {
+      _foreground = foreground;
+      if (!foreground) _cancelPlayback();
+    });
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    if (_playing) unawaited(_provider?.phonicsAudio.stop());
+    _cancelPlayback();
     super.dispose();
   }
 
@@ -847,20 +867,18 @@ class _AudioButtonState extends State<AudioButton> with WidgetsBindingObserver {
   void didUpdateWidget(AudioButton oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.phrase != widget.phrase) {
+      _cancelPlayback(phrase: oldWidget.phrase);
       _attempt++;
-      if (_playing) unawaited(_provider?.phonicsAudio.stop());
       _playing = false;
       _heard = false;
       _message = null;
     }
-    if (widget.controlBuilder != null && !widget.enabled) _cancelPlayback();
+    if (!widget.enabled) _cancelPlayback();
   }
 
   String? _message;
   Future<void> _play() async {
-    if (_playing ||
-        !widget.enabled ||
-        !context.read<AppProvider>().voiceEnabled) {
+    if (_playing || !widget.enabled || !_environmentAvailable) {
       return;
     }
     widget.onBeforePlay?.call();
@@ -872,6 +890,10 @@ class _AudioButtonState extends State<AudioButton> with WidgetsBindingObserver {
     });
     await p.audio.stop();
     if (!mounted || attempt != _attempt) return;
+    if (!_environmentAvailable) {
+      setState(() => _cancelPlayback());
+      return;
+    }
     final success = await p.phonicsAudio.playInstruction(widget.phrase);
     if (!mounted || attempt != _attempt) return;
     setState(() {
@@ -885,7 +907,7 @@ class _AudioButtonState extends State<AudioButton> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final voiceEnabled = context.watch<AppProvider>().voiceEnabled;
-    final enabled = widget.enabled && voiceEnabled;
+    final enabled = widget.enabled && voiceEnabled && _environmentAvailable;
     final available = PhonicsAudioService.assetForPhrase(widget.phrase) != null;
     final label = _playing
         ? 'Listening…'
@@ -1008,12 +1030,18 @@ class GameResultDialog extends StatefulWidget {
       required this.earnedStars,
       required this.onAgain,
       required this.onBack,
+      this.onReview,
+      this.reviewCount = 0,
+      this.accuracyNote = 'Accuracy includes retries.',
       this.totalItems,
       this.correctItems,
       this.backLabel = 'Back to Games'});
   final int correct, attempts, earnedXp, earnedStars;
   final int? totalItems, correctItems;
   final VoidCallback onAgain, onBack;
+  final VoidCallback? onReview;
+  final int reviewCount;
+  final String accuracyNote;
   final String backLabel;
   @override
   State<GameResultDialog> createState() => _GameResultDialogState();
@@ -1105,7 +1133,7 @@ class _GameResultDialogState extends State<GameResultDialog> {
                     style: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.w700)),
                 Text(
-                    'Attempts: ${widget.attempts} • Wrong attempts: ${widget.attempts - widget.correct}\nAccuracy includes retries.',
+                    'Attempts: ${widget.attempts} • Wrong attempts: ${widget.attempts - widget.correct}\n${widget.accuracyNote}',
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontSize: 12, color: KidsUi.muted)),
                 const SizedBox(height: 10),
@@ -1147,6 +1175,20 @@ class _GameResultDialogState extends State<GameResultDialog> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      if (widget.onReview != null &&
+                          widget.reviewCount > 0) ...[
+                        SizedBox(
+                            width: double.infinity,
+                            child: OutlinedButton.icon(
+                                key: const ValueKey('quiz-review-mistakes'),
+                                onPressed: withButtonSound(_used
+                                    ? null
+                                    : () => _act(widget.onReview!)),
+                                icon: const Icon(Icons.replay_rounded),
+                                label: Text(
+                                    'Review Mistakes (${widget.reviewCount})'))),
+                        const SizedBox(height: 6),
+                      ],
                       SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
@@ -1444,7 +1486,10 @@ mixin GameSessionUi<T extends StatefulWidget> on State<T> {
   }
 
   Future<void> showGameResult(VoidCallback restart,
-      {String backLabel = 'Back to Games'}) async {
+      {String backLabel = 'Back to Games',
+      VoidCallback? onReview,
+      int reviewCount = 0,
+      String accuracyNote = 'Accuracy includes retries.'}) async {
     final navigator = Navigator.of(context);
     await _saved;
     if (!mounted) return;
@@ -1461,6 +1506,14 @@ mixin GameSessionUi<T extends StatefulWidget> on State<T> {
             earnedXp: earnedXp,
             earnedStars: earnedStars,
             backLabel: backLabel,
+            reviewCount: reviewCount,
+            accuracyNote: accuracyNote,
+            onReview: onReview == null
+                ? null
+                : () {
+                    navigator.pop();
+                    onReview();
+                  },
             onAgain: () {
               navigator.pop();
               clearGameLedger();

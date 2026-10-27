@@ -1,0 +1,17 @@
+﻿{
+    "mode":  "universal",
+    "arguments":  [
+                      "--no-version-check",
+                      "--suppress-analytics",
+                      "build",
+                      "apk",
+                      "--release",
+                      "--no-pub",
+                      "--target-platform",
+                      "android-arm,android-arm64,android-x64"
+                  ],
+    "startedUtc":  "2026-10-25T23:31:47.7975968Z",
+    "endedUtc":  "2026-10-25T23:41:39.0053751Z",
+    "exitCode":  0,
+    "generatedAPK":  "C:\\Users\\leeji\\AppData\\Local\\Temp\\kidsphonics-corrected-release-1792970978643\\working-copy\\build\\app\\outputs\\flutter-apk\\app-release.apk"
+}

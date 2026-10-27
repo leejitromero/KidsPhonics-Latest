@@ -14,6 +14,7 @@ void main() {
     (const Size(320, 568), 1.0),
     (const Size(390, 844), 1.0),
     (const Size(390, 844), 1.8),
+    (const Size(768, 1024), 1.0),
   ]) {
     testWidgets(
         'speech reference ordering and readable controls at $size x$scale',
@@ -37,8 +38,19 @@ void main() {
         find.byKey(const ValueKey('speech-hear-word')),
         find.byKey(const ValueKey('speech-microphone')),
         find.byKey(const ValueKey('speech-heard-card')),
-        find.byKey(const ValueKey('speech-tip-card')),
       ];
+      final guide = find.byKey(const ValueKey('game-instruction-guide'));
+      final scroll = find.byKey(const ValueKey('speech-content-scroll'));
+      final guideRect = t.getRect(guide);
+      final viewport = t.getRect(scroll);
+      expect(find.byKey(const ValueKey('speech-tip-card')), findsNothing);
+      expect(guideRect.top, greaterThanOrEqualTo(0));
+      expect(guideRect.bottom, lessThanOrEqualTo(viewport.top));
+      expect(t.getRect(parts.first).top, greaterThanOrEqualTo(viewport.top));
+      // Content must stop painting at the viewport when it scrolls beneath
+      // the fixed instruction bubble (the original overlap regression).
+      expect(t.widget<SingleChildScrollView>(scroll).clipBehavior,
+          isNot(Clip.none));
       for (var i = 1; i < parts.length; i++) {
         expect(t.getRect(parts[i]).top,
             greaterThanOrEqualTo(t.getRect(parts[i - 1]).bottom));
@@ -63,6 +75,23 @@ void main() {
       await t.ensureVisible(parts.last);
       await t.pump();
       expect(t.getRect(parts.last).bottom, lessThanOrEqualTo(size.height));
+      expect(t.getRect(guide), guideRect);
+      expect(t.takeException(), isNull);
+
+      final word =
+          t.widget<SpeechPictureCard>(find.byType(SpeechPictureCard)).word;
+      speech.result!(word, true);
+      await t.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 20)));
+      await t.pump();
+      expect(find.text('Recognized'), findsOneWidget);
+      final next = find.byKey(const ValueKey('speech-next-word'));
+      await t.ensureVisible(next);
+      await t.pump();
+      expect(t.getRect(guide), guideRect);
+      expect(t.getRect(next).top, greaterThanOrEqualTo(viewport.top));
+      expect(t.getRect(next).bottom, lessThanOrEqualTo(viewport.bottom));
+      expect(find.text('Next Word').hitTestable(), findsOneWidget);
       expect(t.takeException(), isNull);
       await close(t, p);
     });

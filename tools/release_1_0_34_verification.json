@@ -1,0 +1,52 @@
+{
+  "version": "1.0.34+35",
+  "verifiedUtc": "2026-10-23T17:22:35.363499+00:00",
+  "APK": "output/apk/KidsPhonics-1.0.34-build35.apk",
+  "capturedSourceInputs": 1092,
+  "sourceInputsUnchanged": true,
+  "registeredAssetsVerified": 880,
+  "bundledAssetsMatchSource": 880,
+  "suppliedGameRecordingsVerified": 11,
+  "suppliedLessonRecordingsVerified": 10,
+  "retiredIntroRecordingsAbsent": 5,
+  "ApkBytes": 546282393,
+  "ApkSHA256": "1AF2A20A3F96FE4BFCC47991D2DB6C9A33221CE676C4C3D6C2D572945D7D96AB",
+  "physicalDeviceTested": false,
+  "signatureVerified": true,
+  "updateCertificateMatchesPreviousRelease": true,
+  "signerCertificateSHA256": "e51915ff388c75d5cb980d40ecb354a5379806fee2b3dc67a36ab4e701774f69",
+  "packageMetadata": "package: name='com.example.kidsphonics' versionCode='35' versionName='1.0.34' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+  "androidVersionName": "1.0.34",
+  "androidVersionCode": 35,
+  "androidArchitectures": [
+    "armeabi-v7a",
+    "arm64-v8a",
+    "x86_64"
+  ],
+  "alphabetPicturesAssetsVerified": {
+    "pictures": 78,
+    "sentences": 26,
+    "instructions": 2
+  },
+  "suppliedUIArtworkVerified": [
+    "assets/images/new_ui/correct_frame.png",
+    "assets/images/new_ui/missing_vowel_next.png",
+    "assets/images/progress_collection/phonics_skills_frame.png"
+  ],
+  "updates": [
+    "Compact Rumbled Words buttons, letter boards and spacing with a visible picture",
+    "Supplied green Correct frame across six games",
+    "Supplied yellow Next button in Missing Vowel",
+    "Supplied My Phonics Skills frame with five aligned skill rows",
+    "Previously delivered Alphabet & Pictures and other UI improvements"
+  ],
+  "validationLogs": [
+    "build/rumbled_compact_layout_final.log",
+    "build/rumbled_compact_analysis_final.log",
+    "build/game_feedback_art_final_checks.log",
+    "build/game_feedback_art_preview_final.log",
+    "build/game_feedback_art_analysis_final.log",
+    "build/phonics_skills_frame_verified.log",
+    "build/phonics_skills_frame_analysis_verified.log"
+  ]
+}

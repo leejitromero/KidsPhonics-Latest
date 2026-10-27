@@ -114,13 +114,18 @@ class _ParentScreenState extends State<ParentScreen> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     if (!provider.parentAuth.isAuthenticated) {
+      // Scaffold consumes viewInsets in its body. Read the keyboard here so
+      // PIN layout and footer space use the actual keyboard state.
+      final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
       return Theme(
           data: parentPanelTheme,
           child: Scaffold(
               body: _ParentGarden(
                   settingsOnly: widget.settingsOnly,
+                  showNavigation: !keyboardOpen,
                   child: SafeArea(
                       child: ParentPinForm(
+                          keyboardOpen: keyboardOpen,
                           auth: provider.parentAuth,
                           onBack: () {
                             final navigation =
@@ -339,12 +344,17 @@ class _ParentSection extends ParentSectionCard {
 }
 
 class _ParentGarden extends StatelessWidget {
-  const _ParentGarden({required this.child, this.settingsOnly = false});
+  const _ParentGarden(
+      {required this.child,
+      this.settingsOnly = false,
+      this.showNavigation = true});
   final Widget child;
   final bool settingsOnly;
+  final bool showNavigation;
   @override
   Widget build(BuildContext context) => SchoolRoomBody(
       room: SchoolRoom.parents,
+      showNavigation: showNavigation,
       navigationDestination:
           settingsOnly ? KidsDestination.settings : KidsDestination.parents,
       child: child);

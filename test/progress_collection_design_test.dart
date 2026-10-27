@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kidsphonics/providers/app_provider.dart';
 import 'package:kidsphonics/screens/progress_screen.dart';
 import 'package:kidsphonics/widgets/progress_letter_frame_design.dart';
+import 'package:kidsphonics/widgets/progress_rewards_frames.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show close;
 
@@ -256,9 +257,9 @@ void main() {
             .position
             .maxScrollExtent;
         if (bottom) {
-          final scroll =
-              t.state<ScrollableState>(find.byType(Scrollable).first).position;
-          scroll.jumpTo(scroll.maxScrollExtent);
+          await t.scrollUntilVisible(find.text(ProgressTreasureFrame.note), 200,
+              scrollable: find.byType(Scrollable).first);
+          await t.pumpAndSettle();
         }
         await t.runAsync(() async {
           await Future.wait(t

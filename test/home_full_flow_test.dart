@@ -179,6 +179,9 @@ void main() {
       final start = t.getRect(find.byKey(const ValueKey('home-student')));
       final left = category == 'lessons';
       final cue = '${character}_lets_${left ? 'learn' : 'play'}.mp3';
+      await t.runAsync(() => prepareCloudTransition(
+          t.element(find.byType(HomeScreen)),
+          cloudTransitionImages(t.element(find.byType(HomeScreen)))));
       await t.tap(find.byKey(ValueKey('home-$category')));
       await waitForVoice(t, () => audio.starts.any((s) => s.endsWith(cue)));
       expect(find.byKey(ValueKey('walk-$character-$left')), findsNothing);
@@ -213,15 +216,26 @@ void main() {
       expect(stopped.left, greaterThanOrEqualTo(0));
       expect(stopped.right, lessThanOrEqualTo(390));
       expect(find.byKey(ValueKey('walk-$character-$left')), findsNothing);
-      expect(
-          find.byKey(const ValueKey('home-character-cloud')), findsOneWidget);
-      expect(find.byType(destination), findsNothing);
-      await t.pump(const Duration(milliseconds: 471));
-      await t.pump();
+      expect(find.byKey(const ValueKey('home-character-cloud')), findsNothing);
       await waitForVoice(
-          t, () => find.byType(destination).evaluate().isNotEmpty);
+          t,
+          () =>
+              find.byType(destination).evaluate().isNotEmpty &&
+              find
+                  .byKey(const ValueKey('cloud-transition'))
+                  .evaluate()
+                  .isNotEmpty);
       await t.pump();
-      await t.pump(const Duration(milliseconds: 600));
+      final curtain = t.widget<CloudScreenTransition>(
+          find.byType(CloudScreenTransition).last);
+      expect(
+          ModalRoute.of(t.element(find.byType(CloudScreenTransition).last))!
+              .transitionDuration,
+          const Duration(milliseconds: 1800));
+      await t.pump(const Duration(milliseconds: 900));
+      expect(curtain.animation.value, closeTo(.5, .02));
+      expect(find.byType(destination).hitTestable(), findsNothing);
+      await t.pump(const Duration(milliseconds: 950));
       expect(find.byType(destination), findsOneWidget);
       expect(
           audio.starts.where((s) => s.endsWith('kidsphonics_title_chorus.mp3')),

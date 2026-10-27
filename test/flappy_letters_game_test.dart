@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:kidsphonics/models/difficulty.dart';
 import 'package:kidsphonics/models/flappy_letters_game.dart';
 import 'package:kidsphonics/services/phonics_audio_service.dart';
+import 'package:kidsphonics/widgets/loading_screen_art.dart';
 
 void main() {
   test('difficulty changes only travel speed', () {
@@ -90,12 +91,18 @@ void main() {
     expect(game.advance(.1), isEmpty);
   });
 
-  test('all letter-name recordings and the loading mascot exist', () {
+  test('all letter-name/sound recordings and the loading frames exist', () {
     for (final letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')) {
-      final asset = PhonicsAudioService.assetForPhrase('lesson-letter-$letter');
-      expect(asset, isNotNull);
-      expect(File('assets/$asset').existsSync(), isTrue, reason: letter);
+      for (final kind in ['letter', 'sound']) {
+        final asset =
+            PhonicsAudioService.assetForPhrase('lesson-$kind-$letter');
+        expect(asset, isNotNull);
+        expect(File('assets/$asset').existsSync(), isTrue,
+            reason: '$letter $kind');
+      }
     }
-    expect(File('assets/images/app_mascot.png').existsSync(), isTrue);
+    for (final frame in loadingScreenFrames) {
+      expect(File(frame).existsSync(), isTrue, reason: frame);
+    }
   });
 }

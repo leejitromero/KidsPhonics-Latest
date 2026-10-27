@@ -1,4 +1,7 @@
 import 'game_word_data.dart';
+import 'cvc_lesson_data.dart';
+import 'phonics_quiz_prompts.dart';
+export 'phonics_quiz_prompts.dart' show QuizSoundPosition;
 // Central introductory sound scope. Teacher review: PHONICS_TEACHER_VALIDATION.md.
 import '../models/difficulty.dart';
 
@@ -245,7 +248,18 @@ class SoundRound {
 }
 
 class QuizQuestion extends SoundRound {
-  QuizQuestion(super.correctLetter, super.choices, {super.artwork});
+  QuizQuestion(super.correctLetter, super.choices,
+      {super.artwork, this.cue, this.position = QuizSoundPosition.beginning});
+  final CvcLessonWord? cue;
+  final QuizSoundPosition position;
+  @override
+  String get word => cue?.word ?? super.word;
+  String get id => '${word.toUpperCase()}-${position.name}';
+  String get wordAudioKey => cue?.wordAudio ?? voiceHint;
+  String? get pictureAsset => cue?.imageAsset;
+  @override
+  String get question => position.question;
+  String get explanation => '$word: ${position.name} sound is $correctLetter.';
 }
 
 final List<SoundRound> soundRounds = [
@@ -326,18 +340,32 @@ final List<QuizQuestion> quizQuestionsHard = [
   QuizQuestion('Z', ['Z', 'S', 'X', 'C']),
 ];
 List<QuizQuestion> quizQuestionsForDifficulty(Difficulty d) => [
-      for (final w in gameWordsFor(d))
-        QuizQuestion(
-            w.letter,
-            [
-              w.letter,
-              ...'BCDFHKLMNPRSTVW'
-                  .split('')
-                  .where((l) => l != w.letter)
-                  .take(d.index + 2)
-            ],
-            artwork: w),
+      // Three-letter words have one unambiguous target sound per position.
+      // Keep silent letters, digraphs and consonant clusters out of this quiz.
+      for (final word
+          in cvcLessonWords.where((w) => w.word != 'RED' && w.word != 'RUN'))
+        for (final position in quizPositionsFor(d))
+          QuizQuestion(word.word[position.wordIndex],
+              _quizChoices(word.word[position.wordIndex], position, word.word),
+              cue: word, position: position),
     ];
+
+List<QuizSoundPosition> quizPositionsFor(Difficulty d) => switch (d) {
+      Difficulty.easy => [QuizSoundPosition.beginning],
+      Difficulty.medium => [QuizSoundPosition.beginning, QuizSoundPosition.end],
+      Difficulty.hard => QuizSoundPosition.values,
+    };
+
+List<String> _quizChoices(
+    String target, QuizSoundPosition position, String word) {
+  final pool =
+      (position == QuizSoundPosition.middle ? 'AEIOU' : 'BDFGHLMNPRSTVWZC')
+          .split('');
+  final offset = word.codeUnits.fold(0, (sum, c) => sum + c) % pool.length;
+  final rotated = [...pool.skip(offset), ...pool.take(offset)];
+  return soundChoices(
+      target, [target, ...rotated.where((letter) => letter != target).take(2)]);
+}
 
 class MemoryPair {
   final String letter;
