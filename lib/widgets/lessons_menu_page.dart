@@ -20,7 +20,7 @@ class LessonsMenuPage extends StatelessWidget {
   final ValueListenable<LessonIntroductionStatus>? introductionStatus;
   final String title, instruction;
   final Widget child;
-  static const bannerAsset = '$lessonHeaderAssets/banner_lessons.png';
+  static const bannerAsset = '$lessonHeaderAssets/banner_lessons.webp';
 
   @override
   Widget build(BuildContext context) => Theme(

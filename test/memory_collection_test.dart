@@ -103,7 +103,13 @@ void main() {
         }
       }
       expect(collected, total);
-      expect(p.stars, total);
+      final result = t.widget<GameResultDialog>(find.byType(GameResultDialog));
+      expect(
+          p.stars,
+          gameRoundStars(
+              correct: result.correct,
+              total: result.attempts,
+              completed: true));
       expect(p.xp, total * 5 + 10);
       await t.ensureVisible(find.text('Play Again'));
       await t.tap(find.text('Play Again'));

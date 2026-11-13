@@ -22,13 +22,13 @@ class DayCycleBackground extends StatefulWidget {
   static const fadeDuration = Duration(milliseconds: 650);
   static List<String> framesFor(String category) => category == 'home'
       ? const [
-          'assets/images/home_classroom/new_bgmornig.png',
-          'assets/images/home_classroom/new_bg_sunset.png',
-          'assets/images/home_classroom/new_bg_night.png',
+          'assets/images/home_classroom/new_bgmornig.webp',
+          'assets/images/home_classroom/new_bg_sunset.webp',
+          'assets/images/home_classroom/new_bg_night.webp',
         ]
       : [
           for (var i = 1; i <= 3; i++)
-            '$sceneAssets/${category}_new_bg${category == 'games' && i == 1 ? '' : '_'}$i.png',
+            '$sceneAssets/${category}_new_bg${category == 'games' && i == 1 ? '' : '_'}$i.webp',
         ];
   @override
   State<DayCycleBackground> createState() => _DayCycleBackgroundState();

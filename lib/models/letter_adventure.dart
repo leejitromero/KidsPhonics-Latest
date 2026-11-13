@@ -57,10 +57,10 @@ const adventureContents = [
 ];
 
 String adventureWordKey(String word) {
-  for (final item in cvcLessonWords) {
+  for (final item in cvcIllustratedWords) {
     if (item.word.toLowerCase() == word.toLowerCase()) return item.wordAudio;
   }
-  for (final item in blendingLessonWords) {
+  for (final item in blendingCoreWords) {
     if (item.word.toLowerCase() == word.toLowerCase()) return item.wordAudio;
   }
   final lesson = lessonExamples.where((e) => e.word == word);
@@ -70,7 +70,7 @@ String adventureWordKey(String word) {
 }
 
 String adventurePicture(String word) {
-  for (final item in [...cvcLessonWords, ...blendingLessonWords]) {
+  for (final item in [...cvcIllustratedWords, ...blendingCoreWords]) {
     if (item.word.toLowerCase() == word.toLowerCase() &&
         item.imageAsset != null) {
       return item.imageAsset!;

@@ -44,12 +44,12 @@ const profileIntroduction = <HomeDialogue>[
 
 List<String> mascotTalkingFrames(bool games) => [
       for (var i = 1; i <= 5; i++)
-        '$sceneAssets/${games ? 'games_talking_$i' : 'lesson_mascot_talking$i'}.png',
+        '$sceneAssets/${games ? 'games_talking_$i' : 'lesson_mascot_talking$i'}.webp',
     ];
 
 List<String> studentWalkingFrames(String character, {required bool left}) => [
       for (var i = left ? 7 : 2; i <= (left ? 10 : 5); i++)
-        '$sceneAssets/${character}_$i.png',
+        '$sceneAssets/${character}_$i.webp',
     ];
 
 const welcomeLessonText =

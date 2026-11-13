@@ -14,7 +14,7 @@ void main() {
     mockProgressAudio();
   });
 
-  testWidgets('selection floats without moving letters; drag inserts in order',
+  testWidgets('selection stays still; direct drag inserts letters in order',
       (t) async {
     final p = await mount(
         t,
@@ -25,11 +25,10 @@ void main() {
     final before = boardLetters(t, word.length);
     await tapBoardLetter(t, 0);
     expect(boardLetters(t, word.length), before);
-    expect(find.text('Drag the floating letter into place.'), findsOneWidget);
+    expect(find.text('Drag the selected letter into place.'), findsOneWidget);
     await tapBoardLetter(t, 0);
-    expect(find.text('Drag the floating letter into place.'), findsNothing);
+    expect(find.text('Drag the selected letter into place.'), findsNothing);
     // CTA -> CAT: moving the last tile to the middle shifts the middle one.
-    await tapBoardLetter(t, 2);
     await dragBoardLetter(t, 2, 1);
     final expected = List.of(before);
     expected.insert(1, expected.removeAt(2));
@@ -63,38 +62,35 @@ void main() {
     await t.pump();
     expect(session.scoredAttempts, 1);
     expect(boardLetters(t, word.length), before);
-    expect(find.text('Try again! Drag a letter into place.'), findsOneWidget);
-    // Selecting and cancelling do not allow the same wrong answer to be scored
-    // again. The board must actually change.
-    await tapBoardLetter(t, 0);
-    await tapBoardLetter(t, 0);
+    expect(find.text('Answer saved!'), findsOneWidget);
     expect(t.widget<OutlinedButton>(check).onPressed, isNull);
-    await t.tap(find.byKey(const ValueKey('word-hint')));
-    await t.pump();
-    expect(boardLetters(t, word.length).first, word[0]);
-    expect(
-        t
-            .widget<ElevatedButton>(find.byKey(const ValueKey('word-tile-0')))
-            .onPressed,
-        isNull);
     expect(
         t
             .widget<OutlinedButton>(find.byKey(const ValueKey('word-hint')))
             .onPressed,
         isNull);
-    expect(session.scoredAttempts, 1);
-    await arrangeBoard(t, word);
-    expect(session.scoredAttempts, 1);
-    expect(find.text('Correct!'), findsNothing);
+    await flushWrites(t);
+    expect((p.xp, p.stars), (0, 0));
+    expect(p.dailyActivity.values.single.questionsAnswered, 1);
+    await t.pump(const Duration(milliseconds: 700));
+    expect(
+        t
+            .widget<WordGameLayout>(find.byType(WordGameLayout))
+            .word
+            .toUpperCase(),
+        isNot(word));
+    final newWord = t
+        .widget<WordGameLayout>(find.byType(WordGameLayout))
+        .word
+        .toUpperCase();
+    await arrangeBoard(t, newWord);
     final submitCorrect = t.widget<OutlinedButton>(check).onPressed!;
     submitCorrect();
     submitCorrect();
     await t.pump();
-    expect(find.text('Correct!'), findsOneWidget);
-    expect(session.scoredAttempts, 2);
-    expect(session.correctAttempts, 1);
+    expect((session.scoredAttempts, session.correctAttempts), (2, 1));
     await flushWrites(t);
-    expect((p.xp, p.stars), (8, 1));
+    expect((p.xp, p.stars), (8, 0));
     expect(p.dailyActivity.values.single.questionsAnswered, 2);
     await close(t, p);
   });

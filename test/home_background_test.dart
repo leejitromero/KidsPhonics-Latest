@@ -1,16 +1,17 @@
 import 'dart:io';
-import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kidsphonics/widgets/day_cycle_background.dart';
+import 'verified_image_assets.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   final frames = DayCycleBackground.framesFor('home');
 
-  test('home uses the three unmodified supplied images in day order', () {
+  test('home preserves the three supplied images in day order', () async {
     const hashes = [
       '07ea266057db487a6a45890335e69b1b0b90dd5bc2081d78add71df3aa5ff0d1',
       '6da868d628bfc6f47160d41f891929ab5e28a3f4c454155d4c7cab1790b7831f',
@@ -18,10 +19,14 @@ void main() {
     ];
     for (var i = 0; i < frames.length; i++) {
       final bytes = File(frames[i]).readAsBytesSync();
-      expect(sha256.convert(bytes).toString(), hashes[i]);
-      final header = ByteData.sublistView(bytes);
-      expect(header.getUint32(16), 1024);
-      expect(header.getUint32(20), 1536);
+      expect(sha256.convert(bytes).toString(),
+          optimizedImageHash(frames[i], hashes[i]));
+      final codec = await ui.instantiateImageCodec(bytes);
+      final image = (await codec.getNextFrame()).image;
+      expect(image.width, 1024);
+      expect(image.height, 1536);
+      image.dispose();
+      codec.dispose();
     }
   });
 

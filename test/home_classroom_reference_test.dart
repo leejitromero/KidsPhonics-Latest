@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import 'package:kidsphonics/widgets/day_cycle_background.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show mount, close;
 import 'updated_scene_test.dart' show loadArt, capture;
+import 'verified_image_assets.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +24,7 @@ void main() {
       () async {
     for (final path in [
       'assets/images/app_icon.png',
-      'assets/images/games_locl.png',
+      'assets/images/games_locl.webp',
       'android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png',
     ]) {
       final codec =
@@ -47,7 +47,7 @@ void main() {
         }
         expect(alpha(image.width ~/ 2, image.height ~/ 2), greaterThan(240),
             reason: 'Keep the actual illustration visible.');
-        if (path.endsWith('games_locl.png')) {
+        if (path.endsWith('games_locl.webp')) {
           expect(alpha(image.width ~/ 2, image.height ~/ 4), 0,
               reason: 'The classroom should show through the shackle opening.');
         }
@@ -64,9 +64,8 @@ void main() {
             'The artwork should fill the launcher mask without the old wide cyan frame.');
   });
 
-  test(
-      'current runtime Home artwork stays byte-identical at its approved dimensions',
-      () {
+  test('current runtime Home artwork preserves approved pixels and dimensions',
+      () async {
     const hashes = {
       'new_bgmornig':
           '07ea266057db487a6a45890335e69b1b0b90dd5bc2081d78add71df3aa5ff0d1',
@@ -76,14 +75,18 @@ void main() {
           'c10e614dae6f4b5fdebe3d3a38fe812fec5a0ca5168ab9d76b66da1fba8abc77',
     };
     for (final entry in hashes.entries) {
-      final source = File('assets/images/home_classroom/${entry.key}.png');
-      expect(sha256.convert(source.readAsBytesSync()).toString(), entry.value);
-      final header = ByteData.sublistView(source.readAsBytesSync());
-      expect(header.getUint32(16), 1024);
-      expect(header.getUint32(20), 1536);
+      final source = File('assets/images/home_classroom/${entry.key}.webp');
+      expect(sha256.convert(source.readAsBytesSync()).toString(),
+          optimizedImageHash(source.path.replaceAll('\\', '/'), entry.value));
+      final codec = await ui.instantiateImageCodec(source.readAsBytesSync());
+      final image = (await codec.getNextFrame()).image;
+      expect(image.width, 1024);
+      expect(image.height, 1536);
+      image.dispose();
+      codec.dispose();
     }
     expect(DayCycleBackground.framesFor('home'), [
-      for (final name in hashes.keys) 'assets/images/home_classroom/$name.png'
+      for (final name in hashes.keys) 'assets/images/home_classroom/$name.webp'
     ]);
   });
 
@@ -197,7 +200,7 @@ void main() {
       final image = t.widget<Image>(lock);
       expect(
           ((image.image as ResizeImage).imageProvider as AssetImage).assetName,
-          'assets/images/games_locl.png');
+          'assets/images/games_locl.webp');
       expect(image.fit, BoxFit.contain);
       final lockRect = t.getRect(lock);
       final buttonRect = t.getRect(find.byKey(const ValueKey('home-games')));

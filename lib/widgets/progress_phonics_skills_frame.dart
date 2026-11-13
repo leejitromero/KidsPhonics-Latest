@@ -9,7 +9,7 @@ class ProgressPhonicsSkillsFrame extends StatelessWidget {
       : assert(children.length == 5);
   final List<Widget> children;
   static const asset =
-      'assets/images/progress_collection/phonics_skills_frame.png';
+      'assets/images/progress_collection/phonics_skills_frame.webp';
   static const slotTops = [300.0, 516.0, 732.0, 948.0, 1164.0];
 
   @override

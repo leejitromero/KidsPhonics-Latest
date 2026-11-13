@@ -34,7 +34,8 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     mockProgressAudio();
   });
-  testWidgets('wrong and correct options finish letter names before feedback',
+  testWidgets(
+      'a wrong letter fills the blank and scores once without corrective audio',
       (t) async {
     final audio = QuizAudioHarness()..install();
     final p =
@@ -43,36 +44,25 @@ void main() {
     await t.pump();
     final task = puzzle(t, Difficulty.easy);
     final wrong = task.tiles.firstWhere((l) => l != task.correctLetters.first);
-    await t.tap(find.byKey(ValueKey('builder-choice-$wrong')));
+    final choice = t.widget<GameAnswerButton>(find
+        .byWidgetPredicate((w) => w is GameAnswerButton && w.label == wrong)
+        .first);
+    await t.tap(find.byKey(choice.buttonKey!));
     await t.pump();
     await flushAudio(t);
-    expect(audio.starts.last,
-        endsWith('/letters/letter-${wrong.toLowerCase()}.mp3'));
-    expect(find.byKey(const ValueKey('flying-builder-letter')), findsNothing);
-    expect(slot(t, 0), '_');
-    expect(t.widget<AudioButton>(find.byType(AudioButton)).enabled, isFalse);
-    await t.runAsync(() => audio.completeLetterName(wrong));
-    await flushAudio(t);
-    await t.pump(const Duration(milliseconds: 350));
-    final answer = task.correctLetters.first;
-    await t.tap(find.byKey(ValueKey('builder-choice-$answer')));
-    await t.pump();
-    await flushAudio(t);
-    expect(audio.starts.last,
-        endsWith('/letters/letter-${answer.toLowerCase()}.mp3'));
+    expect(
+        audio.starts.where((s) => !s.contains('/game_instructions/')), isEmpty,
+        reason: 'Choices do not reveal correctness through audio');
     await t.pump(const Duration(milliseconds: 600));
-    expect(slot(t, 0), answer);
+    expect(slot(t, 0), wrong);
     expect(p.stars, 0);
-    expect(audio.sources.where((s) => s.contains('/praise-')), isEmpty);
-    await t.pump(const Duration(seconds: 2));
-    expect(puzzle(t, Difficulty.easy).word, task.word);
-    await t.runAsync(() => audio.completeLetterName(answer));
-    await flushAudio(t);
-    expect(p.stars, 1);
-    expect(audio.sources.where((s) => s.contains('/praise-')), isEmpty);
-    expect(audio.sources.where((s) => s.contains('/game_narration/')), isEmpty);
-    await t.pump(const Duration(milliseconds: 1100));
+    expect(p.xp, 0);
+    final state = t.state<GameSessionUi>(find.byType(WordBuilderScreen));
+    expect((state.scoredAttempts, state.correctAttempts), (1, 0));
+    expect(find.text('Answer saved!'), findsOneWidget);
+    await t.pump(const Duration(milliseconds: 700));
     expect(puzzle(t, Difficulty.easy).word, isNot(task.word));
+    expect(audio.sources.where((s) => s.contains('/praise-')), isEmpty);
     await close(t, p);
   });
 }

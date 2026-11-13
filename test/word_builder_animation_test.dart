@@ -44,16 +44,21 @@ void main() {
       await t.pump();
       final task = puzzle(t, Difficulty.hard);
       for (var i = 0; i < task.correctLetters.length; i++) {
-        final choice =
-            find.byKey(ValueKey('builder-choice-${task.correctLetters[i]}'));
+        final available = find
+            .byWidgetPredicate((w) =>
+                w is GameAnswerButton && w.label == task.correctLetters[i])
+            .first;
+        final tile = t.widget<GameAnswerButton>(available);
+        final choice = find.byKey(tile.buttonKey!);
         final start = t.getRect(choice);
         final end = t.getRect(find.byKey(ValueKey('builder-blank-$i')));
         await t.tap(choice);
-        await t.tap(choice);
+        tile.onPressed!();
         await t.pump();
         final flying = find.byKey(const ValueKey('flying-builder-letter'));
         expect(flying, findsOneWidget);
-        expect(t.getRect(flying), start);
+        expect(find.byType(GameAnswerButton), findsNWidgets(4 - i));
+        expect((t.getRect(flying).center - start.center).distance, lessThan(4));
         expect(slot(t, i), '_');
         await t.pump(const Duration(milliseconds: 275));
         expect(t.getRect(flying).center.dy, lessThan(start.center.dy));
@@ -63,7 +68,7 @@ void main() {
         expect(flying, findsNothing);
         expect(slot(t, i), task.correctLetters[i]);
         await flushAudio(t);
-        expect(p.stars, i == task.correctLetters.length - 1 ? 1 : 0);
+        expect(p.stars, 0);
         await t.pump(const Duration(milliseconds: 1100));
       }
       expect(t.takeException(), isNull);
@@ -74,8 +79,11 @@ void main() {
   testWidgets('leaving during a flight removes the animated letter', (t) async {
     final p = await mount(t, const WordBuilderScreen());
     final task = puzzle(t, Difficulty.medium);
-    await t.tap(
-        find.byKey(ValueKey('builder-choice-${task.correctLetters.first}')));
+    final selected = t.widget<GameAnswerButton>(find
+        .byWidgetPredicate((w) =>
+            w is GameAnswerButton && w.label == task.correctLetters.first)
+        .first);
+    await t.tap(find.byKey(selected.buttonKey!));
     await t.pump();
     expect(find.byKey(const ValueKey('flying-builder-letter')), findsOneWidget);
     await close(t, p);

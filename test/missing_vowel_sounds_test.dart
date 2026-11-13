@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,6 +8,7 @@ import 'package:kidsphonics/data/phonics_activity_data.dart';
 import 'package:kidsphonics/models/difficulty.dart';
 import 'package:kidsphonics/screens/missing_vowel_screen.dart';
 import 'package:kidsphonics/services/phonics_audio_service.dart';
+import 'package:kidsphonics/services/audio_service.dart';
 import 'package:kidsphonics/widgets/game_design.dart';
 import 'package:kidsphonics/widgets/learner_widgets.dart';
 import 'package:kidsphonics/widgets/word_game_layout.dart';
@@ -42,15 +44,46 @@ Set<int> glowing(WidgetTester t, int length) => {
           i
     };
 
+Map<String, Object> soundTestPreferences({String? firstWord}) => {
+      'sfx': false,
+      'gameSessionOrderV1': jsonEncode({
+        'version': 1,
+        'games': {
+          for (final d in Difficulty.values)
+            'missing_vowel-${d.name}': {
+              'pool': vowelPuzzlesFor(d).map((p) => p.word).toList(),
+              'remaining': (vowelPuzzlesFor(d).map((p) => p.word).toList()
+                ..sort((a, b) {
+                  int rank(String w) => w == firstWord
+                      ? -1
+                      : PhonicsAudioService.assetForPhrase(
+                                  missingVowelSoundSteps(w).single.phrase) !=
+                              null
+                          ? 0
+                          : 1;
+                  final byRank = rank(a).compareTo(rank(b));
+                  return byRank == 0 ? a.compareTo(b) : byRank;
+                })),
+            },
+        },
+      }),
+    };
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUp(() {
-    SharedPreferences.setMockInitialValues({'sfx': false});
+    SharedPreferences.setMockInitialValues(soundTestPreferences());
     mockProgressAudio();
     final dispatcher = TestWidgetsFlutterBinding.instance.platformDispatcher;
     dispatcher.accessibilityFeaturesTestValue =
         const FakeAccessibilityFeatures(disableAnimations: true);
     addTearDown(dispatcher.clearAccessibilityFeaturesTestValue);
+  });
+  tearDown(() async {
+    // Each harness models fresh native players, including their cached sources.
+    PhonicsAudioService().dispose();
+    AudioService().dispose();
+    await Future<void>.delayed(Duration.zero);
   });
 
   test('all difficulties show all five vowels exactly once', () {
@@ -61,50 +94,63 @@ void main() {
     }
   });
 
-  test('TUB sounds its consonants and missing short vowel before the word', () {
-    final steps = missingVowelSoundSteps('TUB');
-    expect(steps.map((s) => s.phrase),
-        ['lesson-sound-T', 'lesson-sound-U', 'lesson-sound-B', 'TUB']);
-    expect(steps.map((s) => s.positions), [
-      [0],
-      [1],
-      [2],
-      [0, 1, 2]
-    ]);
-  });
-
-  test('word-specific vowel groups and silent letters use matching recordings',
+  test(
+      'one cue highlights only the blank and never reads the word or consonants',
       () {
-    final goat = missingVowelSoundSteps('GOAT');
-    expect(goat[1].phrase, 'lesson-letter-O');
-    expect(goat[1].positions, [1, 2]);
-    final rose = missingVowelSoundSteps('ROSE');
-    expect(rose.map((s) => s.phrase),
-        ['lesson-sound-R', 'lesson-letter-O', 'lesson-sound-Z', 'ROSE']);
-    expect(rose[1].positions, [1, 3]);
-    final lamb = missingVowelSoundSteps('LAMB');
-    expect(lamb.map((s) => s.phrase), isNot(contains('lesson-sound-B')));
-    for (final word in ['MOON', 'SHEEP']) {
-      final steps = missingVowelSoundSteps(word);
-      expect(steps, hasLength(1));
-      expect(steps.single.phrase, word);
-      expect(steps.single.positions, List.generate(word.length, (i) => i));
-    }
-    for (final difficulty in Difficulty.values) {
-      for (final puzzle in vowelPuzzlesFor(difficulty)) {
-        final steps = missingVowelSoundSteps(puzzle.word);
-        expect(steps.last.phrase, puzzle.word);
-        for (final step in steps) {
-          expect(step.positions, isNotEmpty);
-          expect(step.positions.every((i) => i >= 0 && i < puzzle.word.length),
-              isTrue);
-          final asset = PhonicsAudioService.assetForPhrase(step.phrase);
-          expect(asset, isNotNull, reason: step.phrase);
-          expect(File('assets/$asset').existsSync(), isTrue,
-              reason: step.phrase);
-        }
+    final steps = missingVowelSoundSteps('TUB');
+    expect(steps, hasLength(1));
+    expect(steps.single.phrase, 'lesson-sound-U');
+    expect(steps.single.positions, [1]);
+    for (final d in Difficulty.values) {
+      for (final puzzle in vowelPuzzlesFor(d)) {
+        final cue = missingVowelSoundSteps(puzzle.word);
+        expect(cue, hasLength(1), reason: puzzle.word);
+        expect(cue.single.positions, [puzzle.display.split(' ').indexOf('_')]);
+        expect(cue.single.phrase, isNot(puzzle.word));
+        final asset = PhonicsAudioService.assetForPhrase(cue.single.phrase);
+        expect(cue.single.phrase, 'lesson-sound-${puzzle.vowel}');
+        expect(asset, isNotNull);
+        expect(File('assets/$asset').existsSync(), isTrue);
       }
     }
+  });
+
+  test('every written vowel uses its existing sound recording', () {
+    for (final (word, vowel, position) in [
+      ('FAN', 'A', 1),
+      ('NET', 'E', 1),
+      ('LIPS', 'I', 1),
+      ('MOON', 'O', 1),
+      ('TUB', 'U', 1),
+      ('BOOK', 'O', 1),
+      ('ONION', 'O', 0),
+      ('QUILL', 'U', 1),
+      ('HEART', 'E', 1),
+    ]) {
+      final cue = missingVowelSoundSteps(word).single;
+      expect(cue.phrase, 'lesson-sound-$vowel');
+      expect(cue.positions, [position]);
+    }
+    expect(missingVowelSoundSteps('sky'), isEmpty);
+  });
+
+  testWidgets('MOON uses the existing O sound and highlights only its blank',
+      (t) async {
+    SharedPreferences.setMockInitialValues(
+        soundTestPreferences(firstWord: 'MOON'));
+    final audio = QuizAudioHarness()..install();
+    final p = await mount(t, const MissingVowelScreen());
+    expect(t.widget<WordGameLayout>(find.byType(WordGameLayout)).word, 'MOON');
+    await audio.finishGameIntro(t, 'missing_vowel.mp3');
+    await waitFor(t, () => audio.starts.isNotEmpty);
+    expect(audio.starts.single, endsWith('/sounds/sound-o.mp3'));
+    expect(glowing(t, 4), {1});
+    expect(
+        t.widget<Text>(find.byKey(const ValueKey('vowel-blank-letter'))).data,
+        '_');
+    expect((p.xp, p.stars), (0, 0));
+    expect(t.takeException(), isNull);
+    await close(t, p);
   });
 
   testWidgets(
@@ -127,9 +173,15 @@ void main() {
     await t.pump(const Duration(seconds: 2));
     await drain(t);
     await flushWrites(t);
-    expect(audio.starts.length, before);
+    await waitFor(t, () => audio.starts.length > before);
+    expect(audio.starts.length, before + 1);
+    expect(audio.starts.last,
+        endsWith('/${PhonicsAudioService.assetForPhrase(word)}'));
+    expect(
+        t.widget<Text>(find.byKey(const ValueKey('vowel-blank-letter'))).data,
+        vowel);
     expect(glowing(t, word.length), isEmpty);
-    expect((p.xp, p.stars), (8, 1));
+    expect((p.xp, p.stars), (8, 0));
     expect(t.widget<ElevatedButton>(button).onPressed, isNull);
     expect(t.takeException(), isNull);
     await close(t, p);
@@ -162,6 +214,134 @@ void main() {
     expect(t.takeException(), isNull);
     await close(t, p);
   });
+
+  testWidgets('FAN: blank cue, A flight, then completed word in that order',
+      (t) async {
+    SharedPreferences.setMockInitialValues(
+        soundTestPreferences(firstWord: 'FAN'));
+    t.binding.platformDispatcher.accessibilityFeaturesTestValue =
+        const FakeAccessibilityFeatures(disableAnimations: false);
+    final audio = QuizAudioHarness()..install();
+    final p = await mount(
+        t,
+        const MediaQuery(
+            data: MediaQueryData(disableAnimations: false),
+            child: MissingVowelScreen()));
+    await audio.finishGameIntro(t, 'missing_vowel.mp3');
+    await waitFor(t, () => audio.starts.isNotEmpty);
+    expect(audio.starts.single, endsWith('/sounds/sound-a.mp3'));
+    expect(glowing(t, 3), {1});
+    final choice =
+        find.byWidgetPredicate((w) => w is GameAnswerButton && w.label == 'A');
+    await t.tap(
+        find.descendant(of: choice, matching: find.byType(ElevatedButton)));
+    await t.pump();
+    await t.pump();
+    expect(find.byKey(const ValueKey('flying-vowel')), findsOneWidget);
+    await t.pump(const Duration(milliseconds: 250));
+    expect(
+        t.widget<Text>(find.byKey(const ValueKey('vowel-blank-letter'))).data,
+        '_');
+    expect(audio.starts, hasLength(1));
+    await t.pump(const Duration(milliseconds: 300));
+    await waitFor(t, () => audio.starts.length == 2);
+    expect(find.byKey(const ValueKey('flying-vowel')), findsNothing);
+    expect(
+        t.widget<Text>(find.byKey(const ValueKey('vowel-blank-letter'))).data,
+        'A');
+    expect(audio.starts.last, endsWith('/game_words/fan.mp3'));
+    await t.pump(const Duration(seconds: 3));
+    expect(t.widget<WordGameLayout>(find.byType(WordGameLayout)).word, 'FAN');
+    await t.runAsync(() => audio.completeSource('/game_words/fan.mp3'));
+    await drain(t);
+    await t.pump(const Duration(milliseconds: 800));
+    await drain(t);
+    expect(t.widget<WordGameLayout>(find.byType(WordGameLayout)).word,
+        isNot('FAN'));
+    expect((p.xp, p.stars), (8, 0));
+    expect(t.takeException(), isNull);
+    await close(t, p);
+  });
+
+  testWidgets('wrong answer advances without reading the completed word',
+      (t) async {
+    SharedPreferences.setMockInitialValues(
+        soundTestPreferences(firstWord: 'FAN'));
+    final audio = QuizAudioHarness()..install();
+    final p = await mount(t, const MissingVowelScreen());
+    await audio.finishGameIntro(t, 'missing_vowel.mp3');
+    await waitFor(t, () => audio.starts.isNotEmpty);
+    final choice =
+        find.byWidgetPredicate((w) => w is GameAnswerButton && w.label == 'E');
+    await t.tap(
+        find.descendant(of: choice, matching: find.byType(ElevatedButton)));
+    await t.pump();
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 800));
+    await drain(t);
+    expect(audio.starts.any((s) => s.endsWith('/game_words/fan.mp3')), isFalse);
+    expect(t.widget<WordGameLayout>(find.byType(WordGameLayout)).word,
+        isNot('FAN'));
+    expect((p.xp, p.stars), (0, 0));
+    expect(t.takeException(), isNull);
+    await close(t, p);
+  });
+
+  for (final interrupt in ['background', 'route', 'dispose']) {
+    testWidgets(
+        '$interrupt during completed word cannot advance or speak offscreen',
+        (t) async {
+      SharedPreferences.setMockInitialValues(
+          soundTestPreferences(firstWord: 'FAN'));
+      final audio = QuizAudioHarness()..install();
+      final p = await mount(t, const MissingVowelScreen());
+      await audio.finishGameIntro(t, 'missing_vowel.mp3');
+      await waitFor(t, () => audio.starts.isNotEmpty);
+      final choice = find
+          .byWidgetPredicate((w) => w is GameAnswerButton && w.label == 'A');
+      await t.tap(
+          find.descendant(of: choice, matching: find.byType(ElevatedButton)));
+      await t.pump();
+      await t.pump();
+      await waitFor(t, () => audio.starts.last.endsWith('/game_words/fan.mp3'));
+      final navigator =
+          Navigator.of(t.element(find.byType(MissingVowelScreen)));
+      if (interrupt == 'background') {
+        t.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      } else if (interrupt == 'route') {
+        navigator.push<void>(MaterialPageRoute(
+            builder: (_) => const Scaffold(body: Text('Covered'))));
+      } else {
+        await t.pumpWidget(const SizedBox());
+      }
+      await t.pump(const Duration(seconds: 2));
+      await drain(t);
+      final count = audio.starts.length;
+      await t.pump(const Duration(seconds: 2));
+      expect(audio.starts.length, count);
+      if (interrupt != 'dispose') {
+        if (interrupt == 'background') {
+          t.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+        } else {
+          navigator.pop();
+        }
+        await t.pump(const Duration(milliseconds: 400));
+        await waitFor(t, () => audio.starts.length > count);
+        expect(audio.starts.last, endsWith('/game_words/fan.mp3'));
+        expect(
+            t.widget<WordGameLayout>(find.byType(WordGameLayout)).word, 'FAN');
+        await t.runAsync(() => audio.completeSource('/game_words/fan.mp3'));
+        await drain(t);
+        await t.pump(const Duration(milliseconds: 800));
+        await drain(t);
+        expect(t.widget<WordGameLayout>(find.byType(WordGameLayout)).word,
+            isNot('FAN'));
+      }
+      expect((p.xp, p.stars), (8, 0));
+      expect(t.takeException(), isNull);
+      await close(t, p);
+    });
+  }
 
   for (final difficulty in Difficulty.values) {
     testWidgets(
@@ -230,10 +410,22 @@ void main() {
           find.descendant(of: choice, matching: find.byType(ElevatedButton)));
       await t.pump(const Duration(milliseconds: 710));
       await flushWrites(t);
-      expect(p.stars, 1);
+      expect(p.stars, 0);
       expect(p.xp, (8 * difficulty.xpMultiplier).round());
+      final completedWord = '/${PhonicsAudioService.assetForPhrase(word)}';
+      await waitFor(t, () => audio.starts.last.endsWith(completedWord));
       final starts = audio.starts.length;
-      await t.tap(find.widgetWithText(ElevatedButton, 'Next'));
+      expect(
+          t.widget<Text>(find.byKey(const ValueKey('vowel-blank-letter'))).data,
+          vowel);
+      expect(t.widget<OutlinedButton>(again).onPressed, isNull);
+      await t.pump(const Duration(seconds: 3));
+      expect(audio.starts.length, starts,
+          reason: 'The completed word finishes before advancing');
+      expect(t.widget<WordGameLayout>(find.byType(WordGameLayout)).word, word);
+      await t.runAsync(() => audio.completeSource(completedWord));
+      await drain(t);
+      await t.pump(const Duration(milliseconds: 800));
       await t.pump();
       await waitFor(t, () => audio.starts.length > starts);
       final nextWord =

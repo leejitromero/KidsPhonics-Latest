@@ -38,14 +38,15 @@ class SchoolHomeScene extends StatelessWidget {
       this.dialogueSpeaker,
       this.dialogue,
       this.dialogueControls,
+      this.greeting,
       this.reserveNavigation = false,
       this.studentSpeech});
-  static const lessonsButton = 'assets/images/home_buttons/button_lessons.png';
-  static const gamesButton = 'assets/images/home_buttons/button_games.png';
+  static const lessonsButton = 'assets/images/home_buttons/button_lessons.webp';
+  static const gamesButton = 'assets/images/home_buttons/button_games.webp';
   static const practiceButton =
-      'assets/images/home_buttons/practice_letters_button.png';
+      'assets/images/home_buttons/practice_letters_button.webp';
   static const guideArrow =
-      'assets/images/home_buttons/yellow_guide_arrow_v1.png';
+      'assets/images/home_buttons/yellow_guide_arrow_v1.webp';
   static const buttonAssets = [lessonsButton, practiceButton, gamesButton];
   final String character, name, progressLabel;
   final int level, stars, xp, streak;
@@ -54,7 +55,7 @@ class SchoolHomeScene extends StatelessWidget {
   final bool introduction, showGuideArrow;
   final Animation<double> visit;
   final HomeCategory? selected, speakingMascot, dialogueSpeaker;
-  final Widget? dialogue, dialogueControls, studentSpeech;
+  final Widget? dialogue, dialogueControls, studentSpeech, greeting;
   final bool reserveNavigation;
   final ValueChanged<HomeCategory> onSelect;
   final VoidCallback onCharacter, onSettings, onContinue;
@@ -153,6 +154,10 @@ class SchoolHomeScene extends StatelessWidget {
             ? 'Review letters'
             : 'Practice This Letter ${letter ?? 'A'}';
         final minSpeechTop = math.max(insets.top + 8, banner.panel.bottom + 8);
+        final greetingSpace =
+            math.max(1.0, studentRect.top - 12 - minSpeechTop);
+        final greetingHeight = math.min(124.0, greetingSpace);
+        final greetingWidth = math.min(600.0, width - side * 2);
         return Stack(fit: StackFit.expand, children: [
           DayCycleBackground(
               key: const ValueKey('school-background'),
@@ -314,14 +319,14 @@ class SchoolHomeScene extends StatelessWidget {
                         scene: Size(width, height),
                         speaker: mascotHead(guide),
                         art:
-                            'dialogue_box_${guide == HomeCategory.games ? 1 : 2}.png',
+                            'dialogue_box_${guide == HomeCategory.games ? 1 : 2}.webp',
                         minTop: minSpeechTop,
                         sideInset: side)
                     : SceneSpeechGeometry.aboveHead(
                         scene: Size(width, height),
                         speaker: mascotHead(guide),
                         art:
-                            'dialogue_box_${guide == HomeCategory.games ? 1 : 2}.png',
+                            'dialogue_box_${guide == HomeCategory.games ? 1 : 2}.webp',
                         flip: guide == HomeCategory.games,
                         preferredWidth: math.min(
                             width * (introduction ? .90 : .84),
@@ -329,12 +334,19 @@ class SchoolHomeScene extends StatelessWidget {
                         minTop: minSpeechTop,
                         sideInset: side),
                 child: dialogue!),
+          if (greeting != null)
+            Positioned(
+                left: (width - greetingWidth) / 2,
+                top: minSpeechTop + (greetingSpace - greetingHeight) / 2,
+                width: greetingWidth,
+                height: greetingHeight,
+                child: IgnorePointer(child: greeting!)),
           if (studentSpeech != null)
             Positioned.fromRect(
                 rect: SceneSpeechGeometry.aboveHead(
                     scene: Size(width, height),
                     speaker: studentHead,
-                    art: 'dialogue_box_${character == 'girl' ? 4 : 1}.png',
+                    art: 'dialogue_box_${character == 'girl' ? 4 : 1}.webp',
                     preferredWidth: math.min(width * .56, 320),
                     minTop: minSpeechTop,
                     sideInset: side),
@@ -391,7 +403,7 @@ class _ReferenceActivityButton extends StatelessWidget {
                                   dimension: (box.biggest.shortestSide * .48)
                                       .clamp(32.0, 60.0),
                                   child: Image.asset(
-                                      'assets/images/games_locl.png',
+                                      'assets/images/games_locl.webp',
                                       key:
                                           const ValueKey('home-games-lock-art'),
                                       fit: BoxFit.contain,

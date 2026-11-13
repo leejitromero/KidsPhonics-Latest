@@ -6,6 +6,7 @@ import 'package:kidsphonics/models/difficulty.dart';
 import 'package:kidsphonics/screens/phonics_quiz_screen.dart';
 import 'package:kidsphonics/widgets/learner_widgets.dart';
 import 'package:kidsphonics/widgets/phonics_quiz_design.dart';
+import 'package:kidsphonics/widgets/game_word_picture.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show mount, close;
 import 'phonics_quiz_test_helpers.dart';
@@ -18,8 +19,10 @@ void main() {
       (const Size(390, 844), 1.0),
       (const Size(480, 1066), 1.0),
       (const Size(320, 568), 1.8),
+      (const Size(768, 1024), 1.0),
     ]) {
-      testWidgets('$d sound quiz fits $size text $scale before and after Check',
+      testWidgets(
+          '$d framed sound quiz fits $size text $scale before and after a tap',
           (t) async {
         t.view.physicalSize = size;
         t.view.devicePixelRatio = 1;
@@ -44,6 +47,12 @@ void main() {
         void fits() {
           final view = t.getRect(find.byType(PhonicsQuizQuestionView));
           expect(guide.bottom, lessThan(view.top));
+          final pictureFrame =
+              t.getRect(find.byKey(const ValueKey('quiz-picture-frame')));
+          final picture = t.getRect(find.byType(GameWordPicture));
+          expect(pictureFrame.contains(picture.topLeft), isTrue);
+          expect(pictureFrame.contains(picture.bottomRight), isTrue);
+          expect(picture.height, greaterThanOrEqualTo(80));
           for (final choice in find.byType(GameAnswerButton).evaluate()) {
             final rect = t.getRect(find.byWidget(choice.widget));
             expect(rect.left, greaterThanOrEqualTo(12));
@@ -82,15 +91,14 @@ void main() {
             : q.correctLetter;
         await selectQuiz(t, selected);
         final check = find.byKey(const ValueKey('quiz-check-answer'));
-        expect(t.getRect(check).bottom, lessThanOrEqualTo(size.height - 24));
-        await submitQuiz(t);
+        expect(check, findsNothing);
         fits();
-        expect(find.text(q.explanation), findsOneWidget);
-        final feedback =
-            t.getRect(find.byKey(const ValueKey('quiz-feedback-frame')));
-        expect(feedback.bottom, lessThanOrEqualTo(size.height - 24));
-        expect(find.text('Correct!'),
-            selected == q.correctLetter ? findsOneWidget : findsNothing);
+        expect(find.text(q.explanation), findsNothing);
+        expect(find.text('Correct!'), findsNothing);
+        final acknowledgement = find.text('Answer saved!');
+        expect(acknowledgement, findsOneWidget);
+        expect(t.getRect(acknowledgement).bottom,
+            lessThanOrEqualTo(size.height - 24));
         if (size.width == 390 && d == Difficulty.hard) {
           await capture(t, boundary, 'phonics_quiz_new_feedback');
         }

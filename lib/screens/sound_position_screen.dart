@@ -1,4 +1,3 @@
-import '../widgets/button_sound.dart';
 import '../widgets/activity_prompt.dart';
 import '../data/game_session_order.dart';
 import '../data/game_word_data.dart';
@@ -52,31 +51,29 @@ class SoundPositionitionScreenState extends State<SoundPositionScreen>
     super.initState();
   }
 
-  void _pick(SoundPosition pos) async {
+  void _pick(SoundPosition pos) {
     if (_answered || _picked != null || resultOpen) return;
-    final isCorrect = pos == _round.correctPos;
-    setState(() => _picked = pos);
-
-    recordGameAnswer(correct: isCorrect);
-    if (isCorrect) {
-      setState(() {
-        _answered = true;
-      });
-      playGameCorrect();
-      awardGameXp((8 * widget.difficulty.xpMultiplier).round());
-      awardGameStar();
-      // Keep a short pause for visual feedback.
-      await Future.delayed(const Duration(milliseconds: 700));
-    } else {
-      // Wrong — play wrong.mp3 tone first, then voice
-      playGameWrong();
-      await Future.delayed(const Duration(milliseconds: 700));
-      await Future.delayed(const Duration(milliseconds: 600));
-      if (mounted) setState(() => _picked = null);
-    }
+    final correct = pos == _round.correctPos;
+    gameNarration.cancel();
+    setState(() {
+      _picked = pos;
+      _answered = true;
+    });
+    recordGameAnswer(
+        reviewTarget: ReviewTarget.position(
+            _round.word.toUpperCase(), _round.targetLetter),
+        correct: correct,
+        itemId: 'position-$_index',
+        prompt: 'Sound position in ${_round.word}',
+        selected: pos.label,
+        expected: _round.correctPos.label,
+        word: _round.word);
+    if (correct) awardGameXp((8 * widget.difficulty.xpMultiplier).round());
+    scheduleGameAdvance(_next);
   }
 
   void _next() {
+    cancelGameAdvance();
     if (!_answered || resultOpen) return;
     if (_index < _rounds.length - 1) {
       setState(() {
@@ -108,13 +105,20 @@ class SoundPositionitionScreenState extends State<SoundPositionScreen>
   }
 
   @override
+  String get gameTitle => 'Sound Position';
+  @override
+  Difficulty get roundDifficulty => widget.difficulty;
+  @override
+  Widget gameForDifficulty(Difficulty difficulty) =>
+      SoundPositionScreen(difficulty: difficulty);
+  @override
   int get totalGameItems => _rounds.length;
 
   @override
   Widget build(BuildContext context) => GameScaffold(
         narration: gameNarration,
         showHeader: true,
-        answerResult: _picked == null ? null : _picked == _round.correctPos,
+        answerResult: gameAnswerFeedback,
         title: 'Sound Position',
         instructions: 'Where is the sound?',
         difficulty: widget.difficulty,
@@ -139,19 +143,12 @@ class SoundPositionitionScreenState extends State<SoundPositionScreen>
                   .map((option) => GameAnswerButton(
                       label: option.label,
                       selected: _picked == option,
-                      result: _picked == option
-                          ? option == _round.correctPos
-                          : null,
+                      result: null,
                       onPressed: _answered || _picked != null || resultOpen
                           ? null
                           : () => _pick(option)))
                   .toList()),
-          if (_picked != null)
-            GameFeedback(correct: _picked == _round.correctPos),
-          if (_answered)
-            ElevatedButton(
-                onPressed: withButtonSound(resultOpen ? null : _next),
-                child: const Text('Next')),
+          if (_picked != null) const Text('Answer saved!'),
         ]),
       );
 }

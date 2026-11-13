@@ -8,6 +8,31 @@ import 'scene_voice_controller.dart';
 /// One instruction per lesson entry. Browsing and manual audio interrupt it.
 mixin LessonInstructionPlayback<T extends StatefulWidget> on State<T> {
   String get lessonInstructionPhrase;
+
+  /// Opt-in automatic playback for the currently displayed letter.
+  String? get lessonFeedbackPhrase => null;
+  Future<void> onLessonFeedbackPlayed(String phrase) async {}
+
+  Future<void> playLessonFeedback() async {
+    final request = _instructionRequest;
+    final phrase = lessonFeedbackPhrase;
+    if (phrase == null) return;
+    final provider = context.read<AppProvider>();
+    bool current() =>
+        mounted &&
+        request == _instructionRequest &&
+        phrase == lessonFeedbackPhrase &&
+        provider.isReady &&
+        provider.voiceEnabled &&
+        !provider.timeLimitReached &&
+        (ModalRoute.isCurrentOf(context) ?? true);
+    // Display the new letter before speaking it, including rapid swipes.
+    await WidgetsBinding.instance.endOfFrame;
+    if (!current()) return;
+    final completed = await _lessonInstruction!.play(phrase);
+    if (completed && current()) await onLessonFeedbackPlayed(phrase);
+  }
+
   SceneVoiceController? _lessonInstruction;
   String? _instructionPhrase;
   int _instructionRequest = 0;
@@ -34,7 +59,7 @@ mixin LessonInstructionPlayback<T extends StatefulWidget> on State<T> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       unawaited(provider.ready.then((_) async {
         if (mounted && provider.isReady && request == _instructionRequest) {
-          await lessonIntroductionStatus.run(
+          final completed = await lessonIntroductionStatus.run(
               lesson: phrase,
               play: _lessonInstruction!.play,
               stop: () async => _lessonInstruction?.stop(),
@@ -44,6 +69,9 @@ mixin LessonInstructionPlayback<T extends StatefulWidget> on State<T> {
                   request == _instructionRequest &&
                   (ModalRoute.isCurrentOf(context) ?? true) &&
                   !provider.timeLimitReached);
+          if (completed && mounted && request == _instructionRequest) {
+            await playLessonFeedback();
+          }
         }
       }));
     });

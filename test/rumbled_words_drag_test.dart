@@ -3,6 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kidsphonics/screens/rumbled_words_screen.dart';
 import 'package:kidsphonics/widgets/learner_widgets.dart';
+import 'package:kidsphonics/widgets/rumbled_words_design.dart';
+import 'package:kidsphonics/widgets/floating_choice.dart';
+import 'package:kidsphonics/models/difficulty.dart';
+import 'package:kidsphonics/widgets/word_game_layout.dart';
 import 'learner_ui_test.dart' show mount, close;
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'rumbled_words_swap_helpers.dart';
@@ -18,7 +22,7 @@ void main() {
 
   for (final reduced in [false, true]) {
     testWidgets(
-        'selected letter floats; neighbors slide for insertion, reduced $reduced',
+        'direct drag needs no tap; neighbors slide for insertion, reduced $reduced',
         (t) async {
       t.view.physicalSize = const Size(390, 844);
       t.view.devicePixelRatio = 1;
@@ -36,9 +40,12 @@ void main() {
       final first = t.getCenter(tile(0));
       final second = t.getCenter(tile(1));
       final last = t.getCenter(tile(2));
-      await tapBoardLetter(t, 2);
-      await t.pump(const Duration(milliseconds: 300));
-      if (!reduced) expect(t.getCenter(tile(2)).dy, lessThan(last.dy));
+      expect(
+          find.descendant(
+              of: find.byType(RumbledLetterRow),
+              matching: find.byType(FloatingChoice)),
+          findsNothing);
+      expect(t.getCenter(tile(2)), last);
       final gesture = await t.startGesture(t.getCenter(tile(2)));
       await gesture.moveBy(const Offset(-22, 0));
       await t.pump();
@@ -83,20 +90,57 @@ void main() {
       (t) async {
     final p = await mount(t, const RumbledWordsScreen());
     final before = boardLetters(t, 3);
-    await tapBoardLetter(t, 0);
     await dragBoardLetter(t, 0, 2);
     expect(boardLetters(t, 3), [before[1], before[2], before[0]]);
     expect((p.xp, p.stars), (0, 0));
     await close(t, p);
   });
 
+  for (final difficulty in Difficulty.values) {
+    testWidgets(
+        '$difficulty directly moves any tile without selecting it first',
+        (t) async {
+      await t.binding.setSurfaceSize(const Size(390, 844));
+      addTearDown(() => t.binding.setSurfaceSize(null));
+      final p = await mount(t, RumbledWordsScreen(difficulty: difficulty));
+      final count =
+          t.widget<WordGameLayout>(find.byType(WordGameLayout)).word.length;
+      final before = boardLetters(t, count);
+      final ids = List.of(
+          t.widget<RumbledLetterRow>(find.byType(RumbledLetterRow)).tileIds);
+      await dragBoardLetter(t, count - 1, 1);
+      final expected = List.of(before)..insert(1, before.last);
+      expected.removeLast();
+      ids.insert(1, ids.removeLast());
+      expect(boardLetters(t, count), expected);
+      expect(t.widget<RumbledLetterRow>(find.byType(RumbledLetterRow)).tileIds,
+          ids);
+      expect(
+          t
+              .state<GameSessionUi>(find.byType(RumbledWordsScreen))
+              .scoredAttempts,
+          0);
+      expect(t.takeException(), isNull);
+      await close(t, p);
+    });
+  }
+
   testWidgets(
       'two taps select another letter without suddenly moving either one',
       (t) async {
     final p = await mount(t, const RumbledWordsScreen());
     final before = boardLetters(t, 3);
+    final centers = [for (var i = 0; i < 3; i++) t.getCenter(tile(i))];
     await tapBoardLetter(t, 0);
+    await t.pump(const Duration(milliseconds: 450));
+    for (var i = 0; i < 3; i++) {
+      expect(t.getCenter(tile(i)), centers[i]);
+    }
     await tapBoardLetter(t, 2);
+    await t.pump(const Duration(milliseconds: 800));
+    for (var i = 0; i < 3; i++) {
+      expect(t.getCenter(tile(i)), centers[i]);
+    }
     expect(boardLetters(t, 3), before);
     await dragBoardLetter(t, 2, 1);
     final expected = List.of(before)..insert(1, before[2]);
@@ -105,11 +149,40 @@ void main() {
     await close(t, p);
   });
 
+  testWidgets('a second finger cannot replace or finish an active drag',
+      (t) async {
+    final p = await mount(t, const RumbledWordsScreen());
+    final before = boardLetters(t, 3);
+    final end = t.getCenter(tile(1));
+    final first = await t.startGesture(t.getCenter(tile(0)), pointer: 1);
+    await first.moveBy(const Offset(22, 0));
+    await t.pump();
+    final second = await t.startGesture(t.getCenter(tile(2)), pointer: 2);
+    await second.moveBy(const Offset(0, 25));
+    await t.pump();
+    await second.up();
+    await t.pump();
+    expect(
+        t
+            .widget<OutlinedButton>(find.byKey(const ValueKey('word-check')))
+            .onPressed,
+        isNull);
+    await first.moveTo(end);
+    await t.pump(const Duration(milliseconds: 300));
+    await first.up();
+    await t.pump(const Duration(milliseconds: 300));
+    expect(boardLetters(t, 3), [before[1], before[0], before[2]]);
+    expect(
+        t.state<GameSessionUi>(find.byType(RumbledWordsScreen)).scoredAttempts,
+        0);
+    expect(t.takeException(), isNull);
+    await close(t, p);
+  });
+
   testWidgets('outside drop cancels and hint keeps the first letter fixed',
       (t) async {
     final p = await mount(t, const RumbledWordsScreen());
     final before = boardLetters(t, 3);
-    await tapBoardLetter(t, 2);
     final gesture = await t.startGesture(t.getCenter(tile(2)));
     await gesture.moveBy(const Offset(0, -120));
     await t.pump();
@@ -122,7 +195,8 @@ void main() {
     await t.pump();
     await t.pump(const Duration(milliseconds: 300));
     final hinted = boardLetters(t, 3);
-    await tapBoardLetter(t, 2);
+    await dragBoardLetter(t, 0, 2);
+    expect(boardLetters(t, 3), hinted);
     await dragBoardLetter(t, 2, 0);
     expect(boardLetters(t, 3), [hinted[0], hinted[2], hinted[1]]);
     expect(t.widget<ElevatedButton>(tile(0)).onPressed, isNull);
@@ -136,7 +210,6 @@ void main() {
         (t) async {
       final p = await mount(t, const RumbledWordsScreen());
       final before = boardLetters(t, 3);
-      await tapBoardLetter(t, 2);
       final gesture = await t.startGesture(t.getCenter(tile(2)));
       await gesture.moveBy(const Offset(-22, 0));
       await t.pump();

@@ -368,7 +368,12 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
       final a = _flipped[0], b = _flipped[1];
       final isMatch = a.id == b.id;
       setState(() => _answerResult = isMatch);
-      recordGameAnswer(correct: isMatch);
+      recordGameAnswer(
+          feedback: false,
+          correct: isMatch,
+          prompt: 'Matching cards',
+          selected: '${a.id} / ${b.id}',
+          expected: '${a.id} / ${a.id}');
 
       if (isMatch) {
         setState(() {
@@ -379,7 +384,6 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
         if (_matchCount == _totalPairs) _clock.stop();
         playGameCorrect();
         awardGameXp((5 * widget.difficulty.xpMultiplier).round());
-        awardGameStar();
         await _collect(a);
         if (!mounted) return;
         if (_matchCount == _totalPairs) {
@@ -426,7 +430,20 @@ class _MemoryGameScreenState extends State<MemoryGameScreen>
   }
 
   @override
+  String get gameTitle => 'Memory Flip';
+  @override
+  Difficulty get roundDifficulty => widget.difficulty;
+  @override
+  Widget gameForDifficulty(Difficulty difficulty) =>
+      MemoryGameScreen(difficulty: difficulty);
+  @override
   int get totalGameItems => _totalPairs;
+  @override
+  int get roundRatingCorrect => correctAttempts;
+  @override
+  int get roundRatingTotal => scoredAttempts;
+  @override
+  String get resultScoreUnit => 'Pairs found; stars use matching accuracy.';
 
   @override
   Widget build(BuildContext context) => GameScaffold(

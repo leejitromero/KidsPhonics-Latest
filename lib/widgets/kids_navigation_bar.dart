@@ -3,10 +3,11 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'button_sound.dart';
 import 'main_navigation_scope.dart';
+import 'lesson_swipe_navigation.dart';
 
 abstract final class KidsNavigationArt {
   static const directory = 'assets/images/custom_navigation';
-  static const base = '$directory/wooden_frame_home.png';
+  static const base = '$directory/wooden_frame_home.webp';
   static const baseWidth = 2148.0;
   static const baseHeight = 732.0;
   // Transparent top/bottom margins of the supplied frame are outside the dock.
@@ -14,7 +15,7 @@ abstract final class KidsNavigationArt {
   static const frameBottom = 514.0;
   static String button(KidsDestination destination, {required bool glowing}) =>
       '$directory/${destination == KidsDestination.parents ? 'parent' : destination.name}'
-      '_button_${glowing ? 'glowing' : 'not_glowing'}.png';
+      '_button_${glowing ? 'glowing' : 'not_glowing'}.webp';
   static final assets = [
     base,
     for (final destination in KidsDestination.values)
@@ -114,6 +115,7 @@ class _KidsNavigationBarState extends State<KidsNavigationBar> {
     final media = MediaQuery.of(context);
     final scope = MainNavigationScope.maybeOf(context);
     final enabled = widget.enabled && !(scope?.transitioning ?? false);
+    final index = widget.current.index;
     return SafeArea(
         top: false,
         minimum: const EdgeInsets.fromLTRB(6, 0, 6, 8),
@@ -127,94 +129,109 @@ class _KidsNavigationBarState extends State<KidsNavigationBar> {
                     child: LayoutBuilder(builder: (_, box) {
                       final width = box.maxWidth;
                       final height = KidsNavigationGeometry.barHeight(width);
-                      return SizedBox(
-                          key: const ValueKey('kids-navigation-bar'),
-                          width: width,
-                          height: height,
-                          child: Stack(clipBehavior: Clip.none, children: [
-                            Positioned.fromRect(
-                                rect: KidsNavigationGeometry.frameRect(width),
-                                child: IgnorePointer(
-                                    child: SizedBox(
-                                        key: const ValueKey(
-                                            'kids-navigation-base'),
-                                        child: FittedBox(
-                                            fit: BoxFit.contain,
-                                            child: SizedBox(
-                                                width:
-                                                    KidsNavigationArt.baseWidth,
-                                                height: KidsNavigationGeometry
-                                                            .frameRect(width)
-                                                        .height *
-                                                    KidsNavigationArt
-                                                        .baseWidth /
-                                                    width,
-                                                child: Image.asset(
-                                                    KidsNavigationArt.base,
-                                                    key: const ValueKey(
-                                                        'kids-navigation-base-image'),
-                                                    // Extend only the plain wood; corner artwork
-                                                    // retains its proportions at every screen size.
-                                                    centerSlice:
-                                                        const Rect.fromLTRB(240,
-                                                            390, 1908, 420),
-                                                    fit: BoxFit.fill,
-                                                    cacheWidth: 2148,
-                                                    excludeFromSemantics:
-                                                        true)))))),
-                            Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: width * .04,
-                                    vertical: width * .018),
-                                child: Row(children: [
-                                  for (final destination
-                                      in KidsDestination.values) ...[
-                                    if (destination != KidsDestination.home)
-                                      SizedBox(width: width * .014),
-                                    Expanded(
-                                        child: Semantics(
-                                            button: true,
-                                            selected:
-                                                widget.current == destination,
-                                            enabled: enabled && !_pending,
-                                            label: switch (destination) {
-                                              KidsDestination.home => 'Home',
-                                              KidsDestination.progress =>
-                                                'Progress',
-                                              KidsDestination.parents =>
-                                                'Parents',
-                                              KidsDestination.settings =>
-                                                'Settings',
-                                            },
-                                            child: Material(
-                                                color: Colors.transparent,
-                                                child: InkWell(
-                                                    key: ValueKey(
-                                                        'main-nav-${destination.name}'),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            16),
-                                                    onTap: withButtonSound(enabled && !_pending
-                                                        ? () =>
-                                                            _tap(destination)
-                                                        : null),
-                                                    child: SizedBox(
-                                                        height: height,
-                                                        child: AnimatedScale(
-                                                            key: ValueKey(
-                                                                'main-nav-${destination.name}-scale'),
-                                                            scale:
-                                                                _pressed == destination
-                                                                    ? .95
-                                                                    : 1,
-                                                            duration: media.disableAnimations
-                                                                ? Duration.zero
-                                                                : const Duration(milliseconds: 85),
-                                                            curve: Curves.easeOutCubic,
-                                                            child: AspectRatio(aspectRatio: 1, child: Image.asset(KidsNavigationArt.button(destination, glowing: widget.current == destination), key: ValueKey('main-nav-${destination.name}-image'), fit: BoxFit.contain, cacheWidth: 384, gaplessPlayback: true, excludeFromSemantics: true)))))))),
-                                  ],
-                                ])),
-                          ]));
+                      return LessonSwipeNavigation(
+                          key: const ValueKey('main-navigation-swipe'),
+                          navigationKey: widget.current,
+                          enabled: enabled && !_pending,
+                          onNext: index < KidsDestination.values.length - 1
+                              ? () => unawaited(
+                                  _tap(KidsDestination.values[index + 1]))
+                              : null,
+                          onPrevious: index > 0
+                              ? () => unawaited(
+                                  _tap(KidsDestination.values[index - 1]))
+                              : null,
+                          child: SizedBox(
+                              key: const ValueKey('kids-navigation-bar'),
+                              width: width,
+                              height: height,
+                              child: Stack(clipBehavior: Clip.none, children: [
+                                Positioned.fromRect(
+                                    rect:
+                                        KidsNavigationGeometry.frameRect(width),
+                                    child: IgnorePointer(
+                                        child: SizedBox(
+                                            key: const ValueKey(
+                                                'kids-navigation-base'),
+                                            child: FittedBox(
+                                                fit: BoxFit.contain,
+                                                child: SizedBox(
+                                                    width: KidsNavigationArt
+                                                        .baseWidth,
+                                                    height:
+                                                        KidsNavigationGeometry
+                                                                    .frameRect(
+                                                                        width)
+                                                                .height *
+                                                            KidsNavigationArt
+                                                                .baseWidth /
+                                                            width,
+                                                    child: Image.asset(
+                                                        KidsNavigationArt.base,
+                                                        key: const ValueKey(
+                                                            'kids-navigation-base-image'),
+                                                        // Extend only the plain wood; corner artwork
+                                                        // retains its proportions at every screen size.
+                                                        centerSlice:
+                                                            const Rect.fromLTRB(
+                                                                240,
+                                                                390,
+                                                                1908,
+                                                                420),
+                                                        fit: BoxFit.fill,
+                                                        cacheWidth: 2148,
+                                                        excludeFromSemantics:
+                                                            true)))))),
+                                Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: width * .04,
+                                        vertical: width * .018),
+                                    child: Row(children: [
+                                      for (final destination
+                                          in KidsDestination.values) ...[
+                                        if (destination != KidsDestination.home)
+                                          SizedBox(width: width * .014),
+                                        Expanded(
+                                            child: Semantics(
+                                                button: true,
+                                                selected: widget.current ==
+                                                    destination,
+                                                enabled: enabled && !_pending,
+                                                label: switch (destination) {
+                                                  KidsDestination.home =>
+                                                    'Home',
+                                                  KidsDestination.progress =>
+                                                    'Progress',
+                                                  KidsDestination.parents =>
+                                                    'Parents',
+                                                  KidsDestination.settings =>
+                                                    'Settings',
+                                                },
+                                                child: Material(
+                                                    color: Colors.transparent,
+                                                    child: InkWell(
+                                                        key: ValueKey(
+                                                            'main-nav-${destination.name}'),
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                16),
+                                                        onTap: withButtonSound(
+                                                            enabled && !_pending
+                                                                ? () => _tap(
+                                                                    destination)
+                                                                : null),
+                                                        child: SizedBox(
+                                                            height: height,
+                                                            child: AnimatedScale(
+                                                                key: ValueKey(
+                                                                    'main-nav-${destination.name}-scale'),
+                                                                scale: _pressed == destination ? .95 : 1,
+                                                                duration: media.disableAnimations ? Duration.zero : const Duration(milliseconds: 85),
+                                                                curve: Curves.easeOutCubic,
+                                                                child: AspectRatio(aspectRatio: 1, child: Image.asset(KidsNavigationArt.button(destination, glowing: widget.current == destination), key: ValueKey('main-nav-${destination.name}-image'), fit: BoxFit.contain, cacheWidth: 384, gaplessPlayback: true, excludeFromSemantics: true)))))))),
+                                      ],
+                                    ])),
+                              ])));
                     })))));
   }
 }

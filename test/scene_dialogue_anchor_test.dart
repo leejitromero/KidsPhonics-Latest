@@ -52,13 +52,13 @@ SchoolHomeScene scene({String character = 'girl', HomeCategory? guide}) {
       studentSpeech: guide == null
           ? SceneDialogue(
               text: 'Hi! Would you like to learn, practice, or play?',
-              art: 'dialogue_box_${character == 'girl' ? 4 : 1}.png')
+              art: 'dialogue_box_${character == 'girl' ? 4 : 1}.webp')
           : null,
       dialogue: guide == null
           ? null
           : SceneDialogue(
               text: homeIntroduction[games ? 5 : 0].text,
-              art: 'dialogue_box_${games ? 1 : 2}.png',
+              art: 'dialogue_box_${games ? 1 : 2}.webp',
               flip: games));
 }
 
@@ -98,7 +98,7 @@ void main() {
         final head = Rect.fromLTRB(student.left,
             student.top + student.height * .04, student.right, student.bottom);
         verifyPointer(
-            t, head, 'dialogue_box_${character == 'girl' ? 4 : 1}.png');
+            t, head, 'dialogue_box_${character == 'girl' ? 4 : 1}.webp');
         final bubble =
             t.getRect(find.byKey(const ValueKey('scene-dialogue-art')));
         final logo = t.getRect(find.byKey(const ValueKey('home-logo-art')));
@@ -142,7 +142,7 @@ void main() {
         final head =
             Rect.fromCenter(center: mascot.center, width: side, height: side);
         final games = category == HomeCategory.games;
-        verifyPointer(t, head, 'dialogue_box_${games ? 1 : 2}.png',
+        verifyPointer(t, head, 'dialogue_box_${games ? 1 : 2}.webp',
             flip: games);
         if (size.width == 390) {
           await capture(t, key, 'dialogue_${category.name}');
@@ -170,7 +170,7 @@ void main() {
       verifyPointer(
           t,
           t.getRect(find.byKey(const ValueKey('guideline-speaker'))),
-          'dialogue_box_${games ? 1 : 2}.png',
+          'dialogue_box_${games ? 1 : 2}.webp',
           flip: games);
       await capture(
           t, key, 'dialogue_guideline_${games ? 'games' : 'lessons'}');

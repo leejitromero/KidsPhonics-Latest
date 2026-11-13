@@ -14,13 +14,16 @@ import 'learner_widgets.dart';
 import 'lessons_menu_page.dart';
 import 'lesson_control_button.dart';
 import 'lesson_frame.dart';
+import 'lesson_swipe_navigation.dart';
 
 enum LetterLessonAudio { name, sound }
 
 /// Shared A–Z presentation; browsing and listening do not award mastery.
 class LetterLessonPage extends StatefulWidget {
-  const LetterLessonPage({super.key, required this.audio});
+  const LetterLessonPage(
+      {super.key, required this.audio, this.initialLetter = 'A'});
   final LetterLessonAudio audio;
+  final String initialLetter;
 
   @override
   State<LetterLessonPage> createState() => _LetterLessonPageState();
@@ -28,10 +31,16 @@ class LetterLessonPage extends StatefulWidget {
 
 class _LetterLessonPageState extends State<LetterLessonPage>
     with LessonInstructionPlayback<LetterLessonPage> {
-  int _index = 0;
+  late int _index = _initialIndex(widget.initialLetter);
   int _audioVersion = 0;
   bool _gridOpen = false;
   AppProvider? _provider;
+
+  static int _initialIndex(String letter) {
+    final value = letter.trim().toUpperCase();
+    if (!RegExp(r'^[A-Z]$').hasMatch(value)) return 0;
+    return value.codeUnitAt(0) - 65;
+  }
 
   @override
   String get lessonInstructionPhrase => widget.audio == LetterLessonAudio.name
@@ -42,6 +51,17 @@ class _LetterLessonPageState extends State<LetterLessonPage>
   String get _audioPhrase => widget.audio == LetterLessonAudio.name
       ? _letter
       : 'lesson-sound-$_letter';
+
+  @override
+  String get lessonFeedbackPhrase => _audioPhrase;
+
+  @override
+  Future<void> onLessonFeedbackPlayed(String phrase) =>
+      _provider!.recordLetterListening(
+          phrase.startsWith('lesson-sound-') ? phrase.split('-').last : phrase,
+          widget.audio == LetterLessonAudio.name
+              ? LetterListeningKind.name
+              : LetterListeningKind.sound);
 
   @override
   void didChangeDependencies() {
@@ -68,6 +88,7 @@ class _LetterLessonPageState extends State<LetterLessonPage>
       _audioVersion++;
     });
     unawaited(_provider!.markLetterViewed(_letter));
+    unawaited(playLessonFeedback());
   }
 
   Future<void> _openGrid() async {
@@ -92,91 +113,100 @@ class _LetterLessonPageState extends State<LetterLessonPage>
   }
 
   @override
-  Widget build(BuildContext context) => LessonsMenuPage(
-        title: widget.audio == LetterLessonAudio.name
-            ? 'Letter Recognition'
-            : 'Letter Sounds',
-        introduction: lessonInstructionScripts[lessonInstructionPhrase]!,
-        introductionStatus: lessonIntroductionStatus,
-        instruction: lessonInstructionDefaults[lessonInstructionPhrase]!,
-        child: LayoutBuilder(builder: (context, available) {
-          final scale = MediaQuery.textScalerOf(context).scale(18) / 18;
-          final minimumHeight = 250 + 62 * scale;
-          final content = SizedBox(
-              height: math.max(available.maxHeight, minimumHeight),
-              child: Column(children: [
-                Expanded(
-                  child: LayoutBuilder(builder: (context, box) {
-                    final side =
-                        math.min(480.0, math.min(box.maxWidth, box.maxHeight));
-                    return Center(
-                      child: SizedBox(
-                        width: side,
-                        height: side,
-                        child: LessonFrame(
-                            radius: 32,
-                            padding: EdgeInsets.all(side * .08),
-                            child: Image.asset(
-                              'assets/images/letters/${_letter.toLowerCase()}.webp',
-                              key: const ValueKey('recognition-letter'),
-                              fit: BoxFit.contain,
-                              semanticLabel: 'Letter $_letter',
-                              cacheWidth: (side *
-                                      MediaQuery.devicePixelRatioOf(context))
-                                  .ceil(),
-                            )),
+  Widget build(BuildContext context) {
+    final VoidCallback? previous =
+        _index == 0 ? null : () => _select(_index - 1);
+    final VoidCallback? next = _index == 25 ? null : () => _select(_index + 1);
+    return LessonsMenuPage(
+      title: widget.audio == LetterLessonAudio.name
+          ? 'Letter Recognition'
+          : 'Letter Sounds',
+      introduction: lessonInstructionScripts[lessonInstructionPhrase]!,
+      introductionStatus: lessonIntroductionStatus,
+      instruction: lessonInstructionDefaults[lessonInstructionPhrase]!,
+      child: LessonSwipeNavigation(
+          navigationKey: _index,
+          enabled: !_gridOpen,
+          onPrevious: previous,
+          onNext: next,
+          child: LayoutBuilder(builder: (context, available) {
+            final scale = MediaQuery.textScalerOf(context).scale(18) / 18;
+            final minimumHeight = 250 + 62 * scale;
+            final content = SizedBox(
+                height: math.max(available.maxHeight, minimumHeight),
+                child: Column(children: [
+                  Expanded(
+                    child: LayoutBuilder(builder: (context, box) {
+                      final side = math.min(
+                          480.0, math.min(box.maxWidth, box.maxHeight));
+                      return Center(
+                        child: SizedBox(
+                          width: side,
+                          height: side,
+                          child: LessonFrame(
+                              radius: 32,
+                              padding: EdgeInsets.all(side * .08),
+                              child: Image.asset(
+                                'assets/images/letters/${_letter.toLowerCase()}.webp',
+                                key: const ValueKey('recognition-letter'),
+                                fit: BoxFit.contain,
+                                semanticLabel: 'Letter $_letter',
+                                cacheWidth: (side *
+                                        MediaQuery.devicePixelRatioOf(context))
+                                    .ceil(),
+                              )),
+                        ),
+                      );
+                    }),
+                  ),
+                  const SizedBox(height: 12),
+                  AudioButton(
+                    key: ValueKey(
+                        'letter-${widget.audio.name}-$_index-$_audioVersion'),
+                    phrase: _audioPhrase,
+                    onBeforePlay: stopLessonInstruction,
+                    onPlayed: () => _provider!.recordLetterListening(
+                        _letter,
+                        widget.audio == LetterLessonAudio.name
+                            ? LetterListeningKind.name
+                            : LetterListeningKind.sound),
+                    label: 'Sound',
+                    icon: Icons.volume_up_rounded,
+                    color: const Color(0xFF087F86),
+                    lessonArt: true,
+                  ),
+                  const SizedBox(height: 20),
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Expanded(
+                      child: _LetterNavigationButton(
+                        label: 'Previous',
+                        icon: Icons.arrow_back_rounded,
+                        onPressed: previous,
                       ),
-                    );
-                  }),
-                ),
-                const SizedBox(height: 12),
-                AudioButton(
-                  key: ValueKey(
-                      'letter-${widget.audio.name}-$_index-$_audioVersion'),
-                  phrase: _audioPhrase,
-                  onBeforePlay: stopLessonInstruction,
-                  onPlayed: () => _provider!.recordLetterListening(
-                      _letter,
-                      widget.audio == LetterLessonAudio.name
-                          ? LetterListeningKind.name
-                          : LetterListeningKind.sound),
-                  label: 'Sound',
-                  icon: Icons.volume_up_rounded,
-                  color: const Color(0xFF087F86),
-                  lessonArt: true,
-                ),
-                const SizedBox(height: 20),
-                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Expanded(
-                    child: _LetterNavigationButton(
-                      label: 'Previous',
-                      icon: Icons.arrow_back_rounded,
-                      onPressed: _index == 0 ? null : () => _select(_index - 1),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: _LetterNavigationButton(
-                      label: 'A–Z Grid',
-                      icon: Icons.grid_view_rounded,
-                      primary: true,
-                      onPressed: _gridOpen ? null : _openGrid,
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: _LetterNavigationButton(
+                        label: 'A–Z Grid',
+                        icon: Icons.grid_view_rounded,
+                        primary: true,
+                        onPressed: _gridOpen ? null : _openGrid,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: _LetterNavigationButton(
-                      label: 'Next',
-                      icon: Icons.arrow_forward_rounded,
-                      onPressed:
-                          _index == 25 ? null : () => _select(_index + 1),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: _LetterNavigationButton(
+                        label: 'Next',
+                        icon: Icons.arrow_forward_rounded,
+                        onPressed: next,
+                      ),
                     ),
-                  ),
-                ]),
-              ]));
-          return SingleChildScrollView(child: content);
-        }),
-      );
+                  ]),
+                ]));
+            return SingleChildScrollView(child: content);
+          })),
+    );
+  }
 }
 
 class _LetterNavigationButton extends LessonControlButton {

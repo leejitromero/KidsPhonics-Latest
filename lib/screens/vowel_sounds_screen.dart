@@ -11,6 +11,7 @@ import '../widgets/learner_widgets.dart';
 import '../widgets/lesson_control_button.dart';
 import '../widgets/lessons_menu_page.dart';
 import '../widgets/lesson_frame.dart';
+import '../widgets/lesson_swipe_navigation.dart';
 
 class VowelSoundsScreen extends StatefulWidget {
   const VowelSoundsScreen({super.key});
@@ -27,6 +28,13 @@ class _VowelSoundsScreenState extends State<VowelSoundsScreen>
   AppProvider? _provider;
   String get _letter => _vowels[_index];
   @override
+  String get lessonFeedbackPhrase => 'lesson-sound-$_letter';
+
+  @override
+  Future<void> onLessonFeedbackPlayed(String phrase) => _provider!
+      .recordLetterListening(phrase.split('-').last, LetterListeningKind.sound);
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_provider != null) return;
@@ -42,6 +50,7 @@ class _VowelSoundsScreenState extends State<VowelSoundsScreen>
     unawaited(_provider!.phonicsAudio.stop());
     setState(() => _index = index);
     unawaited(_provider!.markLetterViewed(_letter));
+    unawaited(playLessonFeedback());
   }
 
   @override
@@ -51,125 +60,137 @@ class _VowelSoundsScreenState extends State<VowelSoundsScreen>
   }
 
   @override
-  Widget build(BuildContext context) => LessonsMenuPage(
-      title: 'Short Vowel Sounds',
-      introduction: lessonInstructionScripts[lessonInstructionPhrase]!,
-      introductionStatus: lessonIntroductionStatus,
-      instruction: lessonInstructionDefaults[lessonInstructionPhrase]!,
-      child: Column(children: [
-        Expanded(child: LayoutBuilder(builder: (context, box) {
-          final pictureHeight = (box.maxHeight - 240).clamp(120.0, 330.0);
-          return SingleChildScrollView(
-              child: Column(children: [
-            const Text('Meet the Vowels!',
-                style: TextStyle(fontSize: 15, color: KidsUi.ink)),
-            const SizedBox(height: 10),
-            Row(children: [
-              for (var i = 0; i < _vowels.length; i++)
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2),
-                    child: Semantics(
-                        selected: i == _index,
-                        label: 'Choose vowel ${_vowels[i]}',
-                        child: OutlinedButton(
-                          key: ValueKey('vowel-tab-${_vowels[i]}'),
-                          onPressed: withButtonSound(() => _select(i)),
-                          style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 6),
-                              minimumSize: const Size(48, 54),
-                              backgroundColor: i == _index
-                                  ? const Color(0xFF7052CA)
-                                  : KidsUi.cardSurface,
-                              foregroundColor:
-                                  i == _index ? Colors.white : KidsUi.ink,
-                              side: BorderSide(
-                                  color: i == _index
-                                      ? const Color(0xFFFFD76A)
-                                      : Colors.white,
-                                  width: 2),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16))),
-                          child: Column(children: [
-                            Text(_vowels[i],
-                                style: const TextStyle(
-                                    fontFamily: 'Nunito',
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w900)),
-                            Container(
-                                height: 3,
-                                width: 18,
-                                decoration: BoxDecoration(
-                                    color: i == _index
-                                        ? const Color(0xFFFFD76A)
-                                        : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(3))),
-                          ]),
-                        )),
+  Widget build(BuildContext context) {
+    final VoidCallback? previous =
+        _index == 0 ? null : () => _select(_index - 1);
+    final VoidCallback? next = _index == 4 ? null : () => _select(_index + 1);
+    return LessonsMenuPage(
+        title: 'Short Vowel Sounds',
+        introduction: lessonInstructionScripts[lessonInstructionPhrase]!,
+        introductionStatus: lessonIntroductionStatus,
+        instruction: lessonInstructionDefaults[lessonInstructionPhrase]!,
+        child: LessonSwipeNavigation(
+            navigationKey: _index,
+            onPrevious: previous,
+            onNext: next,
+            child: Column(children: [
+              Expanded(child: LayoutBuilder(builder: (context, box) {
+                final pictureHeight = (box.maxHeight - 240).clamp(120.0, 330.0);
+                return SingleChildScrollView(
+                    child: Column(children: [
+                  const Text('Meet the Vowels!',
+                      style: TextStyle(fontSize: 15, color: KidsUi.ink)),
+                  const SizedBox(height: 10),
+                  Row(children: [
+                    for (var i = 0; i < _vowels.length; i++)
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2),
+                          child: Semantics(
+                              selected: i == _index,
+                              label: 'Choose vowel ${_vowels[i]}',
+                              child: OutlinedButton(
+                                key: ValueKey('vowel-tab-${_vowels[i]}'),
+                                onPressed: withButtonSound(() => _select(i)),
+                                style: OutlinedButton.styleFrom(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 6),
+                                    minimumSize: const Size(48, 54),
+                                    backgroundColor: i == _index
+                                        ? const Color(0xFF7052CA)
+                                        : KidsUi.cardSurface,
+                                    foregroundColor:
+                                        i == _index ? Colors.white : KidsUi.ink,
+                                    side: BorderSide(
+                                        color: i == _index
+                                            ? const Color(0xFFFFD76A)
+                                            : Colors.white,
+                                        width: 2),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(16))),
+                                child: Column(children: [
+                                  Text(_vowels[i],
+                                      style: const TextStyle(
+                                          fontFamily: 'Nunito',
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w900)),
+                                  Container(
+                                      height: 3,
+                                      width: 18,
+                                      decoration: BoxDecoration(
+                                          color: i == _index
+                                              ? const Color(0xFFFFD76A)
+                                              : Colors.transparent,
+                                          borderRadius:
+                                              BorderRadius.circular(3))),
+                                ]),
+                              )),
+                        ),
+                      )
+                  ]),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    height: pictureHeight,
+                    child: LessonFrame(
+                        radius: 32,
+                        child: Semantics(
+                            label:
+                                'Uppercase $_letter, lowercase ${_letter.toLowerCase()}',
+                            child: ExcludeSemantics(
+                                child: Column(children: [
+                              Expanded(
+                                  child: Image.asset(
+                                      'assets/images/letters/${_letter.toLowerCase()}.webp',
+                                      key: const ValueKey('vowel-letter'),
+                                      fit: BoxFit.contain,
+                                      cacheWidth: 480)),
+                              SizedBox(
+                                  height: 42,
+                                  child: FittedBox(
+                                      child: Text(_letter.toLowerCase(),
+                                          style: const TextStyle(
+                                              fontFamily: 'Nunito',
+                                              fontSize: 38,
+                                              fontWeight: FontWeight.w900,
+                                              color: KidsUi.ink)))),
+                            ])))),
                   ),
-                )
-            ]),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              height: pictureHeight,
-              child: LessonFrame(
-                  radius: 32,
-                  child: Semantics(
-                      label:
-                          'Uppercase $_letter, lowercase ${_letter.toLowerCase()}',
-                      child: ExcludeSemantics(
-                          child: Column(children: [
-                        Expanded(
-                            child: Image.asset(
-                                'assets/images/letters/${_letter.toLowerCase()}.webp',
-                                key: const ValueKey('vowel-letter'),
-                                fit: BoxFit.contain,
-                                cacheWidth: 480)),
-                        SizedBox(
-                            height: 42,
-                            child: FittedBox(
-                                child: Text(_letter.toLowerCase(),
-                                    style: const TextStyle(
-                                        fontFamily: 'Nunito',
-                                        fontSize: 38,
-                                        fontWeight: FontWeight.w900,
-                                        color: KidsUi.ink)))),
-                      ])))),
-            ),
-            const SizedBox(height: 10),
-            const Text('Hear the vowel sound',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    color: KidsUi.ink)),
-            AudioButton(
-                key: ValueKey('vowel-sound-$_letter'),
-                phrase: 'lesson-sound-$_letter',
-                onBeforePlay: stopLessonInstruction,
-                onPlayed: () => _provider!
-                    .recordLetterListening(_letter, LetterListeningKind.sound),
-                label: '/${_letter.toLowerCase()}/',
-                lessonArt: true),
-            const SizedBox(height: 8),
-          ]));
-        })),
-        const SizedBox(height: 8),
-        Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Expanded(
-              child: LessonControlButton(
-                  label: 'Previous',
-                  icon: Icons.arrow_back_rounded,
-                  art: LessonButtonArt.previous,
-                  onPressed: _index == 0 ? null : () => _select(_index - 1))),
-          const SizedBox(width: 24),
-          Expanded(
-              child: LessonControlButton(
-                  label: 'Next',
-                  icon: Icons.arrow_forward_rounded,
-                  art: LessonButtonArt.next,
-                  onPressed: _index == 4 ? null : () => _select(_index + 1))),
-        ]),
-      ]));
+                  const SizedBox(height: 10),
+                  const Text('Hear the vowel sound',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: KidsUi.ink)),
+                  AudioButton(
+                      key: ValueKey('vowel-sound-$_letter'),
+                      phrase: 'lesson-sound-$_letter',
+                      onBeforePlay: stopLessonInstruction,
+                      onPlayed: () => _provider!.recordLetterListening(
+                          _letter, LetterListeningKind.sound),
+                      label: '/${_letter.toLowerCase()}/',
+                      lessonArt: true),
+                  const SizedBox(height: 8),
+                ]));
+              })),
+              const SizedBox(height: 8),
+              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Expanded(
+                    child: LessonControlButton(
+                        label: 'Previous',
+                        icon: Icons.arrow_back_rounded,
+                        art: LessonButtonArt.previous,
+                        onPressed: previous)),
+                const SizedBox(width: 24),
+                Expanded(
+                    child: LessonControlButton(
+                        label: 'Next',
+                        icon: Icons.arrow_forward_rounded,
+                        art: LessonButtonArt.next,
+                        onPressed: next)),
+              ]),
+            ])));
+  }
 }

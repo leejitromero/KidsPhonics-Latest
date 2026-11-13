@@ -1,0 +1,38 @@
+{
+  "task": "Missing Vowel: existing vowel-letter sound and blank highlight, answer flight, then completed word",
+  "flow": "F_N -> existing A sound with only the blank highlighted -> correct A lands -> FAN recording finishes -> next question",
+  "recordingsNeeded": [],
+  "affectedWordsPendingAudio": 0,
+  "usesExistingAudioOnly": true,
+  "earlierPhonicsQuizChangesPreserved": true,
+  "checks": [
+    {
+      "log": "build/missing_vowel_letter_flow_focused.log",
+      "passed": 30
+    },
+    {
+      "log": "build/missing_vowel_letter_flow_regression.log",
+      "passed": 33
+    }
+  ],
+  "totalPassed": 63,
+  "analyzer": "No issues found",
+  "analyzerLog": "build/missing_vowel_letter_flow_analysis.log",
+  "checked": "All difficulty vowel cues, full-word ordering, wrong answer, first-answer scoring, flight/reduced motion, pause/resume, route changes, disposal, small screens, asset audit",
+  "apkRebuilt": false,
+  "backup": "output/checkpoints/missing-vowel-letter-cue-before-20261113-071842",
+  "files": [
+    {
+      "path": "lib/data/missing_vowel_sounds.dart",
+      "sha256": "044F46FB294F3420992B252D774B2080FB2F92E4C403924D363AB6BAC845A4E1"
+    },
+    {
+      "path": "lib/screens/missing_vowel_screen.dart",
+      "sha256": "8DC09972DCC32C170C062E6FC50FC492108BA4279E05BF49997A87D4E6408DED"
+    },
+    {
+      "path": "test/missing_vowel_sounds_test.dart",
+      "sha256": "5D9AAD1503B59D61438C399850AFA7C2624F9398177D3D96E135A3DB269A9F99"
+    }
+  ]
+}

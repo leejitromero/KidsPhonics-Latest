@@ -1,3 +1,9 @@
+import 'game_round_result_dialog.dart';
+export 'game_round_result_dialog.dart';
+import '../models/game_round_result.dart';
+import '../models/smart_review.dart';
+export '../models/smart_review.dart' show ReviewTarget;
+export '../models/game_round_result.dart';
 import 'answer_choice_button.dart';
 import 'game_design.dart';
 import 'game_feedback_art.dart';
@@ -22,7 +28,6 @@ import 'adventure_background.dart';
 import 'mascot_guide.dart';
 import 'game_tutorial.dart';
 import 'game_mascot_coach.dart';
-import 'completion_celebration.dart';
 import '../controllers/game_narration_controller.dart';
 import 'floating_choice.dart';
 import 'quick_choice_art.dart';
@@ -1021,213 +1026,6 @@ class _AudioButtonState extends State<AudioButton> with WidgetsBindingObserver {
   }
 }
 
-class GameResultDialog extends StatefulWidget {
-  const GameResultDialog(
-      {super.key,
-      required this.correct,
-      required this.attempts,
-      required this.earnedXp,
-      required this.earnedStars,
-      required this.onAgain,
-      required this.onBack,
-      this.onReview,
-      this.reviewCount = 0,
-      this.accuracyNote = 'Accuracy includes retries.',
-      this.totalItems,
-      this.correctItems,
-      this.backLabel = 'Back to Games'});
-  final int correct, attempts, earnedXp, earnedStars;
-  final int? totalItems, correctItems;
-  final VoidCallback onAgain, onBack;
-  final VoidCallback? onReview;
-  final int reviewCount;
-  final String accuracyNote;
-  final String backLabel;
-  @override
-  State<GameResultDialog> createState() => _GameResultDialogState();
-}
-
-class _GameResultDialogState extends State<GameResultDialog> {
-  int get _total => widget.totalItems ?? widget.attempts;
-  int get _score => widget.correctItems ?? widget.correct;
-  bool _used = false;
-  void _act(VoidCallback action) {
-    if (_used) return;
-    setState(() => _used = true);
-    action();
-  }
-
-  @override
-  Widget build(BuildContext context) => CompletionCelebration(
-      child: Theme(
-          data: KidsUi.theme,
-          child: PopScope(
-            canPop: false,
-            child: AlertDialog(
-              constraints: const BoxConstraints(maxWidth: 360),
-              insetPadding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-              titlePadding: EdgeInsets.zero,
-              contentPadding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-              actionsPadding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
-              clipBehavior: Clip.antiAlias,
-              backgroundColor: const Color(0xFFF8F3FF),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
-                  side: const BorderSide(color: Color(0xFFD7C8F3), width: 1.5)),
-              title: Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [Color(0xFF7052CA), Color(0xFF398EAA)])),
-                  child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.auto_awesome_rounded,
-                              color: Color(0xFFFFDF88), size: 22),
-                          SizedBox(width: 8),
-                          Flexible(
-                              child: Text('Round complete!',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w900))),
-                        ]),
-                    const SizedBox(height: 8),
-                    Image.asset(GameMascotCoach.mascotAsset,
-                        width: 64,
-                        height: 64,
-                        fit: BoxFit.contain,
-                        cacheWidth: 192,
-                        excludeFromSemantics: true),
-                    const SizedBox(height: 4),
-                    Text(
-                        widget.attempts > 0 &&
-                                widget.correct / widget.attempts >= .8
-                            ? 'Amazing work!'
-                            : 'Every try helps you grow!',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white)),
-                  ])),
-              content: SingleChildScrollView(
-                  child: Column(mainAxisSize: MainAxisSize.min, children: [
-                Text('Score: $_score / $_total',
-                    style: const TextStyle(
-                        fontSize: 23, fontWeight: FontWeight.w900)),
-                const SizedBox(height: 8),
-                LinearProgressIndicator(
-                    value: _total == 0 ? 0 : (_score / _total).clamp(0.0, 1.0),
-                    minHeight: 7,
-                    borderRadius: BorderRadius.circular(6),
-                    color: const Color(0xFF398EAA),
-                    backgroundColor: const Color(0xFFE3DAF3)),
-                const SizedBox(height: 6),
-                Text(
-                    'Activity Accuracy: ${widget.attempts == 0 ? 'No attempts yet' : '${(widget.correct / widget.attempts * 100).round()}%'}',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w700)),
-                Text(
-                    'Attempts: ${widget.attempts} • Wrong attempts: ${widget.attempts - widget.correct}\n${widget.accuracyNote}',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 12, color: KidsUi.muted)),
-                const SizedBox(height: 10),
-                Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                            colors: [Color(0xFFFFEEC6), Color(0xFFFFE2AC)]),
-                        border: Border.all(color: const Color(0xFFF0D18A)),
-                        borderRadius: BorderRadius.circular(16)),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.stars_rounded,
-                              color: Color(0xFF99600E), size: 28),
-                          const SizedBox(width: 10),
-                          Flexible(
-                              child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                Text('XP Earned: +${widget.earnedXp}',
-                                    style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w800)),
-                                Text('Stars Earned: +${widget.earnedStars}',
-                                    style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w800)),
-                              ])),
-                        ])),
-                const SizedBox(height: 8),
-                const Text('Play again or take a little break.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 13, color: KidsUi.muted)),
-              ])),
-              actions: [
-                Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (widget.onReview != null &&
-                          widget.reviewCount > 0) ...[
-                        SizedBox(
-                            width: double.infinity,
-                            child: OutlinedButton.icon(
-                                key: const ValueKey('quiz-review-mistakes'),
-                                onPressed: withButtonSound(_used
-                                    ? null
-                                    : () => _act(widget.onReview!)),
-                                icon: const Icon(Icons.replay_rounded),
-                                label: Text(
-                                    'Review Mistakes (${widget.reviewCount})'))),
-                        const SizedBox(height: 6),
-                      ],
-                      SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  minimumSize: const Size(0, 48),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 8),
-                                  textStyle: const TextStyle(
-                                      fontFamily: 'Nunito',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w800),
-                                  backgroundColor: const Color(0xFF7052CA),
-                                  foregroundColor: Colors.white),
-                              onPressed: withButtonSound(
-                                  _used ? null : () => _act(widget.onAgain)),
-                              child: const Text('Play Again'))),
-                      const SizedBox(height: 6),
-                      SizedBox(
-                          width: double.infinity,
-                          child: OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                  minimumSize: const Size(0, 48),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 8),
-                                  textStyle: const TextStyle(
-                                      fontFamily: 'Nunito',
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w800)),
-                              onPressed: withButtonSound(
-                                  _used ? null : () => _act(widget.onBack)),
-                              child: Text(widget.backLabel == 'Back to Games'
-                                  ? 'Choose Next Game'
-                                  : widget.backLabel))),
-                    ])
-              ],
-            ),
-          )));
-}
-
 class GameLives extends StatelessWidget {
   const GameLives({super.key, required this.lives});
   final int lives;
@@ -1397,7 +1195,7 @@ class _GameScaffoldState extends State<GameScaffold> {
       );
 }
 
-/// Tracks per-play rewards and answers without changing reward formulas.
+/// Records first submissions and awards a single rating at round completion.
 mixin GameSessionUi<T extends StatefulWidget> on State<T> {
   AppProvider? _audioProvider;
 
@@ -1406,6 +1204,7 @@ mixin GameSessionUi<T extends StatefulWidget> on State<T> {
     if (!mounted || resultOpen || ModalRoute.isCurrentOf(context) == false) {
       return false;
     }
+    if (!TickerMode.valuesOf(context).enabled) return false;
     final lifecycle = WidgetsBinding.instance.lifecycleState;
     if (lifecycle != null && lifecycle != AppLifecycleState.resumed) {
       return false;
@@ -1443,6 +1242,7 @@ mixin GameSessionUi<T extends StatefulWidget> on State<T> {
   @override
   void dispose() {
     gameNarration.dispose();
+    cancelGameAdvance();
     unawaited(_audioProvider?.phonicsAudio.stop());
     unawaited(_audioProvider?.audio.stop());
     super.dispose();
@@ -1450,8 +1250,20 @@ mixin GameSessionUi<T extends StatefulWidget> on State<T> {
 
   int earnedXp = 0, earnedStars = 0, scoredAttempts = 0, correctAttempts = 0;
   bool resultOpen = false;
+  bool? gameAnswerFeedback;
+  bool get gameAnswerEffectsEnabled => true;
+  String get gameTitle;
+  Difficulty get roundDifficulty;
+  Widget gameForDifficulty(Difficulty difficulty);
   int get totalGameItems;
   int get correctGameItems => correctAttempts;
+  int get roundRatingCorrect => correctGameItems;
+  int get roundRatingTotal => totalGameItems;
+  String get resultScoreUnit => 'correct';
+  final List<GameRoundAnswer> _roundAnswers = [];
+  final Set<String> _answeredItems = {};
+  bool _roundStarsAwarded = false, _resultShowing = false;
+  Timer? _gameAdvance;
 
   Future<void> _saved = Future.value();
 
@@ -1463,34 +1275,114 @@ mixin GameSessionUi<T extends StatefulWidget> on State<T> {
     _saved = _saved.then((_) => p.addXP(value));
   }
 
-  void awardGameStar() {
-    earnedStars++;
-    final p = context.read<AppProvider>();
-    _saved = _saved.then((_) => p.addStar());
-  }
-
-  void recordGameAnswer({required bool correct}) {
-    if (resultOpen) return;
+  bool recordGameAnswer(
+      {required bool correct,
+      String? itemId,
+      String? prompt,
+      String? selected,
+      String? expected,
+      String? word,
+      int? highlightedIndex,
+      ReviewTarget? reviewTarget,
+      bool speech = false,
+      bool feedback = true}) {
+    if (resultOpen || (itemId != null && !_answeredItems.add(itemId))) {
+      return false;
+    }
     scoredAttempts++;
     if (correct) correctAttempts++;
-    context.read<AppProvider>().recordDailyAnswer(correct: correct);
+    if (feedback) {
+      setState(() => gameAnswerFeedback = correct);
+      if (gameAnswerEffectsEnabled) {
+        unawaited(correct ? playGameCorrect() : playGameWrong());
+      }
+    }
+    if (prompt != null && selected != null && expected != null) {
+      _roundAnswers.add(GameRoundAnswer(
+          id: itemId ?? 'attempt-$scoredAttempts',
+          prompt: prompt,
+          selected: selected,
+          expected: expected,
+          correct: correct,
+          word: word,
+          highlightedIndex: highlightedIndex));
+    }
+    if (speech) {
+      context.read<AppProvider>().recordSpeechPractice(correct: correct);
+    } else {
+      context
+          .read<AppProvider>()
+          .recordDailyAnswer(correct: correct, reviewTarget: reviewTarget);
+    }
+    return true;
+  }
+
+  void clearGameAnswerFeedback() {
+    if (mounted && gameAnswerFeedback != null) {
+      setState(() => gameAnswerFeedback = null);
+    }
+  }
+
+  /// Hold answer feedback until the learner can interact with the next task.
+  void scheduleGameAdvance(VoidCallback next,
+      {Duration delay = const Duration(milliseconds: 600)}) {
+    cancelGameAdvance();
+    void finish() {
+      if (!mounted || resultOpen) return;
+      if (!canAdvanceGameFeedback) {
+        _gameAdvance = Timer(const Duration(milliseconds: 250), finish);
+        return;
+      }
+      _gameAdvance = null;
+      clearGameAnswerFeedback();
+      next();
+    }
+
+    _gameAdvance = Timer(delay, finish);
+  }
+
+  void cancelGameAdvance() {
+    _gameAdvance?.cancel();
+    _gameAdvance = null;
   }
 
   void clearGameLedger() {
+    cancelGameAdvance();
     gameNarration.resetRound();
+    gameAnswerFeedback = null;
     earnedXp = 0;
     earnedStars = 0;
     scoredAttempts = 0;
     correctAttempts = 0;
     resultOpen = false;
+    _roundAnswers.clear();
+    _answeredItems.clear();
+    _roundStarsAwarded = _resultShowing = false;
   }
 
   Future<void> showGameResult(VoidCallback restart,
       {String backLabel = 'Back to Games',
       VoidCallback? onReview,
       int reviewCount = 0,
-      String accuracyNote = 'Accuracy includes retries.'}) async {
+      String accuracyNote = 'The first submitted answer counts.'}) async {
+    if (_resultShowing || !mounted) return;
+    _resultShowing = true;
+    cancelGameAdvance();
     final navigator = Navigator.of(context);
+    if (!_roundStarsAwarded) {
+      _roundStarsAwarded = true;
+      earnedStars = gameRoundStars(
+          correct: roundRatingCorrect,
+          total: roundRatingTotal,
+          completed: true);
+      final provider = context.read<AppProvider>();
+      final count = earnedStars;
+      _saved = _saved.then((_) async {
+        for (var i = 0; i < count; i++) {
+          await provider.addStar();
+        }
+      });
+    }
     await _saved;
     if (!mounted) return;
     await context.read<AppProvider>().phonicsAudio.stop();
@@ -1498,30 +1390,47 @@ mixin GameSessionUi<T extends StatefulWidget> on State<T> {
     await showDialog<void>(
         context: context,
         barrierDismissible: false,
-        builder: (_) => GameResultDialog(
-            totalItems: totalGameItems,
-            correctItems: correctGameItems,
-            correct: correctAttempts,
-            attempts: scoredAttempts,
-            earnedXp: earnedXp,
-            earnedStars: earnedStars,
-            backLabel: backLabel,
-            reviewCount: reviewCount,
-            accuracyNote: accuracyNote,
-            onReview: onReview == null
-                ? null
-                : () {
-                    navigator.pop();
-                    onReview();
-                  },
-            onAgain: () {
-              navigator.pop();
-              clearGameLedger();
-              restart();
-            },
-            onBack: () {
-              navigator.pop();
-              navigator.pop();
-            }));
+        builder: (_) => PopScope(
+            canPop: false,
+            child: Consumer<AppProvider>(
+                builder: (_, provider, __) => GameResultDialog(
+                    savePending: provider.hasUnsavedChanges,
+                    onRetrySaving: () => unawaited(provider.retrySaving()),
+                    title: gameTitle,
+                    difficulty: roundDifficulty,
+                    answers: List.unmodifiable(_roundAnswers),
+                    ratingCorrect: roundRatingCorrect,
+                    ratingTotal: roundRatingTotal,
+                    scoreUnit: resultScoreUnit,
+                    totalItems: totalGameItems,
+                    correctItems: correctGameItems,
+                    correct: correctAttempts,
+                    attempts: scoredAttempts,
+                    earnedXp: earnedXp,
+                    earnedStars: earnedStars,
+                    backLabel: backLabel,
+                    reviewCount: reviewCount,
+                    accuracyNote: accuracyNote,
+                    onReview: onReview == null
+                        ? null
+                        : () {
+                            navigator.pop();
+                            _resultShowing = false;
+                            onReview();
+                          },
+                    onDifficultySelected: (difficulty) {
+                      navigator.pop();
+                      navigator.pushReplacement(MaterialPageRoute<void>(
+                          builder: (_) => gameForDifficulty(difficulty)));
+                    },
+                    onAgain: () {
+                      navigator.pop();
+                      clearGameLedger();
+                      restart();
+                    },
+                    onBack: () {
+                      navigator.pop();
+                      navigator.pop();
+                    }))));
   }
 }

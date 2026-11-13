@@ -84,14 +84,15 @@ void main() {
       await t.runAsync(
           () => Future<void>.delayed(const Duration(milliseconds: 20)));
       await t.pump();
-      expect(find.text('Recognized'), findsOneWidget);
-      final next = find.byKey(const ValueKey('speech-next-word'));
-      await t.ensureVisible(next);
-      await t.pump();
+      expect(find.text('Recognized'), findsNothing);
+      expect(find.text('Next Word'), findsNothing);
+      expect(find.text('Answer saved!'), findsOneWidget);
+      expect(t.widget<SpeechHeardCard>(find.byType(SpeechHeardCard)).correct,
+          isNull);
       expect(t.getRect(guide), guideRect);
-      expect(t.getRect(next).top, greaterThanOrEqualTo(viewport.top));
-      expect(t.getRect(next).bottom, lessThanOrEqualTo(viewport.bottom));
-      expect(find.text('Next Word').hitTestable(), findsOneWidget);
+      await t.pump(const Duration(milliseconds: 700));
+      expect(t.widget<SpeechPictureCard>(find.byType(SpeechPictureCard)).word,
+          isNot(word));
       expect(t.takeException(), isNull);
       await close(t, p);
     });

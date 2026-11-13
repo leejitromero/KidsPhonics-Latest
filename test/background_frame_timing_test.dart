@@ -28,7 +28,7 @@ void main() {
           builder: (_, __) => const SizedBox()),
       frames: [
         for (var i = 1; i <= 3; i++)
-          'assets/images/quick_check_background/quickcheck_newbg_$i.png',
+          'assets/images/quick_check_background/quickcheck_newbg_$i.webp',
       ],
     ),
     (

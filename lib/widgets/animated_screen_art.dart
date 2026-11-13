@@ -10,18 +10,18 @@ const skyFrames = [
   'assets/images/screen_frames/background/bg-5.webp',
 ];
 const lessonFrames = [
-  'assets/images/lesson_background/Lesson_new_bg_1.png',
-  'assets/images/lesson_background/Lesson_new_bg_2.png',
-  'assets/images/lesson_background/Lesson_new_bg_3.png',
-  'assets/images/lesson_background/Lesson_new_bg_4.png',
-  'assets/images/lesson_background/Lesson_new_bg_5.png',
+  'assets/images/lesson_background/Lesson_new_bg_1.webp',
+  'assets/images/lesson_background/Lesson_new_bg_2.webp',
+  'assets/images/lesson_background/Lesson_new_bg_3.webp',
+  'assets/images/lesson_background/Lesson_new_bg_4.webp',
+  'assets/images/lesson_background/Lesson_new_bg_5.webp',
 ];
 const gameFrames = [
-  'assets/images/game_background/games_newbg_1.png',
-  'assets/images/game_background/games_newbg_2.png',
-  'assets/images/game_background/games_newbg_3.png',
-  'assets/images/game_background/games_newbg_4.png',
-  'assets/images/game_background/games_newbg_5.png',
+  'assets/images/game_background/games_newbg_1.webp',
+  'assets/images/game_background/games_newbg_2.webp',
+  'assets/images/game_background/games_newbg_3.webp',
+  'assets/images/game_background/games_newbg_4.webp',
+  'assets/images/game_background/games_newbg_5.webp',
 ];
 
 /// Preloaded, local frames. Only this artwork repaints when the frame changes.

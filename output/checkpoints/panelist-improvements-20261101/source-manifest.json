@@ -1,0 +1,117 @@
+﻿{
+    "checkpointDate":  "2026-11-01",
+    "baseCommit":  "22f172d9468fbfedba2fe5c825381e95ac506182",
+    "scope":  "All currently modified and untracked source/test files; unchanged files and runtime media remain in the repository at the recorded base commit.",
+    "files":  [
+                  {
+                      "path":  "android/app/src/main/AndroidManifest.xml",
+                      "bytes":  1764,
+                      "sha256":  "64BA9F384BA0C09F7AD29FD57EC7D318B0A0C6FEA3CC75AA35C28F2BF4647C44"
+                  },
+                  {
+                      "path":  "android/app/src/main/kotlin/com/example/kidsphonics/MainActivity.kt",
+                      "bytes":  2127,
+                      "sha256":  "ABEBE00E8859F187B09AFB251BBA981B33F7BBC7BD9EBB9534C1462962934D27"
+                  },
+                  {
+                      "path":  "android/app/src/main/kotlin/com/example/kidsphonics/PlayerWelcomeSpeech.kt",
+                      "bytes":  7628,
+                      "sha256":  "F39AEF6779E4F9447CB108B2DEBF294B7ADE7779182FBC9A45EAF480245D63B2"
+                  },
+                  {
+                      "path":  "lib/controllers/player_welcome_voice.dart",
+                      "bytes":  4121,
+                      "sha256":  "BB996636E47CFFF99382F43569E93A34D963C6CC751E695B8DE5950714BBA7C0"
+                  },
+                  {
+                      "path":  "lib/data/game_session_order.dart",
+                      "bytes":  5901,
+                      "sha256":  "5C76725BAF5446486D39FF186052D79F33D5BE3BCAC0F0AD80D1436E2B4D5685"
+                  },
+                  {
+                      "path":  "lib/providers/app_provider.dart",
+                      "bytes":  32193,
+                      "sha256":  "093D6891DF0110E67958ABA212BB4C351D78BFE93B7FA0D37EAD8D57C8BB74A6"
+                  },
+                  {
+                      "path":  "lib/screens/alphabet_pictures_screen.dart",
+                      "bytes":  11083,
+                      "sha256":  "17B1607003630AC693A739499CF877917D89C8CF75C8467713CFAAE9170C20A9"
+                  },
+                  {
+                      "path":  "lib/screens/blending_sounds_screen.dart",
+                      "bytes":  22110,
+                      "sha256":  "31C2D2CF79C61581F591967187D43AEB81786587A844D1ECAC9965DACDFBF6D2"
+                  },
+                  {
+                      "path":  "lib/screens/cvc_words_screen.dart",
+                      "bytes":  16525,
+                      "sha256":  "55794EA7B9144CAB72AB36CB71ABC2EE6160F6261FA54296DA5A7E8B800C2DC6"
+                  },
+                  {
+                      "path":  "lib/screens/home_screen.dart",
+                      "bytes":  16902,
+                      "sha256":  "F548DA492B4DEFE5F14A3A3D5441A6D4DCE1E0B8C71BFBEED46292D60AA52281"
+                  },
+                  {
+                      "path":  "lib/screens/vowel_sounds_screen.dart",
+                      "bytes":  8864,
+                      "sha256":  "80161E094374084BA42F373BBC1FD590EE06ECF4364CF4B4C989D738589031CD"
+                  },
+                  {
+                      "path":  "lib/screens/welcome_screen.dart",
+                      "bytes":  19523,
+                      "sha256":  "DCE4E97DC6E19E742527E69131AAF8B184D51182D79A698B6E25DE1B14142013"
+                  },
+                  {
+                      "path":  "lib/widgets/lesson_swipe_navigation.dart",
+                      "bytes":  3016,
+                      "sha256":  "78925254BB31BFEC972FCE02A6DB0B0AEE59E1D1C64B3EFF88D109F94FB7DAFD"
+                  },
+                  {
+                      "path":  "lib/widgets/letter_lesson_page.dart",
+                      "bytes":  13674,
+                      "sha256":  "7C292B2860E93F80A72AB04BE705CE4C793379AF3774D0E36DB7BEEE64F0262F"
+                  },
+                  {
+                      "path":  "test/game_randomization_lifecycle_test.dart",
+                      "bytes":  5440,
+                      "sha256":  "449A9B2EC6EEE197D1CEF7F49BAB436462CC135B214C75CCEE16AE3F26E61C14"
+                  },
+                  {
+                      "path":  "test/game_session_history_test.dart",
+                      "bytes":  12756,
+                      "sha256":  "19467545B5895FA1F215555AE6A5B69C23BB0247096440EFC01D319F68A10124"
+                  },
+                  {
+                      "path":  "test/home_full_flow_test.dart",
+                      "bytes":  11689,
+                      "sha256":  "82FB6066D91BE426107EE61A187818C5B62D98BEB963ED48C0280E0EC56FC5B2"
+                  },
+                  {
+                      "path":  "test/learner_ui_test.dart",
+                      "bytes":  34333,
+                      "sha256":  "5CE853E16DD9B2AC823521F35A29DBF6288BB29ADBC68C38B2E7415C4BF8C960"
+                  },
+                  {
+                      "path":  "test/lesson_swipe_flow_test.dart",
+                      "bytes":  7900,
+                      "sha256":  "80CFF87814F74A84C8CCA718AB82EA5A97321CDC595C2C2BE1321B6A46FBA66E"
+                  },
+                  {
+                      "path":  "test/lesson_swipe_navigation_test.dart",
+                      "bytes":  5706,
+                      "sha256":  "E0435E7A66C07EB04A3F5F34C57E841C80F53EBFDD2463EEE01B79A5CFBB8B72"
+                  },
+                  {
+                      "path":  "test/phonics_quiz_test_helpers.dart",
+                      "bytes":  1903,
+                      "sha256":  "799F89456DD0581A59C0BD6C53D470B360B5ADE3D3737B16C3DA0D2A3C1CB9C5"
+                  },
+                  {
+                      "path":  "test/player_welcome_test.dart",
+                      "bytes":  13243,
+                      "sha256":  "82B3AB1661F7094CFE1F109B3328E3F07512388572727CCFEB8826D3504CE715"
+                  }
+              ]
+}

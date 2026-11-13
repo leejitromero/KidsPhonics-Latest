@@ -1,3 +1,4 @@
+import 'verified_image_assets.dart';
 import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'dart:ui' as ui;
@@ -41,10 +42,10 @@ void main() {
     var previousCoverage = 0;
     for (var index = 0; index < cloudTransitionAssets.length; index++) {
       final asset = cloudTransitionAssets[index];
-      expect(asset, endsWith('curtain_${index + 1}.png'));
+      expect(asset, endsWith('curtain_${index + 1}.webp'));
       final bytes = await rootBundle.load(asset);
-      expect(
-          sha256.convert(bytes.buffer.asUint8List()).toString(), hashes[index]);
+      expect(sha256.convert(bytes.buffer.asUint8List()).toString(),
+          optimizedImageHash(asset, hashes[index]));
       final codec = await ui.instantiateImageCodec(bytes.buffer.asUint8List());
       final frame = await codec.getNextFrame();
       expect(frame.image.width, 1024);

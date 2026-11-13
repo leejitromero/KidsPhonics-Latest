@@ -1,5 +1,4 @@
 import 'dart:async';
-import '../widgets/game_feedback_art.dart';
 
 import '../data/game_session_order.dart';
 import '../widgets/word_game_layout.dart';
@@ -18,6 +17,8 @@ import '../providers/app_provider.dart';
 import '../models/difficulty.dart';
 import '../widgets/learner_widgets.dart';
 import '../widgets/game_tutorial.dart';
+import '../widgets/word_builder_choice_frame.dart';
+import '../widgets/activity_round_header.dart';
 
 class WordBuilderScreen extends StatefulWidget {
   final Difficulty difficulty;
@@ -37,8 +38,9 @@ class _WordBuilderScreenState extends State<WordBuilderScreen>
   late List<String?> _filledAnswers;
 
   bool _busy = false;
-  bool _allCorrect = false; // true when all blanks filled correctly
-  final _choiceKeys = <String, GlobalKey>{};
+  bool _wordSubmitted = false; // true once every blank has a submitted letter
+  final _choiceKeys = <int, GlobalKey>{};
+  final _usedTiles = <int>{};
   final _slotKeys = <int, GlobalKey>{};
   late final AnimationController _flight;
   OverlayEntry? _flightEntry;
@@ -69,58 +71,55 @@ class _WordBuilderScreenState extends State<WordBuilderScreen>
     _busy = false;
     _activeBlankIndex = 0;
     _filledAnswers = List<String?>.filled(_blankCount, null);
-    _allCorrect = false;
+    _wordSubmitted = false;
     _feedback = null;
+    _usedTiles.clear();
     _shuffledTiles = List<String>.from(_puzzle.tiles)..shuffle();
   }
 
   // ── tap a letter tile ──────────────────────────────────────────────────
-  void _tapTile(String letter) async {
-    if (_allCorrect ||
+  void _tapTile(int tile) async {
+    if (_wordSubmitted ||
         _busy ||
         resultOpen ||
+        tile < 0 ||
+        tile >= _shuffledTiles.length ||
+        _usedTiles.contains(tile) ||
         _activeBlankIndex >= _blankCount) {
       return;
     }
+    final letter = _shuffledTiles[tile];
     final blankIndex = _activeBlankIndex;
-    final isCorrect = letter == _puzzle.correctLetters[_activeBlankIndex];
-    recordGameAnswer(correct: isCorrect);
     setState(() {
       _busy = true;
-      _feedback = isCorrect;
+      _usedTiles.add(tile);
     });
     gameNarration.cancel();
-    final sound = gameNarration.letterName(letter);
-    final request = gameNarration.generation;
-
-    if (isCorrect) {
-      await _flyLetter(letter, blankIndex);
-      if (!mounted) return;
-      setState(() {
-        _filledAnswers[_activeBlankIndex] = letter;
-        _activeBlankIndex++;
-        if (_activeBlankIndex >= _blankCount) _allCorrect = true;
-      });
-    }
-    await sound;
+    await _flyLetter(tile, letter, blankIndex);
     if (!mounted || resultOpen) return;
-    if (isCorrect) {
-      if (_allCorrect) {
-        if (request == gameNarration.generation) playGameCorrect();
-        awardGameXp((10 * widget.difficulty.xpMultiplier).round());
-        awardGameStar();
-        _feedbackTimer =
-            Timer(const Duration(milliseconds: 1000), _finishPuzzleFeedback);
-        return;
-      } else {
-        if (request == gameNarration.generation) playGameCorrect();
-        await Future.delayed(const Duration(milliseconds: 300));
-      }
-    } else {
-      if (request == gameNarration.generation) playGameWrong();
-      await Future.delayed(const Duration(milliseconds: 300));
+    setState(() {
+      _filledAnswers[blankIndex] = letter;
+      _activeBlankIndex++;
+      _wordSubmitted = _activeBlankIndex == _blankCount;
+      _busy = _wordSubmitted;
+      _feedback = _wordSubmitted ? true : null;
+    });
+    if (_wordSubmitted) {
+      final correct = _filledAnswers.join() == _puzzle.correctLetters.join();
+      var blank = 0;
+      final selected =
+          _puzzle.blanks.map((l) => l ?? _filledAnswers[blank++]!).join();
+      recordGameAnswer(
+          reviewTarget: ReviewTarget.word(_puzzle.word),
+          correct: correct,
+          itemId: 'builder-$_puzzleIndex',
+          prompt: 'Build the word',
+          selected: selected,
+          expected: _puzzle.word,
+          word: _puzzle.word);
+      if (correct) awardGameXp((10 * widget.difficulty.xpMultiplier).round());
+      scheduleGameAdvance(_finishPuzzleFeedback);
     }
-    if (mounted) setState(() => _busy = false);
   }
 
   void _finishPuzzleFeedback() {
@@ -141,12 +140,12 @@ class _WordBuilderScreenState extends State<WordBuilderScreen>
     }
   }
 
-  Future<void> _flyLetter(String letter, int blank) async {
+  Future<void> _flyLetter(int tile, String letter, int blank) async {
     if (MediaQuery.disableAnimationsOf(context)) return;
     final overlay = Overlay.of(context);
     final overlayBox = overlay.context.findRenderObject() as RenderBox;
     final source =
-        _choiceKeys[letter]!.currentContext!.findRenderObject() as RenderBox;
+        _choiceKeys[tile]!.currentContext!.findRenderObject() as RenderBox;
     final target =
         _slotKeys[blank]!.currentContext!.findRenderObject() as RenderBox;
     final start = MatrixUtils.transformRect(
@@ -262,7 +261,7 @@ class _WordBuilderScreenState extends State<WordBuilderScreen>
             border: Border.all(
                 color: filled == null
                     ? const Color(0xFFBCAAD5)
-                    : const Color(0xFF167769))),
+                    : const Color(0xFF5A3390))),
         child: Text(filled ?? '_',
             style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
       ),
@@ -270,19 +269,32 @@ class _WordBuilderScreenState extends State<WordBuilderScreen>
   }
 
   @override
+  String get gameTitle => 'Word Builder';
+  @override
+  Difficulty get roundDifficulty => widget.difficulty;
+  @override
+  Widget gameForDifficulty(Difficulty difficulty) =>
+      WordBuilderScreen(difficulty: difficulty);
+  @override
   int get totalGameItems => _activePuzzles.length;
 
   @override
-  int get correctGameItems => _puzzleIndex + (_allCorrect ? 1 : 0);
+  int get correctGameItems => correctAttempts;
 
   @override
   Widget build(BuildContext context) => GameScaffold(
       narration: gameNarration,
       tutorial: GameTutorial.wordBuilder,
       canOpenTutorial: () => !_busy && !resultOpen,
-      answerResult: _feedback,
+      answerResult: gameAnswerFeedback,
       title: 'Word Builder',
       instructions: _instruction,
+      roundHeader: ActivityRoundHeader(
+          difficulty: widget.difficulty,
+          current: _puzzleIndex + 1,
+          total: _activePuzzles.length,
+          label: 'Question',
+          fitLabels: true),
       instructionPanel: GameMascotCoach(
           title: 'Word Builder',
           instructions: _instruction,
@@ -300,42 +312,29 @@ class _WordBuilderScreenState extends State<WordBuilderScreen>
         const SizedBox(height: 8),
         AudioButton(
             phrase: _puzzle.word[0] + _puzzle.word.substring(1).toLowerCase(),
-            enabled: !_busy && !_allCorrect && !resultOpen),
+            enabled: !_busy && !_wordSubmitted && !resultOpen),
         const SizedBox(height: 8),
-        WordChoiceGrid(
-            children: _shuffledTiles
-                .map((letter) => SizedBox(
-                    key: _choiceKeys.putIfAbsent(letter, () => GlobalKey()),
-                    child: GameAnswerButton(
-                      buttonKey: ValueKey('builder-choice-$letter'),
-                      compact: true,
-                      label: letter,
-                      onPressed: _allCorrect || _busy || resultOpen
-                          ? null
-                          : () => _tapTile(letter),
-                    )))
-                .toList()),
+        WordBuilderChoiceFrame(
+            key: const ValueKey('builder-choice-frame'),
+            children: [
+              for (var tile = 0; tile < _shuffledTiles.length; tile++)
+                SizedBox(
+                    key: _choiceKeys.putIfAbsent(tile, () => GlobalKey()),
+                    child: _usedTiles.contains(tile)
+                        ? WordBuilderEmptyPlace(
+                            key: ValueKey('builder-empty-$tile'))
+                        : GameAnswerButton(
+                            buttonKey: ValueKey(
+                                'builder-choice-${_shuffledTiles[tile]}-$tile'),
+                            compact: true,
+                            floating: false,
+                            label: _shuffledTiles[tile],
+                            onPressed: _wordSubmitted || _busy || resultOpen
+                                ? null
+                                : () => _tapTile(tile),
+                          )),
+            ]),
         const SizedBox(height: 6),
-        SizedBox(
-            height: 36,
-            child: _feedback == true
-                ? const GameCorrectFrame(height: 36)
-                : Center(
-                    child: Semantics(
-                    liveRegion: true,
-                    child: Text(
-                        _feedback == null
-                            ? ''
-                            : _feedback!
-                                ? 'Correct!'
-                                : 'Nice try! Keep practicing.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: _feedback == true
-                                ? const Color(0xFF167769)
-                                : const Color(0xFFB63D50))),
-                  ))),
+        if (_feedback != null) const Text('Answer saved!'),
       ]));
 }

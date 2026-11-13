@@ -151,15 +151,9 @@ void main() {
         final before = boardLetters(t, length);
         await tapBoardLetter(t, 0);
         expect(
-            find.text('Drag the floating letter into place.'), findsOneWidget);
+            find.text('Drag the selected letter into place.'), findsOneWidget);
         await tapBoardLetter(t, 0);
         expect(boardLetters(t, length), before);
-        await t.tap(find.byKey(const ValueKey('word-check')));
-        await t.pump();
-        expect(
-            find.text('Try again! Drag a letter into place.'), findsOneWidget);
-        expect(boardLetters(t, length), before);
-        checkBounds();
         await t.tap(find.byKey(const ValueKey('word-hint')));
         await t.pumpAndSettle();
         expect(find.text('Hint used: first letter fixed'), findsOneWidget);
@@ -174,6 +168,11 @@ void main() {
                     find.byKey(const ValueKey('word-tile-0')))
                 .onPressed,
             isNull);
+        checkBounds();
+        await t.tap(find.byKey(const ValueKey('word-check')));
+        await t.pump();
+        expect(find.text('Answer saved!'), findsOneWidget);
+        expect(find.textContaining('Try again!'), findsNothing);
         checkBounds();
         expect(p.xp, 0);
         await close(t, p);

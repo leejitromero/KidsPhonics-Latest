@@ -9,11 +9,13 @@ class BlendingPuzzlePiece extends StatelessWidget {
       this.active = false,
       this.filled = false,
       this.position = 1,
+      this.pieceCount = 3,
       this.onPressed,
       this.label});
   final String? letter, label;
   final bool active, filled;
   final int position;
+  final int pieceCount;
   final VoidCallback? onPressed;
 
   @override
@@ -23,46 +25,60 @@ class BlendingPuzzlePiece extends StatelessWidget {
         selected: active,
         child: CustomPaint(
           painter: _PuzzlePainter(
-              active: active, filled: filled, position: position),
-          child: TextButton(
-            onPressed: onPressed,
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              foregroundColor: KidsUi.ink,
-              disabledForegroundColor: KidsUi.ink,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14)),
-            ),
-            child: ExcludeSemantics(
-                child: Center(
-                    child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(letter ?? '',
-                  style: TextStyle(
-                    fontFamily: 'Nunito',
-                    fontSize: 38,
-                    fontWeight: FontWeight.w900,
-                    color:
-                        letter == null ? const Color(0xFF7C7196) : KidsUi.ink,
+              active: active,
+              filled: filled,
+              position: position,
+              pieceCount: pieceCount),
+          child: LayoutBuilder(
+              builder: (context, bounds) => TextButton(
+                    onPressed: onPressed,
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: bounds.maxWidth * .20,
+                          vertical: bounds.maxHeight * .12),
+                      foregroundColor: KidsUi.ink,
+                      disabledForegroundColor: KidsUi.ink,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14)),
+                    ),
+                    child: ExcludeSemantics(
+                        child: Center(
+                            child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(letter ?? '',
+                          style: TextStyle(
+                            fontFamily: 'Nunito',
+                            fontSize: 38,
+                            fontWeight: FontWeight.w900,
+                            color: letter == null
+                                ? const Color(0xFF7C7196)
+                                : KidsUi.ink,
+                          )),
+                    ))),
                   )),
-            ))),
-          ),
         ),
       );
 }
 
 class _PuzzlePainter extends CustomPainter {
   const _PuzzlePainter(
-      {required this.active, required this.filled, required this.position});
+      {required this.active,
+      required this.filled,
+      required this.position,
+      required this.pieceCount});
   final bool active, filled;
   final int position;
+  final int pieceCount;
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
     canvas.scale(size.width / 100, size.height / 100);
-    final colors = switch (position) {
+    final colors = switch (position % 6) {
       0 => const [Color(0xFFFF8A8A), Color(0xFFFF333B), Color(0xFFB7071A)],
       2 => const [Color(0xFF5CE2FF), Color(0xFF03A9F4), Color(0xFF0456B6)],
+      3 => const [Color(0xFF9CF586), Color(0xFF47C852), Color(0xFF168736)],
+      4 => const [Color(0xFFD9AAFF), Color(0xFFAA60EE), Color(0xFF7130AF)],
+      5 => const [Color(0xFFFFC675), Color(0xFFFF9637), Color(0xFFBF580C)],
       _ => const [Color(0xFFFFEE67), Color(0xFFFFCC00), Color(0xFFE18300)],
     };
     final path = Path()
@@ -70,7 +86,7 @@ class _PuzzlePainter extends CustomPainter {
       ..lineTo(70, 9)
       ..quadraticBezierTo(87, 9, 87, 26)
       ..lineTo(87, 39);
-    if (position != 2) path.cubicTo(103, 28, 103, 72, 87, 61);
+    if (position != pieceCount - 1) path.cubicTo(103, 28, 103, 72, 87, 61);
     path
       ..lineTo(87, 74)
       ..quadraticBezierTo(87, 91, 70, 91)
@@ -138,5 +154,8 @@ class _PuzzlePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_PuzzlePainter old) =>
-      old.active != active || old.filled != filled || old.position != position;
+      old.active != active ||
+      old.filled != filled ||
+      old.position != position ||
+      old.pieceCount != pieceCount;
 }

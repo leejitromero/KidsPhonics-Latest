@@ -10,7 +10,8 @@ import 'learner_ui_test.dart' show mount, close;
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   for (final difficulty in Difficulty.values) {
-    testWidgets('$difficulty fits and moves a red choice into a green slot',
+    testWidgets(
+        '$difficulty fits and moves a choice into its neutral submitted slot',
         (t) async {
       await t.binding.setSurfaceSize(const Size(320, 568));
       addTearDown(() => t.binding.setSurfaceSize(null));
@@ -33,12 +34,6 @@ void main() {
         expect(rect.left, greaterThanOrEqualTo(0));
         expect(rect.right, lessThanOrEqualTo(320));
       }
-      await t.tap(find.byKey(const ValueKey('alphabet-choice-B')));
-      await t.pump();
-      expect(find.byIcon(Icons.star_rounded), findsNWidgets(count));
-      expect(find.byType(GameLives), findsNothing);
-      await t.pump(const Duration(milliseconds: 750));
-      await t.pump(const Duration(milliseconds: 650));
       await t.tap(find.byKey(const ValueKey('alphabet-choice-A')));
       await t.pump();
       expect(
@@ -59,7 +54,7 @@ void main() {
               w is Container &&
               w.key is GlobalKey &&
               w.decoration is BoxDecoration &&
-              (w.decoration as BoxDecoration).color == const Color(0xFF167769)),
+              (w.decoration as BoxDecoration).color == const Color(0xFF5A3390)),
           findsOneWidget);
       expect(t.takeException(), isNull);
       await close(t, p);

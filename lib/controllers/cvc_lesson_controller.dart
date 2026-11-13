@@ -11,11 +11,20 @@ class CvcLessonController extends ChangeNotifier {
       {required this.play,
       required this.stop,
       this.voiceEnabled = true,
-      this.playIntroduction});
+      this.playIntroduction,
+      List<CvcLessonWord> words = cvcLessonWords})
+      : words = List.unmodifiable(words) {
+    if (this.words.isEmpty ||
+        this.words.any((word) => !RegExp(r'^[A-Z]{3}$').hasMatch(word.word))) {
+      throw ArgumentError.value(words, 'words',
+          'Provide at least one word with 3 uppercase letters.');
+    }
+  }
 
   final Future<bool> Function(String phrase) play;
   final Future<void> Function() stop;
   Future<bool> Function()? playIntroduction;
+  final List<CvcLessonWord> words;
   bool voiceEnabled;
   int index = 0, highlighted = -1;
   CvcPhase phase = CvcPhase.picture;
@@ -25,7 +34,7 @@ class CvcLessonController extends ChangeNotifier {
   bool _disposed = false;
   Timer? _timer;
   Completer<void>? _delay;
-  CvcLessonWord get word => cvcLessonWords[index];
+  CvcLessonWord get word => words[index];
   bool _current(int generation) => !_disposed && generation == _generation;
 
   void _cancelDelay() {
@@ -141,10 +150,7 @@ class CvcLessonController extends ChangeNotifier {
   }
 
   Future<void> select(int next) async {
-    if (_disposed ||
-        next < 0 ||
-        next >= cvcLessonWords.length ||
-        next == index) {
+    if (_disposed || next < 0 || next >= words.length || next == index) {
       return;
     }
     index = next;

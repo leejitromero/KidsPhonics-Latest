@@ -37,6 +37,7 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
   late List<String> _shuffled; // displayed in this order
   bool _busy = false;
   int _nextExpected = 0; // index into _letters (sorted)
+  final Map<String, String> _placedAnswers = {};
   Set<String> _correct = {}; // tapped correctly
   String? _wrongLetter; // flashes red briefly
   final Map<String, GlobalKey> _slots = {}, _choices = {};
@@ -51,14 +52,14 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
     super.dispose();
   }
 
-  Future<void> _flyLetter(String letter) async {
+  Future<void> _flyLetter(String letter, String expected) async {
     if (MediaQuery.disableAnimationsOf(context)) return;
     final overlay = Overlay.of(context);
     final overlayBox = overlay.context.findRenderObject() as RenderBox;
     final source =
         _choices[letter]!.currentContext!.findRenderObject() as RenderBox;
     final target =
-        _slots[letter]!.currentContext!.findRenderObject() as RenderBox;
+        _slots[expected]!.currentContext!.findRenderObject() as RenderBox;
     final start =
         source.localToGlobal(Offset.zero, ancestor: overlayBox) & source.size;
     final end =
@@ -76,7 +77,7 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
                         child: ExcludeSemantics(
                             child: Material(
                       key: const ValueKey('flying-alphabet-letter'),
-                      color: Color.lerp(choiceBlue, const Color(0xFF167769), t),
+                      color: Color.lerp(choiceBlue, const Color(0xFF5A3390), t),
                       borderRadius: BorderRadius.circular(10),
                       elevation: 6,
                       child: Center(
@@ -126,6 +127,7 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
     _shuffled = List<String>.from(_letters)..shuffle();
     _nextExpected = 0;
     _correct = {};
+    _placedAnswers.clear();
     _wrongLetter = null;
     _busy = false;
   }
@@ -139,43 +141,38 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
 
   void _tap(String letter) async {
     if (resultOpen || _finished || _busy || _correct.contains(letter)) return;
+    final expected = _letters[_nextExpected];
+    final correct = letter == expected;
     setState(() => _busy = true);
-    final provider = context.read<AppProvider>();
-
-    recordGameAnswer(correct: letter == _letters[_nextExpected]);
-    if (letter == _letters[_nextExpected]) {
-      playGameCorrect();
-      awardGameXp((3 * widget.difficulty.xpMultiplier).round());
-      awardGameStar();
-      await _flyLetter(letter);
-      if (!mounted) return;
-      setState(() {
-        _correct.add(letter);
-        _nextExpected++;
-        _wrongLetter = null;
-      });
-      if (_finished) provider.recordActivityCompleted();
-      if (!mounted) return;
+    gameNarration.cancel();
+    recordGameAnswer(
+        reviewTarget: ReviewTarget.letter(expected),
+        correct: correct,
+        itemId: 'alphabet-$_nextExpected',
+        prompt: 'Next letter in order',
+        selected: letter,
+        expected: expected);
+    if (correct) awardGameXp((3 * widget.difficulty.xpMultiplier).round());
+    await _flyLetter(letter, expected);
+    if (!mounted || resultOpen) return;
+    setState(() {
+      _placedAnswers[expected] = letter;
+      _correct.add(expected);
+      _nextExpected++;
+      _wrongLetter = null;
+    });
+    scheduleGameAdvance(() {
       if (_finished) {
-        await Future.delayed(const Duration(milliseconds: 500));
-        if (mounted) {
-          provider.audio.playWin();
-          awardGameXp((15 * widget.difficulty.xpMultiplier).round());
-          _showWinDialog();
-        }
+        final provider = context.read<AppProvider>();
+        provider.recordActivityCompleted();
+        awardGameXp((15 * widget.difficulty.xpMultiplier).round());
+        provider.audio.playWin();
+        _showWinDialog();
+      } else if (mounted) {
+        setState(() => _busy = false);
       }
-    } else {
-      // Play the existing local feedback effect.
-      playGameWrong();
-      setState(() => _wrongLetter = letter);
-      await Future.delayed(const Duration(milliseconds: 700));
-      await Future.delayed(const Duration(milliseconds: 600));
-      if (mounted) setState(() => _wrongLetter = null);
-    }
-    if (mounted) setState(() => _busy = false);
+    });
   }
-
-  // ── win dialog ────────────────────────────────────────────────────────────
 
   void _showWinDialog() {
     if (resultOpen) return;
@@ -186,12 +183,19 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
   // ── build ─────────────────────────────────────────────────────────────────
 
   @override
+  String get gameTitle => 'Alphabet Order';
+  @override
+  Difficulty get roundDifficulty => widget.difficulty;
+  @override
+  Widget gameForDifficulty(Difficulty difficulty) =>
+      AlphabetOrderScreen(difficulty: difficulty);
+  @override
   int get totalGameItems => _totalLetters;
 
   @override
   Widget build(BuildContext context) => GameScaffold(
       narration: gameNarration,
-      answerResult: _busy ? _wrongLetter == null : null,
+      answerResult: gameAnswerFeedback,
       title: 'Alphabet Order',
       roundHeader: ActivityRoundHeader(
           difficulty: widget.difficulty,
@@ -246,7 +250,7 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                     color: placed
-                                        ? const Color(0xFF167769)
+                                        ? const Color(0xFF5A3390)
                                         : const Color(0xFFFFFCF3),
                                     borderRadius:
                                         BorderRadius.circular(side * .16)),
@@ -257,7 +261,9 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
                                             padding: const EdgeInsets.all(5),
                                             child: FittedBox(
                                                 fit: BoxFit.scaleDown,
-                                                child: Text(letter,
+                                                child: Text(
+                                                    _placedAnswers[letter] ??
+                                                        letter,
                                                     style: TextStyle(
                                                         fontSize: side * .5,
                                                         fontWeight:
@@ -317,7 +323,7 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
                               _finished
                                   ? 'Alphabet complete!'
                                   : _wrongLetter != null
-                                      ? 'Try again! Find ${_letters[_nextExpected]}'
+                                      ? 'Answer saved!'
                                       : 'Find ${_letters[_nextExpected]}',
                               textAlign: TextAlign.center,
                               style: const TextStyle(

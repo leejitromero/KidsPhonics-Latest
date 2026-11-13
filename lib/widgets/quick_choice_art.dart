@@ -140,6 +140,30 @@ class QuickAudioButton extends StatelessWidget {
   }
 }
 
+/// Keeps listening and answering as distinct tap targets with matching colors.
+/// Short screens place the speaker alongside the answer rather than shrinking it.
+class QuickAudioChoice extends StatelessWidget {
+  const QuickAudioChoice(
+      {super.key, required this.answer, required this.speaker});
+  final Widget answer, speaker;
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(builder: (_, box) {
+        if (box.maxHeight >= 112) {
+          return Column(children: [
+            Expanded(child: SizedBox.expand(child: answer)),
+            const SizedBox(height: 8),
+            Center(child: speaker),
+          ]);
+        }
+        return Row(children: [
+          Expanded(child: SizedBox.expand(child: answer)),
+          const SizedBox(width: 8),
+          speaker,
+        ]);
+      });
+}
+
 class _QuickButtonPainter extends CustomPainter {
   const _QuickButtonPainter({
     required this.color,

@@ -109,11 +109,11 @@ void main() {
               lesson.title);
           expect(find.text(lesson.title), findsOneWidget);
           expect(asset(t, 'lessons-banner'),
-              '$lessonHeaderAssets/banner_lessons.png');
+              '$lessonHeaderAssets/banner_lessons.webp');
           expect(asset(t, 'lesson-guide-profile'),
-              '$lessonHeaderAssets/${character}_profile.png');
+              '$lessonHeaderAssets/${character}_profile.webp');
           expect(asset(t, 'lesson-dialogue-art'),
-              '$lessonHeaderAssets/instructions_dialogue_$character.png');
+              '$lessonHeaderAssets/instructions_dialogue_$character.webp');
           final banner =
               t.getRect(find.byKey(const ValueKey('lessons-banner')));
           final back = t.getRect(find.byTooltip('Back'));
@@ -183,9 +183,9 @@ void main() {
     await t.runAsync(() => p.setStudentCharacter('girl', 'Learner'));
     await t.pump();
     expect(asset(t, 'lesson-guide-profile'),
-        '$lessonHeaderAssets/girl_profile.png');
+        '$lessonHeaderAssets/girl_profile.webp');
     expect(asset(t, 'lesson-dialogue-art'),
-        '$lessonHeaderAssets/instructions_dialogue_girl.png');
+        '$lessonHeaderAssets/instructions_dialogue_girl.webp');
     expect(p.xp, 0);
     expect(p.stars, 0);
     expect(t.takeException(), isNull);

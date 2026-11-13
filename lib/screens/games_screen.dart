@@ -3,6 +3,7 @@ import '../data/games_menu_art.dart';
 import '../data/game_session_order.dart';
 import '../widgets/game_zone_card.dart';
 import '../widgets/games_menu_header.dart';
+import '../widgets/lesson_swipe_navigation.dart';
 import '../widgets/main_navigation_scope.dart';
 import '../widgets/main_navigation_shell.dart';
 import '../widgets/student_character_picker.dart';
@@ -40,6 +41,7 @@ class _GamesScreenState extends State<GamesScreen> {
   String _category = 'All Games';
   final _scroll = ScrollController();
   final Map<String, double> _scrollPositions = {};
+  static const _categoryNames = ['All Games', 'Letters', 'Sounds', 'Words'];
 
   @override
   void dispose() {
@@ -137,95 +139,110 @@ class _GamesScreenState extends State<GamesScreen> {
       return _zonePage(child: const Text('Games are turned off by a parent.'));
     }
     return _zonePage(
-        child: Column(children: [
-      _categories(),
-      const SizedBox(height: 10),
-      Expanded(
-          child: _gameRows([
-        _card(
-            'Flappy Letters',
-            'Fly through A\u2013Z!',
-            Icons.flight_rounded,
-            (d) => FlappyLettersScreen(difficulty: d),
-            (d) => switch (d) {
-                  Difficulty.easy => 'Slow speed - 26 letters',
-                  Difficulty.medium => 'Normal speed - 26 letters',
-                  Difficulty.hard => 'Faster speed - 26 letters',
-                }),
-        _card(
-            'Sound Match',
-            'Match the sound!',
-            Icons.hearing,
-            (d) => SoundMatchScreen(difficulty: d),
-            (d) =>
-                '${soundRoundsForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} rounds - 3 choices'),
-        _card(
-            'Memory Flip',
-            'Match pairs!',
-            Icons.grid_view,
-            (d) => MemoryGameScreen(difficulty: d),
-            (d) => '${memoryPairsForDifficulty(d).length} pairs'),
-        _card(
-            'Phonics Quiz',
-            'Listen, choose, and check!',
-            Icons.quiz_outlined,
-            (d) => PhonicsQuizScreen(difficulty: d),
-            (d) =>
-                '${quizQuestionsForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} questions'),
-        _card(
-            'Word Builder',
-            'Build a word!',
-            Icons.extension_outlined,
-            (d) => WordBuilderScreen(difficulty: d),
-            (d) =>
-                '${wordPuzzlesForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} words - Fill missing letters'),
-        _card(
-            'Speak & Recognize',
-            'Say the word!',
-            Icons.mic_none,
-            (d) => VoiceRecognitionScreen(difficulty: d),
-            (d) =>
-                '${voiceWords[d]!.length.clamp(0, GameSessionOrder.roundLength(d))} words'),
-        _card(
-            'Alphabet Order',
-            'Put letters in order!',
-            Icons.sort_by_alpha,
-            (d) => AlphabetOrderScreen(difficulty: d),
-            (d) => switch (d) {
-                  Difficulty.easy => 'A-F - 6 letters',
-                  Difficulty.medium => 'A-M - 13 letters',
-                  Difficulty.hard => 'A-Z - 26 letters'
-                }),
-        _card(
-            'Missing Vowel',
-            'Find the vowel!',
-            Icons.text_fields,
-            (d) => MissingVowelScreen(difficulty: d),
-            (d) =>
-                '${vowelPuzzlesFor(d).length.clamp(0, GameSessionOrder.roundLength(d))} words'),
-        _card(
-            'Picture Match',
-            'Match the picture!',
-            Icons.image_outlined,
-            (d) => PictureWordMatchScreen(difficulty: d),
-            (d) =>
-                '${pictureRoundsFor(d).length.clamp(0, GameSessionOrder.roundLength(d))} words - ${pictureRoundsFor(d).first.options.length} pictures'),
-        _card(
-            'Rumbled Words',
-            'Drag letters to make a word!',
-            Icons.shuffle_rounded,
-            (d) => RumbledWordsScreen(difficulty: d),
-            (d) =>
-                '${rumbledWordsFor(d).length.clamp(0, GameSessionOrder.roundLength(d))} words - ${rumbledWordLengthLabel(d)} - 1 hint per word'),
-        _card(
-            'Rhyming Words',
-            'Find rhyming words!',
-            Icons.music_note_rounded,
-            (d) => RhymingWordsScreen(difficulty: d),
-            (d) =>
-                '${GameSessionOrder.roundLength(d)} jars - 3 rhymes per jar'),
-      ])),
-    ]));
+        child: LessonSwipeNavigation(
+            key: const ValueKey('games-categories-swipe'),
+            navigationKey: _category,
+            enabled: !_opening &&
+                context.read<AppProvider>().isReady &&
+                !context.read<AppProvider>().timeLimitReached,
+            onNext:
+                _categoryNames.indexOf(_category) < _categoryNames.length - 1
+                    ? () => _filter(
+                        _categoryNames[_categoryNames.indexOf(_category) + 1])
+                    : null,
+            onPrevious: _categoryNames.indexOf(_category) > 0
+                ? () => _filter(
+                    _categoryNames[_categoryNames.indexOf(_category) - 1])
+                : null,
+            child: Column(children: [
+              _categories(),
+              const SizedBox(height: 10),
+              Expanded(
+                  child: _gameRows([
+                _card(
+                    'Flappy Letters',
+                    'Fly through A\u2013Z!',
+                    Icons.flight_rounded,
+                    (d) => FlappyLettersScreen(difficulty: d),
+                    (d) => switch (d) {
+                          Difficulty.easy => 'Slow speed - 26 letters',
+                          Difficulty.medium => 'Normal speed - 26 letters',
+                          Difficulty.hard => 'Faster speed - 26 letters',
+                        }),
+                _card(
+                    'Sound Match',
+                    'Match the sound!',
+                    Icons.hearing,
+                    (d) => SoundMatchScreen(difficulty: d),
+                    (d) =>
+                        '${soundRoundsForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} rounds - 3 choices'),
+                _card(
+                    'Memory Flip',
+                    'Match pairs!',
+                    Icons.grid_view,
+                    (d) => MemoryGameScreen(difficulty: d),
+                    (d) => '${memoryPairsForDifficulty(d).length} pairs'),
+                _card(
+                    'Phonics Quiz',
+                    'Listen, choose, and check!',
+                    Icons.quiz_outlined,
+                    (d) => PhonicsQuizScreen(difficulty: d),
+                    (d) =>
+                        '${quizQuestionsForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} questions'),
+                _card(
+                    'Word Builder',
+                    'Build a word!',
+                    Icons.extension_outlined,
+                    (d) => WordBuilderScreen(difficulty: d),
+                    (d) =>
+                        '${wordPuzzlesForDifficulty(d).length.clamp(0, GameSessionOrder.roundLength(d))} words - Fill missing letters'),
+                _card(
+                    'Speak & Recognize',
+                    'Say the word!',
+                    Icons.mic_none,
+                    (d) => VoiceRecognitionScreen(difficulty: d),
+                    (d) =>
+                        '${voiceWords[d]!.length.clamp(0, GameSessionOrder.roundLength(d))} words'),
+                _card(
+                    'Alphabet Order',
+                    'Put letters in order!',
+                    Icons.sort_by_alpha,
+                    (d) => AlphabetOrderScreen(difficulty: d),
+                    (d) => switch (d) {
+                          Difficulty.easy => 'A-F - 6 letters',
+                          Difficulty.medium => 'A-M - 13 letters',
+                          Difficulty.hard => 'A-Z - 26 letters'
+                        }),
+                _card(
+                    'Missing Vowel',
+                    'Find the vowel!',
+                    Icons.text_fields,
+                    (d) => MissingVowelScreen(difficulty: d),
+                    (d) =>
+                        '${vowelPuzzlesFor(d).length.clamp(0, GameSessionOrder.roundLength(d))} words'),
+                _card(
+                    'Picture Match',
+                    'Match the picture!',
+                    Icons.image_outlined,
+                    (d) => PictureWordMatchScreen(difficulty: d),
+                    (d) =>
+                        '${pictureRoundsFor(d).length.clamp(0, GameSessionOrder.roundLength(d))} words - ${pictureRoundsFor(d).first.options.length} pictures'),
+                _card(
+                    'Rumbled Words',
+                    'Drag letters to make a word!',
+                    Icons.shuffle_rounded,
+                    (d) => RumbledWordsScreen(difficulty: d),
+                    (d) =>
+                        '${rumbledWordsFor(d).length.clamp(0, GameSessionOrder.roundLength(d))} words - ${rumbledWordLengthLabel(d)} - 1 hint per word'),
+                _card(
+                    'Rhyming Words',
+                    'Find rhyming words!',
+                    Icons.music_note_rounded,
+                    (d) => RhymingWordsScreen(difficulty: d),
+                    (d) =>
+                        '${GameSessionOrder.roundLength(d)} jars - 3 rhymes per jar'),
+              ])),
+            ])));
   }
 
   Widget _zonePage({required Widget child}) => Theme(

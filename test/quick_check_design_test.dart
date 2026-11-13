@@ -11,6 +11,7 @@ import 'package:kidsphonics/models/letter_adventure.dart';
 import 'package:kidsphonics/providers/app_provider.dart';
 import 'package:kidsphonics/screens/letter_mastery_check_screen.dart';
 import 'package:kidsphonics/widgets/quick_check_design.dart';
+import 'package:kidsphonics/widgets/quick_choice_art.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'letter_mastery_check_test.dart'
     show AdventureTestAudio, press, hear, flushAdventure;
@@ -161,6 +162,23 @@ void main() {
       Future<void> capture(String name) async {
         expect(t.takeException(), isNull);
         expect(find.byType(Scrollable), findsNothing);
+        for (final cell
+            in t.widgetList<QuickAudioChoice>(find.byType(QuickAudioChoice))) {
+          final group = find.byWidget(cell);
+          final answer =
+              find.descendant(of: group, matching: find.byType(ElevatedButton));
+          final speaker = find.descendant(
+              of: group, matching: find.byType(QuickAudioButton));
+          expect(answer, findsOneWidget);
+          expect(speaker, findsOneWidget);
+          expect(t.getRect(answer).overlaps(t.getRect(speaker)), isFalse,
+              reason: '$name: listening and answering have separate tap areas');
+          expect(t.widget<QuickAudioButton>(speaker).embedded, isFalse);
+          expect(
+              find.descendant(
+                  of: answer, matching: find.byType(QuickAudioButton)),
+              findsNothing);
+        }
         if (find.byType(QuickInstruction).evaluate().isNotEmpty) {
           expect(
               t

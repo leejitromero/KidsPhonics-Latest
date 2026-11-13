@@ -156,6 +156,11 @@ void main() {
       expect(p.studentName, 'Sam');
       expect(p.welcomeCompleted, true);
 
+      // Personalized welcome (or unavailable-voice fallback) completes before
+      // Home begins its existing five-second idle countdown.
+      await waitForVoice(t,
+          () => !t.widget<SchoolHomeScene>(find.byType(SchoolHomeScene)).busy);
+
       final idle = character == 'girl'
           ? 'girl_automatic_prompt_1.mp3'
           : 'boy_automatic_prompt_4.mp3';

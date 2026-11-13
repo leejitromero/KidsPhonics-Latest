@@ -192,8 +192,8 @@ void main() {
           expect(guide.width, lessThanOrEqualTo(340));
           expect(guide.height, lessThanOrEqualTo(112));
           for (final (key, name) in [
-            ('lesson-guide-profile', '${character}_profile.png'),
-            ('lesson-dialogue-art', 'instructions_dialogue_$character.png'),
+            ('lesson-guide-profile', '${character}_profile.webp'),
+            ('lesson-dialogue-art', 'instructions_dialogue_$character.webp'),
           ]) {
             final image = t.widget<Image>(find.byKey(ValueKey(key)));
             expect(

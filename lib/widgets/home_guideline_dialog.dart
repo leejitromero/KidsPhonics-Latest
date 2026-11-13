@@ -134,7 +134,7 @@ class _HomeGuidelineDialogState extends State<HomeGuidelineDialog> {
                     height: bubbleHeight,
                     child: SceneDialogue(
                         text: _dialogues[_step].text,
-                        art: 'dialogue_box_${widget.games ? 1 : 2}.png',
+                        art: 'dialogue_box_${widget.games ? 1 : 2}.webp',
                         flip: widget.games,
                         contentInsets: widget.games
                             ? const EdgeInsets.fromLTRB(.18, .28, .18, .28)
@@ -142,7 +142,7 @@ class _HomeGuidelineDialogState extends State<HomeGuidelineDialog> {
               ]));
         }
         final side = math.min(150.0, width * .36);
-        final art = 'dialogue_box_${widget.games ? 1 : 2}.png';
+        final art = 'dialogue_box_${widget.games ? 1 : 2}.webp';
         final preferredWidth = math.min(width * .80, 320.0);
         final speaker = Rect.fromLTWH(
             width * (widget.games ? .76 : .24) - side / 2,

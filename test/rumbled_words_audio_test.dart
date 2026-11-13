@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kidsphonics/screens/rumbled_words_screen.dart';
-import 'package:kidsphonics/services/phonics_audio_service.dart';
 import 'package:kidsphonics/widgets/learner_widgets.dart';
 import 'package:kidsphonics/widgets/word_game_layout.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
@@ -70,7 +69,7 @@ void main() {
   });
 
   testWidgets(
-      'options spell, each letter highlights, word finishes before next',
+      'letter previews share one channel and submission advances without revealing correction',
       (t) async {
     final audio = QuizAudioHarness()..install();
     final p = await mount(t, const RumbledWordsScreen());
@@ -81,43 +80,19 @@ void main() {
     final task = shownWord(t);
     final word = task.toUpperCase();
     final selectionCount = await spell(t, audio, word);
-    expect(find.text('Correct!'), findsOneWidget);
-    expect(find.text('Check Word'), findsOneWidget);
-    expect(find.text('Next'), findsNothing);
-    expect(t.widget<AudioButton>(find.byType(AudioButton)).enabled, isFalse);
+    expect(find.text('Answer saved!'), findsOneWidget);
+    expect(find.text('Correct!'), findsNothing);
     expect(
         t
             .widget<OutlinedButton>(find.byKey(const ValueKey('word-check')))
             .onPressed,
         isNull);
-    expect(find.byKey(const ValueKey('word-erase')), findsNothing);
-    for (var slot = 0; slot < word.length; slot++) {
-      await audioStarted(t, audio, selectionCount + slot + 1);
-      expect(audio.starts.last,
-          endsWith('/letters/letter-${word[slot].toLowerCase()}.mp3'));
-      for (var i = 0; i < word.length; i++) {
-        expect(highlighted(t, i), i == slot);
-      }
-      await t.pump(const Duration(seconds: 2));
-      expect(shownWord(t), task);
-      await t.runAsync(() => audio.completeLetterName(word[slot]));
-    }
-    await audioStarted(t, audio, selectionCount + word.length + 1);
-    final asset = PhonicsAudioService.assetForPhrase(task)!;
-    expect(audio.starts.last, endsWith('/$asset'));
-    for (var slot = 0; slot < word.length; slot++) {
-      expect(highlighted(t, slot), isTrue);
-    }
-    await t.pump(const Duration(seconds: 2));
-    expect(shownWord(t), task);
-    await t.runAsync(() => audio.completeSource('/$asset'));
     await flushAudio(t);
+    expect(audio.starts.length, selectionCount,
+        reason: 'Correction audio is deferred until result review');
+    await t.pump(const Duration(milliseconds: 700));
     expect(shownWord(t), isNot(task));
-    await t.runAsync(() async {
-      final state = t.state<GameSessionUi>(find.byType(RumbledWordsScreen));
-      await state.rewardsSaved;
-    });
-    expect(p.stars, 1);
+    expect(p.stars, 0);
     expect(audio.sources.where((s) => s.contains('/game_narration/')), isEmpty);
     await close(t, p);
     p.phonicsAudio.dispose();

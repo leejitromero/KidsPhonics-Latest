@@ -6,8 +6,14 @@ import io.flutter.plugin.common.MethodChannel
 import android.os.Build
 
 class MainActivity : FlutterActivity() {
+    private var playerWelcome: PlayerWelcomeSpeech? = null
+    private var activityForeground = false
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        playerWelcome?.dispose()
+        playerWelcome = PlayerWelcomeSpeech(this, flutterEngine.dartExecutor.binaryMessenger)
+        playerWelcome?.setForeground(activityForeground)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "kidsphonics/app_info")
             .setMethodCallHandler { call, result ->
                 if (call.method != "getInfo") {
@@ -28,5 +34,23 @@ class MainActivity : FlutterActivity() {
                     result.error("APP_INFO_UNAVAILABLE", "Could not read app version", null)
                 }
             }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activityForeground = true
+        playerWelcome?.setForeground(true)
+    }
+
+    override fun onPause() {
+        activityForeground = false
+        playerWelcome?.setForeground(false)
+        super.onPause()
+    }
+
+    override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
+        playerWelcome?.dispose()
+        playerWelcome = null
+        super.cleanUpFlutterEngine(flutterEngine)
     }
 }

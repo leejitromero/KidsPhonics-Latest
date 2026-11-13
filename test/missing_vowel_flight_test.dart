@@ -57,7 +57,7 @@ void main() {
           expect(middle.dy, lessThan(start.dy));
           expect(middle.dy, greaterThan(t.getCenter(find.byKey(blank)).dy));
         }
-        await t.pump(const Duration(milliseconds: 600));
+        await t.pump(Duration(milliseconds: reduced ? 100 : 600));
         await t.pump();
         expect(find.byKey(flying), findsNothing);
         expect(t.widget<Text>(find.byKey(blank)).data, vowel);
@@ -69,8 +69,7 @@ void main() {
           await t.pump();
         }
         expect(saved, isTrue);
-        expect((p.xp, p.stars), ((8 * difficulty.xpMultiplier).round(), 1));
-        await t.tap(find.widgetWithText(ElevatedButton, 'Next'));
+        expect((p.xp, p.stars), ((8 * difficulty.xpMultiplier).round(), 0));
         await t.pump(const Duration(milliseconds: 800));
         expect(t.widget<Text>(find.byKey(blank)).data, '_');
         expect(find.byKey(flying), findsNothing);
@@ -80,7 +79,7 @@ void main() {
     }
   }
 
-  testWidgets('wrong vowel lands, then clears on the existing retry reset',
+  testWidgets('wrong vowel lands, is scored once, then advances without retry',
       (t) async {
     final p = await mount(t, const MissingVowelScreen());
     final correct = correctVowel(t);
@@ -105,7 +104,6 @@ void main() {
       await pick(t, correctVowel(t));
       expect(find.byKey(flying), findsOneWidget);
       if (leave == 'next') {
-        await t.tap(find.widgetWithText(ElevatedButton, 'Next'));
         await t.pump();
         expect(t.widget<Text>(find.byKey(blank)).data, '_');
       } else {

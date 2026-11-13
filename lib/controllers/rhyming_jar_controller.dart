@@ -12,9 +12,11 @@ enum JarPhase {
   ready
 }
 
-/// Only a unique correct choice can contribute energy or earn a reward.
+/// Training collects correct choices; assessment collects three unique
+/// submissions without revealing correctness. The screen owns scoring.
 class RhymingJarController extends ChangeNotifier {
-  RhymingJarController(this.family);
+  RhymingJarController(this.family, {this.assessment = false});
+  final bool assessment;
   RhymingFamily family;
   JarPhase phase = JarPhase.intro;
   final Set<String> collected = {};
@@ -27,7 +29,7 @@ class RhymingJarController extends ChangeNotifier {
     if (!canPick || collected.contains(word)) return null;
     picked = word;
     final correct = family.rhymes.contains(word);
-    phase = correct ? JarPhase.collecting : JarPhase.wrong;
+    phase = correct || assessment ? JarPhase.collecting : JarPhase.wrong;
     notifyListeners();
     return correct;
   }

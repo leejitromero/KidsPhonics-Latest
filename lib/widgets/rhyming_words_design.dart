@@ -158,7 +158,7 @@ class RhymingTargetPanels extends StatelessWidget {
                     liveRegion: true,
                     child: FittedBox(
                         fit: BoxFit.scaleDown,
-                        child: Text('$collected / 3 rhymes',
+                        child: Text('$collected / 3 chosen',
                             style: const TextStyle(
                                 fontFamily: 'Nunito',
                                 fontSize: 19,

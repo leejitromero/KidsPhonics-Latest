@@ -291,7 +291,7 @@ class ProgressBadgeCard extends StatelessWidget {
                           'assets/images/letters/a.webp',
                           'assets/images/lessons_menu/cvc_words.webp',
                           'assets/images/lessons_menu/blending_sounds.webp',
-                          'assets/images/home_banner/fire.png',
+                          'assets/images/home_banner/fire.webp',
                         ][index],
                         fit: BoxFit.contain,
                         excludeFromSemantics: true))

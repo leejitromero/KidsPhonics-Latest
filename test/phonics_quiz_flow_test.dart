@@ -9,7 +9,7 @@ import 'package:kidsphonics/models/difficulty.dart';
 import 'package:kidsphonics/screens/phonics_quiz_screen.dart';
 import 'package:kidsphonics/services/phonics_audio_service.dart';
 import 'package:kidsphonics/widgets/learner_widgets.dart';
-import 'package:kidsphonics/widgets/game_design.dart';
+import 'package:kidsphonics/widgets/phonics_quiz_design.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show mount, close, flushWrites;
 import 'phonics_quiz_test_helpers.dart';
@@ -18,6 +18,10 @@ void main() {
   setUp(() {
     SharedPreferences.setMockInitialValues({'voice': false, 'sfx': false});
     mockProgressAudio();
+    final dispatcher = TestWidgetsFlutterBinding.instance.platformDispatcher;
+    dispatcher.accessibilityFeaturesTestValue =
+        const FakeAccessibilityFeatures(disableAnimations: true);
+    addTearDown(dispatcher.clearAccessibilityFeaturesTestValue);
   });
   test(
       'four supplied recordings are preserved and all sound targets are explicit',
@@ -55,30 +59,45 @@ void main() {
     }
   });
 
-  testWidgets('selection is editable and Check accepts only one submission',
+  testWidgets('first tap submits immediately and stale taps cannot score again',
       (t) async {
     final p = await mount(t, const PhonicsQuizScreen());
     final q = shownQuiz(t);
     final session = t.state<GameSessionUi>(find.byType(PhonicsQuizScreen));
     final wrong = q.options.firstWhere((x) => x != q.correctLetter);
-    await submitQuiz(t);
-    expect(session.scoredAttempts, 0);
-    await selectQuiz(t, wrong);
-    expect(session.scoredAttempts, 0);
+    final staleChoice = t
+        .widgetList<GameAnswerButton>(find.byType(GameAnswerButton))
+        .firstWhere((w) => w.label == letterChoiceLabel(q.correctLetter))
+        .onPressed!;
+    expect(find.byKey(const ValueKey('quiz-check-answer')), findsNothing);
+    expect(find.text('Check Answer'), findsNothing);
     expect(
         t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult, isNull);
-    await selectQuiz(t, q.correctLetter);
-    expect(session.scoredAttempts, 0);
-    await submitQuiz(t);
-    await submitQuiz(t);
+    await selectQuiz(t, wrong);
+    staleChoice();
+    staleChoice();
+    await t.pump();
     expect(session.scoredAttempts, 1);
+    expect(t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult,
+        isFalse);
+    expect(session.correctAttempts, 0);
     expect(
-        t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult, isTrue);
-    expect(find.text(q.explanation), findsOneWidget);
+        t
+            .widget<PhonicsQuizQuestionView>(
+                find.byType(PhonicsQuizQuestionView))
+            .selected,
+        wrong);
+    expect(
+        t
+            .widgetList<GameAnswerButton>(find.byType(GameAnswerButton))
+            .every((w) => w.onPressed == null),
+        isTrue);
+    expect(find.text(q.explanation), findsNothing);
+    expect(find.text('Answer saved!'), findsOneWidget);
     await finishMutedQuizFeedback(t);
     expect(shownQuiz(t).id, isNot(q.id));
     await flushWrites(t);
-    expect(p.stars, 1);
+    expect(p.stars, 0);
     await close(t, p);
   });
 
@@ -102,7 +121,6 @@ void main() {
             i == 0
                 ? q.options.firstWhere((l) => l != q.correctLetter)
                 : q.correctLetter);
-        await submitQuiz(t);
         await finishMutedQuizFeedback(t);
       }
       await flushWrites(t);
@@ -115,7 +133,7 @@ void main() {
       expect(session.scoredAttempts, total);
       final expectedXp = (total - 1) * (5 * d.xpMultiplier).round() +
           (20 * d.xpMultiplier).round();
-      expect((p.xp, p.stars), (expectedXp, total - 1));
+      expect((p.xp, p.stars), (expectedXp, 2));
       expect(p.dailyActivity.values.single.activitiesCompleted, 1);
       await t.ensureVisible(find.byKey(const ValueKey('quiz-review-mistakes')));
       await t.tap(find.byKey(const ValueKey('quiz-review-mistakes')));
@@ -124,12 +142,11 @@ void main() {
       expect(t.widget<GameScaffold>(find.byType(GameScaffold)).progressLabel,
           'Review');
       await selectQuiz(t, shownQuiz(t).correctLetter);
-      await submitQuiz(t);
       await finishMutedQuizFeedback(t);
       await flushWrites(t);
       expect(find.text('Score: ${total - 1} / $total'), findsOneWidget);
       expect(find.byKey(const ValueKey('quiz-review-mistakes')), findsNothing);
-      expect((p.xp, p.stars), (expectedXp, total - 1));
+      expect((p.xp, p.stars), (expectedXp, 2));
       expect(session.scoredAttempts, total);
       expect(p.dailyActivity.values.single.questionsAnswered, total);
       expect(p.dailyActivity.values.single.activitiesCompleted, 1);
@@ -139,12 +156,13 @@ void main() {
       expect(session.scoredAttempts, 0);
       expect(t.widget<GameScaffold>(find.byType(GameScaffold)).progressLabel,
           'Question');
+      expect(find.byKey(const ValueKey('quiz-check-answer')), findsNothing);
       expect(
           t
-              .widget<ForestAudioButton>(
-                  find.byKey(const ValueKey('quiz-check-answer')))
-              .onPressed,
-          isNull);
+              .widget<PhonicsQuizQuestionView>(
+                  find.byType(PhonicsQuizQuestionView))
+              .submitted,
+          isFalse);
       await close(t, p);
     });
   }

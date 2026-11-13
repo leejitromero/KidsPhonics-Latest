@@ -13,6 +13,7 @@ import '../widgets/parent_pin_form.dart';
 import '../widgets/parent_settings_design.dart';
 import '../widgets/parent_garden_overview.dart';
 import '../widgets/main_navigation_scope.dart';
+import '../widgets/lesson_swipe_navigation.dart';
 
 class ParentScreen extends StatefulWidget {
   const ParentScreen(
@@ -28,6 +29,19 @@ class _ParentScreenState extends State<ParentScreen> {
   bool _resetDialogOpen = false;
   late int _tab = widget.initialTab;
   final _scroll = ScrollController();
+
+  void _selectTab(int tab) {
+    if (widget.settingsOnly ||
+        !(_provider?.parentAuth.isAuthenticated ?? false) ||
+        tab < 0 ||
+        tab > 2 ||
+        tab == _tab) {
+      return;
+    }
+    setState(() => _tab = tab);
+    if (_scroll.hasClients) _scroll.jumpTo(0);
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -182,10 +196,8 @@ class _ParentScreenState extends State<ParentScreen> {
                                   label: label,
                                   icon: icon,
                                   selected: _tab == index,
-                                  onPressed: withButtonSound(() {
-                                    setState(() => _tab = index);
-                                    if (_scroll.hasClients) _scroll.jumpTo(0);
-                                  })!,
+                                  onPressed:
+                                      withButtonSound(() => _selectTab(index))!,
                                 ),
                               )),
                           ]),
@@ -195,141 +207,183 @@ class _ParentScreenState extends State<ParentScreen> {
                   Expanded(
                       child: Center(
                           child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 720),
-                    child: ListView(
-                        controller: _scroll,
-                        padding: const EdgeInsets.fromLTRB(14, 8, 14, 80),
-                        children: [
-                          if (_tab == 0) const ParentGardenOverview(),
-                          if (_tab == 1) const ParentGardenActivity(),
-                          if (_tab == 2) ...[
-                            const _ParentSection(
-                                icon: Icons.timer_rounded,
-                                description: 'Time spent learning.',
-                                title: "Today's Screen Time",
-                                child: ParentScreenTimeSummary()),
-                            _ParentSection(
-                                icon: Icons.sports_esports_rounded,
-                                title: 'Learning & Play',
-                                description: 'Games and daily limits.',
-                                child: Column(children: [
-                                  ParentSettingToggle(
-                                      title: 'Games',
-                                      icon: Icons.sports_esports_rounded,
-                                      color: const Color(0xFFE5DCFF),
-                                      ink: const Color(0xFF8958CF),
-                                      subtitle: provider.gameAccess
-                                          ? 'Enabled'
-                                          : 'Disabled',
-                                      value: provider.gameAccess,
-                                      onChanged: withSelectionSound(
-                                          (_) => provider.toggleGameAccess())),
-                                  ParentSettingToggle(
-                                      title: 'Daily Time Limit',
-                                      icon: Icons.schedule_rounded,
-                                      color: const Color(0xFFFFDFE5),
-                                      ink: const Color(0xFFD92958),
-                                      value: time.isLimitEnabled,
-                                      onChanged: withSelectionSound(
-                                          time.setLimitEnabled)),
-                                  DropdownButtonFormField<int>(
-                                      isExpanded: true,
-                                      onTap: withButtonSound(() {}),
-                                      initialValue: time.dailyLimitMinutes,
-                                      decoration: InputDecoration(
-                                          isDense: true,
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 12, vertical: 12),
-                                          labelText: 'Daily Limit',
-                                          filled: true,
-                                          fillColor: const Color(0xCCFFFFFF),
-                                          prefixIcon: const Padding(
-                                              padding: EdgeInsets.all(8),
-                                              child: ParentIconBadge(
-                                                  icon: Icons.schedule_rounded,
-                                                  color: Color(0xFFD5F0FF),
-                                                  ink: Color(0xFF087DB6))),
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              borderSide: BorderSide.none)),
-                                      items: [15, 30, 45, 60, 90]
-                                          .map((m) => DropdownMenuItem(
-                                              value: m,
-                                              child: Text('$m minutes')))
-                                          .toList(),
-                                      onChanged: withSelectionSound((m) {
-                                        if (m != null) time.setDailyLimit(m);
-                                      })),
-                                ])),
-                            GardenCard(
-                                child: ParentActionRow(
-                                    icon: Icons.tune_rounded,
-                                    title: 'App Settings',
-                                    onTap: withButtonSound(() =>
-                                        navigateKidsTab(context,
-                                            KidsDestination.settings)))),
-                            _ParentSection(
-                                icon: Icons.lock_rounded,
-                                title: 'Parent Access',
-                                description: 'Protect parent settings.',
-                                child: Column(children: [
-                                  ParentActionRow(
-                                      icon: Icons.lock_rounded,
-                                      highlight: true,
-                                      title: 'Change Parent PIN',
-                                      onTap: withButtonSound(() => showDialog<
-                                              void>(
-                                          context: context,
-                                          builder: (ctx) => Dialog(
-                                              child: ParentPinForm(
-                                                  auth: provider.parentAuth,
-                                                  changePin: true,
-                                                  onBack: () =>
-                                                      Navigator.pop(ctx),
-                                                  onSuccess: () =>
-                                                      Navigator.pop(ctx)))))),
-                                ])),
-                            _ParentSection(
-                                icon: Icons.delete_outline_rounded,
-                                accent: const Color(0xFFFFB8AD),
-                                description: 'Reset learning progress.',
-                                title: 'Data / Reset',
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                              constraints: const BoxConstraints(maxWidth: 720),
+                              child: LessonSwipeNavigation(
+                                key: const ValueKey('parent-tabs-swipe'),
+                                navigationKey: _tab,
+                                enabled: !widget.settingsOnly &&
+                                    provider.parentAuth.isAuthenticated,
+                                onNext: _tab < 2
+                                    ? () => _selectTab(_tab + 1)
+                                    : null,
+                                onPrevious: _tab > 0
+                                    ? () => _selectTab(_tab - 1)
+                                    : null,
+                                child: ListView(
+                                    controller: _scroll,
+                                    padding: const EdgeInsets.fromLTRB(
+                                        14, 8, 14, 80),
                                     children: [
-                                      const Text(
-                                          'Reset learning progress only. Parent settings and screen-time usage are kept.'),
-                                      const SizedBox(height: 8),
-                                      OutlinedButton.icon(
-                                          style: OutlinedButton.styleFrom(
-                                              backgroundColor:
-                                                  const Color(0xFFFFE7E8),
-                                              foregroundColor:
-                                                  const Color(0xFFE9264C),
-                                              side: const BorderSide(
-                                                  color: Color(0xFFFF5270),
-                                                  width: 1.5),
-                                              minimumSize: const Size(
-                                                  double.infinity, 48),
-                                              textStyle: const TextStyle(
-                                                  fontFamily: 'Nunito',
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w900),
-                                              shape: const StadiumBorder()),
-                                          onPressed: withButtonSound(
-                                              () => _confirmReset(provider)),
-                                          icon: const Icon(Icons.delete_outline,
-                                              color: AppColors.wrong),
-                                          label: const Text('Reset Progress',
-                                              style: TextStyle(
-                                                  color: AppColors.wrong))),
-                                    ])),
-                          ],
-                        ]),
-                  ))),
+                                      if (_tab == 0)
+                                        const ParentGardenOverview(),
+                                      if (_tab == 1)
+                                        const ParentGardenActivity(),
+                                      if (_tab == 2) ...[
+                                        const _ParentSection(
+                                            icon: Icons.timer_rounded,
+                                            description: 'Time spent learning.',
+                                            title: "Today's Screen Time",
+                                            child: ParentScreenTimeSummary()),
+                                        _ParentSection(
+                                            icon: Icons.sports_esports_rounded,
+                                            title: 'Learning & Play',
+                                            description:
+                                                'Games and daily limits.',
+                                            child: Column(children: [
+                                              ParentSettingToggle(
+                                                  title: 'Games',
+                                                  icon: Icons
+                                                      .sports_esports_rounded,
+                                                  color:
+                                                      const Color(0xFFE5DCFF),
+                                                  ink: const Color(0xFF8958CF),
+                                                  subtitle: provider.gameAccess
+                                                      ? 'Enabled'
+                                                      : 'Disabled',
+                                                  value: provider.gameAccess,
+                                                  onChanged: withSelectionSound(
+                                                      (_) => provider
+                                                          .toggleGameAccess())),
+                                              ParentSettingToggle(
+                                                  title: 'Daily Time Limit',
+                                                  icon: Icons.schedule_rounded,
+                                                  color:
+                                                      const Color(0xFFFFDFE5),
+                                                  ink: const Color(0xFFD92958),
+                                                  value: time.isLimitEnabled,
+                                                  onChanged: withSelectionSound(
+                                                      time.setLimitEnabled)),
+                                              DropdownButtonFormField<int>(
+                                                  isExpanded: true,
+                                                  onTap: withButtonSound(() {}),
+                                                  initialValue:
+                                                      time.dailyLimitMinutes,
+                                                  decoration: InputDecoration(
+                                                      isDense: true,
+                                                      contentPadding:
+                                                          const EdgeInsets.symmetric(
+                                                              horizontal: 12,
+                                                              vertical: 12),
+                                                      labelText: 'Daily Limit',
+                                                      filled: true,
+                                                      fillColor: const Color(
+                                                          0xCCFFFFFF),
+                                                      prefixIcon: const Padding(
+                                                          padding:
+                                                              EdgeInsets.all(8),
+                                                          child: ParentIconBadge(
+                                                              icon: Icons
+                                                                  .schedule_rounded,
+                                                              color: Color(
+                                                                  0xFFD5F0FF),
+                                                              ink: Color(
+                                                                  0xFF087DB6))),
+                                                      border: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(
+                                                              20),
+                                                          borderSide:
+                                                              BorderSide.none)),
+                                                  items: [15, 30, 45, 60, 90]
+                                                      .map((m) => DropdownMenuItem(value: m, child: Text('$m minutes')))
+                                                      .toList(),
+                                                  onChanged: withSelectionSound((m) {
+                                                    if (m != null) {
+                                                      time.setDailyLimit(m);
+                                                    }
+                                                  })),
+                                            ])),
+                                        GardenCard(
+                                            child: ParentActionRow(
+                                                icon: Icons.tune_rounded,
+                                                title: 'App Settings',
+                                                onTap: withButtonSound(() =>
+                                                    navigateKidsTab(
+                                                        context,
+                                                        KidsDestination
+                                                            .settings)))),
+                                        _ParentSection(
+                                            icon: Icons.lock_rounded,
+                                            title: 'Parent Access',
+                                            description:
+                                                'Protect parent settings.',
+                                            child: Column(children: [
+                                              ParentActionRow(
+                                                  icon: Icons.lock_rounded,
+                                                  highlight: true,
+                                                  title: 'Change Parent PIN',
+                                                  onTap: withButtonSound(() => showDialog<
+                                                          void>(
+                                                      context: context,
+                                                      builder: (ctx) => Dialog(
+                                                          child: ParentPinForm(
+                                                              auth: provider
+                                                                  .parentAuth,
+                                                              changePin: true,
+                                                              onBack: () =>
+                                                                  Navigator.pop(
+                                                                      ctx),
+                                                              onSuccess: () =>
+                                                                  Navigator.pop(
+                                                                      ctx)))))),
+                                            ])),
+                                        _ParentSection(
+                                            icon: Icons.delete_outline_rounded,
+                                            accent: const Color(0xFFFFB8AD),
+                                            description:
+                                                'Reset learning progress.',
+                                            title: 'Data / Reset',
+                                            child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const Text(
+                                                      'Reset learning progress only. Parent settings and screen-time usage are kept.'),
+                                                  const SizedBox(height: 8),
+                                                  OutlinedButton.icon(
+                                                      style: OutlinedButton.styleFrom(
+                                                          backgroundColor:
+                                                              const Color(
+                                                                  0xFFFFE7E8),
+                                                          foregroundColor:
+                                                              const Color(
+                                                                  0xFFE9264C),
+                                                          side: const BorderSide(
+                                                              color: Color(
+                                                                  0xFFFF5270),
+                                                              width: 1.5),
+                                                          minimumSize: const Size(
+                                                              double.infinity,
+                                                              48),
+                                                          textStyle: const TextStyle(
+                                                              fontFamily:
+                                                                  'Nunito',
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w900),
+                                                          shape:
+                                                              const StadiumBorder()),
+                                                      onPressed: withButtonSound(
+                                                          () => _confirmReset(
+                                                              provider)),
+                                                      icon: const Icon(
+                                                          Icons.delete_outline,
+                                                          color: AppColors.wrong),
+                                                      label: const Text('Reset Progress', style: TextStyle(color: AppColors.wrong))),
+                                                ])),
+                                      ],
+                                    ]),
+                              )))),
                 ]))));
   }
 }

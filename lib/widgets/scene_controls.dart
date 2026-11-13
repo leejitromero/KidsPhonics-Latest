@@ -81,7 +81,7 @@ class StudentProfilePortrait extends StatelessWidget {
                     color: const Color(0xFFFFF4DB),
                     child: Padding(
                         padding: EdgeInsets.symmetric(vertical: size * .02),
-                        child: Image.asset('$sceneAssets/${character}_6.png',
+                        child: Image.asset('$sceneAssets/${character}_6.webp',
                             key: ValueKey('profile-$character-character'),
                             fit: BoxFit.contain,
                             cacheWidth:
@@ -89,7 +89,7 @@ class StudentProfilePortrait extends StatelessWidget {
                                     .ceil()
                                     .clamp(120, 512),
                             excludeFromSemantics: true))))),
-        Image.asset('$sceneAssets/profile_frame_$character.png',
+        Image.asset('$sceneAssets/profile_frame_$character.webp',
             key: ValueKey('profile-$character-frame'),
             fit: BoxFit.contain,
             cacheWidth: (size * MediaQuery.devicePixelRatioOf(context))

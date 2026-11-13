@@ -192,7 +192,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     if (_leaving) return;
     setState(() => _leaving = true);
     _voice!.stop();
-    unawaited(LearnerNavigation.open(context, const HomeScreen(),
+    unawaited(LearnerNavigation.open(
+        context, const HomeScreen(welcomePlayer: true),
         replace: true, cloudTransition: true));
   }
 
@@ -288,7 +289,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                           text: dialogue.text,
                                           introduction: true,
                                           art:
-                                              'dialogue_box_${dialogue.games ? 1 : 2}.png',
+                                              'dialogue_box_${dialogue.games ? 1 : 2}.webp',
                                           flip: dialogue.games))
                                   : null,
                               dialogueControls: !_setup

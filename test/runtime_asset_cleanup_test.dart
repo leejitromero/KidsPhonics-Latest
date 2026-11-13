@@ -1,3 +1,4 @@
+import 'verified_image_assets.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
@@ -135,13 +136,13 @@ Set<String> evaluatedRuntimeAssets(
     for (final category in ['home', 'lesson', 'games', 'progress', 'parent'])
       ...DayCycleBackground.framesFor(category),
     for (final character in ['boy', 'girl']) ...[
-      for (var i = 1; i <= 10; i++) '$sceneAssets/${character}_$i.png',
-      '$sceneAssets/profile_frame_$character.png',
-      'assets/images/school_home/${character}_wave.png',
-      'assets/images/lesson_header/${character}_profile.png',
-      'assets/images/lesson_header/instructions_dialogue_$character.png',
+      for (var i = 1; i <= 10; i++) '$sceneAssets/${character}_$i.webp',
+      '$sceneAssets/profile_frame_$character.webp',
+      'assets/images/school_home/${character}_wave.webp',
+      'assets/images/lesson_header/${character}_profile.webp',
+      'assets/images/lesson_header/instructions_dialogue_$character.webp',
     ],
-    for (var i = 1; i <= 4; i++) '$sceneAssets/dialogue_box_$i.png',
+    for (var i = 1; i <= 4; i++) '$sceneAssets/dialogue_box_$i.webp',
     for (var code = 97; code <= 122; code++)
       'assets/images/letters/${String.fromCharCode(code)}.webp',
     for (final name in ['next', 'previous', 'sound'])
@@ -154,7 +155,7 @@ Set<String> evaluatedRuntimeAssets(
       'frame_rewards_contain',
       'frame_mytreasure'
     ])
-      'assets/images/progress_collection/$name.png',
+      'assets/images/progress_collection/$name.webp',
     'assets/images/app_icon.png',
     for (final name in [
       'win.mp3',
@@ -264,7 +265,7 @@ void main() {
         expect(File(path).existsSync(), isFalse);
         continue;
       }
-      expect(required, contains(path));
+      expect(required, contains(optimizedImagePath(path)));
       var expectedHash = item['sha256'];
       if (path == iconReplacement['path']) {
         expect(iconReplacement['previousSha256'], expectedHash);
@@ -279,8 +280,11 @@ void main() {
         expectedHash = quizIntro['sha256'];
       }
       expect(
-          sha256.convert(File(path).readAsBytesSync()).toString().toUpperCase(),
-          expectedHash,
+          sha256
+              .convert(File(optimizedImagePath(path)).readAsBytesSync())
+              .toString()
+              .toUpperCase(),
+          optimizedImageHash(path, expectedHash),
           reason:
               'An active image, font or recording must not change during unused-file cleanup: $path');
     }
@@ -288,11 +292,11 @@ void main() {
       expect(File(item['path'] as String).existsSync(), isFalse);
     }
     for (final item in loadingImport['frames'] as List) {
-      final file = File(item['path'] as String);
-      expect(required, contains(item['path']));
+      final file = File(optimizedImagePath(item['path'] as String));
+      expect(required, contains(optimizedImagePath(item['path'] as String)));
       expect(sha256.convert(file.readAsBytesSync()).toString().toUpperCase(),
-          item['sha256'],
-          reason: 'Preserve the supplied loading frame bytes.');
+          optimizedImageHash(item['path'] as String, item['sha256']),
+          reason: 'Preserve the supplied loading frame pixels.');
     }
   });
 }

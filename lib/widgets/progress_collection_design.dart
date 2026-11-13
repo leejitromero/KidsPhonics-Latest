@@ -142,9 +142,9 @@ class ProgressLetterTile extends StatelessWidget {
   final LetterProgress letter;
   final VoidCallback onPressed;
   static const purpleFrame =
-      'assets/images/progress_collection/letter_frame_purple.png';
+      'assets/images/progress_collection/letter_frame_purple.webp';
   static const greenFrame =
-      'assets/images/progress_collection/letter_frame_green.png';
+      'assets/images/progress_collection/letter_frame_green.webp';
 
   @override
   Widget build(BuildContext context) {

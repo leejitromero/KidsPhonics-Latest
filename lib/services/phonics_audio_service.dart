@@ -134,7 +134,9 @@ class PhonicsAudioService {
     final asset = assetForPhrase(phrase);
     if (asset == null) return;
     try {
-      await AudioCache.instance.fetchToMemory(asset);
+      // Register the cached URI too, so AssetSource reuses the prepared file
+      // instead of extracting and writing the same recording again at play.
+      await AudioCache.instance.load(asset);
     } catch (_) {
       // Playback handles device failures without trapping the interface.
     }
@@ -155,7 +157,8 @@ class PhonicsAudioService {
 
   /// One instructional channel, with latest-request-wins cancellation.
   /// Returns true only on real completion; never falls back to TTS.
-  Future<bool> playInstruction(String phrase) async {
+  Future<bool> playInstruction(String phrase,
+      {double playbackRate = 1.0}) async {
     if (_disposed) return false;
     final focus = LocalAudioFocus.claim();
     final request = _request + 1;
@@ -176,6 +179,17 @@ class PhonicsAudioService {
     try {
       await rootBundle.load('assets/$asset');
       if (request != _request ||
+          !LocalAudioFocus.isCurrent(focus) ||
+          completed.isCompleted) {
+        return false;
+      }
+      // Flappy's faster rounds opt in; every other instruction resets to its
+      // normal rate. Set it while stopped, before the native player resumes.
+      if (_player.playbackRate != playbackRate) {
+        await _player.setPlaybackRate(playbackRate);
+      }
+      if (_disposed ||
+          request != _request ||
           !LocalAudioFocus.isCurrent(focus) ||
           completed.isCompleted) {
         return false;

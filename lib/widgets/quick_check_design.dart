@@ -121,7 +121,7 @@ class _QuickCheckProfile extends StatelessWidget {
             borderRadius: BorderRadius.circular(16)),
         child: ClipRRect(
             borderRadius: BorderRadius.circular(11),
-            child: Image.asset('$sceneAssets/${character}_1.png',
+            child: Image.asset('$sceneAssets/${character}_1.webp',
                 key: ValueKey('quick-check-profile-$character'),
                 fit: BoxFit.cover,
                 alignment: Alignment.topCenter,
@@ -139,9 +139,9 @@ class _QuickCheckBackground extends StatelessWidget {
   Widget build(BuildContext context) => Stack(fit: StackFit.expand, children: [
         const AnimatedScreenArt(
             frames: [
-              'assets/images/quick_check_background/quickcheck_newbg_1.png',
-              'assets/images/quick_check_background/quickcheck_newbg_2.png',
-              'assets/images/quick_check_background/quickcheck_newbg_3.png',
+              'assets/images/quick_check_background/quickcheck_newbg_1.webp',
+              'assets/images/quick_check_background/quickcheck_newbg_2.webp',
+              'assets/images/quick_check_background/quickcheck_newbg_3.webp',
             ],
             fit: BoxFit.cover,
             alignment: Alignment.center,

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/scene_voice_controller.dart';
+import '../controllers/player_welcome_voice.dart';
 import '../data/home_village.dart';
 import '../data/home_narration.dart';
 import '../data/letter_data.dart';
@@ -10,6 +11,7 @@ import '../providers/app_provider.dart';
 import '../theme/kids_ui.dart';
 import '../widgets/day_cycle_background.dart';
 import '../widgets/home_character_visit.dart';
+import '../widgets/home_greeting_card.dart';
 import '../widgets/cloud_page_route.dart';
 import '../widgets/kids_navigation_bar.dart';
 import '../widgets/main_navigation_scope.dart';
@@ -26,9 +28,11 @@ import 'progress_screen.dart';
 import 'letter_mastery_check_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key, this.announceTitle = false});
+  const HomeScreen(
+      {super.key, this.announceTitle = false, this.welcomePlayer = false});
   // Only loading requests the opening cue; returning from a room does not.
   final bool announceTitle;
+  final bool welcomePlayer;
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -38,12 +42,17 @@ class _HomeScreenState extends State<HomeScreen>
   late final _visit = AnimationController(
       vsync: this, duration: HomeCharacterVisitTiming.duration);
   SceneVoiceController? _voice;
+  PlayerWelcomeVoice? _welcome;
   AppProvider? _provider;
   HomeCategory? _selected;
   bool _navigating = false, _foreground = true;
   int _visitRequest = 0;
   String? _preparedCharacter;
   Timer? _idleTimer;
+  Timer? _profileWelcomeTimer;
+  String? _observedName, _pendingWelcomeName;
+  bool _profileGreetingSpeaking = false;
+  int _profileWelcomeRequest = 0;
   final _navigation = GlobalKey<MainNavigationShellState>();
   bool _tabActive = true;
   Animation<double>? _routeAnimation;
@@ -54,8 +63,10 @@ class _HomeScreenState extends State<HomeScreen>
   String _idlePromptText = '';
   bool _wasCurrent = false;
   bool _titleComplete = false, _titleSpeaking = false;
+  bool _greetingComplete = false;
   int _titleRequest = 0;
-  bool get _openingTitle => widget.announceTitle && !_titleComplete;
+  bool get _openingTitle =>
+      (widget.announceTitle || widget.welcomePlayer) && !_titleComplete;
   bool get _busy => _selected != null || _navigating || _openingTitle;
   bool get _current =>
       mounted &&
@@ -98,6 +109,16 @@ class _HomeScreenState extends State<HomeScreen>
     final p = _provider = context.watch<AppProvider>();
     _voice ??= SceneVoiceController(p,
         isCurrent: () => _current, replayOnResume: false);
+    _welcome ??= PlayerWelcomeVoice(p, isCurrent: () => _current);
+    if (p.isReady) {
+      if (_observedName != null && _observedName != p.studentName) {
+        _pendingWelcomeName =
+            p.studentName.trim().isEmpty ? null : p.studentName;
+        _profileWelcomeTimer?.cancel();
+        _profileWelcomeTimer = null;
+      }
+      _observedName = p.studentName;
+    }
     final animation = ModalRoute.of(context)?.animation;
     if (_routeAnimation != animation) {
       _routeAnimation?.removeStatusListener(_routeStatus);
@@ -118,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen>
           context,
           onError: (_, __) {}));
       for (final asset in [
-        '$sceneAssets/${p.studentCharacter}_1.png',
+        '$sceneAssets/${p.studentCharacter}_1.webp',
         ...studentWalkingFrames(p.studentCharacter, left: true),
         ...studentWalkingFrames(p.studentCharacter, left: false),
       ]) {
@@ -141,6 +162,14 @@ class _HomeScreenState extends State<HomeScreen>
   void _syncIdleRoute() {
     if (!mounted) return;
     if (!_current) {
+      _profileWelcomeTimer?.cancel();
+      _profileWelcomeTimer = null;
+      if (_titleSpeaking) {
+        _titleRequest++;
+        _titleSpeaking = false;
+        _welcome?.stop();
+        _voice?.stop();
+      }
       _wasCurrent = false;
       _cancelIdlePrompt(stopVoice: true);
       return;
@@ -156,13 +185,59 @@ class _HomeScreenState extends State<HomeScreen>
       }
       return;
     }
+    if (_pendingWelcomeName != null) {
+      _scheduleProfileWelcome();
+      return;
+    }
     _scheduleIdlePrompt();
+  }
+
+  void _scheduleProfileWelcome() {
+    if (!_canWelcomeProfile) return;
+    _idleTimer?.cancel();
+    _idleTimer = null;
+    _profileWelcomeTimer ??= Timer(const Duration(milliseconds: 1200), () {
+      _profileWelcomeTimer = null;
+      if (_canWelcomeProfile) unawaited(_welcomeProfile());
+    });
+  }
+
+  bool get _canWelcomeProfile =>
+      _current &&
+      !_busy &&
+      _pendingWelcomeName != null &&
+      _provider!.isReady &&
+      _provider!.voiceEnabled &&
+      !_provider!.timeLimitReached &&
+      (_routeAnimation == null || _routeAnimation!.isCompleted) &&
+      (_secondaryAnimation == null || _secondaryAnimation!.isDismissed);
+
+  Future<void> _welcomeProfile() async {
+    final name = _pendingWelcomeName!;
+    _pendingWelcomeName = null;
+    _cancelIdlePrompt(stopVoice: true);
+    final request = ++_profileWelcomeRequest;
+    _profileGreetingSpeaking = true;
+    await _welcome!.play(name, returning: false);
+    if (!mounted || request != _profileWelcomeRequest) return;
+    _profileGreetingSpeaking = false;
+    _syncIdleRoute();
   }
 
   Future<void> _announceTitle() async {
     final request = ++_titleRequest;
     _titleSpeaking = true;
-    await _voice!.play('home-title');
+    if (!_greetingComplete) {
+      // An unfinished startup can itself welcome a newly saved profile.
+      if (_pendingWelcomeName == _provider!.studentName) {
+        _pendingWelcomeName = null;
+      }
+      await _welcome!
+          .play(_provider!.studentName, returning: !widget.welcomePlayer);
+      if (!mounted || request != _titleRequest || !_current) return;
+      _greetingComplete = true;
+    }
+    if (widget.announceTitle) await _voice!.play('home-title');
     if (!mounted || request != _titleRequest) return;
     _titleSpeaking = false;
     if (!_current) return;
@@ -179,6 +254,8 @@ class _HomeScreenState extends State<HomeScreen>
       !_provider!.timeLimitReached &&
       !_idlePromptPlayed &&
       !_voice!.playing &&
+      !_welcome!.playing &&
+      _pendingWelcomeName == null &&
       (_routeAnimation == null || _routeAnimation!.isCompleted) &&
       (_secondaryAnimation == null || _secondaryAnimation!.isDismissed);
 
@@ -223,6 +300,11 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   void _cancelIdlePrompt({bool stopVoice = false}) {
+    if (stopVoice && _profileGreetingSpeaking) {
+      _profileWelcomeRequest++;
+      _profileGreetingSpeaking = false;
+      _welcome?.stop();
+    }
     _idleTimer?.cancel();
     _idleTimer = null;
     if (stopVoice && _idlePromptSpeaking) {
@@ -348,8 +430,11 @@ class _HomeScreenState extends State<HomeScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     _foreground = state == AppLifecycleState.resumed;
     if (!_foreground) {
+      _profileWelcomeTimer?.cancel();
+      _profileWelcomeTimer = null;
       _titleRequest++;
       _titleSpeaking = false;
+      _welcome?.stop();
       _cancelIdlePrompt(stopVoice: true);
       _wasCurrent = false;
       _cancelVisit();
@@ -364,9 +449,11 @@ class _HomeScreenState extends State<HomeScreen>
     _titleRequest++;
     _visitRequest++;
     _idleTimer?.cancel();
+    _profileWelcomeTimer?.cancel();
     _routeAnimation?.removeStatusListener(_routeStatus);
     _secondaryAnimation?.removeStatusListener(_routeStatus);
     _voice?.dispose();
+    _welcome?.dispose();
     WidgetsBinding.instance.removeObserver(this);
     _visit.dispose();
     super.dispose();
@@ -392,37 +479,46 @@ class _HomeScreenState extends State<HomeScreen>
                     behavior: HitTestBehavior.translucent,
                     child: ListenableBuilder(
                         listenable: _voice!,
-                        builder: (_, __) => SchoolHomeScene(
-                            character: p.studentCharacter,
-                            name: p.studentName,
-                            letter: p.recommendedAdventureLetter,
-                            progressLabel: '',
-                            level: p.level,
-                            stars: p.stars,
-                            xp: p.xp,
-                            streak: p.streak,
-                            gameAccess: p.gameAccess,
-                            busy: _busy || !p.isReady,
-                            visit: _visit,
-                            selected: _selected,
-                            reserveNavigation: true,
-                            studentSpeech: _voice!.playing &&
-                                    (_idlePromptSpeaking ||
-                                        (_selected?.hasHouse ?? false))
-                                ? SceneDialogue(
-                                    text: _idlePromptSpeaking
-                                        ? _idlePromptText
-                                        : _selected == HomeCategory.lessons
-                                            ? 'Let’s learn!'
-                                            : 'Let’s play!',
-                                    art:
-                                        'dialogue_box_${p.studentCharacter == 'girl' ? 4 : 1}.png')
-                                : null,
-                            onSelect: (category) => unawaited(
-                                _selectCategory(navigationContext, category)),
-                            onCharacter: () => unawaited(_editCharacter()),
-                            onSettings: () => unawaited(_editCharacter()),
-                            onContinue: () => unawaited(
-                                _continueLearning(navigationContext))))))));
+                        builder: (_, __) => ListenableBuilder(
+                            listenable: _welcome!,
+                            builder: (_, __) => SchoolHomeScene(
+                                character: p.studentCharacter,
+                                name: p.studentName,
+                                letter: p.recommendedAdventureLetter,
+                                progressLabel: '',
+                                level: p.level,
+                                stars: p.stars,
+                                xp: p.xp,
+                                streak: p.streak,
+                                gameAccess: p.gameAccess,
+                                busy: _busy || !p.isReady,
+                                visit: _visit,
+                                selected: _selected,
+                                reserveNavigation: true,
+                                greeting: _welcome!.playing
+                                    ? HomeGreetingCard(
+                                        key: const ValueKey(
+                                            'player-welcome-dialogue'),
+                                        text: _welcome!.text)
+                                    : null,
+                                studentSpeech: _voice!.playing &&
+                                        (_idlePromptSpeaking ||
+                                            (_selected?.hasHouse ?? false))
+                                    ? SceneDialogue(
+                                        text: _idlePromptSpeaking
+                                            ? _idlePromptText
+                                            : _selected == HomeCategory.lessons
+                                                ? 'Let’s learn!'
+                                                : 'Let’s play!',
+                                        art:
+                                            'dialogue_box_${p.studentCharacter == 'girl' ? 4 : 1}.webp')
+                                    : null,
+                                onSelect: (category) => unawaited(
+                                    _selectCategory(
+                                        navigationContext, category)),
+                                onCharacter: () => unawaited(_editCharacter()),
+                                onSettings: () => unawaited(_editCharacter()),
+                                onContinue: () => unawaited(_continueLearning(
+                                    navigationContext)))))))));
   }
 }

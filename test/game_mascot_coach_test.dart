@@ -16,7 +16,7 @@ import 'phonics_quiz_test_helpers.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   testWidgets(
-      'quiz intro, word, question, previews and feedback share one audio channel',
+      'quiz word, question and previews share one audio channel with automatic scoring',
       (t) async {
     SharedPreferences.setMockInitialValues({'voice': true, 'sfx': false});
     mockProgressAudio();
@@ -34,53 +34,38 @@ void main() {
 
     final q = shownQuiz(t);
     await waitStarts(1);
-    expect(audio.starts.last, endsWith('/game_instructions/phonics_quiz.mp3'));
-    await t.runAsync(
-        () => audio.completeSource('/game_instructions/phonics_quiz.mp3'));
-    await waitStarts(2);
     expect(audio.starts.last,
         endsWith('/cvc_lesson/word-${q.word.toLowerCase()}.mp3'));
+    expect(
+        audio.starts
+            .any((s) => s.endsWith('/game_instructions/phonics_quiz.mp3')),
+        isFalse);
     await t.runAsync(() =>
         audio.completeSource('/cvc_lesson/word-${q.word.toLowerCase()}.mp3'));
-    await waitStarts(3);
+    await waitStarts(2);
     expect(
         audio.starts.last, endsWith('/game_instructions/quiz_beginning.mp3'));
     await t.runAsync(
         () => audio.completeSource('/game_instructions/quiz_beginning.mp3'));
     final wrong = q.options.firstWhere((letter) => letter != q.correctLetter);
     await t.tap(find.byKey(ValueKey('quiz-sound-$wrong')));
-    await waitStarts(4);
+    await waitStarts(3);
     expect(audio.starts.last,
         endsWith('/sounds/sound-${wrong.toLowerCase()}.mp3'));
     await t.runAsync(() => audio.completeSound(wrong));
     await selectQuiz(t, wrong);
     expect(
         t.state<GameSessionUi>(find.byType(PhonicsQuizScreen)).scoredAttempts,
-        0);
-    expect(
-        t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult, isNull);
-    await submitQuiz(t);
-    await waitStarts(5);
+        1);
     expect(t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult,
         isFalse);
-    expect(audio.starts.last,
-        endsWith('/cvc_lesson/word-${q.word.toLowerCase()}.mp3'));
-    await t.pump(const Duration(seconds: 2));
-    expect(shownQuiz(t).id, q.id);
-    await t.runAsync(() =>
-        audio.completeSource('/cvc_lesson/word-${q.word.toLowerCase()}.mp3'));
-    await waitStarts(6);
-    expect(audio.starts.last,
-        endsWith('/sounds/sound-${q.correctLetter.toLowerCase()}.mp3'));
-    await t.pump(const Duration(seconds: 2));
-    expect(shownQuiz(t).id, q.id);
-    await t.runAsync(() => audio.completeSound(q.correctLetter));
-    for (var i = 0; i < 12; i++) {
-      await t.runAsync(
-          () => Future<void>.delayed(const Duration(milliseconds: 10)));
-      await t.pump();
-    }
-    await t.pump(const Duration(milliseconds: 850));
+    await t.pump();
+    expect(t.widget<GameScaffold>(find.byType(GameScaffold)).answerResult,
+        isFalse);
+    expect(find.text(q.explanation), findsNothing);
+    expect(audio.starts, hasLength(3),
+        reason: 'No corrective audio before results');
+    await t.pump(const Duration(milliseconds: 2250));
     expect(shownQuiz(t).word, isNot(q.word));
     expect(p.stars, 0);
     expect(audio.sources.where((s) => s.contains('/praise-')), isEmpty);

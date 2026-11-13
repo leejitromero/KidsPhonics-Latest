@@ -85,6 +85,14 @@ void main() {
         expect(find.text('Check your word'), findsOneWidget);
         expect(find.textContaining('Tap Check Word'), findsOneWidget);
       }
+      if (![
+        GameTutorial.flappyLetters,
+        GameTutorial.memoryFlip,
+        GameTutorial.alphabetOrder
+      ].contains(tutorial)) {
+        expect(find.textContaining('at the end'), findsOneWidget);
+        expect(find.textContaining('try again or continue'), findsNothing);
+      }
       await tester.tap(find.text("Let's Play"));
       await settle();
       expect(find.byKey(const ValueKey('game-tutorial')), findsNothing);

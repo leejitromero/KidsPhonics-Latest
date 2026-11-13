@@ -13,10 +13,10 @@ class ParentReportFrame extends StatelessWidget {
   });
 
   static const overviewAsset =
-      'assets/images/parent_reports/frame_overview.png';
-  static const weeklyAsset = 'assets/images/parent_reports/frame_weeklyact.png';
+      'assets/images/parent_reports/frame_overview.webp';
+  static const weeklyAsset = 'assets/images/parent_reports/frame_weeklyact.webp';
   static const dailyAsset =
-      'assets/images/parent_reports/frame_dailybreakdown.png';
+      'assets/images/parent_reports/frame_dailybreakdown.webp';
   static const ink = Color(0xFF123D32);
   static const muted = Color(0xFF4B6955);
 

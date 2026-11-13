@@ -9,7 +9,7 @@ class ProgressLetterSummaryFrame extends StatelessWidget {
       {super.key, required this.masteredCount, required this.values});
   final int masteredCount;
   final List<(String, String, IconData, Color)> values;
-  static const asset = 'assets/images/progress_collection/summary_frame.png';
+  static const asset = 'assets/images/progress_collection/summary_frame.webp';
 
   @override
   Widget build(BuildContext context) => AspectRatio(
@@ -81,7 +81,7 @@ class ProgressLetterFilterButton extends StatelessWidget {
   final bool selected;
   final ValueChanged<bool> onSelected;
   final double width;
-  static const asset = 'assets/images/progress_collection/filter_button.png';
+  static const asset = 'assets/images/progress_collection/filter_button.webp';
 
   @override
   Widget build(BuildContext context) {

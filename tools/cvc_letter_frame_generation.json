@@ -1,0 +1,14 @@
+﻿{
+    "date":  "2026-11-01",
+    "mode":  "built-in image_gen",
+    "asset":  "assets/images/cvc_letter_frame.png",
+    "sourceImage":  "C:/Users/leeji/.codex/generated_images/01a13ec5-5152-7d61-becd-22d85de74a6c/exec-ea6b3d30-fd52-442c-a085-bd96ac42d4c4.png",
+    "reference":  "User-supplied sheet of three purple/star/cloud frames",
+    "transparentBackground":  true,
+    "dimensions":  {
+                       "height":  1402,
+                       "width":  1122
+                   },
+    "sha256":  "2ECECA71DD943E87B39B3006EDC47BCD27CE1FD1379B42DA0292A4FA11055316",
+    "prompt":  "Use case: precise-object-edit. Make ONE reusable blank letter-tile frame asset for the KidsPhonics app, based on the supplied image that has THREE identical narrow frames side by side. That three-frame image is the editing target/style source. Ignore the other reference with one very tall plain lavender frame. Isolate/recreate just the MIDDLE frame from the THREE-frame source: rich glossy purple rounded rectangular border, large gold five-point star and blue ribbon at its top center, cream blank inner face, a curved blue cloud-shaped trim along the bottom and two small gold stars near its lower corners. Preserve that specific design, rich 3D finish and cheerful colors. Keep the center completely blank: no letter, no symbol, no speaker, no text. Deliver ONE complete upright tile, not a sheet of three, filling the canvas with only 3-5% empty margin, roughly 4:5 portrait aspect ratio. The background OUTSIDE the silhouette must be genuinely transparent alpha, not black, not white, not checkerboard painted into the image, not blurred colors. Inside the frame the cream face remains opaque. Do not include floor or any outer drop shadow or glow, to keep the cutout clean. Full star, ribbon and all frame edges visible, no cropped corners. PNG game UI sprite, no watermark."
+}

@@ -1,0 +1,27 @@
+{
+  "apkBytes": 493827758,
+  "apkMB": 493.8,
+  "sha256": "3A4240B7E65F254641F9A686AEBAFD8B98116405115A2A4D94173952CB8B7711",
+  "crcVerified": true,
+  "noDuplicateZipPaths": true,
+  "abis": [
+    "arm64-v8a",
+    "armeabi-v7a",
+    "x86_64"
+  ],
+  "bundledAppAssets": 1207,
+  "compiledApplication": {
+    "arm64-v8a": {
+      "sha256": "287B15DFBEC6EEF57381742F1F4E3013C5A6FA60A0B9F10532DFD6C1CD98D920",
+      "changedSincePreviousApk": true
+    },
+    "armeabi-v7a": {
+      "sha256": "DAB25A0A1B3819DCC070EE58158983090236A6D0715246F659C5CBDBD4A97C5E",
+      "changedSincePreviousApk": true
+    },
+    "x86_64": {
+      "sha256": "C7612E380ECEA8F3A224B7B29B375F73309D2579F77358DA135EE48D3B959350",
+      "changedSincePreviousApk": true
+    }
+  }
+}

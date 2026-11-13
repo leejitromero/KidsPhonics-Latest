@@ -139,7 +139,8 @@ void main() {
       addTearDown(() => t.binding.setSurfaceSize(null));
       final p = await mount(t, entry.value);
       final s = gameInstructionScripts[entry.key]!;
-      final hasCurrentRecording = entry.key != 'Rumbled Words';
+      final hasCurrentRecording =
+          !['Rumbled Words', 'Phonics Quiz'].contains(entry.key);
       if (hasCurrentRecording) {
         await until(
             t, () => audio.starts.any((path) => path.endsWith('/${s.asset}')));

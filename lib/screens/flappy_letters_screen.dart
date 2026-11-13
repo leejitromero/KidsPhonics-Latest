@@ -11,8 +11,10 @@ import '../widgets/flappy_bird_sprite.dart';
 import '../widgets/flappy_letters_design.dart';
 import '../widgets/game_instruction_guide.dart';
 import '../widgets/completion_celebration.dart';
+import '../widgets/game_round_result_dialog.dart';
 import '../controllers/game_narration_controller.dart';
 import '../providers/app_provider.dart';
+import '../services/phonics_audio_service.dart';
 import '../widgets/game_tutorial.dart';
 
 class FlappyLettersScreen extends StatefulWidget {
@@ -29,21 +31,38 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
   late AppProvider _provider;
   int _narrationSync = 0;
   int _feedbackGeneration = 0;
-  Future<void> _letterFeedback = Future.value();
   late final _narration = GameNarrationController(
       play: (phrase) async {
         if (!_provider.voiceEnabled) return false;
-        return _provider.phonicsAudio.playInstruction(phrase);
+        return _provider.phonicsAudio
+            .playInstruction(phrase, playbackRate: _feedbackRate);
       },
       stop: () => _provider.phonicsAudio.stop());
   final _focus = FocusNode();
   Duration? _last;
   String? _letter;
   double _successGlow = 0;
+  bool _flightStarsPosted = false;
+  int _flightEarnedStars = 0;
   static const _birdSize = 72.0;
   static const _flapFrames = [1, 2, 3, 2, 0];
   static const _frameSeconds = .065;
   double _flapElapsed = _frameSeconds * _flapFrames.length;
+
+  // The longest name/sound pair is 2.48 s. Leave decoder headroom within
+  // the 3.29 / 2.43 / 1.93 s between pipes, without changing the flight speed.
+  double get _feedbackRate => switch (widget.difficulty) {
+        Difficulty.easy => 1.0,
+        Difficulty.medium => 1.2,
+        Difficulty.hard => 1.5,
+      };
+
+  void _prepareLetterFeedback(int index) {
+    if (index >= 26) return;
+    final letter = String.fromCharCode(65 + index);
+    unawaited(PhonicsAudioService.prepareInstruction('lesson-letter-$letter'));
+    unawaited(PhonicsAudioService.prepareInstruction('lesson-sound-$letter'));
+  }
 
   int get _birdFrame => _game.state == FlightState.flying
       ? _flapFrames[(_flapElapsed / _frameSeconds)
@@ -66,11 +85,12 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
     _narration.cancel();
   }
 
-  void _queueLetterFeedback(String letter) {
+  Future<void> _playLetterFeedback(String letter) async {
+    // A slow decoder must never leave an earlier letter queued behind the
+    // visible one. Cancel that pair before starting the newly cleared letter.
+    _cancelLetterFeedback();
     final run = _feedbackGeneration;
-    // Preserve each name/sound pair when another pipe is cleared before the
-    // recordings finish. Each await uses the player's actual completion event.
-    _letterFeedback = _letterFeedback.then((_) async {
+    try {
       bool current() =>
           mounted &&
           run == _feedbackGeneration &&
@@ -87,15 +107,17 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
         return;
       }
       await _narration.letterSound(letter);
-    }).catchError((Object _) {
+    } catch (_) {
       // An unavailable recording must not interrupt the flight controls.
-    });
+    }
   }
 
   @override
   void initState() {
     super.initState();
     _game = FlappyLettersGame(widget.difficulty);
+    _prepareLetterFeedback(0);
+    _prepareLetterFeedback(1);
     WidgetsBinding.instance.addObserver(this);
     _ticker = createTicker(_tick)..start();
   }
@@ -133,8 +155,9 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
         _successGlow = .7;
         _letter = letter;
         if (_provider.voiceEnabled) {
-          _queueLetterFeedback(letter);
+          unawaited(_playLetterFeedback(letter));
         }
+        _prepareLetterFeedback(_game.passed);
       }
     });
     if (_game.lives < previousLives) {
@@ -145,6 +168,20 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
     if (_game.state == FlightState.won) {
       // Flying is motor practice, not a scored letter-mastery assessment.
       _provider.recordActivityCompleted();
+    }
+    if ((_game.state == FlightState.won || _game.state == FlightState.lost) &&
+        !_flightStarsPosted) {
+      _flightStarsPosted = true;
+      _flightEarnedStars = _game.state == FlightState.won
+          ? (_game.lives == 3 ? 3 : 2)
+          : (_game.passed * 100 >= 26 * 60 ? 2 : 1);
+      unawaited(_saveFlightStars(_flightEarnedStars));
+    }
+  }
+
+  Future<void> _saveFlightStars(int count) async {
+    for (var i = 0; i < count; i++) {
+      await _provider.addStar();
     }
   }
 
@@ -178,6 +215,8 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
   }
 
   void _restart() {
+    _flightStarsPosted = false;
+    _flightEarnedStars = 0;
     _cancelLetterFeedback();
     unawaited(_provider.phonicsAudio.stop());
     unawaited(_provider.audio.stop());
@@ -284,7 +323,7 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
                         passed: _game.passed,
                         lives: _game.lives,
                         letter: _letter,
-                        onBack: () => Navigator.maybePop(context),
+                        onBack: () => Navigator.pop(context),
                         onHelp: onHelp,
                         onPause:
                             _game.state == FlightState.flying ? _pause : null),
@@ -302,6 +341,30 @@ class _FlappyLettersScreenState extends State<FlappyLettersScreen>
       ));
   Widget _overlay() {
     final state = _game.state;
+    if (state == FlightState.won || state == FlightState.lost) {
+      return GameResultDialog(
+          title: 'Flappy Letters',
+          savePending: _provider.hasUnsavedChanges,
+          onRetrySaving: () => unawaited(_provider.retrySaving()),
+          correct: _game.passed,
+          attempts: 26,
+          totalItems: 26,
+          earnedXp: 0,
+          earnedStars: _flightEarnedStars,
+          difficulty: widget.difficulty,
+          ratingStars: _flightEarnedStars,
+          ratingLabel: 'course progress',
+          scoreUnit: 'Letters cleared; flight practice, not letter mastery.',
+          accuracyNote:
+              'Three stars: clear A to Z without losing a life. Two stars: finish with a lost life, or clear 60% of the course.',
+          onAgain: _restart,
+          onBack: () => Navigator.pop(context),
+          onDifficultySelected: (difficulty) => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute<void>(
+                  builder: (_) =>
+                      FlappyLettersScreen(difficulty: difficulty))));
+    }
     final title = switch (state) {
       FlightState.ready => 'Ready to fly?',
       FlightState.paused => 'Taking a little break',

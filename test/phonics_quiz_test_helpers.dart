@@ -18,13 +18,6 @@ Future<void> selectQuiz(WidgetTester t, String letter) async {
   await t.pump();
 }
 
-Future<void> submitQuiz(WidgetTester t) async {
-  t
-      .widget<PhonicsQuizQuestionView>(find.byType(PhonicsQuizQuestionView))
-      .onCheck();
-  await t.pump();
-}
-
 Future<void> finishMutedQuizFeedback(WidgetTester t) async {
   for (final ms in [450, 450, 950]) {
     await t.pump(Duration(milliseconds: ms));
@@ -40,4 +33,9 @@ Future<void> finishMutedQuizFeedback(WidgetTester t) async {
         .runAsync(() => Future<void>.delayed(const Duration(milliseconds: 5)));
     await t.pump(const Duration(milliseconds: 100));
   }
+  final session = t.state<GameSessionUi>(find.byType(PhonicsQuizScreen));
+  final view =
+      t.widget<PhonicsQuizQuestionView>(find.byType(PhonicsQuizQuestionView));
+  expect(session.resultOpen || !view.submitted, isTrue,
+      reason: 'Feedback must finish before the test submits another answer');
 }

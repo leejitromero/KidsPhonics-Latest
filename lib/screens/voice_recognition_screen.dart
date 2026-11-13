@@ -282,7 +282,7 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
   Future<void> _listen() async {
     if (_requestingPermission ||
         _isSpelling ||
-        _isCorrect == true ||
+        _isCorrect != null ||
         !_canListen) {
       return;
     }
@@ -333,8 +333,8 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
     }
   }
 
-  void _evaluate(String recognized) async {
-    if (!_canListen || _evaluatedThisListen) return;
+  void _evaluate(String recognized) {
+    if (!_canListen || _evaluatedThisListen || _isCorrect != null) return;
     if (recognized.trim().isEmpty) {
       setState(() {
         _isListening = false;
@@ -345,39 +345,28 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
     _evaluatedThisListen = true;
     final target = _current['word']!.toLowerCase().trim();
     final heard = recognized.toLowerCase().trim();
-
-    final isCorrect = matchesSpokenWord(target, heard,
+    final correct = matchesSpokenWord(target, heard,
         strict: widget.difficulty == Difficulty.hard);
-
     setState(() {
-      _isCorrect = isCorrect;
+      _isCorrect = correct;
       _isListening = false;
       _speechMessage = null;
     });
-
-    scoredAttempts++;
-    if (isCorrect) correctAttempts++;
-    final request = ++_listenGeneration;
-    final provider = context.read<AppProvider>();
-    unawaited(provider.recordSpeechPractice(correct: isCorrect));
-    await _stopSpeech();
-    if (!mounted || !_canListen || request != _listenGeneration) return;
-    gameNarration.updateEnvironment(
-        enabled: provider.voiceEnabled,
-        active: (ModalRoute.isCurrentOf(context) ?? true) &&
-            (WidgetsBinding.instance.lifecycleState == null ||
-                WidgetsBinding.instance.lifecycleState ==
-                    AppLifecycleState.resumed));
-    if (isCorrect) {
-      awardGameXp((10 * widget.difficulty.xpMultiplier).round());
-      awardGameStar();
-      playGameCorrect();
-    } else {
-      playGameWrong();
-    }
+    recordGameAnswer(
+        correct: correct,
+        itemId: 'speech-$_wordIndex',
+        prompt: 'Recognized word (not pronunciation scoring)',
+        selected: recognized,
+        expected: _current['word']!,
+        speech: true);
+    if (correct) awardGameXp((10 * widget.difficulty.xpMultiplier).round());
+    _listenGeneration++;
+    unawaited(_stopSpeech());
+    scheduleGameAdvance(_nextWord);
   }
 
   void _nextWord() {
+    cancelGameAdvance();
     if (_isCorrect == null || _isListening || _isSpelling || resultOpen) return;
     _listenGeneration++;
     if (_wordIndex < _words.length - 1) {
@@ -420,6 +409,13 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
   }
 
   @override
+  String get gameTitle => 'Speak & Recognize';
+  @override
+  Difficulty get roundDifficulty => widget.difficulty;
+  @override
+  Widget gameForDifficulty(Difficulty difficulty) =>
+      VoiceRecognitionScreen(difficulty: difficulty);
+  @override
   int get totalGameItems => _words.length;
 
   @override
@@ -429,7 +425,7 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
       narration: gameNarration,
       narrationEnabled: !_isListening && !_requestingPermission && !resultOpen,
       fitViewport: true,
-      answerResult: _isCorrect,
+      answerResult: gameAnswerFeedback,
       title: 'Speak & Recognize',
       instructions: 'Listen, then say the word.',
       instructionPanel: GameMascotCoach(
@@ -506,7 +502,7 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
                 listening: _isListening,
                 onPressed: _requestingPermission ||
                         _isSpelling ||
-                        _isCorrect == true ||
+                        _isCorrect != null ||
                         resultOpen
                     ? null
                     : _listen,
@@ -546,18 +542,8 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
                   ])),
             ],
             const SizedBox(height: 8),
-            SpeechHeardCard(heard: _recognized, correct: _isCorrect),
-            if (_isCorrect != null) ...[
-              const SizedBox(height: 8),
-              Center(
-                  child: ForestAudioButton(
-                      key: const ValueKey('speech-next-word'),
-                      label: 'Next Word',
-                      icon: Icons.arrow_forward_rounded,
-                      onPressed: _isListening || _isSpelling || resultOpen
-                          ? null
-                          : _nextWord)),
-            ],
+            SpeechHeardCard(heard: _recognized, correct: null),
+            if (_isCorrect != null) const Text('Answer saved!'),
           ]),
         );
       }),

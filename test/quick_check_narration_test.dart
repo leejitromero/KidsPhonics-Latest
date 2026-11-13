@@ -58,7 +58,7 @@ void main() {
               .widget<FilledButton>(
                   find.byKey(const ValueKey('start-adventure')))
               .onPressed,
-          isNull);
+          isNotNull);
       await finish(t, audio, 'intro');
       await press(t, find.byTooltip('Replay instruction'));
       await finish(t, audio, 'intro');
@@ -70,7 +70,7 @@ void main() {
               .widget<FilledButton>(
                   find.widgetWithText(FilledButton, 'Next Challenge'))
               .onPressed,
-          isNull);
+          isNotNull);
       await finish(t, audio, 'saved');
       await press(t, find.text('Next Challenge'));
       await finish(t, audio, 'sound');
@@ -115,6 +115,70 @@ void main() {
       p.dispose();
     });
   }
+
+  testWidgets(
+      'controls interrupt instructions without stale audio or extra answers',
+      (t) async {
+    final audio = AdventureTestAudio(autoNarration: false);
+    final p = await openAdventure(t, audio, letter: 'C');
+    await flushAdventure(t);
+    final intro = audio.pending!;
+    await press(t, find.byKey(const ValueKey('start-adventure')));
+    expect(await intro.future, isFalse);
+    expect(audio.keys.last, 'adventure-match');
+    final match = audio.pending!;
+    await press(t, find.byKey(const ValueKey('adventure-option-c')));
+    expect(await match.future, isFalse);
+    expect(find.text('Answer saved!'), findsOneWidget);
+    expect(find.textContaining('recording did not finish'), findsNothing);
+    // Repeated taps cannot alter the first response while saved speech plays.
+    expect(
+        t
+            .widget<ElevatedButton>(
+                find.byKey(const ValueKey('adventure-option-c')))
+            .onPressed,
+        isNull);
+    final saved = audio.pending!;
+    await press(t, find.text('Next Challenge'));
+    expect(await saved.future, isFalse);
+    expect(audio.keys.last, 'adventure-sound');
+    final instruction = audio.pending!;
+    // The essential audio button is available during the spoken instruction.
+    await hear(t, audio, 'lesson-sound-C');
+    expect(await instruction.future, isFalse);
+    await press(t, find.byTooltip('Replay instruction'));
+    final replay = audio.pending!;
+    await press(t, find.byKey(const ValueKey('adventure-option-C')));
+    expect(await replay.future, isFalse);
+    await press(t, find.text('Next Challenge'));
+    expect(audio.keys.last, 'adventure-spelling');
+    await hear(t, audio, adventureWordKey('Cat'));
+    await press(t, find.byKey(const ValueKey('adventure-option-C')));
+    await press(t, find.text('Next Challenge'));
+    expect(audio.keys.last, 'adventure-picture-beginning');
+    await hear(t, audio, 'lesson-sound-C');
+    await press(t, find.byKey(const ValueKey('adventure-option-Cow')));
+    await press(t, find.text('Next Challenge'));
+    expect(audio.keys.last, 'adventure-hunt');
+    final hunt = audio.pending!;
+    for (var i = 0; i < 12; i++) {
+      final button = t.widget<FilledButton>(find.byKey(ValueKey('hunt-$i')));
+      if ((button.child! as Text).data!.toUpperCase() == 'C') {
+        await press(t, find.byKey(ValueKey('hunt-$i')));
+      }
+    }
+    expect(await hunt.future, isFalse);
+    await press(t, find.text('See Result'));
+    expect(find.text('Score: 5 / 5'), findsOneWidget);
+    expect(audio.keys.last, 'adventure-mastered');
+    expect(p.adventureProgress('C').completed, 1);
+    expect(p.dailyActivity.values.single.questionsAnswered, 5);
+    expect((p.xp, p.stars), (30, 1));
+    expect(find.textContaining('recording did not finish'), findsNothing);
+    expect(t.takeException(), isNull);
+    await t.pumpWidget(const SizedBox());
+    p.dispose();
+  });
 
   testWidgets(
       'muting and background stop instruction speech without recording an answer',

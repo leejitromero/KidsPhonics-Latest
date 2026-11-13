@@ -23,13 +23,13 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
         GameSessionUi<RhymingWordsScreen>,
         TickerProviderStateMixin,
         WidgetsBindingObserver {
-  static const cloudAsset = 'assets/images/rhyming_jar/cloud.png';
-  static const jarAsset = 'assets/images/rhyming_jar/jar.png';
+  static const cloudAsset = 'assets/images/rhyming_jar/cloud.webp';
+  static const jarAsset = 'assets/images/rhyming_jar/jar.webp';
   late final _motion = AnimationController(vsync: this);
   late final _float =
       AnimationController(vsync: this, duration: const Duration(seconds: 5));
   late List<RhymingFamily> _rounds = _newSession();
-  late final _jar = RhymingJarController(_rounds.first);
+  late final _jar = RhymingJarController(_rounds.first, assessment: true);
   late List<String> _choices = rhymingChoices(_jar.family, widget.difficulty);
   int _index = 0, _speechRequest = 0;
   bool _foreground = true, _manualPause = false, _muted = false;
@@ -50,10 +50,11 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
     _motion.addStatusListener((status) {
       if (status != AnimationStatus.completed || !_active) return;
       if (_jar.phase == JarPhase.centering) {
-        _jar.setPhase(JarPhase.reveal);
-        unawaited(_speakPhase());
+        _jar.setPhase(JarPhase.ready);
+        scheduleGameAdvance(_next);
       } else {
         _jar.finishFeedback();
+        if (_jar.phase == JarPhase.choosing) clearGameAnswerFeedback();
         if (_jar.phase == JarPhase.centering) {
           _animate(const Duration(milliseconds: 950));
         }
@@ -166,16 +167,15 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
     if (correct == null) return;
     _flightStart = center;
     _highlight = null;
-    recordGameAnswer(correct: correct);
-    if (correct) {
-      if (!_muted) unawaited(playGameCorrect());
-      awardGameXp((8 * widget.difficulty.xpMultiplier).round());
-      awardGameStar();
-      _animate(const Duration(milliseconds: 800));
-    } else {
-      if (!_muted) unawaited(playGameWrong());
-      _animate(const Duration(milliseconds: 500));
-    }
+    recordGameAnswer(
+        reviewTarget: ReviewTarget.rhyme(_jar.family.target),
+        correct: correct,
+        itemId: 'rhyme-$_index-${_jar.collected.length}',
+        prompt: 'Rhymes with ${_jar.family.target}',
+        selected: word,
+        expected: _jar.family.rhymes.join(', '));
+    if (correct) awardGameXp((8 * widget.difficulty.xpMultiplier).round());
+    _animate(const Duration(milliseconds: 800));
   }
 
   Future<void> _replayWord(String word) async {
@@ -197,6 +197,7 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
 
   void _next() {
     if (_jar.phase != JarPhase.ready || _speechBusy || !_active) return;
+    cancelGameAdvance();
     if (_index == _rounds.length - 1) {
       _showResults();
     } else {
@@ -234,6 +235,18 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
   }
 
   @override
+  bool get canAdvanceGameFeedback => super.canAdvanceGameFeedback && _active;
+  @override
+  bool get gameAnswerEffectsEnabled => !_muted;
+
+  @override
+  String get gameTitle => 'Rhyming Words';
+  @override
+  Difficulty get roundDifficulty => widget.difficulty;
+  @override
+  Widget gameForDifficulty(Difficulty difficulty) =>
+      RhymingWordsScreen(difficulty: difficulty);
+  @override
   int get totalGameItems => _rounds.length * 3;
   @override
   void dispose() {
@@ -249,6 +262,7 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
   @override
   Widget build(BuildContext context) => GameScaffold(
         title: 'Rhyming Words',
+        answerResult: gameAnswerFeedback,
         instructions: 'Find three words that rhyme!',
         difficulty: widget.difficulty,
         current: _index + 1,
@@ -282,6 +296,9 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
                 label: _muted ? 'Unmute' : 'Mute',
                 onPressed: () {
                   setState(() => _muted = !_muted);
+                  if (_muted) {
+                    unawaited(context.read<AppProvider>().audio.stop());
+                  }
                   _sync();
                 },
                 icon: _muted
@@ -308,7 +325,7 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
           final size = constraints.biggest;
           final centered = [JarPhase.centering, JarPhase.reveal, JarPhase.ready]
               .contains(_jar.phase);
-          final revealed =
+          final revealed = !_jar.assessment &&
               [JarPhase.reveal, JarPhase.ready].contains(_jar.phase);
           final jarHeight = math.min(
               math.max(size.height * .30, RhymingTargetPanels.height),

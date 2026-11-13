@@ -25,7 +25,7 @@ void main() {
       () async {
     expect(gameFrames, [
       for (var i = 1; i <= 5; i++)
-        'assets/images/game_background/games_newbg_$i.png'
+        'assets/images/game_background/games_newbg_$i.webp'
     ]);
     for (final asset in gameFrames) {
       final bytes = await rootBundle.load(asset);
@@ -132,11 +132,11 @@ void main() {
                                       'Alphabet Order',
                                       (d) => switch (d) {
                                             Difficulty.easy =>
-                                              'A–F · 6 letters',
+                                              'Aâ€“F Â· 6 letters',
                                             Difficulty.medium =>
-                                              'A–M · 13 letters',
+                                              'Aâ€“M Â· 13 letters',
                                             Difficulty.hard =>
-                                              'A–Z · 26 letters'
+                                              'Aâ€“Z Â· 26 letters'
                                           });
                                   completed = true;
                                 }))))));

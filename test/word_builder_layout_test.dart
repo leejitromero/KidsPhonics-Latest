@@ -5,6 +5,7 @@ import 'package:kidsphonics/models/difficulty.dart';
 import 'package:kidsphonics/data/phonics_activity_data.dart';
 import 'package:kidsphonics/screens/word_builder_screen.dart';
 import 'package:kidsphonics/widgets/learner_widgets.dart';
+import 'package:kidsphonics/widgets/word_builder_choice_frame.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show mount, close;
 
@@ -25,27 +26,43 @@ void main() {
           t.widget<AudioButton>(find.byType(AudioButton)).phrase.toUpperCase();
       final puzzle = wordPuzzlesForDifficulty(difficulty)
           .firstWhere((p) => p.word == word);
-      final before = <String, Rect>{};
-      for (final letter in puzzle.tiles) {
-        final rect = t.getRect(find.byKey(ValueKey('builder-choice-$letter')));
+      final before = <Key, Rect>{};
+      final choices = t
+          .widgetList<GameAnswerButton>(find.byType(GameAnswerButton))
+          .toList();
+      expect(choices, hasLength(difficulty.index + 3));
+      final frame = t.getRect(find.byType(WordBuilderChoiceFrame));
+      for (final choice in choices) {
+        final rect = t.getRect(find.byKey(choice.buttonKey!));
         expect(rect.bottom, lessThanOrEqualTo(568));
         expect(rect.left, greaterThanOrEqualTo(0));
         expect(rect.right, lessThanOrEqualTo(320));
         expect(rect.width, lessThanOrEqualTo(60));
-        before[letter] = rect;
+        expect(frame.contains(rect.topLeft), isTrue);
+        expect(frame.contains(rect.bottomRight), isTrue);
+        before[choice.buttonKey!] = rect;
       }
       final wrong =
           puzzle.tiles.firstWhere((l) => l != puzzle.correctLetters.first);
-      await t.tap(find.byKey(ValueKey('builder-choice-$wrong')));
+      final selected = choices.firstWhere((choice) => choice.label == wrong);
+      await t.tap(find.byKey(selected.buttonKey!));
       await t.pump();
-      expect(find.text('Nice try! Keep practicing.'), findsOneWidget);
-      for (final letter in puzzle.tiles) {
-        expect(t.getRect(find.byKey(ValueKey('builder-choice-$letter'))),
-            before[letter]);
+      expect(find.byKey(selected.buttonKey!), findsNothing);
+      expect(find.byType(WordBuilderEmptyPlace), findsOneWidget);
+      expect(find.text('Nice try! Keep practicing.'), findsNothing);
+      for (final choice in choices.where((choice) => choice != selected)) {
+        final current = t.getRect(find.byKey(choice.buttonKey!));
+        expect((current.center - before[choice.buttonKey!]!.center).distance,
+            lessThan(4));
+        expect(current.bottom, lessThanOrEqualTo(568));
       }
-      expect(t.getRect(find.text('Nice try! Keep practicing.')).bottom,
-          lessThanOrEqualTo(568));
-      await t.pump(const Duration(milliseconds: 350));
+      await t.pump(const Duration(milliseconds: 600));
+      expect(find.text('Correct!'), findsNothing);
+      if (puzzle.correctLetters.length == 1) {
+        final saved = find.text('Answer saved!');
+        expect(saved, findsOneWidget);
+        expect(t.getRect(saved).bottom, lessThanOrEqualTo(568));
+      }
       expect(t.takeException(), isNull);
       await close(t, p);
     });

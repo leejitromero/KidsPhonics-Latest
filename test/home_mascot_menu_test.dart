@@ -15,6 +15,9 @@ import 'package:kidsphonics/screens/parent_screen.dart';
 import 'package:kidsphonics/widgets/school_home_scene.dart';
 import 'package:kidsphonics/widgets/student_wave.dart';
 import 'package:kidsphonics/widgets/student_character_picker.dart';
+import 'package:kidsphonics/widgets/cloud_page_route.dart';
+import 'package:kidsphonics/widgets/home_character_visit.dart';
+import 'home_character_visit_test.dart' show waitForHomeCurtain;
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show mount, close;
 
@@ -96,7 +99,7 @@ void main() {
     const Size(390, 844),
     const Size(430, 932),
     const Size(768, 1024),
-    const Size(568, 320)
+    // The application locks Android orientation to portrait.
   ]) {
     testWidgets('school positions and tap targets fit $size', (t) async {
       await t.binding.setSurfaceSize(size);
@@ -149,6 +152,9 @@ void main() {
       addTearDown(() => t.binding.setSurfaceSize(null));
       final p = await mount(t, const HomeScreen());
       await t.pump(const Duration(milliseconds: 1200));
+      await t.runAsync(() => prepareCloudTransition(
+          t.element(find.byType(HomeScreen)),
+          cloudTransitionImages(t.element(find.byType(HomeScreen)))));
       final start = t.getRect(find.byKey(const ValueKey('home-student')));
       final before = start.center;
       await t.tap(find.byKey(ValueKey('home-${category.name}')));
@@ -171,10 +177,14 @@ void main() {
       await t.pump(const Duration(milliseconds: 400));
       await t.pump();
       await t.pump(const Duration(milliseconds: 350));
+      await waitForHomeCurtain(t);
+      await t.pump(HomeCharacterVisitTiming.curtain);
+      await t.pump();
       expect(find.byType(destination), findsOneWidget);
       Navigator.of(t.element(find.byType(destination))).pop();
       await t.pump();
-      await t.pump(const Duration(milliseconds: 600));
+      await t.pump(HomeCharacterVisitTiming.curtain);
+      await t.pump();
       expect(t.widget<SchoolHomeScene>(find.byType(SchoolHomeScene)).selected,
           isNull);
       expect(t.takeException(), isNull);

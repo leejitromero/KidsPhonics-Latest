@@ -368,22 +368,22 @@ void main() {
         ((t.widget<Image>(find.byType(Image).first).image as ResizeImage)
                 .imageProvider as AssetImage)
             .assetName;
-    expect(visible(), endsWith('lesson_new_bg_1.png'));
+    expect(visible(), endsWith('lesson_new_bg_1.webp'));
     await t.pump(const Duration(milliseconds: 3500));
-    expect(visible(), endsWith('lesson_new_bg_2.png'));
+    expect(visible(), endsWith('lesson_new_bg_2.webp'));
     await t.pump(const Duration(milliseconds: 3500));
-    expect(visible(), endsWith('lesson_new_bg_3.png'));
+    expect(visible(), endsWith('lesson_new_bg_3.webp'));
     t.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
     t.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
     t.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
     await t.pump(const Duration(seconds: 8));
-    expect(visible(), endsWith('lesson_new_bg_3.png'));
+    expect(visible(), endsWith('lesson_new_bg_3.webp'));
     t.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
     t.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
     t.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
     await t.pump();
     await t.pump(const Duration(milliseconds: 3500));
-    expect(visible(), endsWith('lesson_new_bg_1.png'));
+    expect(visible(), endsWith('lesson_new_bg_1.webp'));
     expect(t.takeException(), isNull);
     await close(t, p);
   });

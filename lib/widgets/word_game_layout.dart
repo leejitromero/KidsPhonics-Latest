@@ -8,31 +8,42 @@ class WordGameLayout extends StatelessWidget {
       required this.word,
       required this.children,
       this.pictureAsset,
-      this.pictureExtent});
+      this.pictureExtent,
+      this.pictureFrameBuilder});
   final String word;
   final List<Widget> children;
   final String? pictureAsset;
 
   /// Lets a word-building board reserve room for its larger interactive tiles.
   final double? pictureExtent;
+
+  /// Allows one game to frame its picture while retaining the shared sizing.
+  final Widget Function(Widget picture)? pictureFrameBuilder;
   @override
   Widget build(BuildContext context) => LayoutBuilder(builder: (_, box) {
         final imageSize =
             pictureExtent ?? (box.maxHeight * .38).clamp(130.0, 220.0);
         return Column(children: [
-          Container(
-              height: imageSize,
-              decoration: BoxDecoration(
-                gradient: const RadialGradient(colors: [
-                  Colors.white,
-                  Color(0xE6FFFFFF),
-                  Color(0x00FFFFFF),
-                ]),
-                borderRadius: BorderRadius.circular(28),
-              ),
-              child: Center(
-                  child: GameWordPicture(
-                      word: word, size: imageSize, asset: pictureAsset))),
+          if (pictureFrameBuilder != null)
+            SizedBox(
+                height: imageSize,
+                child: pictureFrameBuilder!(Center(
+                    child: GameWordPicture(
+                        word: word, size: imageSize, asset: pictureAsset))))
+          else
+            Container(
+                height: imageSize,
+                decoration: BoxDecoration(
+                  gradient: const RadialGradient(colors: [
+                    Colors.white,
+                    Color(0xE6FFFFFF),
+                    Color(0x00FFFFFF),
+                  ]),
+                  borderRadius: BorderRadius.circular(28),
+                ),
+                child: Center(
+                    child: GameWordPicture(
+                        word: word, size: imageSize, asset: pictureAsset))),
           const SizedBox(height: 6),
           Expanded(
               child: LayoutBuilder(

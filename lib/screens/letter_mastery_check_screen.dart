@@ -11,7 +11,7 @@ import '../widgets/completion_celebration.dart';
 import '../widgets/quick_check_design.dart';
 import '../widgets/quick_choice_art.dart';
 import '../widgets/quick_adventure_result.dart';
-import 'letter_introduction_screen.dart';
+import 'letter_recognition_screen.dart';
 import 'progress_screen.dart';
 
 class LetterMasteryCheckScreen extends StatefulWidget {
@@ -40,11 +40,16 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
       _foreground &&
       (ModalRoute.isCurrentOf(context) ?? true) &&
       !context.read<AppProvider>().timeLimitReached;
+  bool get _narrating =>
+      _playing && (_playingKey?.startsWith('adventure-') ?? false);
+  // Instructions can be interrupted. Required word/sound previews still have
+  // to finish before they count as heard for an assessment response.
+  bool get _audioBlocksControls => _playing && !_narrating;
   bool get _canAnswer =>
       !_intro &&
       !_result &&
       !_saving &&
-      !_playing &&
+      !_audioBlocksControls &&
       _active &&
       (_review ? !_reviewCorrect : _session.firstAnswers[_step] == null);
   String get _instructionKey => _intro
@@ -126,7 +131,8 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
   }
 
   Future<void> _play(String key) async {
-    if (_playing || !_active || _saving) return;
+    if (_audioBlocksControls || !_active || _saving) return;
+    if (_narrating) _cancelAudio();
     final request = ++_request;
     setState(() {
       _playing = true;
@@ -170,6 +176,7 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
 
   void _submit(String picked, bool correct) {
     if (!_canAnswer) return;
+    if (_narrating) _cancelAudio();
     if (_review) {
       setState(() {
         _picked = picked;
@@ -195,6 +202,7 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
     if (!_canAnswer) return;
     final found = _review ? _reviewHunted : _session.hunted;
     if (found.contains(index)) return;
+    if (_narrating) _cancelAudio();
     final correct =
         _session.huntLetters[index].toUpperCase() == _session.content.letter;
     setState(() {
@@ -214,7 +222,7 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
   }
 
   Future<void> _next() async {
-    if (!_answered || _saving || _playing || !_active) return;
+    if (!_answered || _saving || _audioBlocksControls || !_active) return;
     if (_review) {
       final next = _reviewOrder.indexOf(_step) + 1;
       _resetTask();
@@ -235,6 +243,7 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
       _narrate(_instructionKey);
       return;
     }
+    _cancelAudio();
     setState(() => _saving = true);
     final rewards = await context.read<AppProvider>().completeAdventure(
         _session.content.letter,
@@ -292,8 +301,9 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
                 minimumSize: const Size(48, 48),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 4)),
-            onPressed:
-                _playing || _saving || !_active ? null : () => _play(key),
+            onPressed: _audioBlocksControls || _saving || !_active
+                ? null
+                : () => _play(key),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Icon(
                   _playingKey == key
@@ -305,23 +315,20 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
                   child: FittedBox(fit: BoxFit.scaleDown, child: Text(label))),
             ]),
           )));
-  Widget _listenIcon(String key, String label,
-          {int index = 0, bool embedded = false}) =>
+  Widget _listenIcon(String key, String label, {int index = 0}) =>
       QuickAudioButton(
         key: ValueKey('listen-$key'),
         label: label,
         index: index,
         compact: true,
-        embedded: embedded,
         playing: _playingKey == key,
-        onPressed: _playing || _saving || !_active ? null : () => _play(key),
+        onPressed: _audioBlocksControls || _saving || !_active
+            ? null
+            : () => _play(key),
       );
 
   Widget _choice(String value, bool correct,
-          {Widget? child,
-          bool enabled = true,
-          int artIndex = 0,
-          bool embedded = false}) =>
+          {Widget? child, bool enabled = true, int artIndex = 0}) =>
       ElevatedButton(
           key: ValueKey('adventure-option-$value'),
           onPressed:
@@ -339,18 +346,16 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
                       borderRadius: BorderRadius.circular(24)),
                   padding: const EdgeInsets.all(6))
               .copyWith(
-                  backgroundBuilder: embedded
-                      ? (_, __, content) => content ?? const SizedBox.shrink()
-                      : (context, states, content) => QuickChoiceArt(
-                          index: artIndex,
-                          selected: _picked == value,
-                          pressed: states.contains(WidgetState.pressed),
-                          focused: states.contains(WidgetState.focused),
-                          child: content ?? const SizedBox.shrink())),
+                  backgroundBuilder: (context, states, content) => QuickChoiceArt(
+                      index: artIndex,
+                      selected: _picked == value,
+                      pressed: states.contains(WidgetState.pressed),
+                      focused: states.contains(WidgetState.focused),
+                      child: content ?? const SizedBox.shrink())),
           child: FittedBox(
               fit: BoxFit.scaleDown,
-              child:
-                  child ?? Text(value, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900))));
+              child: child ??
+                  Text(value, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900))));
   Widget _grid(List<Widget> children,
       {int columns = 2, double rowHeight = 76, double maxWidth = 340}) {
     final rows = (children.length / columns).ceil();
@@ -396,9 +401,9 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
     // or a tall phone. Short screens can still use all the available height.
     final preferredHeight = switch (_skill) {
       AdventureSkill.matching => 320.0,
-      AdventureSkill.sound => 300.0,
+      AdventureSkill.sound => 360.0,
       AdventureSkill.spelling => 320.0,
-      AdventureSkill.soundPicture => 320.0,
+      AdventureSkill.soundPicture => 360.0,
       AdventureSkill.hunt => 260.0,
     };
     return Center(
@@ -471,37 +476,29 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
         ]);
       case AdventureSkill.sound:
         return Column(children: [
-          Expanded(flex: 2, child: _letter(c.letter == 'Q' ? 'Qu' : c.letter)),
+          SizedBox(
+              height: height >= 270 ? 80 : 48,
+              child: _letter(c.letter == 'Q' ? 'Qu' : c.letter)),
           const SizedBox(height: 6),
           Expanded(
-              flex: 3,
               child: _grid([
-                for (var i = 0; i < _session.soundOptions.length; i++)
-                  QuickChoiceArt(
-                      index: i,
-                      selected: _picked == _session.soundOptions[i],
-                      child: Padding(
-                          padding: const EdgeInsets.all(3),
-                          child: Row(children: [
-                            _listenIcon(
-                                'lesson-sound-${_session.soundOptions[i]}',
-                                'Listen to sound ${i + 1}',
-                                index: i,
-                                embedded: true),
-                            Expanded(
-                                child: SizedBox.expand(
-                                    child: _choice(_session.soundOptions[i],
-                                        _session.soundOptions[i] == c.letter,
-                                        embedded: true,
-                                        enabled: _heard.contains(
-                                            'lesson-sound-${_session.soundOptions[i]}'),
-                                        child: const Text('Choose',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight:
-                                                    FontWeight.w900))))),
-                          ])))
-              ])),
+            for (var i = 0; i < _session.soundOptions.length; i++)
+              QuickAudioChoice(
+                  key: ValueKey(
+                      'quick-sound-choice-${_session.soundOptions[i]}'),
+                  answer: _choice(_session.soundOptions[i],
+                      _session.soundOptions[i] == c.letter,
+                      artIndex: i,
+                      enabled: _heard
+                          .contains('lesson-sound-${_session.soundOptions[i]}'),
+                      child: const Text('Choose',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w900))),
+                  speaker: _listenIcon(
+                      'lesson-sound-${_session.soundOptions[i]}',
+                      'Listen to sound ${i + 1}',
+                      index: i)),
+          ], rowHeight: 140)),
         ]);
       case AdventureSkill.spelling:
         final key = adventureWordKey(c.word);
@@ -559,25 +556,22 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
           Expanded(
               child: _grid([
             for (var i = 0; i < _session.pictureOptions.length; i++)
-              QuickChoiceArt(
-                  index: i,
-                  selected: _picked == _session.pictureOptions[i],
-                  child: Row(children: [
-                    Expanded(
-                        child: SizedBox.expand(
-                            child: _choice(_session.pictureOptions[i],
-                                _session.pictureOptions[i] == c.pictureWord,
-                                enabled: _heard.contains(c.soundKey),
-                                embedded: true,
-                                child: Semantics(
-                                    label: 'Choose picture ${i + 1}',
-                                    child: _picture(_session.pictureOptions[i],
-                                        pictureSize))))),
-                    _listenIcon(adventureWordKey(_session.pictureOptions[i]),
-                        'Hear picture ${i + 1}',
-                        index: i, embedded: true),
-                  ]))
-          ], rowHeight: 112, maxWidth: 360)),
+              QuickAudioChoice(
+                  key: ValueKey(
+                      'quick-picture-choice-${_session.pictureOptions[i]}'),
+                  answer: _choice(_session.pictureOptions[i],
+                      _session.pictureOptions[i] == c.pictureWord,
+                      enabled: _heard.contains(c.soundKey),
+                      artIndex: i,
+                      child: Semantics(
+                          label: 'Choose picture ${i + 1}',
+                          child: _picture(
+                              _session.pictureOptions[i], pictureSize))),
+                  speaker: _listenIcon(
+                      adventureWordKey(_session.pictureOptions[i]),
+                      'Hear picture ${i + 1}',
+                      index: i)),
+          ], rowHeight: 140, maxWidth: 360)),
         ]);
       case AdventureSkill.hunt:
         final found = _review ? _reviewHunted : _session.hunted;
@@ -673,11 +667,13 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
             _resultAction(
                 Icons.favorite_rounded, 'Practice these skills', _startReview),
           _resultAction(Icons.refresh_rounded, 'Try Again', _restart),
-          _resultAction(
-              Icons.menu_book_rounded,
-              'Review Lesson',
-              () => LearnerNavigation.open(context,
-                  LetterIntroductionScreen(letter: _session.content.letter))),
+          _resultAction(Icons.menu_book_rounded, 'Review Lesson', () {
+            _cancelAudio();
+            LearnerNavigation.open(
+                context,
+                LetterRecognitionScreen(
+                    initialLetter: _session.content.letter));
+          }),
           _resultAction(Icons.bar_chart_rounded, 'View My Progress',
               () => LearnerNavigation.open(context, const ProgressScreen())),
           _resultAction(Icons.home_rounded, 'Back to Home',
@@ -812,16 +808,21 @@ class _LetterMasteryCheckScreenState extends State<LetterMasteryCheckScreen>
                           child: _intro
                               ? FilledButton.icon(
                                   key: const ValueKey('start-adventure'),
-                                  onPressed: !_active || _playing
+                                  onPressed: !_active || _audioBlocksControls
                                       ? null
                                       : () {
+                                          _resetTask();
                                           setState(() => _intro = false);
                                           _narrate(_instructionKey);
                                         },
                                   icon: const Icon(Icons.play_arrow_rounded),
                                   label: const Text('Start Adventure'))
                               : FilledButton(
-                                  onPressed: _saving || _playing ? null : _next,
+                                  onPressed: _saving ||
+                                          _audioBlocksControls ||
+                                          !_active
+                                      ? null
+                                      : _next,
                                   child: Text(_saving
                                       ? 'Saving...'
                                       : _review

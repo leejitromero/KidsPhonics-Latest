@@ -10,6 +10,7 @@ import 'providers/app_provider.dart';
 import 'screens/home_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'widgets/time_limit_overlay.dart';
+import 'widgets/badge_unlock_celebration.dart';
 import 'widgets/app_display_preferences.dart';
 import 'widgets/background_music_host.dart';
 import 'widgets/loading_screen_art.dart';
@@ -67,7 +68,9 @@ class KidsPhonicsApp extends StatelessWidget {
         theme: AppTheme.theme,
         builder: (_, child) => AppDisplayPreferences(
             child: BackgroundMusicHost(
-                child: TimeLimitOverlay(child: child ?? const SizedBox()))),
+                child: TimeLimitOverlay(
+                    child: BadgeCelebrationHost(
+                        child: child ?? const SizedBox())))),
         home: const SplashScreen(),
       ),
     );
@@ -113,10 +116,10 @@ class _SplashScreenState extends State<SplashScreen> {
         asset: asset == CharacterSelectionArt.banner ? 1024 : 600,
       for (final asset in SchoolHomeScene.buttonAssets) asset: 512,
       SchoolHomeScene.guideArrow: 256,
-      '$sceneAssets/kids.png': 1086,
-      '$sceneAssets/lessin_signage.png': 512,
-      '$sceneAssets/games_signage.png': 512,
-      for (var i = 1; i <= 4; i++) '$sceneAssets/dialogue_box_$i.png': 942,
+      '$sceneAssets/kids.webp': 1086,
+      '$sceneAssets/lessin_signage.webp': 512,
+      '$sceneAssets/games_signage.webp': 512,
+      for (var i = 1; i <= 4; i++) '$sceneAssets/dialogue_box_$i.webp': 942,
       for (final asset in [
         ...mascotTalkingFrames(false),
         ...mascotTalkingFrames(true)
@@ -124,7 +127,7 @@ class _SplashScreenState extends State<SplashScreen> {
         asset: frameWidth,
       for (final character in ['boy', 'girl']) ...{
         StudentWave.assetFor(character): 2172,
-        '$sceneAssets/${character}_1.png': 512,
+        '$sceneAssets/${character}_1.webp': 512,
         for (final asset in [
           ...studentWalkingFrames(character, left: true),
           ...studentWalkingFrames(character, left: false)

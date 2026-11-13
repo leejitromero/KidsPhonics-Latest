@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'animated_screen_art.dart';
 
 const loadingScreenFrames = [
-  'assets/images/loading_screen/loading_s1.png',
-  'assets/images/loading_screen/loading_s2.png',
-  'assets/images/loading_screen/loading_s3.png',
-  'assets/images/loading_screen/loading_s4.png',
-  'assets/images/loading_screen/loading_s5.png',
-  'assets/images/loading_screen/loading_s6.png',
-  'assets/images/loading_screen/loading_s7.png',
+  'assets/images/loading_screen/loading_s1.webp',
+  'assets/images/loading_screen/loading_s2.webp',
+  'assets/images/loading_screen/loading_s3.webp',
+  'assets/images/loading_screen/loading_s4.webp',
+  'assets/images/loading_screen/loading_s5.webp',
+  'assets/images/loading_screen/loading_s6.webp',
+  'assets/images/loading_screen/loading_s7.webp',
 ];
 
 /// Keeps the entire supplied scene visible, including both edge mascots.

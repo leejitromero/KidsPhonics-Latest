@@ -173,11 +173,18 @@ void main() {
     await t.tap(navigation('Previous'));
     await t.pump();
     expect(displayedLetter(t), 'Letter Y');
-    // Navigation does not automatically play speech.
-    expect(
-        calls.where((c) => c.method == 'setSourceUrl').where(
-            (c) => ((c.arguments as Map)['url'] as String).contains('letter-')),
-        isEmpty);
+    // Browsing automatically names the displayed letter without awarding mastery.
+    bool namedY() => calls.any((c) =>
+        c.method == 'setSourceUrl' &&
+        ((c.arguments as Map)['url'] as String)
+            .endsWith('/letters/letter-y.mp3'));
+    for (var i = 0; i < 100 && !namedY(); i++) {
+      await t.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 5)));
+      await t.pump();
+    }
+    expect(namedY(), isTrue);
+    expect(p.masteredLetterCount, 0);
     await close(t, p);
   });
 

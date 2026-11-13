@@ -14,7 +14,6 @@ import '../providers/app_provider.dart';
 import '../widgets/learner_widgets.dart';
 import '../widgets/word_game_layout.dart';
 import '../widgets/rumbled_words_design.dart';
-import '../widgets/game_feedback_art.dart';
 
 class RumbledWordsScreen extends StatefulWidget {
   const RumbledWordsScreen({super.key, this.difficulty = Difficulty.easy});
@@ -40,14 +39,8 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
   bool _hasMoved = false;
   bool _hintUsed = false;
   bool? _correct;
-  int _readingStep = 0;
-  int _activeLetter = -1;
-  bool _readingWord = false;
-  bool _runningPlayback = false;
   int _roundGeneration = 0;
-  Timer? _resumeTimer, _highlightTimer;
-  Completer<void>? _highlightDone;
-  bool get _finished => _correct == true || resultOpen;
+  bool get _finished => _correct != null || resultOpen;
   bool get _gameActive =>
       canAdvanceGameFeedback && TickerMode.valuesOf(context).enabled;
   bool get _canEdit => !_finished && _gameActive;
@@ -61,11 +54,6 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
 
   void _prepare() {
     _roundGeneration++;
-    _resumeTimer?.cancel();
-    _endHighlightDelay();
-    _readingStep = 0;
-    _activeLetter = -1;
-    _readingWord = false;
     _tiles = _word.split('')..shuffle();
     if (_tiles.join() == _word) _tiles.add(_tiles.removeAt(0));
     _tileIds = List.generate(_tiles.length, (i) => i);
@@ -119,89 +107,29 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
   }
 
   void _check() {
-    // A new arrangement is required before submitting a failed word again.
     if (!_canEdit || _dragging || _correct != null) return;
     gameNarration.cancel();
-    final correct = _tiles.join() == _word;
+    final selected = _tiles.join();
+    final correct = selected == _word;
     setState(() {
       _selectedTile = null;
       _correct = correct;
     });
-    recordGameAnswer(correct: correct);
-    if (correct) {
-      awardGameXp((8 * widget.difficulty.xpMultiplier).round());
-      awardGameStar();
-      unawaited(_readCompletedWord());
-    } else {
-      unawaited(playGameWrong());
-    }
-  }
-
-  void _endHighlightDelay() {
-    _highlightTimer?.cancel();
-    final done = _highlightDone;
-    _highlightDone = null;
-    if (done != null && !done.isCompleted) done.complete();
-  }
-
-  Future<void> _holdHighlight() {
-    _endHighlightDelay();
-    final done = Completer<void>();
-    _highlightDone = done;
-    // Still show each step when voice is muted or a recording fails to play.
-    _highlightTimer = Timer(const Duration(milliseconds: 400), () {
-      if (!done.isCompleted) done.complete();
-      if (_highlightDone == done) _highlightDone = null;
-    });
-    return done.future;
-  }
-
-  Future<void> _readCompletedWord() async {
-    if (_runningPlayback || !mounted || _correct != true || resultOpen) return;
-    _resumeTimer?.cancel();
-    _runningPlayback = true;
-    final round = _roundGeneration;
-    final provider = context.read<AppProvider>();
-    bool current() => mounted && round == _roundGeneration && !resultOpen;
-    try {
-      while (mounted && current() && _readingStep <= _word.length) {
-        if (!_gameActive) return;
-        gameNarration.updateEnvironment(
-            enabled: provider.voiceEnabled, active: true);
-        final wholeWord = _readingStep == _word.length;
-        setState(() {
-          _activeLetter = wholeWord ? -1 : _readingStep;
-          _readingWord = wholeWord;
-        });
-        final hold = _holdHighlight();
-        final playback = wholeWord
-            ? gameNarration.word(_words[_index].audioKey)
-            : gameNarration.letterName(_word[_readingStep]);
-        final audioGeneration = gameNarration.generation;
-        await playback;
-        await hold;
-        if (!current()) return;
-        // Replay the interrupted step after returning, including repeated letters.
-        if (!_gameActive || audioGeneration != gameNarration.generation) {
-          return;
-        }
-        _readingStep++;
-      }
-      if (current() && _gameActive) {
-        _next();
-      }
-    } finally {
-      _runningPlayback = false;
-      if (current() && _correct == true) {
-        _resumeTimer = Timer(const Duration(milliseconds: 200), () {
-          unawaited(_readCompletedWord());
-        });
-      }
-    }
+    recordGameAnswer(
+        reviewTarget: ReviewTarget.word(_word),
+        correct: correct,
+        itemId: 'rumbled-$_index',
+        prompt: 'Arrange the word',
+        selected: selected,
+        expected: _word,
+        word: _word);
+    if (correct) awardGameXp((8 * widget.difficulty.xpMultiplier).round());
+    scheduleGameAdvance(_next);
   }
 
   void _next() {
-    if (_correct != true || resultOpen) return;
+    if (_correct == null || resultOpen) return;
+    cancelGameAdvance();
     if (_index + 1 < _words.length) {
       setState(() {
         _index++;
@@ -226,11 +154,16 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
   @override
   void dispose() {
     _roundGeneration++;
-    _resumeTimer?.cancel();
-    _endHighlightDelay();
     super.dispose();
   }
 
+  @override
+  String get gameTitle => 'Rumbled Words';
+  @override
+  Difficulty get roundDifficulty => widget.difficulty;
+  @override
+  Widget gameForDifficulty(Difficulty difficulty) =>
+      RumbledWordsScreen(difficulty: difficulty);
   @override
   int get totalGameItems => _words.length;
 
@@ -238,17 +171,16 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
   Widget build(BuildContext context) => GameScaffold(
         narration: gameNarration,
         fitViewport: true,
-        answerResult: _correct,
+        answerResult: gameAnswerFeedback,
         title: 'Rumbled Words',
         roundHeader: RumbledRoundHeader(
             difficulty: widget.difficulty,
             current: _index + 1,
             total: _words.length),
-        instructions: 'Tap a letter, drag it into place, then tap Check Word!',
+        instructions: 'Drag a letter into place, then tap Check Word!',
         instructionPanel: GameMascotCoach(
             title: 'Rumbled Words',
-            instructions:
-                'Tap a letter, drag it into place, then tap Check Word!',
+            instructions: 'Drag a letter into place, then tap Check Word!',
             controller: gameNarration,
             child: Center(
                 child: ConstrainedBox(
@@ -276,13 +208,13 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
           final picture =
               (box.maxHeight * (compact ? .30 : .38)).clamp(104.0, 220.0);
           const buttonHeight = 44.0;
-          final message = _correct == false
-              ? 'Try again! Drag a letter into place.'
+          final message = _correct != null
+              ? 'Answer saved!'
               : _selectedTile != null
-                  ? 'Drag the floating letter into place.'
+                  ? 'Drag the selected letter into place.'
                   : _hintUsed
                       ? 'First letter fixed. Keep arranging!'
-                      : 'Tap a letter, then drag it.';
+                      : 'Drag a letter into place.';
           return WordGameLayout(
               word: _words[_index].word,
               pictureExtent: picture,
@@ -348,21 +280,24 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
                         maxSide: compact ? 56 : 72,
                         gap: compact || _tiles.length > 7 ? 2 : 4,
                         tileIds: _tileIds,
-                        selectedIndex: _selectedTile,
                         enabled: _canEdit,
                         fixedFirst: _hintUsed,
                         onMove: _moveTile,
                         onDraggingChanged: (dragging) {
                           if (mounted && _dragging != dragging) {
-                            setState(() => _dragging = dragging);
+                            if (dragging) gameNarration.cancel();
+                            setState(() {
+                              _dragging = dragging;
+                              if (dragging) _selectedTile = null;
+                            });
                           }
                         },
                         children: [
                           for (var i = 0; i < _tiles.length; i++) _tile(i),
                         ])),
                 SizedBox(height: gap),
-                if (_correct == true)
-                  GameCorrectFrame(height: compact ? 28 : 36)
+                if (_correct != null)
+                  const Text('Answer saved!')
                 else
                   Semantics(
                       liveRegion: true,
@@ -403,57 +338,44 @@ class _RumbledWordsScreenState extends State<RumbledWordsScreen>
   Widget _tile(int index) {
     final fixed = _hintUsed && index == 0;
     final selected = _selectedTile == index;
-    final highlighted = _readingWord || _activeLetter == index;
-    final reducedMotion = MediaQuery.disableAnimationsOf(context);
     return Semantics(
-        label: 'Letter ${_tiles[index]}, position ${index + 1}'
-            '${fixed ? ', fixed by hint' : ''}',
+        label:
+            'Letter ${_tiles[index]}, position ${index + 1}${fixed ? ', fixed by hint' : ''}',
         selected: selected,
-        child: AnimatedScale(
-            scale: highlighted && !reducedMotion ? 1.04 : 1,
-            duration: reducedMotion
+        child: AnimatedContainer(
+            key: ValueKey('word-highlight-$index'),
+            duration: MediaQuery.disableAnimationsOf(context)
                 ? Duration.zero
                 : const Duration(milliseconds: 160),
-            child: AnimatedContainer(
-                key: ValueKey('word-highlight-$index'),
-                duration: reducedMotion
-                    ? Duration.zero
-                    : const Duration(milliseconds: 160),
-                decoration: BoxDecoration(
-                    color: highlighted
-                        ? const Color(0xFFFFE36B)
-                        : selected
-                            ? const Color(0xFFB7F5EE)
-                            : Colors.transparent,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(
-                        color: selected
-                            ? const Color(0xFF008A80)
-                            : highlighted
-                                ? const Color(0xFFFFB300)
-                                : Colors.transparent,
-                        width: 3)),
-                child: Stack(fit: StackFit.expand, children: [
-                  AnswerChoiceButton(
-                      buttonKey: ValueKey('word-tile-$index'),
-                      onPressed:
-                          !_canEdit || fixed ? null : () => _tapTile(index),
-                      variant: const [4, 2, 3, 1, 0][_tileIds[index] % 5],
-                      selected: selected || highlighted,
-                      child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(_tiles[index],
-                              style: const TextStyle(
-                                  color: GameDesign.ink,
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.w900)))),
-                  if (fixed)
-                    const Positioned(
-                        top: 0,
-                        right: 0,
-                        child: IgnorePointer(
-                            child: Icon(Icons.lock_rounded,
-                                size: 15, color: Color(0xFF167769)))),
-                ]))));
+            decoration: BoxDecoration(
+                color: selected ? const Color(0xFFB7F5EE) : Colors.transparent,
+                borderRadius: BorderRadius.circular(14)),
+            foregroundDecoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                    color:
+                        selected ? const Color(0xFF008A80) : Colors.transparent,
+                    width: 3)),
+            child: Stack(fit: StackFit.expand, children: [
+              AnswerChoiceButton(
+                  buttonKey: ValueKey('word-tile-$index'),
+                  onPressed: !_canEdit || fixed ? null : () => _tapTile(index),
+                  variant: const [4, 2, 3, 1, 0][_tileIds[index] % 5],
+                  selected: selected,
+                  child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(_tiles[index],
+                          style: const TextStyle(
+                              color: GameDesign.ink,
+                              fontSize: 40,
+                              fontWeight: FontWeight.w900)))),
+              if (fixed)
+                const Positioned(
+                    top: 0,
+                    right: 0,
+                    child: IgnorePointer(
+                        child: Icon(Icons.lock_rounded,
+                            size: 15, color: Color(0xFF167769)))),
+            ])));
   }
 }

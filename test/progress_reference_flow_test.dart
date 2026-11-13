@@ -40,8 +40,8 @@ void main() {
       ('letters', 1, 26),
       ('sounds', 1, 26),
       ('vowels', 0, 5),
-      ('cvc', 5, 17),
-      ('blending', 1, 22)
+      ('cvc', 5, 70),
+      ('blending', 1, 100)
     ]) {
       final row = find.byKey(ValueKey('journey-skill-$id'));
       await t.scrollUntilVisible(row.hitTestable(), 120,

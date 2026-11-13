@@ -98,7 +98,7 @@ void main() {
   });
 
   testWidgets(
-      'target first, effects only on choices, praise after centering, replay and pause',
+      'target audio, neutral selections, pause and automatic next preserve first answers',
       (t) async {
     final audio = QuizAudioHarness()..install();
     final p =
@@ -126,54 +126,33 @@ void main() {
         .firstWhere((w) => !family.rhymes.contains(w));
     await t.tap(find.byKey(ValueKey('rhyme-choice-$wrong')));
     await flush(t);
-    expect(audio.starts.last, endsWith('/audio/wrong.mp3'));
-    await t.pump(const Duration(milliseconds: 600));
-    expect(find.text('0 / 3 rhymes'), findsOneWidget);
-    for (var i = 0; i < 3; i++) {
+    expect(audio.sources.where((s) => s.endsWith('/audio/wrong.mp3')),
+        hasLength(1));
+    await t.pump(const Duration(milliseconds: 900));
+    expect(find.text('1 / 3 chosen'), findsOneWidget);
+    for (var i = 0; i < 2; i++) {
       await t.tap(find.byKey(ValueKey('rhyme-choice-${family.rhymes[i]}')));
-      await flush(t);
-      expect(audio.starts.last, endsWith('/audio/correct.mp3'));
+      await t.pump();
       if (i == 0) {
         await t.tap(find.byTooltip('Pause'));
         await t.pump(const Duration(seconds: 2));
-        expect(find.text('0 / 3 rhymes'), findsOneWidget);
+        expect(find.text('1 / 3 chosen'), findsOneWidget);
         await t.tap(find.byTooltip('Resume'));
         await t.pump();
       }
       await t.pump(const Duration(milliseconds: 900));
-      if (i < 2) expect(find.text('${i + 1} / 3 rhymes'), findsOneWidget);
     }
-    expect(find.text('Next Jar'), findsNothing);
     await t.pump(const Duration(milliseconds: 1000));
     await flush(t);
-    expect(audio.starts.last,
-        endsWith('/rhyming_jar/praise-${word.toLowerCase()}.mp3'));
+    expect(find.byType(ActionChip), findsNothing);
+    expect(audio.sources.where((s) => s.contains('/praise-')), isEmpty);
     expect(find.text('Next Jar'), findsNothing);
-    final revealed = t
-        .widgetList<ActionChip>(find.byType(ActionChip))
-        .map((c) => (c.label as Text).data);
-    expect(revealed, family.words);
-    await t.runAsync(() =>
-        audio.completeSource('/rhyming_jar/praise-${word.toLowerCase()}.mp3'));
-    await flush(t);
-    expect(find.text('Next Jar'), findsOneWidget);
-    await t.pump(const Duration(milliseconds: 600));
-    await t.runAsync(() =>
-        t.state<GameSessionUi>(find.byType(RhymingWordsScreen)).rewardsSaved);
-    expect(p.stars, 3);
-    expect(p.xp, 24);
-    expect(p.dailyActivity.values.single.questionsAnswered, 4);
-    await t.tap(find.widgetWithText(ActionChip, family.rhymes.last));
-    await flush(t);
-    expect(audio.starts.last,
-        endsWith('/rhyming_jar/word-${family.rhymes.last.toLowerCase()}.mp3'));
-    await t.runAsync(() => audio.completeSource(
-        '/rhyming_jar/word-${family.rhymes.last.toLowerCase()}.mp3'));
-    await flush(t);
-    await t.tap(find.text('Next Jar'));
+    await t.pump(const Duration(milliseconds: 700));
     await flush(t);
     expect(target(t), isNot(word));
-    expect(find.text('0 / 3 rhymes'), findsOneWidget);
+    expect(p.stars, 0);
+    expect(p.xp, 16);
+    expect(p.dailyActivity.values.single.questionsAnswered, 3);
     await close(t, p);
     p.phonicsAudio.dispose();
     expect(t.takeException(), isNull);
@@ -204,16 +183,16 @@ void main() {
       await t.pump();
       await t.pump(const Duration(milliseconds: 150));
       await flush(t);
-      await t.tap(find.text(jar == 4 ? 'Finish' : 'Next Jar'));
+      await t.pump(const Duration(milliseconds: 700));
       await flush(t);
     }
     expect(find.byType(GameResultDialog), findsOneWidget);
-    expect(p.stars, 15);
+    expect(p.stars, 3);
     expect(p.xp, 140);
     expect(p.dailyActivity.values.single.questionsAnswered, 15);
     await t.tap(find.text('Play Again'));
     await flush(t);
-    expect(find.text('0 / 3 rhymes'), findsOneWidget);
+    expect(find.text('0 / 3 chosen'), findsOneWidget);
     final state = t.state<GameSessionUi>(find.byType(RhymingWordsScreen));
     expect(state.earnedXp, 0);
     expect(state.earnedStars, 0);
@@ -272,7 +251,8 @@ void main() {
       await t.pump();
       await t.pump(const Duration(milliseconds: 150));
       await flush(t);
-      expect(find.text('Next Jar'), findsOneWidget);
+      expect(find.text('Next Jar'), findsNothing);
+      expect(find.byType(ActionChip), findsNothing);
       expect(t.takeException(), isNull);
       if (const bool.fromEnvironment('CAPTURE_UI') && size.width == 390) {
         await t.pump();

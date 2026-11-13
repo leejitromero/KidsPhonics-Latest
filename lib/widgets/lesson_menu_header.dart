@@ -155,7 +155,7 @@ class LessonMenuHeader extends StatelessWidget {
                             child: ColoredBox(
                                 color: const Color(0xFFFFF3D9),
                                 child: Image.asset(
-                                    '$sceneAssets/${character}_1.png',
+                                    '$sceneAssets/${character}_1.webp',
                                     key: ValueKey('lessons-profile-$character'),
                                     fit: BoxFit.cover,
                                     alignment: Alignment.topCenter,

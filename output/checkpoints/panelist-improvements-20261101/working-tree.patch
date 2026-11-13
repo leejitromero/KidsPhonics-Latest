@@ -1,0 +1,2087 @@
+diff --git a/android/app/src/main/AndroidManifest.xml b/android/app/src/main/AndroidManifest.xml
+index 61c2420..ea506ab 100644
+--- a/android/app/src/main/AndroidManifest.xml
++++ b/android/app/src/main/AndroidManifest.xml
+@@ -36,6 +36,9 @@
+     </application>
+ 
+     <queries>
++        <intent>
++            <action android:name="android.intent.action.TTS_SERVICE"/>
++        </intent>
+         <intent>
+             <action android:name="android.speech.RecognitionService"/>
+         </intent>
+diff --git a/android/app/src/main/kotlin/com/example/kidsphonics/MainActivity.kt b/android/app/src/main/kotlin/com/example/kidsphonics/MainActivity.kt
+index 5211985..cb0c5c8 100644
+--- a/android/app/src/main/kotlin/com/example/kidsphonics/MainActivity.kt
++++ b/android/app/src/main/kotlin/com/example/kidsphonics/MainActivity.kt
+@@ -6,8 +6,14 @@ import io.flutter.plugin.common.MethodChannel
+ import android.os.Build
+ 
+ class MainActivity : FlutterActivity() {
++    private var playerWelcome: PlayerWelcomeSpeech? = null
++    private var activityForeground = false
++
+     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+         super.configureFlutterEngine(flutterEngine)
++        playerWelcome?.dispose()
++        playerWelcome = PlayerWelcomeSpeech(this, flutterEngine.dartExecutor.binaryMessenger)
++        playerWelcome?.setForeground(activityForeground)
+         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "kidsphonics/app_info")
+             .setMethodCallHandler { call, result ->
+                 if (call.method != "getInfo") {
+@@ -29,4 +35,22 @@ class MainActivity : FlutterActivity() {
+                 }
+             }
+     }
++
++    override fun onResume() {
++        super.onResume()
++        activityForeground = true
++        playerWelcome?.setForeground(true)
++    }
++
++    override fun onPause() {
++        activityForeground = false
++        playerWelcome?.setForeground(false)
++        super.onPause()
++    }
++
++    override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
++        playerWelcome?.dispose()
++        playerWelcome = null
++        super.cleanUpFlutterEngine(flutterEngine)
++    }
+ }
+diff --git a/lib/data/game_session_order.dart b/lib/data/game_session_order.dart
+index d418ffb..c841f37 100644
+--- a/lib/data/game_session_order.dart
++++ b/lib/data/game_session_order.dart
+@@ -1,5 +1,8 @@
++import 'dart:convert';
+ import 'dart:math';
++import 'package:shared_preferences/shared_preferences.dart';
+ import '../models/difficulty.dart';
++import '../services/preference_write_queue.dart';
+ 
+ /// Draws from a shuffled pool across replays, with history per game/tier.
+ class GameSessionOrder {
+@@ -8,28 +11,78 @@ class GameSessionOrder {
+         Difficulty.medium => 6,
+         Difficulty.hard => 8,
+       };
+-  static final _random = Random();
+-  static final Map<String, String> _previousFirst = {};
+-  static final Map<String, String> _previousLast = {};
+-  static final Map<String, Set<String>> _pools = {};
+-  static final Map<String, List<String>> _remaining = {};
++  static GameSessionHistory _history = GameSessionHistory();
++
++  /// Called after preferences load, before the app permits opening a game.
++  /// Rebuilding a provider must not reset the history of an active app.
++  static void initialize(SharedPreferences preferences) {
++    if (!identical(_history.preferences, preferences)) {
++      _history = GameSessionHistory(preferences: preferences);
++    }
++  }
++
++  static Future<bool> get saved => _history.saved;
++
+   static List<T> next<T>(
+-      String key, Iterable<T> source, String Function(T) identity,
++          String key, Iterable<T> source, String Function(T) identity,
++          {int? count}) =>
++      _history.next(key, source, identity, count: count);
++}
++
++/// Persists only selection history, never active questions, answers or rewards.
++/// A round reserves its tasks once; rebuilding or pausing does not draw again.
++class GameSessionHistory {
++  GameSessionHistory({this.preferences, Random? random})
++      : _random = random ?? Random() {
++    _restore();
++  }
++
++  static const storageKey = 'gameSessionOrderV1';
++  final SharedPreferences? preferences;
++  final Random _random;
++  final _games = <String, _DrawHistory>{};
++  final _writes = PreferenceWriteQueue();
++  Future<bool> _saved = Future.value(true);
++  Future<bool> get saved => _saved;
++
++  void _restore() {
++    final value = preferences?.get(storageKey);
++    if (value is! String) return;
++    try {
++      final data = jsonDecode(value);
++      if (data is! Map || data['version'] != 1 || data['games'] is! Map) {
++        return;
++      }
++      for (final entry in (data['games'] as Map).entries) {
++        if (entry.key is! String) continue;
++        final history = _DrawHistory.fromJson(entry.value);
++        if (history != null) _games[entry.key as String] = history;
++      }
++    } on FormatException {
++      // Damaged randomization data must not prevent games or progress loading.
++    }
++  }
++
++  List<T> next<T>(String key, Iterable<T> source, String Function(T) identity,
+       {int? count}) {
+     final items = {for (final item in source) identity(item): item};
+     final length = (count ?? items.length).clamp(0, items.length);
+     if (length == 0) return [];
+ 
+     final pool = items.keys.toSet();
+-    final previousPool = _pools[key];
+-    if (previousPool == null ||
+-        previousPool.length != pool.length ||
+-        !previousPool.containsAll(pool)) {
+-      _pools[key] = pool;
+-      _remaining[key] = [];
++    final history = _games.putIfAbsent(key, () => _DrawHistory({}));
++    if (history.pool.length != pool.length || !history.pool.containsAll(pool)) {
++      // Keep pending valid tasks when an app update adds/removes content.
++      final added = pool.difference(history.pool).toList()..shuffle(_random);
++      history.remaining
++        ..removeWhere((id) => !pool.contains(id))
++        ..addAll(added);
++      history.pool = pool;
++      if (!pool.contains(history.first)) history.first = null;
++      if (!pool.contains(history.last)) history.last = null;
+     }
+ 
+-    final remaining = _remaining[key]!;
++    final remaining = history.remaining;
+     final selected = <String>[];
+     while (selected.length < length) {
+       if (remaining.isEmpty) {
+@@ -38,17 +91,74 @@ class GameSessionOrder {
+       // A session spanning two pools must still contain unique tasks.
+       final candidates =
+           remaining.where((id) => !selected.contains(id)).toList();
+-      final preferred = candidates
+-          .where((id) =>
+-              id != (selected.isEmpty ? _previousLast[key] : selected.last) &&
+-              (selected.isNotEmpty || id != _previousFirst[key]))
+-          .toList();
+-      final chosen = preferred.isNotEmpty ? preferred.first : candidates.first;
++      // At rollover, avoiding the previous last task takes priority over
++      // changing the opening task. Never skip pending tasks just for variety.
++      final noRepeat = selected.isEmpty
++          ? candidates.where((id) => id != history.last).toList()
++          : candidates;
++      final preferred = selected.isEmpty
++          ? noRepeat.where((id) => id != history.first).toList()
++          : noRepeat;
++      final chosen = preferred.isNotEmpty
++          ? preferred.first
++          : noRepeat.isNotEmpty
++              ? noRepeat.first
++              : candidates.first;
+       remaining.remove(chosen);
+       selected.add(chosen);
+     }
+-    _previousFirst[key] = selected.first;
+-    _previousLast[key] = selected.last;
++    history.first = selected.first;
++    history.last = selected.last;
++    final prefs = preferences;
++    if (prefs != null) {
++      // Capture now and serialize writes so a rapid replay cannot save an
++      // older queue over a newer one. Failed storage writes leave play usable.
++      _saved = _writes.save(prefs, {
++        storageKey: jsonEncode({
++          'version': 1,
++          'games': {for (final e in _games.entries) e.key: e.value.toJson()},
++        }),
++      });
++    }
+     return [for (final id in selected) items[id]!];
+   }
+ }
++
++class _DrawHistory {
++  _DrawHistory(this.pool, {List<String>? remaining, this.first, this.last})
++      : remaining = remaining ?? [];
++
++  Set<String> pool;
++  final List<String> remaining;
++  String? first, last;
++
++  Map<String, Object?> toJson() => {
++        'pool': pool.toList(),
++        'remaining': remaining,
++        'first': first,
++        'last': last,
++      };
++
++  static _DrawHistory? fromJson(Object? value) {
++    if (value is! Map) return null;
++    final pool = value['pool'], remaining = value['remaining'];
++    if (pool is! List ||
++        remaining is! List ||
++        pool.isEmpty ||
++        pool.any((id) => id is! String) ||
++        remaining.any((id) => id is! String)) {
++      return null;
++    }
++    final ids = pool.cast<String>().toSet();
++    final pending = remaining.cast<String>();
++    if (ids.length != pool.length ||
++        pending.toSet().length != pending.length ||
++        !ids.containsAll(pending)) {
++      return null;
++    }
++    return _DrawHistory(ids,
++        remaining: List.of(pending),
++        first: ids.contains(value['first']) ? value['first'] as String : null,
++        last: ids.contains(value['last']) ? value['last'] as String : null);
++  }
++}
+diff --git a/lib/providers/app_provider.dart b/lib/providers/app_provider.dart
+index e453cc3..8be20ae 100644
+--- a/lib/providers/app_provider.dart
++++ b/lib/providers/app_provider.dart
+@@ -7,6 +7,7 @@ import '../services/preference_write_queue.dart';
+ import '../models/learning_progress.dart';
+ import '../models/word_lesson_progress.dart';
+ import '../models/progress_badge.dart';
++import '../data/game_session_order.dart';
+ import '../models/letter_adventure.dart';
+ import '../models/weekly_learning_summary.dart';
+ import 'package:flutter/material.dart';
+@@ -756,6 +757,7 @@ class AppProvider extends ChangeNotifier {
+     }
+ 
+     if (_disposed) return;
++    GameSessionOrder.initialize(prefs);
+     parentAuth = ParentAuthService(prefs, now: _now);
+     screenTime = ScreenTimeService(prefs, parentAuth, now: _now);
+     screenTime.addListener(_screenTimeChanged);
+diff --git a/lib/screens/alphabet_pictures_screen.dart b/lib/screens/alphabet_pictures_screen.dart
+index 18e5761..c0b18e7 100644
+--- a/lib/screens/alphabet_pictures_screen.dart
++++ b/lib/screens/alphabet_pictures_screen.dart
+@@ -15,6 +15,7 @@ import '../widgets/letter_lesson_page.dart' show AlphabetLetterPicker;
+ import '../widgets/lesson_control_button.dart';
+ import '../widgets/lesson_frame.dart';
+ import '../widgets/lessons_menu_page.dart';
++import '../widgets/lesson_swipe_navigation.dart';
+ 
+ class AlphabetPicturesScreen extends StatefulWidget {
+   const AlphabetPicturesScreen({super.key});
+@@ -140,98 +141,111 @@ class _AlphabetPicturesScreenState extends State<AlphabetPicturesScreen> {
+             builder: (_, __) {
+               final entry = lesson.entry;
+               final enabled = p.isReady && !p.timeLimitReached && !_gridOpen;
+-              return LayoutBuilder(builder: (context, available) {
+-                final scale = MediaQuery.textScalerOf(context).scale(18) / 18;
+-                return SingleChildScrollView(
+-                    child: SizedBox(
+-                        height:
+-                            math.max(available.maxHeight, 310 + 100 * scale),
+-                        child: Column(children: [
+-                          Expanded(child: LayoutBuilder(builder: (_, box) {
+-                            final side = math.min(
+-                                480.0, math.min(box.maxWidth, box.maxHeight));
+-                            return Center(
+-                                child: SizedBox(
+-                                    width: side,
+-                                    height: side,
+-                                    child: LessonFrame(
+-                                        radius: 32,
+-                                        padding: EdgeInsets.all(side * .06),
+-                                        child: Semantics(
+-                                            label: entry.sentence,
+-                                            image: true,
+-                                            child: AnimatedScreenArt(
+-                                                key: ValueKey(
+-                                                    'alphabet-picture-${entry.letter}'),
+-                                                frames: entry.frames,
+-                                                fit: BoxFit.contain,
+-                                                maxDecodeWidth: 720,
+-                                                frameDuration: const Duration(
+-                                                    milliseconds: 450))))));
+-                          })),
+-                          const SizedBox(height: 8),
+-                          Text(entry.sentence,
+-                              key: const ValueKey('alphabet-picture-caption'),
+-                              textAlign: TextAlign.center,
+-                              style: const TextStyle(
+-                                  fontSize: 20,
+-                                  fontWeight: FontWeight.w900,
+-                                  color: KidsUi.ink)),
+-                          const SizedBox(height: 8),
+-                          SizedBox(
+-                              width: 150,
+-                              child: LessonControlButton(
+-                                  key: const ValueKey('alphabet-picture-sound'),
+-                                  label:
+-                                      lesson.playing ? 'Listening...' : 'Sound',
+-                                  icon: Icons.volume_up_rounded,
+-                                  art: LessonButtonArt.sound,
+-                                  onPressed: enabled &&
+-                                          p.voiceEnabled &&
+-                                          lesson.hasRecording &&
+-                                          !lesson.playing
+-                                      ? _replay
+-                                      : null)),
+-                          if (!p.voiceEnabled || lesson.message != null)
+-                            Text(
+-                                !p.voiceEnabled
+-                                    ? 'Audio is turned off.'
+-                                    : lesson.message!,
+-                                textAlign: TextAlign.center,
+-                                style: const TextStyle(
+-                                    fontSize: 12, color: KidsUi.ink)),
+-                          const SizedBox(height: 16),
+-                          Row(
+-                              crossAxisAlignment: CrossAxisAlignment.start,
+-                              children: [
+-                                Expanded(
+-                                    child: LessonControlButton(
+-                                        label: 'Previous',
+-                                        icon: Icons.arrow_back_rounded,
+-                                        art: LessonButtonArt.previous,
+-                                        onPressed: !enabled || lesson.index == 0
+-                                            ? null
+-                                            : () => _select(lesson.index - 1))),
+-                                const SizedBox(width: 8),
+-                                Expanded(
+-                                    child: LessonControlButton(
+-                                        label: 'A\u2013Z Grid',
+-                                        icon: Icons.grid_view_rounded,
+-                                        primary: true,
+-                                        onPressed: enabled ? _openGrid : null)),
+-                                const SizedBox(width: 8),
+-                                Expanded(
+-                                    child: LessonControlButton(
+-                                        label: 'Next',
+-                                        icon: Icons.arrow_forward_rounded,
+-                                        art: LessonButtonArt.next,
+-                                        onPressed: !enabled ||
+-                                                lesson.index == 25
+-                                            ? null
+-                                            : () => _select(lesson.index + 1))),
+-                              ])
+-                        ])));
+-              });
++              final VoidCallback? previous = !enabled || lesson.index == 0
++                  ? null
++                  : () => _select(lesson.index - 1);
++              final VoidCallback? next = !enabled || lesson.index == 25
++                  ? null
++                  : () => _select(lesson.index + 1);
++              return LessonSwipeNavigation(
++                  navigationKey: lesson.index,
++                  enabled: enabled,
++                  onPrevious: previous,
++                  onNext: next,
++                  child: LayoutBuilder(builder: (context, available) {
++                    final scale =
++                        MediaQuery.textScalerOf(context).scale(18) / 18;
++                    return SingleChildScrollView(
++                        child: SizedBox(
++                            height: math.max(
++                                available.maxHeight, 310 + 100 * scale),
++                            child: Column(children: [
++                              Expanded(child: LayoutBuilder(builder: (_, box) {
++                                final side = math.min(480.0,
++                                    math.min(box.maxWidth, box.maxHeight));
++                                return Center(
++                                    child: SizedBox(
++                                        width: side,
++                                        height: side,
++                                        child: LessonFrame(
++                                            radius: 32,
++                                            padding: EdgeInsets.all(side * .06),
++                                            child: Semantics(
++                                                label: entry.sentence,
++                                                image: true,
++                                                child: AnimatedScreenArt(
++                                                    key: ValueKey(
++                                                        'alphabet-picture-${entry.letter}'),
++                                                    frames: entry.frames,
++                                                    fit: BoxFit.contain,
++                                                    maxDecodeWidth: 720,
++                                                    frameDuration:
++                                                        const Duration(
++                                                            milliseconds:
++                                                                450))))));
++                              })),
++                              const SizedBox(height: 8),
++                              Text(entry.sentence,
++                                  key: const ValueKey(
++                                      'alphabet-picture-caption'),
++                                  textAlign: TextAlign.center,
++                                  style: const TextStyle(
++                                      fontSize: 20,
++                                      fontWeight: FontWeight.w900,
++                                      color: KidsUi.ink)),
++                              const SizedBox(height: 8),
++                              SizedBox(
++                                  width: 150,
++                                  child: LessonControlButton(
++                                      key: const ValueKey(
++                                          'alphabet-picture-sound'),
++                                      label: lesson.playing
++                                          ? 'Listening...'
++                                          : 'Sound',
++                                      icon: Icons.volume_up_rounded,
++                                      art: LessonButtonArt.sound,
++                                      onPressed: enabled &&
++                                              p.voiceEnabled &&
++                                              lesson.hasRecording &&
++                                              !lesson.playing
++                                          ? _replay
++                                          : null)),
++                              if (!p.voiceEnabled || lesson.message != null)
++                                Text(
++                                    !p.voiceEnabled
++                                        ? 'Audio is turned off.'
++                                        : lesson.message!,
++                                    textAlign: TextAlign.center,
++                                    style: const TextStyle(
++                                        fontSize: 12, color: KidsUi.ink)),
++                              const SizedBox(height: 16),
++                              Row(
++                                  crossAxisAlignment: CrossAxisAlignment.start,
++                                  children: [
++                                    Expanded(
++                                        child: LessonControlButton(
++                                            label: 'Previous',
++                                            icon: Icons.arrow_back_rounded,
++                                            art: LessonButtonArt.previous,
++                                            onPressed: previous)),
++                                    const SizedBox(width: 8),
++                                    Expanded(
++                                        child: LessonControlButton(
++                                            label: 'A\u2013Z Grid',
++                                            icon: Icons.grid_view_rounded,
++                                            primary: true,
++                                            onPressed:
++                                                enabled ? _openGrid : null)),
++                                    const SizedBox(width: 8),
++                                    Expanded(
++                                        child: LessonControlButton(
++                                            label: 'Next',
++                                            icon: Icons.arrow_forward_rounded,
++                                            art: LessonButtonArt.next,
++                                            onPressed: next)),
++                                  ])
++                            ])));
++                  }));
+             }));
+   }
+ }
+diff --git a/lib/screens/blending_sounds_screen.dart b/lib/screens/blending_sounds_screen.dart
+index ba5cc1f..b882f51 100644
+--- a/lib/screens/blending_sounds_screen.dart
++++ b/lib/screens/blending_sounds_screen.dart
+@@ -15,6 +15,7 @@ import '../widgets/blending_puzzle_piece.dart';
+ import '../widgets/button_sound.dart';
+ import '../widgets/cvc_word_picture.dart';
+ import '../widgets/lessons_menu_page.dart';
++import '../widgets/lesson_swipe_navigation.dart';
+ import '../widgets/lesson_frame.dart';
+ 
+ class BlendingSoundsScreen extends StatefulWidget {
+@@ -200,226 +201,250 @@ class _BlendingSoundsScreenState extends State<BlendingSoundsScreen>
+   Widget build(BuildContext context) {
+     final lesson = _lesson!;
+     final reducedMotion = MediaQuery.disableAnimationsOf(context);
++    final VoidCallback? next = lesson.index == blendingLessonWords.length - 1
++        ? null
++        : () => _navigate(lesson.next);
+     return LessonsMenuPage(
+         title: 'Blending Sounds',
+         introduction: lessonInstructionScripts['blend-intro']!,
+         introductionStatus: _introduction,
+         instruction: _message,
+-        child: Column(children: [
+-          Expanded(child: LayoutBuilder(builder: (context, bounds) {
+-            final pictureHeight = (bounds.maxHeight - 335).clamp(80.0, 200.0);
+-            return SingleChildScrollView(
+-              key: const ValueKey('blending-content'),
+-              child: Column(children: [
+-                if (lesson.phase != BlendingPhase.intro)
+-                  LessonFrame(
+-                    padding: const EdgeInsets.all(12),
+-                    child: Column(children: [
+-                      SizedBox(
+-                          height: pictureHeight,
+-                          width: double.infinity,
+-                          child: CvcWordPicture(word: lesson.word)),
+-                      LayoutBuilder(builder: (context, box) {
+-                        final side = math.min(100.0, (box.maxWidth - 16) / 3);
+-                        return Column(children: [
+-                          Row(
+-                              mainAxisAlignment: MainAxisAlignment.center,
+-                              children: [
+-                                for (var slot = 0; slot < 3; slot++) ...[
+-                                  if (slot > 0)
+-                                    AnimatedContainer(
+-                                        duration: reducedMotion
+-                                            ? Duration.zero
+-                                            : const Duration(milliseconds: 500),
+-                                        width: lesson.joined ? 0 : 8),
+-                                  SizedBox(
+-                                      width: side,
+-                                      height: side,
+-                                      child: DragTarget<int>(
+-                                        onWillAcceptWithDetails: (details) =>
+-                                            _dragEpoch == _epoch &&
+-                                            lesson.canPlace(details.data, slot),
+-                                        onAcceptWithDetails: (details) =>
+-                                            lesson.place(details.data, slot),
+-                                        builder:
+-                                            (context, candidates, rejected) =>
++        child: LessonSwipeNavigation(
++            navigationKey: lesson.index,
++            enabled: _dragging == null && _returning == null,
++            onNext: next,
++            child: Column(children: [
++              Expanded(child: LayoutBuilder(builder: (context, bounds) {
++                final pictureHeight =
++                    (bounds.maxHeight - 335).clamp(80.0, 200.0);
++                return SingleChildScrollView(
++                  key: const ValueKey('blending-content'),
++                  child: Column(children: [
++                    if (lesson.phase != BlendingPhase.intro)
++                      LessonFrame(
++                        padding: const EdgeInsets.all(12),
++                        child: Column(children: [
++                          SizedBox(
++                              height: pictureHeight,
++                              width: double.infinity,
++                              child: CvcWordPicture(word: lesson.word)),
++                          LayoutBuilder(builder: (context, box) {
++                            final side =
++                                math.min(100.0, (box.maxWidth - 16) / 3);
++                            return Column(children: [
++                              Row(
++                                  mainAxisAlignment: MainAxisAlignment.center,
++                                  children: [
++                                    for (var slot = 0; slot < 3; slot++) ...[
++                                      if (slot > 0)
++                                        AnimatedContainer(
++                                            duration: reducedMotion
++                                                ? Duration.zero
++                                                : const Duration(
++                                                    milliseconds: 500),
++                                            width: lesson.joined ? 0 : 8),
++                                      SizedBox(
++                                          width: side,
++                                          height: side,
++                                          child: DragTarget<int>(
++                                            onWillAcceptWithDetails:
++                                                (details) =>
++                                                    _dragEpoch == _epoch &&
++                                                    lesson.canPlace(
++                                                        details.data, slot),
++                                            onAcceptWithDetails: (details) =>
++                                                lesson.place(
++                                                    details.data, slot),
++                                            builder: (context, candidates,
++                                                    rejected) =>
+                                                 BlendingPuzzlePiece(
+-                                          key: ValueKey('blend-slot-$slot'),
+-                                          position: slot,
+-                                          letter: lesson.slots[slot] == null
+-                                              ? null
+-                                              : lesson.word.word[slot],
+-                                          filled: lesson.slots[slot] != null,
+-                                          active: lesson.highlighted == slot ||
+-                                              candidates.isNotEmpty,
+-                                          label: lesson.slots[slot] == null
+-                                              ? 'Empty slot ${slot + 1}. Place selected letter'
+-                                              : '${lesson.word.word[slot]}, slot ${slot + 1}',
+-                                          onPressed: lesson.selected == null
+-                                              ? null
+-                                              : withButtonSound(() =>
+-                                                  lesson.place(
+-                                                      lesson.selected!, slot)),
+-                                        ),
+-                                      )),
+-                                ],
+-                              ]),
+-                          const SizedBox(height: 12),
+-                          if (!lesson.complete)
+-                            Row(
+-                                mainAxisAlignment: MainAxisAlignment.center,
+-                                children: [
+-                                  for (final piece in lesson.order)
+-                                    SizedBox(
+-                                      key: _pieceKeys[piece],
+-                                      width: side,
+-                                      height: side,
+-                                      child: lesson.used(piece)
+-                                          ? const SizedBox.shrink()
+-                                          : Draggable<int>(
+-                                              key: ValueKey(
+-                                                  'blend-piece-$piece'),
+-                                              data: piece,
+-                                              maxSimultaneousDrags:
+-                                                  _dragging != null ||
+-                                                          _returning != null
+-                                                      ? 0
+-                                                      : 1,
+-                                              feedback: Material(
+-                                                  type:
+-                                                      MaterialType.transparency,
+-                                                  child: SizedBox(
+-                                                      width: side,
+-                                                      height: side,
++                                              key: ValueKey('blend-slot-$slot'),
++                                              position: slot,
++                                              letter: lesson.slots[slot] == null
++                                                  ? null
++                                                  : lesson.word.word[slot],
++                                              filled:
++                                                  lesson.slots[slot] != null,
++                                              active:
++                                                  lesson.highlighted == slot ||
++                                                      candidates.isNotEmpty,
++                                              label: lesson.slots[slot] == null
++                                                  ? 'Empty slot ${slot + 1}. Place selected letter'
++                                                  : '${lesson.word.word[slot]}, slot ${slot + 1}',
++                                              onPressed: lesson.selected == null
++                                                  ? null
++                                                  : withButtonSound(() =>
++                                                      lesson.place(
++                                                          lesson.selected!,
++                                                          slot)),
++                                            ),
++                                          )),
++                                    ],
++                                  ]),
++                              const SizedBox(height: 12),
++                              if (!lesson.complete)
++                                Row(
++                                    mainAxisAlignment: MainAxisAlignment.center,
++                                    children: [
++                                      for (final piece in lesson.order)
++                                        SizedBox(
++                                          key: _pieceKeys[piece],
++                                          width: side,
++                                          height: side,
++                                          child: lesson.used(piece)
++                                              ? const SizedBox.shrink()
++                                              : Draggable<int>(
++                                                  key: ValueKey(
++                                                      'blend-piece-$piece'),
++                                                  data: piece,
++                                                  maxSimultaneousDrags:
++                                                      _dragging != null ||
++                                                              _returning != null
++                                                          ? 0
++                                                          : 1,
++                                                  feedback: Material(
++                                                      type: MaterialType
++                                                          .transparency,
++                                                      child: SizedBox(
++                                                          width: side,
++                                                          height: side,
++                                                          child:
++                                                              BlendingPuzzlePiece(
++                                                                  position:
++                                                                      piece,
++                                                                  letter: lesson
++                                                                          .word
++                                                                          .word[
++                                                                      piece],
++                                                                  active: true,
++                                                                  filled:
++                                                                      true))),
++                                                  childWhenDragging:
++                                                      const SizedBox.shrink(),
++                                                  onDragStarted: () =>
++                                                      setState(() {
++                                                    _dragEpoch = _epoch;
++                                                    _dragging = piece;
++                                                  }),
++                                                  onDragEnd: (_) {
++                                                    if (mounted) {
++                                                      setState(() =>
++                                                          _dragging = null);
++                                                    }
++                                                  },
++                                                  onDraggableCanceled: (_,
++                                                          offset) =>
++                                                      unawaited(_returnPiece(
++                                                          piece, offset, side)),
++                                                  child: Opacity(
++                                                      opacity:
++                                                          _returning == piece
++                                                              ? 0
++                                                              : 1,
+                                                       child:
+                                                           BlendingPuzzlePiece(
+-                                                              position: piece,
+-                                                              letter: lesson
+-                                                                  .word
+-                                                                  .word[piece],
+-                                                              active: true,
+-                                                              filled: true))),
+-                                              childWhenDragging:
+-                                                  const SizedBox.shrink(),
+-                                              onDragStarted: () => setState(() {
+-                                                _dragEpoch = _epoch;
+-                                                _dragging = piece;
+-                                              }),
+-                                              onDragEnd: (_) {
+-                                                if (mounted) {
+-                                                  setState(
+-                                                      () => _dragging = null);
+-                                                }
+-                                              },
+-                                              onDraggableCanceled:
+-                                                  (_, offset) => unawaited(
+-                                                      _returnPiece(
+-                                                          piece, offset, side)),
+-                                              child: Opacity(
+-                                                  opacity: _returning == piece
+-                                                      ? 0
+-                                                      : 1,
+-                                                  child: BlendingPuzzlePiece(
+-                                                    position: piece,
+-                                                    letter:
+-                                                        lesson.word.word[piece],
+-                                                    filled: true,
+-                                                    active: lesson.selected ==
+-                                                        piece,
+-                                                    label:
+-                                                        'Select ${lesson.word.word[piece]}',
+-                                                    onPressed: withButtonSound(
+-                                                        () => lesson
+-                                                            .choose(piece)),
+-                                                  )),
+-                                            ),
+-                                    ),
+-                                ])
+-                          else
+-                            Semantics(
+-                                liveRegion: true,
+-                                child: AnimatedScale(
+-                                  scale:
+-                                      lesson.phase == BlendingPhase.complete &&
++                                                        position: piece,
++                                                        letter: lesson
++                                                            .word.word[piece],
++                                                        filled: true,
++                                                        active:
++                                                            lesson.selected ==
++                                                                piece,
++                                                        label:
++                                                            'Select ${lesson.word.word[piece]}',
++                                                        onPressed:
++                                                            withButtonSound(
++                                                                () => lesson
++                                                                    .choose(
++                                                                        piece)),
++                                                      )),
++                                                ),
++                                        ),
++                                    ])
++                              else
++                                Semantics(
++                                    liveRegion: true,
++                                    child: AnimatedScale(
++                                      scale: lesson.phase ==
++                                                  BlendingPhase.complete &&
+                                               !reducedMotion
+                                           ? 1.08
+                                           : 1,
+-                                  duration: reducedMotion
+-                                      ? Duration.zero
+-                                      : const Duration(milliseconds: 450),
+-                                  curve: Curves.easeOutBack,
+-                                  child: Row(
+-                                      mainAxisAlignment:
+-                                          MainAxisAlignment.center,
+-                                      children: [
+-                                        if (lesson.phase ==
+-                                            BlendingPhase.complete)
+-                                          const Icon(Icons.auto_awesome,
+-                                              color: Color(0xFFAD6900)),
+-                                        Flexible(
+-                                            child: Padding(
+-                                                padding:
+-                                                    const EdgeInsets.all(8),
+-                                                child: Text(
+-                                                    lesson.joined
+-                                                        ? lesson.word.word
+-                                                        : lesson.word.word
+-                                                            .split('')
+-                                                            .join(' · '),
+-                                                    key: const ValueKey(
+-                                                        'blend-whole-word'),
+-                                                    style: const TextStyle(
+-                                                        fontSize: 32,
+-                                                        fontWeight:
+-                                                            FontWeight.w900,
+-                                                        color: KidsUi.ink)))),
+-                                        if (lesson.phase ==
+-                                            BlendingPhase.complete)
+-                                          const Icon(Icons.auto_awesome,
+-                                              color: Color(0xFFAD6900)),
+-                                      ]),
+-                                )),
+-                        ]);
+-                      }),
+-                    ]),
+-                  ),
+-                if (!lesson.voiceEnabled || lesson.audioUnavailable)
+-                  Padding(
+-                      padding: const EdgeInsets.only(top: 8),
+-                      child: Text(
+-                          !lesson.voiceEnabled
+-                              ? 'Audio is turned off.'
+-                              : 'Audio unavailable. Tap Hear Again.',
+-                          style: const TextStyle(
+-                              fontSize: 14, color: KidsUi.ink))),
+-                const SizedBox(height: 8),
++                                      duration: reducedMotion
++                                          ? Duration.zero
++                                          : const Duration(milliseconds: 450),
++                                      curve: Curves.easeOutBack,
++                                      child: Row(
++                                          mainAxisAlignment:
++                                              MainAxisAlignment.center,
++                                          children: [
++                                            if (lesson.phase ==
++                                                BlendingPhase.complete)
++                                              const Icon(Icons.auto_awesome,
++                                                  color: Color(0xFFAD6900)),
++                                            Flexible(
++                                                child: Padding(
++                                                    padding:
++                                                        const EdgeInsets.all(8),
++                                                    child: Text(
++                                                        lesson.joined
++                                                            ? lesson.word.word
++                                                            : lesson.word.word
++                                                                .split('')
++                                                                .join(' · '),
++                                                        key: const ValueKey(
++                                                            'blend-whole-word'),
++                                                        style: const TextStyle(
++                                                            fontSize: 32,
++                                                            fontWeight:
++                                                                FontWeight.w900,
++                                                            color:
++                                                                KidsUi.ink)))),
++                                            if (lesson.phase ==
++                                                BlendingPhase.complete)
++                                              const Icon(Icons.auto_awesome,
++                                                  color: Color(0xFFAD6900)),
++                                          ]),
++                                    )),
++                            ]);
++                          }),
++                        ]),
++                      ),
++                    if (!lesson.voiceEnabled || lesson.audioUnavailable)
++                      Padding(
++                          padding: const EdgeInsets.only(top: 8),
++                          child: Text(
++                              !lesson.voiceEnabled
++                                  ? 'Audio is turned off.'
++                                  : 'Audio unavailable. Tap Hear Again.',
++                              style: const TextStyle(
++                                  fontSize: 14, color: KidsUi.ink))),
++                    const SizedBox(height: 8),
++                  ]),
++                );
++              })),
++              const SizedBox(height: 8),
++              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
++                Expanded(
++                    child: _Control(
++                        label: 'Hear Again',
++                        icon: Icons.volume_up_rounded,
++                        primary: true,
++                        onPressed: () => _navigate(lesson.hearAgain))),
++                const SizedBox(width: 6),
++                Expanded(
++                    child: _Control(
++                        label: 'Try Again',
++                        icon: Icons.replay_rounded,
++                        onPressed: () => _navigate(lesson.reset))),
++                const SizedBox(width: 6),
++                Expanded(
++                    child: _Control(
++                        label: 'Next',
++                        icon: Icons.arrow_forward_rounded,
++                        onPressed: next)),
+               ]),
+-            );
+-          })),
+-          const SizedBox(height: 8),
+-          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+-            Expanded(
+-                child: _Control(
+-                    label: 'Hear Again',
+-                    icon: Icons.volume_up_rounded,
+-                    primary: true,
+-                    onPressed: () => _navigate(lesson.hearAgain))),
+-            const SizedBox(width: 6),
+-            Expanded(
+-                child: _Control(
+-                    label: 'Try Again',
+-                    icon: Icons.replay_rounded,
+-                    onPressed: () => _navigate(lesson.reset))),
+-            const SizedBox(width: 6),
+-            Expanded(
+-                child: _Control(
+-                    label: 'Next',
+-                    icon: Icons.arrow_forward_rounded,
+-                    onPressed: lesson.index == blendingLessonWords.length - 1
+-                        ? null
+-                        : () => _navigate(lesson.next))),
+-          ]),
+-        ]));
++            ])));
+   }
+ }
+ 
+diff --git a/lib/screens/cvc_words_screen.dart b/lib/screens/cvc_words_screen.dart
+index edd66f8..dae41d1 100644
+--- a/lib/screens/cvc_words_screen.dart
++++ b/lib/screens/cvc_words_screen.dart
+@@ -15,6 +15,7 @@ import '../widgets/button_sound.dart';
+ import '../widgets/cvc_word_picture.dart';
+ import '../widgets/lessons_menu_page.dart';
+ import '../widgets/lesson_frame.dart';
++import '../widgets/lesson_swipe_navigation.dart';
+ 
+ class CvcWordsScreen extends StatefulWidget {
+   const CvcWordsScreen({super.key, this.controller});
+@@ -127,186 +128,204 @@ class _CvcWordsScreenState extends State<CvcWordsScreen>
+     final lesson = _lesson!;
+     final word = lesson.word;
+     final reducedMotion = MediaQuery.disableAnimationsOf(context);
++    final VoidCallback? previous = lesson.index == 0
++        ? null
++        : () => _navigate(() => lesson.select(lesson.index - 1));
++    final VoidCallback? next = lesson.index == cvcLessonWords.length - 1
++        ? null
++        : () => _navigate(() => lesson.select(lesson.index + 1));
+     return LessonsMenuPage(
+         title: 'CVC Words',
+         introduction: lessonInstructionScripts['cvc-intro']!,
+         introductionStatus: _introduction,
+         instruction: lessonInstructionDefaults['cvc-intro']!,
+-        child: Column(children: [
+-          Expanded(child: LayoutBuilder(builder: (context, box) {
+-            final pictureHeight = (box.maxHeight - 270).clamp(80.0, 220.0);
+-            return SingleChildScrollView(
+-              key: const ValueKey('cvc-content'),
+-              child: Column(children: [
+-                if (lesson.phase != CvcPhase.intro)
+-                  LessonFrame(
+-                    padding: const EdgeInsets.symmetric(
+-                        horizontal: 12, vertical: 12),
+-                    child: Column(children: [
+-                      Text('Short ${word.vowel}',
+-                          style: const TextStyle(
+-                              fontSize: 14,
+-                              color: KidsUi.muted,
+-                              fontWeight: FontWeight.w800)),
+-                      SizedBox(
+-                          height: pictureHeight,
+-                          child: CvcWordPicture(
+-                              key: ValueKey(word.word), word: word)),
+-                      AnimatedScale(
+-                        scale:
+-                            lesson.phase == CvcPhase.complete && !reducedMotion
++        child: LessonSwipeNavigation(
++            navigationKey: lesson.index,
++            onPrevious: previous,
++            onNext: next,
++            child: Column(children: [
++              Expanded(child: LayoutBuilder(builder: (context, box) {
++                final pictureHeight = (box.maxHeight - 270).clamp(80.0, 220.0);
++                return SingleChildScrollView(
++                  key: const ValueKey('cvc-content'),
++                  child: Column(children: [
++                    if (lesson.phase != CvcPhase.intro)
++                      LessonFrame(
++                        padding: const EdgeInsets.symmetric(
++                            horizontal: 12, vertical: 12),
++                        child: Column(children: [
++                          Text('Short ${word.vowel}',
++                              style: const TextStyle(
++                                  fontSize: 14,
++                                  color: KidsUi.muted,
++                                  fontWeight: FontWeight.w800)),
++                          SizedBox(
++                              height: pictureHeight,
++                              child: CvcWordPicture(
++                                  key: ValueKey(word.word), word: word)),
++                          AnimatedScale(
++                            scale: lesson.phase == CvcPhase.complete &&
++                                    !reducedMotion
+                                 ? 1.08
+                                 : 1,
+-                        duration: reducedMotion
+-                            ? Duration.zero
+-                            : const Duration(milliseconds: 450),
+-                        curve: Curves.easeOutBack,
+-                        child: Row(
+-                            mainAxisAlignment: MainAxisAlignment.center,
+-                            children: [
+-                              _Sparkle(
+-                                  visible: lesson.phase == CvcPhase.complete,
+-                                  reducedMotion: reducedMotion),
+-                              Flexible(
+-                                  child: Text(word.word,
+-                                      key: const ValueKey('cvc-whole-word'),
+-                                      style: const TextStyle(
+-                                          fontSize: 38,
+-                                          fontWeight: FontWeight.w900,
+-                                          color: KidsUi.ink))),
+-                              _Sparkle(
+-                                  visible: lesson.phase == CvcPhase.complete,
+-                                  reducedMotion: reducedMotion),
+-                            ]),
+-                      ),
+-                      const SizedBox(height: 12),
+-                      LayoutBuilder(builder: (context, bounds) {
+-                        final scale =
+-                            MediaQuery.textScalerOf(context).scale(32) / 32;
+-                        final cardWidth =
+-                            math.min(100.0, (bounds.maxWidth - 24) / 3);
+-                        final cardHeight = 50 + 38 * scale;
+-                        final gap = 12 * (1 - lesson.blend);
+-                        final joinedWidth = math.max(48.0, 32 * scale + 12);
+-                        final animatedWidth = cardWidth -
+-                            lesson.blend * math.max(0, cardWidth - joinedWidth);
+-                        return SizedBox(
+-                            height: cardHeight,
++                            duration: reducedMotion
++                                ? Duration.zero
++                                : const Duration(milliseconds: 450),
++                            curve: Curves.easeOutBack,
+                             child: Row(
+-                              mainAxisAlignment: MainAxisAlignment.center,
+-                              children: [
+-                                for (var i = 0; i < 3; i++) ...[
+-                                  if (i > 0)
+-                                    AnimatedContainer(
+-                                        width: gap,
+-                                        duration: reducedMotion
+-                                            ? Duration.zero
+-                                            : Duration(
+-                                                milliseconds: lesson.phase ==
+-                                                        CvcPhase.fastBlend
+-                                                    ? 180
+-                                                    : 700)),
+-                                  AnimatedContainer(
+-                                      duration: reducedMotion
+-                                          ? Duration.zero
+-                                          : Duration(
+-                                              milliseconds: lesson.phase ==
+-                                                      CvcPhase.fastBlend
+-                                                  ? 180
+-                                                  : 700),
+-                                      width: animatedWidth,
+-                                      height: cardHeight,
+-                                      child: Semantics(
+-                                        label: 'Hear ${word.word[i]} sound',
+-                                        child: OutlinedButton(
+-                                          key: ValueKey('cvc-letter-$i'),
+-                                          onPressed: withButtonSound(
+-                                              () => lesson.hearLetter(i)),
+-                                          style: OutlinedButton.styleFrom(
+-                                            padding: const EdgeInsets.symmetric(
+-                                                vertical: 6),
+-                                            backgroundColor: lesson
+-                                                        .highlighted ==
+-                                                    i
+-                                                ? const Color(0xFFFFD45C)
+-                                                : i == 1
+-                                                    ? const Color(0xFFF7DDF0)
+-                                                    : const Color(0xFFDEF5FF),
+-                                            foregroundColor: KidsUi.ink,
+-                                            side: BorderSide(
+-                                                color: lesson.highlighted == i
+-                                                    ? const Color(0xFFAA6800)
+-                                                    : const Color(0xFFB9A9D8),
+-                                                width: lesson.highlighted == i
+-                                                    ? 3
+-                                                    : 1),
+-                                            shape: RoundedRectangleBorder(
+-                                                borderRadius:
+-                                                    BorderRadius.circular(16)),
+-                                          ),
+-                                          child: Column(
+-                                              mainAxisAlignment:
+-                                                  MainAxisAlignment.center,
+-                                              children: [
+-                                                Text(word.word[i],
+-                                                    style: const TextStyle(
+-                                                        fontFamily: 'Nunito',
+-                                                        fontSize: 32,
+-                                                        fontWeight:
+-                                                            FontWeight.w900)),
+-                                                const Icon(
+-                                                    Icons.volume_up_rounded,
+-                                                    size: 24),
+-                                              ]),
+-                                        ),
+-                                      )),
+-                                ]
+-                              ],
+-                            ));
+-                      }),
+-                    ]),
+-                  ),
+-                if (!lesson.voiceEnabled || lesson.audioUnavailable)
+-                  Padding(
+-                      padding: const EdgeInsets.only(top: 8),
+-                      child: Text(
+-                          !lesson.voiceEnabled
+-                              ? 'Audio is turned off.'
+-                              : 'Audio unavailable. Tap Hear Again.',
+-                          style: const TextStyle(
+-                              color: KidsUi.ink, fontSize: 14))),
+-                const SizedBox(height: 8),
++                                mainAxisAlignment: MainAxisAlignment.center,
++                                children: [
++                                  _Sparkle(
++                                      visible:
++                                          lesson.phase == CvcPhase.complete,
++                                      reducedMotion: reducedMotion),
++                                  Flexible(
++                                      child: Text(word.word,
++                                          key: const ValueKey('cvc-whole-word'),
++                                          style: const TextStyle(
++                                              fontSize: 38,
++                                              fontWeight: FontWeight.w900,
++                                              color: KidsUi.ink))),
++                                  _Sparkle(
++                                      visible:
++                                          lesson.phase == CvcPhase.complete,
++                                      reducedMotion: reducedMotion),
++                                ]),
++                          ),
++                          const SizedBox(height: 12),
++                          LayoutBuilder(builder: (context, bounds) {
++                            final scale =
++                                MediaQuery.textScalerOf(context).scale(32) / 32;
++                            final cardWidth =
++                                math.min(100.0, (bounds.maxWidth - 24) / 3);
++                            final cardHeight = 50 + 38 * scale;
++                            final gap = 12 * (1 - lesson.blend);
++                            final joinedWidth = math.max(48.0, 32 * scale + 12);
++                            final animatedWidth = cardWidth -
++                                lesson.blend *
++                                    math.max(0, cardWidth - joinedWidth);
++                            return SizedBox(
++                                height: cardHeight,
++                                child: Row(
++                                  mainAxisAlignment: MainAxisAlignment.center,
++                                  children: [
++                                    for (var i = 0; i < 3; i++) ...[
++                                      if (i > 0)
++                                        AnimatedContainer(
++                                            width: gap,
++                                            duration: reducedMotion
++                                                ? Duration.zero
++                                                : Duration(
++                                                    milliseconds: lesson
++                                                                .phase ==
++                                                            CvcPhase.fastBlend
++                                                        ? 180
++                                                        : 700)),
++                                      AnimatedContainer(
++                                          duration: reducedMotion
++                                              ? Duration.zero
++                                              : Duration(
++                                                  milliseconds: lesson.phase ==
++                                                          CvcPhase.fastBlend
++                                                      ? 180
++                                                      : 700),
++                                          width: animatedWidth,
++                                          height: cardHeight,
++                                          child: Semantics(
++                                            label: 'Hear ${word.word[i]} sound',
++                                            child: OutlinedButton(
++                                              key: ValueKey('cvc-letter-$i'),
++                                              onPressed: withButtonSound(
++                                                  () => lesson.hearLetter(i)),
++                                              style: OutlinedButton.styleFrom(
++                                                padding:
++                                                    const EdgeInsets.symmetric(
++                                                        vertical: 6),
++                                                backgroundColor: lesson
++                                                            .highlighted ==
++                                                        i
++                                                    ? const Color(0xFFFFD45C)
++                                                    : i == 1
++                                                        ? const Color(
++                                                            0xFFF7DDF0)
++                                                        : const Color(
++                                                            0xFFDEF5FF),
++                                                foregroundColor: KidsUi.ink,
++                                                side: BorderSide(
++                                                    color:
++                                                        lesson.highlighted == i
++                                                            ? const Color(
++                                                                0xFFAA6800)
++                                                            : const Color(
++                                                                0xFFB9A9D8),
++                                                    width:
++                                                        lesson.highlighted == i
++                                                            ? 3
++                                                            : 1),
++                                                shape: RoundedRectangleBorder(
++                                                    borderRadius:
++                                                        BorderRadius.circular(
++                                                            16)),
++                                              ),
++                                              child: Column(
++                                                  mainAxisAlignment:
++                                                      MainAxisAlignment.center,
++                                                  children: [
++                                                    Text(word.word[i],
++                                                        style: const TextStyle(
++                                                            fontFamily:
++                                                                'Nunito',
++                                                            fontSize: 32,
++                                                            fontWeight:
++                                                                FontWeight
++                                                                    .w900)),
++                                                    const Icon(
++                                                        Icons.volume_up_rounded,
++                                                        size: 24),
++                                                  ]),
++                                            ),
++                                          )),
++                                    ]
++                                  ],
++                                ));
++                          }),
++                        ]),
++                      ),
++                    if (!lesson.voiceEnabled || lesson.audioUnavailable)
++                      Padding(
++                          padding: const EdgeInsets.only(top: 8),
++                          child: Text(
++                              !lesson.voiceEnabled
++                                  ? 'Audio is turned off.'
++                                  : 'Audio unavailable. Tap Hear Again.',
++                              style: const TextStyle(
++                                  color: KidsUi.ink, fontSize: 14))),
++                    const SizedBox(height: 8),
++                  ]),
++                );
++              })),
++              const SizedBox(height: 8),
++              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
++                Expanded(
++                    child: _CvcControl(
++                        label: 'Previous',
++                        icon: Icons.arrow_back_rounded,
++                        onPressed: previous)),
++                const SizedBox(width: 6),
++                Expanded(
++                    child: _CvcControl(
++                        label: 'Hear Again',
++                        icon: Icons.replay_rounded,
++                        primary: true,
++                        onPressed: () => _navigate(() => lesson.start()))),
++                const SizedBox(width: 6),
++                Expanded(
++                    child: _CvcControl(
++                        label: 'Next',
++                        icon: Icons.arrow_forward_rounded,
++                        onPressed: next)),
+               ]),
+-            );
+-          })),
+-          const SizedBox(height: 8),
+-          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+-            Expanded(
+-                child: _CvcControl(
+-                    label: 'Previous',
+-                    icon: Icons.arrow_back_rounded,
+-                    onPressed: lesson.index == 0
+-                        ? null
+-                        : () =>
+-                            _navigate(() => lesson.select(lesson.index - 1)))),
+-            const SizedBox(width: 6),
+-            Expanded(
+-                child: _CvcControl(
+-                    label: 'Hear Again',
+-                    icon: Icons.replay_rounded,
+-                    primary: true,
+-                    onPressed: () => _navigate(() => lesson.start()))),
+-            const SizedBox(width: 6),
+-            Expanded(
+-                child: _CvcControl(
+-                    label: 'Next',
+-                    icon: Icons.arrow_forward_rounded,
+-                    onPressed: lesson.index == cvcLessonWords.length - 1
+-                        ? null
+-                        : () =>
+-                            _navigate(() => lesson.select(lesson.index + 1)))),
+-          ]),
+-        ]));
++            ])));
+   }
+ }
+ 
+diff --git a/lib/screens/home_screen.dart b/lib/screens/home_screen.dart
+index 2ec87cb..4452fcb 100644
+--- a/lib/screens/home_screen.dart
++++ b/lib/screens/home_screen.dart
+@@ -2,6 +2,7 @@ import 'dart:async';
+ import 'package:flutter/material.dart';
+ import 'package:provider/provider.dart';
+ import '../controllers/scene_voice_controller.dart';
++import '../controllers/player_welcome_voice.dart';
+ import '../data/home_village.dart';
+ import '../data/home_narration.dart';
+ import '../data/letter_data.dart';
+@@ -26,9 +27,11 @@ import 'progress_screen.dart';
+ import 'letter_mastery_check_screen.dart';
+ 
+ class HomeScreen extends StatefulWidget {
+-  const HomeScreen({super.key, this.announceTitle = false});
++  const HomeScreen(
++      {super.key, this.announceTitle = false, this.welcomePlayer = false});
+   // Only loading requests the opening cue; returning from a room does not.
+   final bool announceTitle;
++  final bool welcomePlayer;
+   @override
+   State<HomeScreen> createState() => _HomeScreenState();
+ }
+@@ -38,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen>
+   late final _visit = AnimationController(
+       vsync: this, duration: HomeCharacterVisitTiming.duration);
+   SceneVoiceController? _voice;
++  PlayerWelcomeVoice? _welcome;
+   AppProvider? _provider;
+   HomeCategory? _selected;
+   bool _navigating = false, _foreground = true;
+@@ -54,8 +58,10 @@ class _HomeScreenState extends State<HomeScreen>
+   String _idlePromptText = '';
+   bool _wasCurrent = false;
+   bool _titleComplete = false, _titleSpeaking = false;
++  bool _greetingComplete = false;
+   int _titleRequest = 0;
+-  bool get _openingTitle => widget.announceTitle && !_titleComplete;
++  bool get _openingTitle =>
++      (widget.announceTitle || widget.welcomePlayer) && !_titleComplete;
+   bool get _busy => _selected != null || _navigating || _openingTitle;
+   bool get _current =>
+       mounted &&
+@@ -98,6 +104,7 @@ class _HomeScreenState extends State<HomeScreen>
+     final p = _provider = context.watch<AppProvider>();
+     _voice ??= SceneVoiceController(p,
+         isCurrent: () => _current, replayOnResume: false);
++    _welcome ??= PlayerWelcomeVoice(p, isCurrent: () => _current);
+     final animation = ModalRoute.of(context)?.animation;
+     if (_routeAnimation != animation) {
+       _routeAnimation?.removeStatusListener(_routeStatus);
+@@ -141,6 +148,12 @@ class _HomeScreenState extends State<HomeScreen>
+   void _syncIdleRoute() {
+     if (!mounted) return;
+     if (!_current) {
++      if (_titleSpeaking) {
++        _titleRequest++;
++        _titleSpeaking = false;
++        _welcome?.stop();
++        _voice?.stop();
++      }
+       _wasCurrent = false;
+       _cancelIdlePrompt(stopVoice: true);
+       return;
+@@ -162,7 +175,13 @@ class _HomeScreenState extends State<HomeScreen>
+   Future<void> _announceTitle() async {
+     final request = ++_titleRequest;
+     _titleSpeaking = true;
+-    await _voice!.play('home-title');
++    if (!_greetingComplete) {
++      await _welcome!
++          .play(_provider!.studentName, returning: !widget.welcomePlayer);
++      if (!mounted || request != _titleRequest || !_current) return;
++      _greetingComplete = true;
++    }
++    if (widget.announceTitle) await _voice!.play('home-title');
+     if (!mounted || request != _titleRequest) return;
+     _titleSpeaking = false;
+     if (!_current) return;
+@@ -350,6 +369,7 @@ class _HomeScreenState extends State<HomeScreen>
+     if (!_foreground) {
+       _titleRequest++;
+       _titleSpeaking = false;
++      _welcome?.stop();
+       _cancelIdlePrompt(stopVoice: true);
+       _wasCurrent = false;
+       _cancelVisit();
+@@ -367,6 +387,7 @@ class _HomeScreenState extends State<HomeScreen>
+     _routeAnimation?.removeStatusListener(_routeStatus);
+     _secondaryAnimation?.removeStatusListener(_routeStatus);
+     _voice?.dispose();
++    _welcome?.dispose();
+     WidgetsBinding.instance.removeObserver(this);
+     _visit.dispose();
+     super.dispose();
+@@ -392,37 +413,48 @@ class _HomeScreenState extends State<HomeScreen>
+                     behavior: HitTestBehavior.translucent,
+                     child: ListenableBuilder(
+                         listenable: _voice!,
+-                        builder: (_, __) => SchoolHomeScene(
+-                            character: p.studentCharacter,
+-                            name: p.studentName,
+-                            letter: p.recommendedAdventureLetter,
+-                            progressLabel: '',
+-                            level: p.level,
+-                            stars: p.stars,
+-                            xp: p.xp,
+-                            streak: p.streak,
+-                            gameAccess: p.gameAccess,
+-                            busy: _busy || !p.isReady,
+-                            visit: _visit,
+-                            selected: _selected,
+-                            reserveNavigation: true,
+-                            studentSpeech: _voice!.playing &&
+-                                    (_idlePromptSpeaking ||
+-                                        (_selected?.hasHouse ?? false))
+-                                ? SceneDialogue(
+-                                    text: _idlePromptSpeaking
+-                                        ? _idlePromptText
+-                                        : _selected == HomeCategory.lessons
+-                                            ? 'Let’s learn!'
+-                                            : 'Let’s play!',
+-                                    art:
+-                                        'dialogue_box_${p.studentCharacter == 'girl' ? 4 : 1}.png')
+-                                : null,
+-                            onSelect: (category) => unawaited(
+-                                _selectCategory(navigationContext, category)),
+-                            onCharacter: () => unawaited(_editCharacter()),
+-                            onSettings: () => unawaited(_editCharacter()),
+-                            onContinue: () => unawaited(
+-                                _continueLearning(navigationContext))))))));
++                        builder: (_, __) => ListenableBuilder(
++                            listenable: _welcome!,
++                            builder: (_, __) => SchoolHomeScene(
++                                character: p.studentCharacter,
++                                name: p.studentName,
++                                letter: p.recommendedAdventureLetter,
++                                progressLabel: '',
++                                level: p.level,
++                                stars: p.stars,
++                                xp: p.xp,
++                                streak: p.streak,
++                                gameAccess: p.gameAccess,
++                                busy: _busy || !p.isReady,
++                                visit: _visit,
++                                selected: _selected,
++                                reserveNavigation: true,
++                                studentSpeech: _welcome!.playing
++                                    ? SceneDialogue(
++                                        key: const ValueKey(
++                                            'player-welcome-dialogue'),
++                                        text: _welcome!.text,
++                                        art:
++                                            'dialogue_box_${p.studentCharacter == 'girl' ? 4 : 1}.png')
++                                    : _voice!.playing &&
++                                            (_idlePromptSpeaking ||
++                                                (_selected?.hasHouse ?? false))
++                                        ? SceneDialogue(
++                                            text: _idlePromptSpeaking
++                                                ? _idlePromptText
++                                                : _selected ==
++                                                        HomeCategory.lessons
++                                                    ? 'Let’s learn!'
++                                                    : 'Let’s play!',
++                                            art:
++                                                'dialogue_box_${p.studentCharacter == 'girl' ? 4 : 1}.png')
++                                        : null,
++                                onSelect: (category) => unawaited(
++                                    _selectCategory(
++                                        navigationContext, category)),
++                                onCharacter: () => unawaited(_editCharacter()),
++                                onSettings: () => unawaited(_editCharacter()),
++                                onContinue: () => unawaited(_continueLearning(
++                                    navigationContext)))))))));
+   }
+ }
+diff --git a/lib/screens/vowel_sounds_screen.dart b/lib/screens/vowel_sounds_screen.dart
+index 518951b..fc6fa27 100644
+--- a/lib/screens/vowel_sounds_screen.dart
++++ b/lib/screens/vowel_sounds_screen.dart
+@@ -11,6 +11,7 @@ import '../widgets/learner_widgets.dart';
+ import '../widgets/lesson_control_button.dart';
+ import '../widgets/lessons_menu_page.dart';
+ import '../widgets/lesson_frame.dart';
++import '../widgets/lesson_swipe_navigation.dart';
+ 
+ class VowelSoundsScreen extends StatefulWidget {
+   const VowelSoundsScreen({super.key});
+@@ -51,125 +52,137 @@ class _VowelSoundsScreenState extends State<VowelSoundsScreen>
+   }
+ 
+   @override
+-  Widget build(BuildContext context) => LessonsMenuPage(
+-      title: 'Short Vowel Sounds',
+-      introduction: lessonInstructionScripts[lessonInstructionPhrase]!,
+-      introductionStatus: lessonIntroductionStatus,
+-      instruction: lessonInstructionDefaults[lessonInstructionPhrase]!,
+-      child: Column(children: [
+-        Expanded(child: LayoutBuilder(builder: (context, box) {
+-          final pictureHeight = (box.maxHeight - 240).clamp(120.0, 330.0);
+-          return SingleChildScrollView(
+-              child: Column(children: [
+-            const Text('Meet the Vowels!',
+-                style: TextStyle(fontSize: 15, color: KidsUi.ink)),
+-            const SizedBox(height: 10),
+-            Row(children: [
+-              for (var i = 0; i < _vowels.length; i++)
+-                Expanded(
+-                  child: Padding(
+-                    padding: const EdgeInsets.symmetric(horizontal: 2),
+-                    child: Semantics(
+-                        selected: i == _index,
+-                        label: 'Choose vowel ${_vowels[i]}',
+-                        child: OutlinedButton(
+-                          key: ValueKey('vowel-tab-${_vowels[i]}'),
+-                          onPressed: withButtonSound(() => _select(i)),
+-                          style: OutlinedButton.styleFrom(
+-                              padding: const EdgeInsets.symmetric(vertical: 6),
+-                              minimumSize: const Size(48, 54),
+-                              backgroundColor: i == _index
+-                                  ? const Color(0xFF7052CA)
+-                                  : KidsUi.cardSurface,
+-                              foregroundColor:
+-                                  i == _index ? Colors.white : KidsUi.ink,
+-                              side: BorderSide(
+-                                  color: i == _index
+-                                      ? const Color(0xFFFFD76A)
+-                                      : Colors.white,
+-                                  width: 2),
+-                              shape: RoundedRectangleBorder(
+-                                  borderRadius: BorderRadius.circular(16))),
+-                          child: Column(children: [
+-                            Text(_vowels[i],
+-                                style: const TextStyle(
+-                                    fontFamily: 'Nunito',
+-                                    fontSize: 22,
+-                                    fontWeight: FontWeight.w900)),
+-                            Container(
+-                                height: 3,
+-                                width: 18,
+-                                decoration: BoxDecoration(
+-                                    color: i == _index
+-                                        ? const Color(0xFFFFD76A)
+-                                        : Colors.transparent,
+-                                    borderRadius: BorderRadius.circular(3))),
+-                          ]),
+-                        )),
++  Widget build(BuildContext context) {
++    final VoidCallback? previous =
++        _index == 0 ? null : () => _select(_index - 1);
++    final VoidCallback? next = _index == 4 ? null : () => _select(_index + 1);
++    return LessonsMenuPage(
++        title: 'Short Vowel Sounds',
++        introduction: lessonInstructionScripts[lessonInstructionPhrase]!,
++        introductionStatus: lessonIntroductionStatus,
++        instruction: lessonInstructionDefaults[lessonInstructionPhrase]!,
++        child: LessonSwipeNavigation(
++            navigationKey: _index,
++            onPrevious: previous,
++            onNext: next,
++            child: Column(children: [
++              Expanded(child: LayoutBuilder(builder: (context, box) {
++                final pictureHeight = (box.maxHeight - 240).clamp(120.0, 330.0);
++                return SingleChildScrollView(
++                    child: Column(children: [
++                  const Text('Meet the Vowels!',
++                      style: TextStyle(fontSize: 15, color: KidsUi.ink)),
++                  const SizedBox(height: 10),
++                  Row(children: [
++                    for (var i = 0; i < _vowels.length; i++)
++                      Expanded(
++                        child: Padding(
++                          padding: const EdgeInsets.symmetric(horizontal: 2),
++                          child: Semantics(
++                              selected: i == _index,
++                              label: 'Choose vowel ${_vowels[i]}',
++                              child: OutlinedButton(
++                                key: ValueKey('vowel-tab-${_vowels[i]}'),
++                                onPressed: withButtonSound(() => _select(i)),
++                                style: OutlinedButton.styleFrom(
++                                    padding:
++                                        const EdgeInsets.symmetric(vertical: 6),
++                                    minimumSize: const Size(48, 54),
++                                    backgroundColor: i == _index
++                                        ? const Color(0xFF7052CA)
++                                        : KidsUi.cardSurface,
++                                    foregroundColor:
++                                        i == _index ? Colors.white : KidsUi.ink,
++                                    side: BorderSide(
++                                        color: i == _index
++                                            ? const Color(0xFFFFD76A)
++                                            : Colors.white,
++                                        width: 2),
++                                    shape: RoundedRectangleBorder(
++                                        borderRadius:
++                                            BorderRadius.circular(16))),
++                                child: Column(children: [
++                                  Text(_vowels[i],
++                                      style: const TextStyle(
++                                          fontFamily: 'Nunito',
++                                          fontSize: 22,
++                                          fontWeight: FontWeight.w900)),
++                                  Container(
++                                      height: 3,
++                                      width: 18,
++                                      decoration: BoxDecoration(
++                                          color: i == _index
++                                              ? const Color(0xFFFFD76A)
++                                              : Colors.transparent,
++                                          borderRadius:
++                                              BorderRadius.circular(3))),
++                                ]),
++                              )),
++                        ),
++                      )
++                  ]),
++                  const SizedBox(height: 12),
++                  SizedBox(
++                    width: double.infinity,
++                    height: pictureHeight,
++                    child: LessonFrame(
++                        radius: 32,
++                        child: Semantics(
++                            label:
++                                'Uppercase $_letter, lowercase ${_letter.toLowerCase()}',
++                            child: ExcludeSemantics(
++                                child: Column(children: [
++                              Expanded(
++                                  child: Image.asset(
++                                      'assets/images/letters/${_letter.toLowerCase()}.webp',
++                                      key: const ValueKey('vowel-letter'),
++                                      fit: BoxFit.contain,
++                                      cacheWidth: 480)),
++                              SizedBox(
++                                  height: 42,
++                                  child: FittedBox(
++                                      child: Text(_letter.toLowerCase(),
++                                          style: const TextStyle(
++                                              fontFamily: 'Nunito',
++                                              fontSize: 38,
++                                              fontWeight: FontWeight.w900,
++                                              color: KidsUi.ink)))),
++                            ])))),
+                   ),
+-                )
+-            ]),
+-            const SizedBox(height: 12),
+-            SizedBox(
+-              width: double.infinity,
+-              height: pictureHeight,
+-              child: LessonFrame(
+-                  radius: 32,
+-                  child: Semantics(
+-                      label:
+-                          'Uppercase $_letter, lowercase ${_letter.toLowerCase()}',
+-                      child: ExcludeSemantics(
+-                          child: Column(children: [
+-                        Expanded(
+-                            child: Image.asset(
+-                                'assets/images/letters/${_letter.toLowerCase()}.webp',
+-                                key: const ValueKey('vowel-letter'),
+-                                fit: BoxFit.contain,
+-                                cacheWidth: 480)),
+-                        SizedBox(
+-                            height: 42,
+-                            child: FittedBox(
+-                                child: Text(_letter.toLowerCase(),
+-                                    style: const TextStyle(
+-                                        fontFamily: 'Nunito',
+-                                        fontSize: 38,
+-                                        fontWeight: FontWeight.w900,
+-                                        color: KidsUi.ink)))),
+-                      ])))),
+-            ),
+-            const SizedBox(height: 10),
+-            const Text('Hear the vowel sound',
+-                textAlign: TextAlign.center,
+-                style: TextStyle(
+-                    fontSize: 16,
+-                    fontWeight: FontWeight.w800,
+-                    color: KidsUi.ink)),
+-            AudioButton(
+-                key: ValueKey('vowel-sound-$_letter'),
+-                phrase: 'lesson-sound-$_letter',
+-                onBeforePlay: stopLessonInstruction,
+-                onPlayed: () => _provider!
+-                    .recordLetterListening(_letter, LetterListeningKind.sound),
+-                label: '/${_letter.toLowerCase()}/',
+-                lessonArt: true),
+-            const SizedBox(height: 8),
+-          ]));
+-        })),
+-        const SizedBox(height: 8),
+-        Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+-          Expanded(
+-              child: LessonControlButton(
+-                  label: 'Previous',
+-                  icon: Icons.arrow_back_rounded,
+-                  art: LessonButtonArt.previous,
+-                  onPressed: _index == 0 ? null : () => _select(_index - 1))),
+-          const SizedBox(width: 24),
+-          Expanded(
+-              child: LessonControlButton(
+-                  label: 'Next',
+-                  icon: Icons.arrow_forward_rounded,
+-                  art: LessonButtonArt.next,
+-                  onPressed: _index == 4 ? null : () => _select(_index + 1))),
+-        ]),
+-      ]));
++                  const SizedBox(height: 10),
++                  const Text('Hear the vowel sound',
++                      textAlign: TextAlign.center,
++                      style: TextStyle(
++                          fontSize: 16,
++                          fontWeight: FontWeight.w800,
++                          color: KidsUi.ink)),
++                  AudioButton(
++                      key: ValueKey('vowel-sound-$_letter'),
++                      phrase: 'lesson-sound-$_letter',
++                      onBeforePlay: stopLessonInstruction,
++                      onPlayed: () => _provider!.recordLetterListening(
++                          _letter, LetterListeningKind.sound),
++                      label: '/${_letter.toLowerCase()}/',
++                      lessonArt: true),
++                  const SizedBox(height: 8),
++                ]));
++              })),
++              const SizedBox(height: 8),
++              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
++                Expanded(
++                    child: LessonControlButton(
++                        label: 'Previous',
++                        icon: Icons.arrow_back_rounded,
++                        art: LessonButtonArt.previous,
++                        onPressed: previous)),
++                const SizedBox(width: 24),
++                Expanded(
++                    child: LessonControlButton(
++                        label: 'Next',
++                        icon: Icons.arrow_forward_rounded,
++                        art: LessonButtonArt.next,
++                        onPressed: next)),
++              ]),
++            ])));
++  }
+ }
+diff --git a/lib/screens/welcome_screen.dart b/lib/screens/welcome_screen.dart
+index a7a803e..f021241 100644
+--- a/lib/screens/welcome_screen.dart
++++ b/lib/screens/welcome_screen.dart
+@@ -192,7 +192,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
+     if (_leaving) return;
+     setState(() => _leaving = true);
+     _voice!.stop();
+-    unawaited(LearnerNavigation.open(context, const HomeScreen(),
++    unawaited(LearnerNavigation.open(
++        context, const HomeScreen(welcomePlayer: true),
+         replace: true, cloudTransition: true));
+   }
+ 
+diff --git a/lib/widgets/letter_lesson_page.dart b/lib/widgets/letter_lesson_page.dart
+index 575e9fa..7001f3e 100644
+--- a/lib/widgets/letter_lesson_page.dart
++++ b/lib/widgets/letter_lesson_page.dart
+@@ -14,6 +14,7 @@ import 'learner_widgets.dart';
+ import 'lessons_menu_page.dart';
+ import 'lesson_control_button.dart';
+ import 'lesson_frame.dart';
++import 'lesson_swipe_navigation.dart';
+ 
+ enum LetterLessonAudio { name, sound }
+ 
+@@ -92,91 +93,100 @@ class _LetterLessonPageState extends State<LetterLessonPage>
+   }
+ 
+   @override
+-  Widget build(BuildContext context) => LessonsMenuPage(
+-        title: widget.audio == LetterLessonAudio.name
+-            ? 'Letter Recognition'
+-            : 'Letter Sounds',
+-        introduction: lessonInstructionScripts[lessonInstructionPhrase]!,
+-        introductionStatus: lessonIntroductionStatus,
+-        instruction: lessonInstructionDefaults[lessonInstructionPhrase]!,
+-        child: LayoutBuilder(builder: (context, available) {
+-          final scale = MediaQuery.textScalerOf(context).scale(18) / 18;
+-          final minimumHeight = 250 + 62 * scale;
+-          final content = SizedBox(
+-              height: math.max(available.maxHeight, minimumHeight),
+-              child: Column(children: [
+-                Expanded(
+-                  child: LayoutBuilder(builder: (context, box) {
+-                    final side =
+-                        math.min(480.0, math.min(box.maxWidth, box.maxHeight));
+-                    return Center(
+-                      child: SizedBox(
+-                        width: side,
+-                        height: side,
+-                        child: LessonFrame(
+-                            radius: 32,
+-                            padding: EdgeInsets.all(side * .08),
+-                            child: Image.asset(
+-                              'assets/images/letters/${_letter.toLowerCase()}.webp',
+-                              key: const ValueKey('recognition-letter'),
+-                              fit: BoxFit.contain,
+-                              semanticLabel: 'Letter $_letter',
+-                              cacheWidth: (side *
+-                                      MediaQuery.devicePixelRatioOf(context))
+-                                  .ceil(),
+-                            )),
+-                      ),
+-                    );
+-                  }),
+-                ),
+-                const SizedBox(height: 12),
+-                AudioButton(
+-                  key: ValueKey(
+-                      'letter-${widget.audio.name}-$_index-$_audioVersion'),
+-                  phrase: _audioPhrase,
+-                  onBeforePlay: stopLessonInstruction,
+-                  onPlayed: () => _provider!.recordLetterListening(
+-                      _letter,
+-                      widget.audio == LetterLessonAudio.name
+-                          ? LetterListeningKind.name
+-                          : LetterListeningKind.sound),
+-                  label: 'Sound',
+-                  icon: Icons.volume_up_rounded,
+-                  color: const Color(0xFF087F86),
+-                  lessonArt: true,
+-                ),
+-                const SizedBox(height: 20),
+-                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
++  Widget build(BuildContext context) {
++    final VoidCallback? previous =
++        _index == 0 ? null : () => _select(_index - 1);
++    final VoidCallback? next = _index == 25 ? null : () => _select(_index + 1);
++    return LessonsMenuPage(
++      title: widget.audio == LetterLessonAudio.name
++          ? 'Letter Recognition'
++          : 'Letter Sounds',
++      introduction: lessonInstructionScripts[lessonInstructionPhrase]!,
++      introductionStatus: lessonIntroductionStatus,
++      instruction: lessonInstructionDefaults[lessonInstructionPhrase]!,
++      child: LessonSwipeNavigation(
++          navigationKey: _index,
++          enabled: !_gridOpen,
++          onPrevious: previous,
++          onNext: next,
++          child: LayoutBuilder(builder: (context, available) {
++            final scale = MediaQuery.textScalerOf(context).scale(18) / 18;
++            final minimumHeight = 250 + 62 * scale;
++            final content = SizedBox(
++                height: math.max(available.maxHeight, minimumHeight),
++                child: Column(children: [
+                   Expanded(
+-                    child: _LetterNavigationButton(
+-                      label: 'Previous',
+-                      icon: Icons.arrow_back_rounded,
+-                      onPressed: _index == 0 ? null : () => _select(_index - 1),
+-                    ),
++                    child: LayoutBuilder(builder: (context, box) {
++                      final side = math.min(
++                          480.0, math.min(box.maxWidth, box.maxHeight));
++                      return Center(
++                        child: SizedBox(
++                          width: side,
++                          height: side,
++                          child: LessonFrame(
++                              radius: 32,
++                              padding: EdgeInsets.all(side * .08),
++                              child: Image.asset(
++                                'assets/images/letters/${_letter.toLowerCase()}.webp',
++                                key: const ValueKey('recognition-letter'),
++                                fit: BoxFit.contain,
++                                semanticLabel: 'Letter $_letter',
++                                cacheWidth: (side *
++                                        MediaQuery.devicePixelRatioOf(context))
++                                    .ceil(),
++                              )),
++                        ),
++                      );
++                    }),
+                   ),
+-                  const SizedBox(width: 8),
+-                  Expanded(
+-                    child: _LetterNavigationButton(
+-                      label: 'A–Z Grid',
+-                      icon: Icons.grid_view_rounded,
+-                      primary: true,
+-                      onPressed: _gridOpen ? null : _openGrid,
+-                    ),
++                  const SizedBox(height: 12),
++                  AudioButton(
++                    key: ValueKey(
++                        'letter-${widget.audio.name}-$_index-$_audioVersion'),
++                    phrase: _audioPhrase,
++                    onBeforePlay: stopLessonInstruction,
++                    onPlayed: () => _provider!.recordLetterListening(
++                        _letter,
++                        widget.audio == LetterLessonAudio.name
++                            ? LetterListeningKind.name
++                            : LetterListeningKind.sound),
++                    label: 'Sound',
++                    icon: Icons.volume_up_rounded,
++                    color: const Color(0xFF087F86),
++                    lessonArt: true,
+                   ),
+-                  const SizedBox(width: 8),
+-                  Expanded(
+-                    child: _LetterNavigationButton(
+-                      label: 'Next',
+-                      icon: Icons.arrow_forward_rounded,
+-                      onPressed:
+-                          _index == 25 ? null : () => _select(_index + 1),
++                  const SizedBox(height: 20),
++                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
++                    Expanded(
++                      child: _LetterNavigationButton(
++                        label: 'Previous',
++                        icon: Icons.arrow_back_rounded,
++                        onPressed: previous,
++                      ),
+                     ),
+-                  ),
+-                ]),
+-              ]));
+-          return SingleChildScrollView(child: content);
+-        }),
+-      );
++                    const SizedBox(width: 8),
++                    Expanded(
++                      child: _LetterNavigationButton(
++                        label: 'A–Z Grid',
++                        icon: Icons.grid_view_rounded,
++                        primary: true,
++                        onPressed: _gridOpen ? null : _openGrid,
++                      ),
++                    ),
++                    const SizedBox(width: 8),
++                    Expanded(
++                      child: _LetterNavigationButton(
++                        label: 'Next',
++                        icon: Icons.arrow_forward_rounded,
++                        onPressed: next,
++                      ),
++                    ),
++                  ]),
++                ]));
++            return SingleChildScrollView(child: content);
++          })),
++    );
++  }
+ }
+ 
+ class _LetterNavigationButton extends LessonControlButton {
+diff --git a/test/home_full_flow_test.dart b/test/home_full_flow_test.dart
+index bde8294..8c541a2 100644
+--- a/test/home_full_flow_test.dart
++++ b/test/home_full_flow_test.dart
+@@ -156,6 +156,11 @@ void main() {
+       expect(p.studentName, 'Sam');
+       expect(p.welcomeCompleted, true);
+ 
++      // Personalized welcome (or unavailable-voice fallback) completes before
++      // Home begins its existing five-second idle countdown.
++      await waitForVoice(t,
++          () => !t.widget<SchoolHomeScene>(find.byType(SchoolHomeScene)).busy);
++
+       final idle = character == 'girl'
+           ? 'girl_automatic_prompt_1.mp3'
+           : 'boy_automatic_prompt_4.mp3';
+diff --git a/test/learner_ui_test.dart b/test/learner_ui_test.dart
+index 92d6379..a7ca9a7 100644
+--- a/test/learner_ui_test.dart
++++ b/test/learner_ui_test.dart
+@@ -27,6 +27,7 @@ import 'package:kidsphonics/data/rumbled_words_data.dart';
+ import 'package:kidsphonics/screens/voice_recognition_screen.dart';
+ import 'package:kidsphonics/widgets/learner_widgets.dart';
+ import 'package:kidsphonics/widgets/game_word_picture.dart';
++import 'package:kidsphonics/widgets/speech_practice_design.dart';
+ import 'learning_progress_test.dart' show mockProgressAudio;
+ import 'rumbled_words_swap_helpers.dart';
+ import 'phonics_quiz_test_helpers.dart';
+@@ -255,7 +256,7 @@ void main() {
+     await close(t, p);
+   });
+   testWidgets(
+-      'speech explains permission before any request and avoids pronunciation claims',
++      'speech keeps instructions above the activity and requests permission only on tap',
+       (t) async {
+     var permissions = 0;
+     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+@@ -268,12 +269,17 @@ void main() {
+     final p = await mount(t, const VoiceRecognitionScreen());
+     expect(find.byType(VoiceRecognitionScreen), findsOneWidget);
+     expect(find.byType(LearnerHeader), findsNothing);
++    // Instructions live in the top dialogue; the old bottom guide was removed.
++    final guide = find.byKey(const ValueKey('game-instruction-guide'));
++    expect(guide, findsOneWidget);
+     expect(
+-        find.text(
+-            'KidsPhonics uses the microphone only for Speak & Recognize.'),
+-        findsOneWidget);
+-    expect(find.text('Your voice is used to recognize the word you say.'),
++        find.descendant(
++            of: guide,
++            matching:
++                find.text('Tap Start Listening and say the word clearly!')),
+         findsOneWidget);
++    expect(t.getRect(guide).bottom,
++        lessThan(t.getRect(find.byType(SpeechPictureCard)).top));
+     expect(find.textContaining('Pronunciation'), findsNothing);
+     expect(permissions, 0);
+     await t.ensureVisible(find.text('Start Listening'));
+@@ -648,6 +654,9 @@ void main() {
+   });
+   testWidgets('quiz submits once and advances after correct and wrong answers',
+       (t) async {
++    // This is a muted submission/auto-advance test. Mute effects as well as
++    // speech: the no-op audio mock does not emit native preparation events.
++    SharedPreferences.setMockInitialValues({'voice': false, 'sfx': false});
+     final p = await mount(
+         t,
+         Builder(
+@@ -658,8 +667,6 @@ void main() {
+                     child: const Text('Open game')))));
+     await t.tap(find.text('Open game'));
+     await t.pumpAndSettle();
+-    await t.runAsync(() => p.toggleVoice());
+-    await t.pumpAndSettle();
+     final roundCount = GameSessionOrder.roundLength(Difficulty.easy);
+     for (var i = 0; i < roundCount; i++) {
+       final q = shownQuiz(t);
+diff --git a/test/phonics_quiz_test_helpers.dart b/test/phonics_quiz_test_helpers.dart
+index aa002af..bdcd128 100644
+--- a/test/phonics_quiz_test_helpers.dart
++++ b/test/phonics_quiz_test_helpers.dart
+@@ -40,4 +40,9 @@ Future<void> finishMutedQuizFeedback(WidgetTester t) async {
+         .runAsync(() => Future<void>.delayed(const Duration(milliseconds: 5)));
+     await t.pump(const Duration(milliseconds: 100));
+   }
++  final session = t.state<GameSessionUi>(find.byType(PhonicsQuizScreen));
++  final view =
++      t.widget<PhonicsQuizQuestionView>(find.byType(PhonicsQuizQuestionView));
++  expect(session.resultOpen || !view.submitted, isTrue,
++      reason: 'Feedback must finish before the test submits another answer');
+ }

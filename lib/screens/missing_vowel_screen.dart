@@ -1,4 +1,3 @@
-import '../widgets/game_feedback_art.dart';
 import '../widgets/game_design.dart';
 import '../data/game_session_order.dart';
 import '../widgets/word_game_layout.dart';
@@ -6,6 +5,7 @@ import '../widgets/game_instruction_guide.dart';
 import '../widgets/game_mascot_coach.dart';
 import '../widgets/activity_round_header.dart';
 import '../data/missing_vowel_sounds.dart';
+import '../services/phonics_audio_service.dart';
 import 'dart:async';
 // lib/screens/missing_vowel_screen.dart
 //
@@ -42,6 +42,7 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
   bool _answered = false;
   bool _introFinished = false, _pendingSound = true, _reading = false;
   bool _soundScheduled = false;
+  bool _pendingAnswerWord = false;
   int _soundStep = 0, _soundRun = 0;
   Set<int> _glowing = {};
   Timer? _glowTimer;
@@ -61,6 +62,10 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
       count: GameSessionOrder.roundLength(widget.difficulty));
   List<String> get _vowels => vowelChoicesFor(widget.difficulty, _puzzle.vowel);
   VowelPuzzle get _puzzle => _puzzles[_index];
+  String get _vowelSoundPhrase {
+    final steps = missingVowelSoundSteps(_puzzle.word);
+    return steps.isEmpty ? 'missing-vowel-unavailable' : steps.single.phrase;
+  }
 
   @override
   void initState() {
@@ -180,7 +185,12 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
     _soundScheduled = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _soundScheduled = false;
-      if (mounted) unawaited(_playSounds());
+      if (!mounted) return;
+      if (_pendingAnswerWord && _vowelLanded) {
+        unawaited(_readCompletedWord());
+      } else {
+        unawaited(_playSounds());
+      }
     });
     WidgetsBinding.instance.ensureVisualUpdate();
   }
@@ -193,6 +203,7 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
 
   Future<void> _playSounds() async {
     if (!_introFinished ||
+        _answered ||
         !_pendingSound ||
         _reading ||
         !canAdvanceGameFeedback ||
@@ -201,6 +212,11 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
     }
     final run = ++_soundRun;
     final steps = missingVowelSoundSteps(_puzzle.word);
+    if (steps.isEmpty ||
+        PhonicsAudioService.assetForPhrase(steps.single.phrase) == null) {
+      _pendingSound = false;
+      return;
+    }
     bool current() => mounted && run == _soundRun;
     setState(() => _reading = true);
     gameNarration.updateEnvironment(enabled: true, active: true);
@@ -210,7 +226,7 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
       while (_soundStep < steps.length) {
         if (!canAdvanceGameFeedback || !gameNarration.enabled) return;
         final step = steps[_soundStep];
-        setState(() => _glowing = step.positions.toSet());
+        setState(() => _glowing = {_puzzle.display.split(' ').indexOf('_')});
         final hold = _holdGlow();
         final playback = gameNarration.word(step.phrase);
         final audioGeneration = gameNarration.generation;
@@ -235,7 +251,9 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
   }
 
   void _repeatSounds() {
-    if (_reading || !canAdvanceGameFeedback) return;
+    if (_answered || _reading || !canAdvanceGameFeedback) {
+      return;
+    }
     _stopSounds();
     _soundStep = 0;
     _pendingSound = true;
@@ -264,40 +282,78 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
     super.dispose();
   }
 
-  void _pick(String vowel) async {
+  void _pick(String vowel) {
     if (_answered || _picked != null || resultOpen) return;
     _stopSounds();
-    final isCorrect = vowel == _puzzle.vowel;
+    final correct = vowel == _puzzle.vowel;
     setState(() {
       _picked = vowel;
+      _answered = true;
+      _pendingAnswerWord = correct;
       _vowelLanded = false;
     });
-    unawaited(_flyVowel(vowel));
+    recordGameAnswer(
+        reviewTarget: ReviewTarget.vowel(_puzzle.vowel),
+        correct: correct,
+        itemId: 'vowel-$_index',
+        prompt: 'Missing vowel',
+        selected: vowel,
+        expected: _puzzle.vowel,
+        word: _puzzle.word,
+        highlightedIndex: _puzzle.word.indexOf(_puzzle.vowel));
+    if (correct) awardGameXp((8 * widget.difficulty.xpMultiplier).round());
+    unawaited(_animateAndAdvance());
+  }
 
-    recordGameAnswer(correct: isCorrect);
-    if (isCorrect) {
-      setState(() {
-        _answered = true;
-      });
-      playGameCorrect();
-      awardGameXp((8 * widget.difficulty.xpMultiplier).round());
-      awardGameStar();
-      await Future.delayed(const Duration(milliseconds: 700));
+  Future<void> _animateAndAdvance() async {
+    await _flyVowel(_picked!);
+    if (!mounted || resultOpen) return;
+    if (_pendingAnswerWord) {
+      await _readCompletedWord();
     } else {
-      playGameWrong();
-      await Future.delayed(const Duration(milliseconds: 700));
-      await Future.delayed(const Duration(milliseconds: 600));
-      if (mounted) {
-        _clearVowelFlight();
-        setState(() {
-          _picked = null;
-          _vowelLanded = false;
-        });
+      scheduleGameAdvance(_next);
+    }
+  }
+
+  Future<void> _readCompletedWord() async {
+    if (!_pendingAnswerWord ||
+        !_vowelLanded ||
+        _reading ||
+        !canAdvanceGameFeedback) {
+      return;
+    }
+    final provider = context.read<AppProvider>();
+    if (!provider.voiceEnabled) {
+      _pendingAnswerWord = false;
+      scheduleGameAdvance(_next);
+      return;
+    }
+    final run = ++_soundRun;
+    bool current() => mounted && run == _soundRun;
+    setState(() => _reading = true);
+    gameNarration.updateEnvironment(enabled: true, active: true);
+    try {
+      await provider.audio.stop();
+      if (!current() || !canAdvanceGameFeedback) {
+        return;
       }
+      final playback = gameNarration.word(_puzzle.word);
+      final generation = gameNarration.generation;
+      await playback;
+      if (!current() ||
+          !canAdvanceGameFeedback ||
+          generation != gameNarration.generation) {
+        return;
+      }
+      _pendingAnswerWord = false;
+      scheduleGameAdvance(_next);
+    } finally {
+      if (current()) setState(() => _reading = false);
     }
   }
 
   void _next() {
+    cancelGameAdvance();
     if (!_answered || resultOpen) return;
     _clearVowelFlight();
     if (_index < _puzzles.length - 1) {
@@ -306,6 +362,7 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
         _index++;
         _picked = null;
         _answered = false;
+        _pendingAnswerWord = false;
         _vowelLanded = false;
         _soundStep = 0;
         _pendingSound = true;
@@ -323,6 +380,7 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
         _puzzles = _newSession();
         _picked = null;
         _answered = false;
+        _pendingAnswerWord = false;
         _vowelLanded = false;
         _soundStep = 0;
         _pendingSound = true;
@@ -341,13 +399,20 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
   }
 
   @override
+  String get gameTitle => 'Missing Vowel';
+  @override
+  Difficulty get roundDifficulty => widget.difficulty;
+  @override
+  Widget gameForDifficulty(Difficulty difficulty) =>
+      MissingVowelScreen(difficulty: difficulty);
+  @override
   int get totalGameItems => _puzzles.length;
 
   @override
   Widget build(BuildContext context) => GameScaffold(
         narration: gameNarration,
         fitViewport: true,
-        answerResult: _picked == null ? null : _picked == _puzzle.vowel,
+        answerResult: gameAnswerFeedback,
         title: 'Missing Vowel',
         roundHeader: ActivityRoundHeader(
             difficulty: widget.difficulty,
@@ -430,12 +495,13 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
                       ForestAudioButton(
                           label: 'Listen Again',
                           icon: Icons.replay_rounded,
-                          onPressed:
-                              onPlay == null || _reading || !_introFinished
-                                  ? null
-                                  : _repeatSounds),
-                  phrase: _puzzle.word[0] +
-                      _puzzle.word.substring(1).toLowerCase()),
+                          onPressed: onPlay == null ||
+                                  _answered ||
+                                  _reading ||
+                                  !_introFinished
+                              ? null
+                              : _repeatSounds),
+                  phrase: _vowelSoundPhrase),
               const SizedBox(height: 8),
               WordChoiceGrid(
                   columns: 5,
@@ -446,20 +512,12 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
                           compact: true,
                           label: option,
                           selected: _picked == option,
-                          result: _picked == option
-                              ? option == _puzzle.vowel
-                              : null,
+                          result: null,
                           onPressed: _answered || _picked != null || resultOpen
                               ? null
                               : () => _pick(option)))
                       .toList()),
-              if (_picked != null)
-                GameFeedback(correct: _picked == _puzzle.vowel),
-              if (_answered)
-                Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: MissingVowelNextButton(
-                        onPressed: resultOpen ? null : _next)),
+              if (_picked != null) const Text('Answer saved!'),
             ]),
       );
 }

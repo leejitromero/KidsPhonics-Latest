@@ -81,9 +81,9 @@ void main() {
         await tester.pump(const Duration(milliseconds: 50));
       }
     }
-    expect(find.text('Nice flying! Try again!'), findsOneWidget);
+    expect(find.text('Round Complete!'), findsOneWidget);
     expect(tester.widget<GameLives>(find.byType(GameLives)).lives, 0);
-    await tester.tap(find.text('Play again'));
+    await tester.tap(find.text('Play Again'));
     await tester.pump();
     expect(find.text('Ready to fly?'), findsOneWidget);
     expect(tester.widget<GameLives>(find.byType(GameLives)).lives, 3);

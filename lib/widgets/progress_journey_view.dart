@@ -8,6 +8,8 @@ import '../models/word_lesson_progress.dart';
 import '../providers/app_provider.dart';
 import '../screens/blending_sounds_screen.dart';
 import '../screens/cvc_words_screen.dart';
+import '../screens/smart_review_screen.dart';
+import 'smart_review_card.dart';
 import '../screens/letter_mastery_check_screen.dart';
 import '../screens/letter_sounds_screen.dart';
 import '../theme/kids_ui.dart';
@@ -23,6 +25,7 @@ import 'progress_journey_frames.dart';
 import 'progress_rewards_frames.dart';
 import 'recommended_practice_card.dart';
 import 'school_room_body.dart';
+import 'lesson_swipe_navigation.dart';
 
 class ProgressJourneyView extends StatefulWidget {
   const ProgressJourneyView({super.key});
@@ -66,71 +69,79 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
         child: Scaffold(
             body: SchoolRoomBody(
                 room: SchoolRoom.progress,
-                child: Column(children: [
-                  _tabs(),
-                  const SizedBox(height: 10),
-                  Expanded(
-                      child: !p.isReady
-                          ? Center(
-                              child: p.hasLoadError
-                                  ? Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
+                child: LessonSwipeNavigation(
+                    key: const ValueKey('progress-tabs-swipe'),
+                    navigationKey: _tab,
+                    enabled: p.isReady,
+                    onNext: _tab < 2 ? () => _selectTab(_tab + 1) : null,
+                    onPrevious: _tab > 0 ? () => _selectTab(_tab - 1) : null,
+                    child: Column(children: [
+                      _tabs(),
+                      const SizedBox(height: 10),
+                      Expanded(
+                          child: !p.isReady
+                              ? Center(
+                                  child: p.hasLoadError
+                                      ? Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                              const Text(
+                                                  'Your saved progress could not be opened.'),
+                                              TextButton(
+                                                  onPressed: p.retryLoading,
+                                                  child:
+                                                      const Text('Try Again')),
+                                            ])
+                                      : const CircularProgressIndicator())
+                              : ListView(
+                                  controller: _scroll,
+                                  padding:
+                                      const EdgeInsets.fromLTRB(3, 0, 3, 14),
+                                  children: [
+                                      ProgressTitleBanner(
+                                          title: [
+                                            'My Journey',
+                                            'My Letters',
+                                            'My Rewards'
+                                          ][_tab],
+                                          subtitle: [
+                                            "See how much you've learned!",
+                                            'Explore, practice, and master the letters!',
+                                            'Keep learning and earn badges!'
+                                          ][_tab],
+                                          asset: _tab == 2
+                                              ? 'assets/images/home_banner/trophy.webp'
+                                              : _tab == 1
+                                                  ? 'assets/images/lesson_logos/letter_recognition.webp'
+                                                  : 'assets/images/game_words/star-0.webp'),
+                                      const SizedBox(height: 10),
+                                      if (p.hasUnsavedChanges) ...[
+                                        ProgressSurface(
+                                            child: Column(children: [
                                           const Text(
-                                              'Your saved progress could not be opened.'),
+                                              'Your latest progress is waiting to save.'),
                                           TextButton(
-                                              onPressed: p.retryLoading,
-                                              child: const Text('Try Again')),
-                                        ])
-                                  : const CircularProgressIndicator())
-                          : ListView(
-                              controller: _scroll,
-                              padding: const EdgeInsets.fromLTRB(3, 0, 3, 14),
-                              children: [
-                                  ProgressTitleBanner(
-                                      title: [
-                                        'My Journey',
-                                        'My Letters',
-                                        'My Rewards'
-                                      ][_tab],
-                                      subtitle: [
-                                        "See how much you've learned!",
-                                        'Explore, practice, and master the letters!',
-                                        'Keep learning and earn badges!'
-                                      ][_tab],
-                                      asset: _tab == 2
-                                          ? 'assets/images/home_banner/trophy.png'
-                                          : _tab == 1
-                                              ? 'assets/images/lesson_logos/letter_recognition.webp'
-                                              : 'assets/images/game_words/star-0.webp'),
-                                  const SizedBox(height: 10),
-                                  if (p.hasUnsavedChanges) ...[
-                                    ProgressSurface(
-                                        child: Column(children: [
-                                      const Text(
-                                          'Your latest progress is waiting to save.'),
-                                      TextButton(
-                                          onPressed: p.retrySaving,
-                                          child: const Text(
-                                              'Retry saving progress')),
+                                              onPressed: p.retrySaving,
+                                              child: const Text(
+                                                  'Retry saving progress')),
+                                        ])),
+                                        const SizedBox(height: 10),
+                                      ],
+                                      ...switch (_tab) {
+                                        1 => _letters(p),
+                                        2 => _rewards(p),
+                                        _ => _journey(p)
+                                      },
+                                      const Padding(
+                                          padding: EdgeInsets.only(top: 12),
+                                          child: Text(
+                                              'Your progress is saved on this device.',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 11,
+                                                  color: progressInk))),
                                     ])),
-                                    const SizedBox(height: 10),
-                                  ],
-                                  ...switch (_tab) {
-                                    1 => _letters(p),
-                                    2 => _rewards(p),
-                                    _ => _journey(p)
-                                  },
-                                  const Padding(
-                                      padding: EdgeInsets.only(top: 12),
-                                      child: Text(
-                                          'Your progress is saved on this device.',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: 11,
-                                              color: progressInk))),
-                                ])),
-                ]))));
+                    ])))));
   }
 
   Widget _tabs() => IntrinsicHeight(
@@ -193,6 +204,15 @@ class _ProgressJourneyViewState extends State<ProgressJourneyView> {
       ]));
 
   List<Widget> _journey(AppProvider p) => [
+        if (p.smartReviewSuggestions.isNotEmpty) ...[
+          SmartReviewCard(
+              key: const ValueKey('smart-review-card'),
+              suggestion: p.smartReviewSuggestions.first,
+              onPressed: p.timeLimitReached
+                  ? null
+                  : withButtonSound(() => _open(const SmartReviewScreen()))),
+          const SizedBox(height: 12),
+        ],
         ProgressPhonicsSkillsFrame(children: [
           for (final (id, title, unit, count, total, color, icon, action) in [
             (

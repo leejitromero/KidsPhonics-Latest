@@ -53,18 +53,12 @@ void main() {
       await tester.ensureVisible(buttonFor(wrong.word));
       await tester.tap(find.descendant(
           of: buttonFor(wrong.word), matching: find.byType(ElevatedButton)));
-      await tester.pump(const Duration(milliseconds: 950));
-      expect(find.byKey(const ValueKey('matched-picture')), findsNothing);
-      expect(find.byKey(const ValueKey('flying-match-picture')), findsNothing);
-      await tester.ensureVisible(buttonFor(correct.word));
-      await tester.tap(find.descendant(
-          of: buttonFor(correct.word), matching: find.byType(ElevatedButton)));
       await tester.pump();
       if (!reduced) {
         expect(
             find.byKey(const ValueKey('flying-match-picture')), findsOneWidget);
       }
-      await tester.pump(const Duration(milliseconds: 800));
+      await tester.pump(Duration(milliseconds: reduced ? 100 : 800));
       await tester.pump();
       expect(find.byKey(const ValueKey('flying-match-picture')), findsNothing);
       expect(
@@ -73,15 +67,11 @@ void main() {
                   find.byKey(const ValueKey('matched-picture')))
               .word
               .toUpperCase(),
-          correct.word.toUpperCase());
-      expect(find.text('Correct match!'), findsOneWidget);
+          wrong.word.toUpperCase());
+      expect(find.text('Answer saved!'), findsWidgets);
       expect(find.text('Next'), findsNothing);
       expect(tester.takeException(), isNull);
-      if (!reduced) {
-        await tester.pump(const Duration(milliseconds: 1100));
-        expect(find.text('Correct match!'), findsOneWidget);
-      }
-      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(milliseconds: 700));
       await tester.pump();
       expect(find.byKey(const ValueKey('matched-picture')), findsNothing);
       expect(find.text('Your picture goes here'), findsOneWidget);
@@ -119,12 +109,13 @@ void main() {
         }
         expect(saved, isTrue);
       }
+
       final correct = t.widget<GameAnswerButton>(find.byWidgetPredicate(
           (w) => w is GameAnswerButton && w.label == 'Picture 1'));
       correct.onPressed!();
       correct.onPressed!();
       await t.pump();
-      expect(find.text('Correct match!'), findsOneWidget);
+      expect(find.text('Answer saved!'), findsWidgets);
       expect(find.text('Next'), findsNothing);
       await flushWrites(t);
       if (interruption == 'background') {
@@ -163,7 +154,7 @@ void main() {
       expect(t.widget<GameScaffold>(scaffold).current, 2);
       expect(find.byKey(const ValueKey('matched-picture')), findsNothing);
       await flushWrites(t);
-      expect(p.stars, 1);
+      expect(p.stars, 0);
       expect(p.xp, 8);
       expect(p.dailyActivity.values.single.questionsAnswered, 1);
       await close(t, p);
@@ -185,7 +176,7 @@ void main() {
             (w) => w is GameAnswerButton && w.label == 'Picture 1'))
         .onPressed!();
     await t.pump();
-    expect(find.text('Correct match!'), findsOneWidget);
+    expect(find.text('Answer saved!'), findsWidgets);
     await flushWrites(t);
     await close(t, p);
     await t.pump(const Duration(seconds: 3));

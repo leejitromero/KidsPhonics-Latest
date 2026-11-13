@@ -144,7 +144,7 @@ void main() {
                             child: SceneDialogue(
                                 text: dialogue.text,
                                 art:
-                                    'dialogue_box_${dialogue.games ? 1 : 2}.png',
+                                    'dialogue_box_${dialogue.games ? 1 : 2}.webp',
                                 flip: dialogue.games)))))));
         final content = t
             .getRect(find.byKey(const ValueKey('scene-dialogue-content')))

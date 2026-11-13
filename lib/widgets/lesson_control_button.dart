@@ -15,12 +15,16 @@ class LessonControlButton extends StatefulWidget {
       required this.icon,
       required this.onPressed,
       this.art,
+      this.fitLabel = false,
       this.primary = false});
   final String label;
   final IconData icon;
   final VoidCallback? onPressed;
   final LessonButtonArt? art;
   final bool primary;
+
+  /// Keep short navigation labels readable in a bounded row on compact pages.
+  final bool fitLabel;
   @override
   State<LessonControlButton> createState() => _LessonControlButtonState();
 }
@@ -97,12 +101,27 @@ class _LessonControlButtonState extends State<LessonControlButton> {
               ),
             ),
             const SizedBox(height: 2),
-            Text(widget.label,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    fontFamily: 'Nunito',
-                    fontSize: 13,
-                    fontWeight: FontWeight.w800)),
+            if (widget.fitLabel)
+              SizedBox(
+                height: 24,
+                width: double.infinity,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(widget.label,
+                      maxLines: 1,
+                      style: const TextStyle(
+                          fontFamily: 'Nunito',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800)),
+                ),
+              )
+            else
+              Text(widget.label,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontFamily: 'Nunito',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800)),
           ]),
         ));
   }

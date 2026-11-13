@@ -1,4 +1,3 @@
-import 'dart:async';
 import '../data/game_session_order.dart';
 import '../widgets/sound_match_design.dart';
 import '../widgets/game_instruction_guide.dart';
@@ -27,27 +26,6 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
   Map<String, bool?> _picks = {}; // letter -> correct?
   bool _roundDone = false;
   bool _retryBusy = false;
-  Timer? _feedbackTimer;
-
-  void _finishFeedback() {
-    if (!mounted || resultOpen) return;
-    if (!canAdvanceGameFeedback) {
-      _feedbackTimer =
-          Timer(const Duration(milliseconds: 250), _finishFeedback);
-      return;
-    }
-    if (_roundDone) {
-      _nextRound();
-    } else {
-      setState(() => _retryBusy = false);
-    }
-  }
-
-  @override
-  void dispose() {
-    _feedbackTimer?.cancel();
-    super.dispose();
-  }
 
   late List<SoundRound> _rounds = _newSession();
   List<SoundRound> _newSession() => GameSessionOrder.next(
@@ -75,6 +53,7 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
   }
 
   void _nextRound() {
+    cancelGameAdvance();
     if (_roundIndex < _rounds.length - 1) {
       setState(() {
         _roundIndex++;
@@ -89,7 +68,6 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
   }
 
   void _restart() {
-    _feedbackTimer?.cancel();
     setState(() {
       _roundIndex = 0;
       _rounds = _newSession();
@@ -112,41 +90,39 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
     showGameResult(_restart, backLabel: 'Back to Games');
   }
 
-  void _pick(String letter) async {
-    if (_roundDone || _retryBusy || resultOpen || _picks[letter] != null) {
-      return;
-    }
-
-    final isCorrect = letter == _round.correctLetter;
+  void _pick(String letter) {
+    if (_roundDone || _retryBusy || resultOpen) return;
+    gameNarration.cancel();
+    final correct = letter == _round.correctLetter;
     setState(() {
-      _picks[letter] = isCorrect;
-      _roundDone = isCorrect;
-      _retryBusy = !isCorrect;
+      _picks[letter] = correct;
+      _roundDone = true;
     });
-    // Count valid retries consistently with the other practice games. The
-    // completed-round guard still prevents duplicate correct-answer rewards.
-    recordGameAnswer(correct: isCorrect);
-    if (isCorrect) {
-      await playGameCorrect();
-      if (!mounted) return;
-      awardGameXp((5 * widget.difficulty.xpMultiplier).round());
-      awardGameStar();
-      _feedbackTimer =
-          Timer(const Duration(milliseconds: 1000), _finishFeedback);
-    } else {
-      playGameWrong();
-      _feedbackTimer =
-          Timer(const Duration(milliseconds: 600), _finishFeedback);
-    }
+    recordGameAnswer(
+        reviewTarget: ReviewTarget.sound(_round.correctLetter),
+        correct: correct,
+        itemId: 'sound-$_roundIndex',
+        prompt: 'Match the sound',
+        selected: letter,
+        expected: _round.correctLetter);
+    if (correct) awardGameXp((5 * widget.difficulty.xpMultiplier).round());
+    scheduleGameAdvance(_nextRound);
   }
 
+  @override
+  String get gameTitle => 'Sound Match';
+  @override
+  Difficulty get roundDifficulty => widget.difficulty;
+  @override
+  Widget gameForDifficulty(Difficulty difficulty) =>
+      SoundMatchScreen(difficulty: difficulty);
   @override
   int get totalGameItems => _rounds.length;
 
   @override
   Widget build(BuildContext context) => GameScaffold(
         narration: gameNarration,
-        answerResult: _picks.isEmpty ? null : _picks.values.last,
+        answerResult: gameAnswerFeedback,
         title: 'Sound Match',
         instructions: 'Hear the sound. Pick a letter.',
         instructionPanel: const GameInstructionGuide(gameTitle: 'Sound Match'),
@@ -156,20 +132,21 @@ class _SoundMatchScreenState extends State<SoundMatchScreen>
         total: _rounds.length,
         fitViewport: true,
         child: SoundMatchLayout(
+          submitted: _roundDone,
           phrase: 'lesson-sound-${_round.correctLetter}',
           enabled: !_roundDone && !_retryBusy && !resultOpen,
-          result: _picks.isEmpty ? null : _picks.values.last,
+          result: null,
           choices: [
             for (var index = 0; index < _opts.length; index++)
               SoundMatchChoiceMotion(
                   key: ValueKey('sound-choice-$_roundIndex-${_opts[index]}'),
-                  result: _picks[_opts[index]],
+                  result: null,
                   child: GameAnswerButton(
                       colorIndex: [0, 1, 2][index],
                       buttonKey: ValueKey('sound-match-letter-${_opts[index]}'),
                       label: letterChoiceLabel(_opts[index]),
                       selected: _picks[_opts[index]] != null,
-                      result: _picks[_opts[index]],
+                      result: null,
                       onPressed: _roundDone ||
                               _retryBusy ||
                               resultOpen ||

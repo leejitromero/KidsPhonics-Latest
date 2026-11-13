@@ -3,7 +3,6 @@ import 'package:flutter/gestures.dart';
 import 'button_sound.dart';
 import 'game_design.dart';
 import '../models/difficulty.dart';
-import 'floating_choice.dart';
 
 class RumbledRoundHeader extends StatelessWidget {
   const RumbledRoundHeader(
@@ -71,7 +70,6 @@ class RumbledLetterRow extends StatefulWidget {
       required this.maxSide,
       required this.gap,
       required this.tileIds,
-      required this.selectedIndex,
       required this.enabled,
       required this.fixedFirst,
       required this.onMove,
@@ -80,7 +78,6 @@ class RumbledLetterRow extends StatefulWidget {
   final double maxSide, gap;
   final List<Widget> children;
   final List<int> tileIds;
-  final int? selectedIndex;
   final bool enabled, fixedFirst;
   final void Function(int from, int to) onMove;
   final ValueChanged<bool> onDraggingChanged;
@@ -194,9 +191,9 @@ class _RumbledLetterRowState extends State<RumbledLetterRow>
                         behavior: HitTestBehavior.translucent,
                         dragStartBehavior: DragStartBehavior.down,
                         onPanStart: widget.enabled &&
-                                widget.selectedIndex == i &&
                                 !(widget.fixedFirst && i == 0)
                             ? (details) {
+                                if (_dragIndex != null) return;
                                 // Start from the tile's visible position, even
                                 // if a hint or previous drop is still settling.
                                 final position =
@@ -212,7 +209,8 @@ class _RumbledLetterRowState extends State<RumbledLetterRow>
                                 widget.onDraggingChanged(true);
                               }
                             : null,
-                        onPanUpdate: widget.enabled && widget.selectedIndex == i
+                        onPanUpdate: widget.enabled &&
+                                !(widget.fixedFirst && i == 0)
                             ? (details) {
                                 if (_dragIndex != i) return;
                                 final pointer = _local(details.globalPosition);
@@ -233,23 +231,21 @@ class _RumbledLetterRowState extends State<RumbledLetterRow>
                                 });
                               }
                             : null,
-                        onPanEnd: widget.enabled && widget.selectedIndex == i
-                            ? (_) => _finishDrag()
-                            : null,
-                        onPanCancel: widget.enabled && widget.selectedIndex == i
-                            ? () => _finishDrag(cancelled: true)
-                            : null,
-                        child: AnimatedSlide(
-                            duration: duration,
-                            offset: widget.selectedIndex == i && !reduced
-                                ? const Offset(0, -.07)
-                                : Offset.zero,
-                            child: FloatingChoice(
-                                enabled: widget.enabled &&
-                                    widget.selectedIndex == i &&
-                                    _dragIndex != i,
-                                seed: widget.tileIds[i],
-                                child: widget.children[i])))),
+                        onPanEnd:
+                            widget.enabled && !(widget.fixedFirst && i == 0)
+                                ? (_) {
+                                    if (_dragIndex == i) _finishDrag();
+                                  }
+                                : null,
+                        onPanCancel:
+                            widget.enabled && !(widget.fixedFirst && i == 0)
+                                ? () {
+                                    if (_dragIndex == i) {
+                                      _finishDrag(cancelled: true);
+                                    }
+                                  }
+                                : null,
+                        child: widget.children[i])),
             ]));
       });
 }

@@ -18,7 +18,7 @@ class LessonTitleBanner extends StatelessWidget {
   Widget build(BuildContext context) => AspectRatio(
         aspectRatio: 3,
         child: Stack(fit: StackFit.expand, children: [
-          Image.asset('$lessonHeaderAssets/banner_lessons.png',
+          Image.asset('$lessonHeaderAssets/banner_lessons.webp',
               key: const ValueKey('lessons-banner'),
               fit: BoxFit.contain,
               cacheWidth: 1008,
@@ -62,7 +62,7 @@ class LessonInstructionDialogue extends StatelessWidget {
         child: Row(children: [
           SizedBox.square(
               dimension: portrait,
-              child: Image.asset('$lessonHeaderAssets/${character}_profile.png',
+              child: Image.asset('$lessonHeaderAssets/${character}_profile.webp',
                   key: const ValueKey('lesson-guide-profile'),
                   fit: BoxFit.contain,
                   cacheWidth: 360,
@@ -72,7 +72,7 @@ class LessonInstructionDialogue extends StatelessWidget {
                   aspectRatio: ratio,
                   child: Stack(fit: StackFit.expand, children: [
                     Image.asset(
-                        '$lessonHeaderAssets/instructions_dialogue_$character.png',
+                        '$lessonHeaderAssets/instructions_dialogue_$character.webp',
                         key: const ValueKey('lesson-dialogue-art'),
                         fit: BoxFit.contain,
                         cacheWidth: 1100,

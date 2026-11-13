@@ -1,3 +1,4 @@
+import 'verified_image_assets.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
@@ -22,16 +23,18 @@ void main() {
         .load();
   });
 
-  test('the supplied streak and summary PNGs are bundled unchanged', () async {
+  test('the supplied streak and summary artwork retains its approved pixels',
+      () async {
     final entries = jsonDecode(File('tools/progress_journey_frames_import.json')
         .readAsStringSync()
         .replaceFirst('\uFEFF', '')) as List;
     expect(entries, hasLength(2));
     for (final entry in entries) {
-      final bytes = await rootBundle.load(entry['path'] as String);
+      final bytes =
+          await rootBundle.load(optimizedImagePath(entry['path'] as String));
       expect(
           sha256.convert(bytes.buffer.asUint8List()).toString().toUpperCase(),
-          entry['sha256']);
+          optimizedImageHash(entry['path'] as String, entry['sha256']));
     }
   });
 

@@ -43,22 +43,9 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
   final Map<int, GlobalKey> _pictureKeys = {};
   late final AnimationController _flight;
   OverlayEntry? _flightEntry;
-  Timer? _feedbackTimer;
-
-  void _finishFeedback() {
-    if (!mounted || resultOpen) return;
-    // Keep the answer visible while the game is covered or unavailable.
-    if (!canAdvanceGameFeedback || !TickerMode.valuesOf(context).enabled) {
-      _feedbackTimer =
-          Timer(const Duration(milliseconds: 250), _finishFeedback);
-      return;
-    }
-    _next();
-  }
 
   @override
   void dispose() {
-    _feedbackTimer?.cancel();
     _flightEntry?.remove();
     _flight.dispose();
     super.dispose();
@@ -140,33 +127,28 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
 
   void _pick(String emoji) async {
     if (_answered || _picked != null || resultOpen) return;
-    final isCorrect = emoji == _round.correctEmoji;
-    setState(() => _picked = emoji);
-
-    recordGameAnswer(correct: isCorrect);
-    if (isCorrect) {
-      setState(() {
-        _answered = true;
-      });
-      playGameCorrect();
-      awardGameXp((8 * widget.difficulty.xpMultiplier).round());
-      awardGameStar();
-      await _flyToFrame(_round.options.indexOf(emoji));
-      if (!mounted) return;
-      // Let the picture land, then leave time to read the correct feedback.
-      _feedbackTimer =
-          Timer(const Duration(milliseconds: 1200), _finishFeedback);
-    } else {
-      // Wrong — play wrong.mp3 tone, show red flash, then clear so child can retry
-      playGameWrong();
-      await Future.delayed(const Duration(milliseconds: 900));
-      if (mounted) setState(() => _picked = null);
-    }
+    gameNarration.cancel();
+    final correct = emoji == _round.correctEmoji;
+    final option = _round.options.indexOf(emoji);
+    setState(() {
+      _picked = emoji;
+      _answered = true;
+    });
+    recordGameAnswer(
+        reviewTarget: ReviewTarget.word(_round.word.toUpperCase()),
+        correct: correct,
+        itemId: 'picture-$_index',
+        prompt: 'Match ${_round.word}',
+        selected: _round.labels[option],
+        expected: _round.word);
+    if (correct) awardGameXp((8 * widget.difficulty.xpMultiplier).round());
+    await _flyToFrame(option);
+    if (mounted && !resultOpen) scheduleGameAdvance(_next);
   }
 
   void _next() {
+    cancelGameAdvance();
     if (!_answered || _flying || resultOpen) return;
-    _feedbackTimer?.cancel();
     if (_index < _rounds.length - 1) {
       setState(() {
         _index++;
@@ -181,7 +163,6 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
   }
 
   void _restart() {
-    _feedbackTimer?.cancel();
     setState(() {
       _index = 0;
       _rounds = _newSession();
@@ -205,12 +186,19 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
   }
 
   @override
+  String get gameTitle => 'Picture Match';
+  @override
+  Difficulty get roundDifficulty => widget.difficulty;
+  @override
+  Widget gameForDifficulty(Difficulty difficulty) =>
+      PictureWordMatchScreen(difficulty: difficulty);
+  @override
   int get totalGameItems => _rounds.length;
 
   @override
   Widget build(BuildContext context) => GameScaffold(
         narration: gameNarration,
-        answerResult: _picked == null ? null : _picked == _round.correctEmoji,
+        answerResult: gameAnswerFeedback,
         title: 'Picture Match',
         fitViewport: true,
         instructions: 'Tap the matching picture.',
@@ -272,7 +260,9 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
                                               ? GameWordPicture(
                                                   key: const ValueKey(
                                                       'matched-picture'),
-                                                  word: _round.word)
+                                                  word: _round.labels[_round
+                                                      .options
+                                                      .indexOf(_picked!)])
                                               : const Icon(
                                                   Icons
                                                       .add_photo_alternate_outlined,
@@ -281,13 +271,13 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
                                   const SizedBox(height: 8),
                                   Text(
                                       _landed
-                                          ? 'Correct match!'
+                                          ? 'Answer saved!'
                                           : 'Your picture goes here',
                                       style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w800,
                                           color: _landed
-                                              ? KidsUi.correct
+                                              ? KidsUi.muted
                                               : KidsUi.muted)),
                                 ]),
                               )),
@@ -303,30 +293,24 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
                                               key: _pictureKeys.putIfAbsent(
                                                   option, () => GlobalKey()),
                                               child: Opacity(
-                                                  opacity:
-                                                      _answered && _picked == _round.options[option]
-                                                          ? 0
-                                                          : 1,
+                                                  opacity: _answered &&
+                                                          _picked ==
+                                                              _round.options[
+                                                                  option]
+                                                      ? 0
+                                                      : 1,
                                                   child: GameWordPicture(
                                                       word: _round
                                                           .labels[option]))),
                                           selected:
                                               _picked == _round.options[option],
-                                          result:
-                                              _picked == _round.options[option]
-                                                  ? _round.options[option] ==
-                                                      _round.correctEmoji
-                                                  : null,
-                                          onPressed: _answered ||
-                                                  _picked != null ||
-                                                  resultOpen
+                                          result: null,
+                                          onPressed: _answered || _picked != null || resultOpen
                                               ? null
                                               : () =>
                                                   _pick(_round.options[option])))
                                       .toList()),
-                              if (_picked != null)
-                                GameFeedback(
-                                    correct: _picked == _round.correctEmoji),
+                              if (_picked != null) const Text('Answer saved!'),
                             ]))))),
       );
 }

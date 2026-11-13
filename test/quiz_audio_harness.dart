@@ -14,6 +14,8 @@ class QuizAudioHarness {
   final sources = <String>[];
   final starts = <String>[];
   final calls = <String>[];
+  final startRates = <double>[];
+  final _rates = <String, double>{};
   final _players = <String, String>{};
   final _messenger =
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
@@ -41,6 +43,10 @@ class QuizAudioHarness {
       }
       if (call.method == 'resume' && _players.containsKey(id)) {
         starts.add(_players[id]!);
+        startRates.add(_rates[id] ?? 1.0);
+      }
+      if (call.method == 'setPlaybackRate') {
+        _rates[id] = (arguments['playbackRate'] as num).toDouble();
       }
       return null;
     });
@@ -79,6 +85,7 @@ class QuizAudioHarness {
       await t.pump();
     }
     starts.clear();
+    startRates.clear();
     sources.clear();
   }
 

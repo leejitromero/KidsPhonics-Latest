@@ -1,3 +1,4 @@
+import 'verified_image_assets.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
@@ -12,7 +13,7 @@ import 'package:kidsphonics/screens/missing_vowel_screen.dart';
 import 'package:kidsphonics/widgets/game_feedback_art.dart';
 import 'package:kidsphonics/widgets/learner_widgets.dart';
 import 'package:kidsphonics/widgets/word_game_layout.dart';
-import 'learner_ui_test.dart' show mount, close, flushWrites;
+import 'learner_ui_test.dart' show mount, close;
 import 'learning_progress_test.dart' show mockProgressAudio;
 
 void main() {
@@ -37,10 +38,11 @@ void main() {
         .replaceFirst('\uFEFF', '')) as List;
     expect(entries, hasLength(2));
     for (final entry in entries) {
-      final bytes = await rootBundle.load(entry['path'] as String);
+      final bytes =
+          await rootBundle.load(optimizedImagePath(entry['path'] as String));
       expect(
           sha256.convert(bytes.buffer.asUint8List()).toString().toUpperCase(),
-          entry['sha256']);
+          optimizedImageHash(entry['path'] as String, entry['sha256']));
       final codec = await ui.instantiateImageCodec(bytes.buffer.asUint8List());
       final image = (await codec.getNextFrame()).image;
       expect((image.width, image.height), (2172, 724));
@@ -81,21 +83,20 @@ void main() {
             (w) => w is GameAnswerButton && w.label == vowel);
         await t.tap(
             find.descendant(of: choice, matching: find.byType(ElevatedButton)));
-        await t.pump(const Duration(milliseconds: 710));
-        await flushWrites(t);
-        expect(find.byType(GameCorrectFrame), findsOneWidget);
-        expect(find.text('Correct!'), findsOneWidget);
-        final next = find.byKey(const ValueKey('missing-vowel-next'));
-        final frame = t.getRect(find.byType(GameCorrectFrame));
-        final button = t.getRect(next);
-        expect(frame.bottom, lessThanOrEqualTo(button.top));
-        for (final rect in [frame, button]) {
-          expect(rect.left, greaterThanOrEqualTo(12));
-          expect(rect.right, lessThanOrEqualTo(size.width - 12));
-          expect(rect.bottom, lessThanOrEqualTo(size.height - 24));
+        await t.pump(const Duration(milliseconds: 100));
+        for (var i = 0; i < 20; i++) {
+          await t.runAsync(() => Future<void>.delayed(Duration.zero));
+          await t.pump();
         }
-        expect(button.height, greaterThanOrEqualTo(32));
-        expect(p.stars, 1);
+        expect(find.byType(GameCorrectFrame), findsNothing);
+        expect(find.text('Correct!'), findsNothing);
+        final acknowledgement = find.text('Answer saved!');
+        expect(acknowledgement, findsOneWidget);
+        final frame = t.getRect(acknowledgement);
+        expect(frame.left, greaterThanOrEqualTo(12));
+        expect(frame.right, lessThanOrEqualTo(size.width - 12));
+        expect(frame.bottom, lessThanOrEqualTo(size.height - 24));
+        expect(p.stars, 0);
         expect(p.xp, (8 * difficulty.xpMultiplier).round());
         if (size.width == 390 && const bool.fromEnvironment('CAPTURE_UI')) {
           await t.runAsync(() async {
@@ -115,11 +116,11 @@ void main() {
             image.dispose();
           });
         }
-        await t.tap(next);
+        await t.pump(const Duration(milliseconds: 800));
         await t.pump();
         expect(find.byType(GameCorrectFrame), findsNothing);
         expect(find.byType(MissingVowelNextButton), findsNothing);
-        expect(p.stars, 1);
+        expect(p.stars, 0);
         expect(find.byType(Scrollable), findsNothing);
         expect(t.takeException(), isNull);
         await close(t, p);

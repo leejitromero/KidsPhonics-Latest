@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 const cloudTransitionAssets = [
-  'assets/images/screen_transitions/curtain_1.png',
-  'assets/images/screen_transitions/curtain_2.png',
-  'assets/images/screen_transitions/curtain_3.png',
-  'assets/images/screen_transitions/curtain_4.png',
-  'assets/images/screen_transitions/curtain_5.png',
+  'assets/images/screen_transitions/curtain_1.webp',
+  'assets/images/screen_transitions/curtain_2.webp',
+  'assets/images/screen_transitions/curtain_3.webp',
+  'assets/images/screen_transitions/curtain_4.webp',
+  'assets/images/screen_transitions/curtain_5.webp',
 ];
 
 /// Decode the short curtain sequence before pushing, avoiding blank first frames.

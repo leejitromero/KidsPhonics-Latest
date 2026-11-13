@@ -5,8 +5,7 @@ import 'package:kidsphonics/screens/rumbled_words_screen.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show mount, close;
 import 'quiz_audio_harness.dart';
-import 'rumbled_words_audio_test.dart'
-    show shownWord, spell, audioStarted, highlighted, flushAudio;
+import 'rumbled_words_audio_test.dart' show shownWord, spell, flushAudio;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +13,7 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     mockProgressAudio();
   });
-  testWidgets('covered and backgrounded playback waits and replays same step',
+  testWidgets('submitted arrangement waits while covered and backgrounded',
       (t) async {
     final audio = QuizAudioHarness()..install();
     final p = await mount(t, const RumbledWordsScreen());
@@ -24,7 +23,7 @@ void main() {
     final task = shownWord(t);
     final word = task.toUpperCase();
     final selectionCount = await spell(t, audio, word);
-    await audioStarted(t, audio, selectionCount + 1);
+
     final context = t.element(find.byType(RumbledWordsScreen));
     showDialog<void>(
         context: context,
@@ -33,26 +32,17 @@ void main() {
     await flushAudio(t);
     await t.pump(const Duration(seconds: 2));
     expect(shownWord(t), task);
-    expect(audio.starts.length, selectionCount + 1);
+    expect(audio.starts.length, selectionCount);
     Navigator.of(context).pop();
-    await t.pump(const Duration(milliseconds: 400));
-    await audioStarted(t, audio, selectionCount + 2);
-    expect(highlighted(t, 0), isTrue);
-    expect(audio.starts.last,
-        endsWith('/letters/letter-${word[0].toLowerCase()}.mp3'));
-
-    t.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    // Background before the covered answer can advance.
     t.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
-    await t.pump();
-    await flushAudio(t);
     await t.pump(const Duration(seconds: 3));
-    expect(audio.starts.length, selectionCount + 2);
     expect(shownWord(t), task);
+    expect(audio.starts.length, selectionCount);
     t.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
-    await t.pump();
-    await t.pump(const Duration(milliseconds: 250));
-    await audioStarted(t, audio, selectionCount + 3);
-    expect(highlighted(t, 0), isTrue);
+    await t.pump(const Duration(milliseconds: 400));
+    expect(shownWord(t), isNot(task));
+    expect(audio.starts.length, selectionCount);
     await close(t, p);
     p.phonicsAudio.dispose();
     await flushAudio(t);

@@ -17,7 +17,7 @@ Future<void> tapBoardLetter(WidgetTester t, int index) async {
   await t.pump();
 }
 
-/// Drag a selected letter to a position, inserting it between its neighbors.
+/// Drag a letter directly to a position, inserting it between its neighbors.
 Future<void> dragBoardLetter(WidgetTester t, int from, int to) async {
   final start = t.getCenter(find.byKey(ValueKey('word-tile-$from')));
   final end = t.getCenter(find.byKey(ValueKey('word-tile-$to')));
@@ -39,8 +39,10 @@ Future<void> arrangeBoard(WidgetTester t, String word,
     if (letters[position] == word[position]) continue;
     final source = List.generate(word.length, (i) => i)
         .firstWhere((i) => i > position && letters[i] == word[position]);
-    await tapBoardLetter(t, source);
-    await afterTap?.call(letters[source]);
+    if (afterTap != null) {
+      await tapBoardLetter(t, source);
+      await afterTap(letters[source]);
+    }
     await dragBoardLetter(t, source, position);
   }
   expect(boardLetters(t, word.length).join(), word);

@@ -22,7 +22,7 @@ void main() {
     )));
     final fireworks = find.byKey(const ValueKey('completion-fireworks'));
     expect(fireworks, findsOneWidget);
-    expect(find.text('Round complete!'), findsOneWidget);
+    expect(find.text('Round Complete!'), findsOneWidget);
     await t.pump(const Duration(milliseconds: 600));
     expect(fireworks, findsOneWidget);
     expect(find.text('Play Again').hitTestable(), findsOneWidget);
@@ -83,7 +83,7 @@ void main() {
     )));
     await t.pumpAndSettle();
     expect(find.byKey(const ValueKey('completion-fireworks')), findsNothing);
-    expect(find.text('Round complete!'), findsOneWidget);
+    expect(find.text('Round Complete!'), findsOneWidget);
     expect(find.text('Play Again').hitTestable(), findsOneWidget);
     expect(t.takeException(), isNull);
   });

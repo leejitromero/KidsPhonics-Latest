@@ -12,6 +12,7 @@ import 'package:kidsphonics/screens/cvc_words_screen.dart';
 import 'package:kidsphonics/screens/lessons_screen.dart';
 import 'package:kidsphonics/services/phonics_audio_service.dart';
 import 'package:kidsphonics/widgets/cvc_word_picture.dart';
+import 'package:kidsphonics/widgets/cvc_letter_tile.dart';
 import 'learning_progress_test.dart' show mockProgressAudio;
 import 'learner_ui_test.dart' show mount, close;
 
@@ -159,23 +160,17 @@ void main() {
     lesson.dispose();
   });
 
-  test('all 17 supplied words have bundled narration, phonemes and a picture',
+  test('all 70 words have bundled narration and phonemes, fourteen per vowel',
       () async {
-    expect(cvcLessonWords, hasLength(17));
-    expect(cvcLessonWords.map((w) => w.word).toSet(), hasLength(17));
-    for (final entry in {'A': 6, 'E': 5, 'I': 2, 'O': 2, 'U': 2}.entries) {
-      expect(cvcLessonWords.where((w) => w.vowel == entry.key),
-          hasLength(entry.value));
+    expect(cvcLessonWords, hasLength(70));
+    expect(cvcLessonWords.map((w) => w.word).toSet(), hasLength(70));
+    for (final vowel in 'AEIOU'.split('')) {
+      expect(cvcLessonWords.where((w) => w.vowel == vowel), hasLength(14));
     }
     expect(cvcLessonWords.first.praise, 'Cat! Nice work! C-A-T makes cat!');
     for (final word in cvcLessonWords) {
       expect(word.word,
           matches(RegExp(r'^[B-DF-HJ-NP-TV-Z][AEIOU][B-DF-HJ-NP-TV-Z]$')));
-      expect(
-          word.imageAsset != null ||
-              word.emoji.isNotEmpty ||
-              ['WIG', 'FIN', 'SIT', 'TOP'].contains(word.word),
-          isTrue);
       if (word.imageAsset != null) {
         expect((await rootBundle.load(word.imageAsset!)).lengthInBytes,
             greaterThan(0));
@@ -195,7 +190,7 @@ void main() {
       }
     }
     expect(Directory('assets/audio/cvc_lesson').listSync().whereType<File>(),
-        hasLength(34));
+        hasLength(cvcLessonWords.length * 2));
   });
 
   Finder control(String label) => find.widgetWithText(OutlinedButton, label);
@@ -259,7 +254,8 @@ void main() {
         await t.pump(const Duration(milliseconds: 700));
         await finishIntroduction(t);
         await t.pump();
-        expect(find.byType(CvcWordPicture), findsOneWidget);
+        expect(find.byType(CvcWordPicture), findsNothing);
+        expect(find.byType(CvcLetterTile), findsNWidgets(3));
         final nav = ['Previous', 'Hear Again', 'Next']
             .map((label) => t.getRect(control(label)))
             .toList();
@@ -296,10 +292,11 @@ void main() {
     await t.pump(const Duration(milliseconds: 700));
     await finishIntroduction(t);
     for (final word in cvcLessonWords) {
-      expect(t.widget<CvcWordPicture>(find.byType(CvcWordPicture)).word.word,
+      expect(t.widget<Text>(find.byKey(const ValueKey('cvc-whole-word'))).data,
           word.word);
+      expect(find.byType(CvcWordPicture), findsNothing);
       expect(t.takeException(), isNull);
-      if (word.word != 'RUN') {
+      if (word != cvcLessonWords.last) {
         await t.tap(control('Next'));
         await t.pump();
       }
@@ -307,8 +304,8 @@ void main() {
     expect(t.widget<OutlinedButton>(control('Next')).onPressed, isNull);
     await t.tap(control('Previous'));
     await t.pump();
-    expect(
-        t.widget<CvcWordPicture>(find.byType(CvcWordPicture)).word.word, 'RUG');
+    expect(t.widget<Text>(find.byKey(const ValueKey('cvc-whole-word'))).data,
+        cvcLessonWords[cvcLessonWords.length - 2].word);
     expect(p.xp, 0);
     expect(p.stars, 0);
     expect(p.journeyScore('cvc'), isNull);

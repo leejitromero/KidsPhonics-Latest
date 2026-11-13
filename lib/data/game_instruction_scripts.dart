@@ -19,7 +19,7 @@ const gameInstructionScripts = <String, GameInstructionScript>{
       'audio/game_instructions/memory_flip.mp3'),
   'Phonics Quiz': GameInstructionScript(
       'phonics-quiz',
-      'Listen to the word, choose your answer, then tap Check Answer!',
+      'Listen to the word, then tap your answer!',
       'audio/game_instructions/phonics_quiz.mp3'),
   'Word Builder': GameInstructionScript(
       'word-builder',
@@ -43,7 +43,7 @@ const gameInstructionScripts = <String, GameInstructionScript>{
       'audio/game_instructions/picture_match.mp3'),
   'Rumbled Words': GameInstructionScript(
       'rumbled-words',
-      'Tap a letter, drag it into place, then tap Check Word!',
+      'Drag a letter into place, then tap Check Word!',
       'audio/game_instructions/rumbled_word.mp3'),
   'Rhyming Words': GameInstructionScript(
       'rhyming-words',

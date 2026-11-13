@@ -145,8 +145,8 @@ class _TutorialDialogState extends State<_TutorialDialog> {
             ),
             (
               Icons.auto_awesome_rounded,
-              'Build and try again',
-              'Green means correct! If a letter is wrong, choose another one.'
+              'Finish and review',
+              'Fill every blank carefully. Your first completed word counts. Check your answers and stars at the end.'
             ),
           ],
         GameTutorial.memoryFlip => [
@@ -180,7 +180,7 @@ class _TutorialDialogState extends State<_TutorialDialog> {
             (
               Icons.check_circle_rounded,
               'Learn and continue',
-              'Try again if you need to. When you find the letter, the next sound appears!'
+              'Your first choice counts, then the next sound appears. Review your answers and stars at the end.'
             ),
           ],
         GameTutorial.phonicsQuiz => [
@@ -191,13 +191,13 @@ class _TutorialDialogState extends State<_TutorialDialog> {
             ),
             (
               Icons.touch_app_rounded,
-              'Choose, then check',
-              'Hear the letter sounds, choose your answer, then tap Check Answer. Only your submitted answer is scored.'
+              'Tap your answer',
+              'Use the speakers to hear the letter sounds, then tap an answer. Your first tap is checked automatically.'
             ),
             (
               Icons.check_circle_rounded,
               'Learn and continue',
-              'See and hear the correct sound before the next question. Review Mistakes at the end is practice and keeps your original score.'
+              'Each submitted answer counts once, then the next question appears. Review answers at the end. Practice keeps your original score.'
             ),
           ],
         GameTutorial.speechPractice => [
@@ -214,7 +214,7 @@ class _TutorialDialogState extends State<_TutorialDialog> {
             (
               Icons.hearing_rounded,
               'See what was heard',
-              'Read the recognized word. Try again if needed. This activity recognizes words; it does not score pronunciation.'
+              'Your recognized word counts once. Review answers at the end. Retry if no speech is detected. This recognizes words, not pronunciation.'
             ),
           ],
         GameTutorial.alphabetOrder => [
@@ -226,12 +226,12 @@ class _TutorialDialogState extends State<_TutorialDialog> {
             (
               Icons.touch_app_rounded,
               'Tap letters in order',
-              'Tap A, then B, then C. Each correct letter moves into its space.'
+              'Find A, then B, then C. Your chosen letter fills the next space and counts once.'
             ),
             (
               Icons.check_circle_rounded,
               'Keep going',
-              'Fill every space in order to finish the round and celebrate!'
+              'Fill every space. Review your letters and earn stars from your score at the end!'
             ),
           ],
         GameTutorial.rumbledWords => [
@@ -243,12 +243,12 @@ class _TutorialDialogState extends State<_TutorialDialog> {
             (
               Icons.swipe_rounded,
               'Drag into place',
-              'Tap a letter to make it float, then drag it into place. The other letters slide aside. Tap the selected letter again to cancel.'
+              'Touch and drag a letter straight into place. The other letters slide aside. Drop outside the letter row to cancel.'
             ),
             (
               Icons.auto_awesome_rounded,
               'Check your word',
-              'Tap Check Word when ready. Keep arranging if it is wrong. A correct word lights up and plays before the next task starts.'
+              'Tap Check Word when ready. Your first arrangement counts, then the next word appears. Review the correct words at the end.'
             ),
           ],
         GameTutorial.missingVowel => [
@@ -265,7 +265,7 @@ class _TutorialDialogState extends State<_TutorialDialog> {
             (
               Icons.check_circle_rounded,
               'Check your word',
-              'Use the feedback to try again or continue.'
+              'Your chosen vowel fills the blank and counts once. The next word appears automatically. Review answers at the end.'
             ),
           ],
         GameTutorial.pictureMatch => [
@@ -282,7 +282,7 @@ class _TutorialDialogState extends State<_TutorialDialog> {
             (
               Icons.check_circle_rounded,
               'Check and continue',
-              'Watch the feedback before continuing.'
+              'Your first choice counts, then the next task appears. Review your answers and stars at the end.'
             ),
           ],
         GameTutorial.rhymingWords => [
@@ -294,12 +294,12 @@ class _TutorialDialogState extends State<_TutorialDialog> {
             (
               Icons.music_note_rounded,
               'Find the same ending',
-              'Tap three different words with the same ending sound. Each correct answer fills the jar with energy.'
+              'Choose three different words with the same ending sound. Each choice fills the jar and counts once.'
             ),
             (
               Icons.check_circle_rounded,
               'Check the rhyme',
-              'When the jar is full, watch the words appear and listen to them. The jar word is spoken first.'
+              'When the jar is full, the next word appears automatically. Review your rhymes and stars at the end.'
             ),
           ],
         GameTutorial.soundPosition => [
@@ -316,7 +316,7 @@ class _TutorialDialogState extends State<_TutorialDialog> {
             (
               Icons.check_circle_rounded,
               'Check and continue',
-              'Watch the feedback before continuing.'
+              'Your first choice counts, then the next task appears. Review your answers and stars at the end.'
             ),
           ],
       };

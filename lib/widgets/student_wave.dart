@@ -8,7 +8,7 @@ class StudentWave extends StatefulWidget {
   final String character;
   final bool animate;
   static String assetFor(String character) =>
-      'assets/images/school_home/${character}_wave.png';
+      'assets/images/school_home/${character}_wave.webp';
 
   @override
   State<StudentWave> createState() => _StudentWaveState();

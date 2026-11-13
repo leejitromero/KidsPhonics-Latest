@@ -1,3 +1,4 @@
+import 'verified_image_assets.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
@@ -61,15 +62,19 @@ void main() {
     final manifest = jsonDecode(File('tools/home_banner_extraction.json')
         .readAsStringSync()
         .replaceFirst('\ufeff', '')) as Map;
-    final sourceBytes = File(manifest['source'] as String).readAsBytesSync();
-    expect(sha256.convert(sourceBytes).toString().toUpperCase(),
-        manifest['sourceSha256']);
+    final sourceBytes = File(optimizedImagePath(manifest['source'] as String))
+        .readAsBytesSync();
+    expect(
+        sha256.convert(sourceBytes).toString().toUpperCase(),
+        optimizedImageHash(
+            manifest['source'] as String, manifest['sourceSha256']));
     final sourceCodec = await ui.instantiateImageCodec(sourceBytes);
     final source = (await sourceCodec.getNextFrame()).image;
     final sourceRgba =
         (await source.toByteData(format: ui.ImageByteFormat.rawRgba))!;
     for (final part in manifest['assets'] as List) {
-      final bytes = File(part['asset'] as String).readAsBytesSync();
+      final bytes =
+          File(optimizedImagePath(part['asset'] as String)).readAsBytesSync();
       final codec = await ui.instantiateImageCodec(bytes);
       final image = (await codec.getNextFrame()).image;
       final rect = (part['sourceRect'] as List).cast<int>();
@@ -90,8 +95,13 @@ void main() {
           }
           opaque++;
           for (var channel = 0; channel < 3; channel++) {
-            expect(rgba.getUint8(offset + channel),
-                sourceRgba.getUint8(original + channel),
+            // PNG/WebP premultiplication can differ by one only on
+            // translucent RGB; opaque colors must still match exactly.
+            expect(
+                (rgba.getUint8(offset + channel) -
+                        sourceRgba.getUint8(original + channel))
+                    .abs(),
+                lessThanOrEqualTo(alpha == 255 ? 0 : 1),
                 reason: part['asset']);
           }
         }

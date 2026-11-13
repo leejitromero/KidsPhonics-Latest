@@ -1,3 +1,4 @@
+import 'verified_image_assets.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
@@ -76,17 +77,25 @@ void main() {
         .replaceFirst('\ufeff', '')) as List;
     expect(report, hasLength(9));
     final replacement = File(KidsNavigationArt.base).readAsBytesSync();
-    expect(sha256.convert(replacement).toString(),
-        '283395c567bae22dff665cd7613c08c2af8d5e75169f564c072c4fc1f2a23bc7');
-    expect(report.map((entry) => entry['path']).toSet(), {
-      ...KidsNavigationArt.assets
-          .where((asset) => asset != KidsNavigationArt.base),
-      'assets/images/custom_navigation/wooden frame.png'
-    });
-    for (final entry
-        in report.where((e) => KidsNavigationArt.assets.contains(e['path']))) {
-      final bytes = File(entry['path'] as String).readAsBytesSync();
-      expect(sha256.convert(bytes).toString().toUpperCase(), entry['sha256']);
+    expect(
+        sha256.convert(replacement).toString(),
+        optimizedImageHash(KidsNavigationArt.base,
+            '283395c567bae22dff665cd7613c08c2af8d5e75169f564c072c4fc1f2a23bc7'));
+    expect(
+        report
+            .map((entry) => optimizedImagePath(entry['path'] as String))
+            .toSet(),
+        {
+          ...KidsNavigationArt.assets
+              .where((asset) => asset != KidsNavigationArt.base),
+          'assets/images/custom_navigation/wooden frame.png'
+        });
+    for (final entry in report.where((e) => KidsNavigationArt.assets
+        .contains(optimizedImagePath(e['path'] as String)))) {
+      final bytes =
+          File(optimizedImagePath(entry['path'] as String)).readAsBytesSync();
+      expect(sha256.convert(bytes).toString().toUpperCase(),
+          optimizedImageHash(entry['path'] as String, entry['sha256']));
       final codec = await ui.instantiateImageCodec(bytes);
       final image = (await codec.getNextFrame()).image;
       final base =

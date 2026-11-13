@@ -342,8 +342,8 @@ final List<QuizQuestion> quizQuestionsHard = [
 List<QuizQuestion> quizQuestionsForDifficulty(Difficulty d) => [
       // Three-letter words have one unambiguous target sound per position.
       // Keep silent letters, digraphs and consonant clusters out of this quiz.
-      for (final word
-          in cvcLessonWords.where((w) => w.word != 'RED' && w.word != 'RUN'))
+      for (final word in cvcIllustratedWords
+          .where((w) => w.word != 'RED' && w.word != 'RUN'))
         for (final position in quizPositionsFor(d))
           QuizQuestion(word.word[position.wordIndex],
               _quizChoices(word.word[position.wordIndex], position, word.word),

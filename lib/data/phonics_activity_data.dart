@@ -162,7 +162,15 @@ WordPuzzle _wordPuzzle(GameWord item, int count) {
           indices.contains(i) ? null : letters[i]
       ],
       correctLetters: answers,
-      tiles: {...answers, ...'AEIOTR'.split('')}.toList(),
+      // Every blank needs its own tile, including repeated answer letters.
+      // Keep exactly 3 / 4 / 5 choices for Easy / Medium / Hard.
+      tiles: [
+        ...answers,
+        ...'AEIOTR'
+            .split('')
+            .where((letter) => !answers.contains(letter))
+            .take(count + 2 - answers.length),
+      ],
       voiceHint: item.audioKey);
 }
 

@@ -18,14 +18,14 @@ class SceneDialogue extends StatelessWidget {
   final EdgeInsets? contentInsets;
 
   static double aspectRatioFor(String art) =>
-      art == 'dialogue_box_3.png' ? 1 : 4 / 3;
+      art == 'dialogue_box_3.webp' ? 1 : 4 / 3;
 
   /// Tip of the supplied artwork, including its transparent outer margins.
   static Offset tailFor(String art, {bool flip = false}) {
     final tip = switch (art) {
-      'dialogue_box_1.png' => const Offset(.108, .900),
-      'dialogue_box_2.png' => const Offset(.113, .929),
-      'dialogue_box_4.png' => const Offset(.139, .921),
+      'dialogue_box_1.webp' => const Offset(.108, .900),
+      'dialogue_box_2.webp' => const Offset(.113, .929),
+      'dialogue_box_4.webp' => const Offset(.139, .921),
       _ => const Offset(.24, .925),
     };
     return Offset(flip ? 1 - tip.dx : tip.dx, tip.dy);
@@ -44,8 +44,8 @@ class SceneDialogue extends StatelessWidget {
                 width: width,
                 height: width / aspectRatioFor(art),
                 child: LayoutBuilder(builder: (_, box) {
-                  final burst = art == 'dialogue_box_3.png';
-                  final cloud = art == 'dialogue_box_2.png';
+                  final burst = art == 'dialogue_box_3.webp';
+                  final cloud = art == 'dialogue_box_2.webp';
                   final horizontal = introduction
                       ? .20
                       : burst || cloud

@@ -34,6 +34,9 @@ migrate_working_dir/
 /android/build/
 /coverage/
 
+# Local recovery backups are not application source.
+/output/checkpoints/
+
 # Symbolication related
 app.*.symbols
 

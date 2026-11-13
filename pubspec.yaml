@@ -1,7 +1,7 @@
 name: kidsphonics
 description: KidsPhonics - Mobile App for Grade 1 Learners
 publish_to: 'none'
-version: 1.0.37+38
+version: 1.2.0+45
 
 environment:
   sdk: '>=3.0.0 <4.0.0'

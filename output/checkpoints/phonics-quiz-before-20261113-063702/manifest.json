@@ -1,0 +1,58 @@
+[
+  {
+    "path": "lib/screens/phonics_quiz_screen.dart",
+    "sha256": "DF4043E4C292DDB129BEF7E0A4E2EA24BEA2A735F61F51A9F3F22B81E41D3013"
+  },
+  {
+    "path": "lib/widgets/phonics_quiz_design.dart",
+    "sha256": "734DCBFEF95EE07CDA3B108D93C34FDF4116B0029E6A949E048EC1FD4B7F926A"
+  },
+  {
+    "path": "lib/widgets/word_game_layout.dart",
+    "sha256": "A306F23AE6AB52B8A85913518F800ED9B6AF598FDD6B25DA81828B6D2DEF0B70"
+  },
+  {
+    "path": "lib/data/game_instruction_scripts.dart",
+    "sha256": "E027DEEF454E58DC41D15F0B4AC520B7F4DDCB65B944E66F623535C8D71E1751"
+  },
+  {
+    "path": "lib/widgets/game_tutorial.dart",
+    "sha256": "2367A758A3D726097EC648450232DA3F463E8EF0638BB30348EBC62D512E8729"
+  },
+  {
+    "path": "test/phonics_quiz_flow_test.dart",
+    "sha256": "D69DC2564190B512966145DF572095FEE655E301B00098D58DC45DE40D49E495"
+  },
+  {
+    "path": "test/phonics_quiz_layout_test.dart",
+    "sha256": "35FE7DA0A6AEA21CD5C4A5D226E1D658643E691CC9910D02EC737043AA1777C5"
+  },
+  {
+    "path": "test/phonics_quiz_test_helpers.dart",
+    "sha256": "799F89456DD0581A59C0BD6C53D470B360B5ADE3D3737B16C3DA0D2A3C1CB9C5"
+  },
+  {
+    "path": "test/game_answer_feedback_test.dart",
+    "sha256": "E33F342B23FBCEE9A811001CF87F6B6FB6A7C14193F191538DC23B41D16F3443"
+  },
+  {
+    "path": "test/game_first_answer_flow_test.dart",
+    "sha256": "23D996A6FDAE72B9F3BBC84721565D6927114BE4B0A01A1E2D05A512839E730F"
+  },
+  {
+    "path": "test/game_feedback_visibility_test.dart",
+    "sha256": "D07B2EE60CCD0BA3A898F792B843DC793D5B081AF13EA6A80BAD526EC082CA96"
+  },
+  {
+    "path": "test/game_mascot_coach_test.dart",
+    "sha256": "19555F59EA867D6D1742C41167AA6F6CB22184A62CA8535E14DC6E6EA650B36C"
+  },
+  {
+    "path": "test/learner_ui_test.dart",
+    "sha256": "3300DDF56A7AA369B629768B427EF3857400BFE12FF36E75CF39664C1BC734A7"
+  },
+  {
+    "path": "test/game_instruction_recordings_test.dart",
+    "sha256": "8E2525A7C810142C99E6A39BDC2860681B5EA787CE06A5E0CF7E70B184201B02"
+  }
+]

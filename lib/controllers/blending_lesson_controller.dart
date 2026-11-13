@@ -11,26 +11,38 @@ class BlendingLessonController extends ChangeNotifier {
       required this.stop,
       this.voiceEnabled = true,
       this.playIntroduction,
+      List<BlendingLessonWord> words = blendingLessonWords,
       Random? random})
-      : _random = random ?? Random() {
+      : words = List.unmodifiable(words),
+        _random = random ?? Random() {
+    if (this.words.isEmpty ||
+        this
+            .words
+            .any((word) => !RegExp(r'^[A-Z]{3,7}$').hasMatch(word.word))) {
+      throw ArgumentError.value(words, 'words',
+          'Provide at least one word with 3 to 7 uppercase letters.');
+    }
+    _clearSlots();
     _shuffle();
   }
   final Future<bool> Function(String) play;
   final Future<void> Function() stop;
   Future<bool> Function()? playIntroduction;
   final Random _random;
+  final List<BlendingLessonWord> words;
   bool voiceEnabled;
   int index = 0;
-  final List<int?> _slots = [null, null, null];
+  final List<int?> _slots = [];
   List<int?> get slots => List.unmodifiable(_slots);
-  List<int> order = [2, 0, 1];
+  List<int> order = [];
   int? selected, highlighted;
+  Set<int> highlightedLetters = const {};
   bool tryAnother = false,
       joined = false,
       running = false,
       audioUnavailable = false;
   BlendingPhase phase = BlendingPhase.puzzle;
-  BlendingLessonWord get word => blendingLessonWords[index];
+  BlendingLessonWord get word => words[index];
   bool get complete => _slots.every((piece) => piece != null);
   bool used(int piece) => _slots.contains(piece);
   int _generation = 0, _jobs = 0;
@@ -40,11 +52,25 @@ class BlendingLessonController extends ChangeNotifier {
   Completer<void>? _delay;
   bool _current(int generation) => !_disposed && generation == _generation;
 
+  void _highlight(Iterable<int> letters) {
+    highlightedLetters = Set.unmodifiable(letters);
+    highlighted = highlightedLetters.isEmpty ? null : highlightedLetters.first;
+  }
+
   void _shuffle() {
-    order = [0, 1, 2]..shuffle(_random);
+    order = List.generate(word.word.length, (i) => i)..shuffle(_random);
     if (order.map((i) => word.word[i]).join() == word.word) {
-      order = [2, 0, 1];
+      order = [
+        word.word.length - 1,
+        for (var i = 0; i < word.word.length - 1; i++) i
+      ];
     }
+  }
+
+  void _clearSlots() {
+    _slots
+      ..clear()
+      ..addAll(List<int?>.filled(word.word.length, null));
   }
 
   void _cancelDelay() {
@@ -61,7 +87,7 @@ class BlendingLessonController extends ChangeNotifier {
     _queue = Future.value();
     _jobs = 0;
     running = false;
-    highlighted = null;
+    _highlight(const []);
     audioUnavailable = false;
     _ready = stop().catchError((Object _) {});
   }
@@ -135,15 +161,15 @@ class BlendingLessonController extends ChangeNotifier {
       !_disposed &&
       phase != BlendingPhase.intro &&
       piece >= 0 &&
-      piece < 3 &&
+      piece < _slots.length &&
       slot >= 0 &&
-      slot < 3 &&
+      slot < _slots.length &&
       !used(piece) &&
       _slots[slot] == null &&
       word.word[piece] == word.word[slot];
 
   void choose(int piece) {
-    if (_disposed || piece < 0 || piece > 2 || used(piece)) return;
+    if (_disposed || piece < 0 || piece >= _slots.length || used(piece)) return;
     selected = selected == piece ? null : piece;
     tryAnother = false;
     notifyListeners();
@@ -168,10 +194,11 @@ class BlendingLessonController extends ChangeNotifier {
     selected = null;
     tryAnother = false;
     _enqueue((generation) async {
-      highlighted = slot;
+      final sound = word.placementSound(slot);
+      _highlight(sound.letters);
       notifyListeners();
-      if (!await _cue(word.soundAudio(slot), generation)) return;
-      highlighted = null;
+      if (!await _cue(sound.audio, generation)) return;
+      _highlight(const []);
     });
     if (complete) _enqueue((generation) => _blend(generation, celebrate: true));
     return true;
@@ -181,19 +208,22 @@ class BlendingLessonController extends ChangeNotifier {
     phase = celebrate ? BlendingPhase.blending : BlendingPhase.puzzle;
     joined = false;
     tryAnother = false;
-    for (var slot = 0; slot < 3; slot++) {
+    for (final sound in word.sounds) {
       if (!_current(generation)) return;
-      highlighted = slot;
+      _highlight(sound.letters);
       notifyListeners();
-      if (!await _cue(word.soundAudio(slot), generation)) return;
+      if (!await _cue(sound.audio, generation)) return;
       await _pause(160, generation);
     }
     if (!_current(generation)) return;
-    highlighted = null;
+    _highlight(word.wholeWordOnly
+        ? List.generate(word.word.length, (i) => i)
+        : const []);
     joined = celebrate;
     notifyListeners();
     await _pause(celebrate ? 550 : 100, generation);
     if (!await _cue(word.wordAudio, generation)) return;
+    _highlight(const []);
     if (celebrate) {
       phase = BlendingPhase.complete;
       notifyListeners();
@@ -211,7 +241,7 @@ class BlendingLessonController extends ChangeNotifier {
   void reset() {
     if (_disposed) return;
     _invalidate();
-    _slots.fillRange(0, 3, null);
+    _clearSlots();
     selected = null;
     joined = false;
     tryAnother = false;
@@ -221,8 +251,14 @@ class BlendingLessonController extends ChangeNotifier {
   }
 
   void next() {
-    if (_disposed || index == blendingLessonWords.length - 1) return;
+    if (_disposed || index == words.length - 1) return;
     index++;
+    reset();
+  }
+
+  void previous() {
+    if (_disposed || index == 0) return;
+    index--;
     reset();
   }
 

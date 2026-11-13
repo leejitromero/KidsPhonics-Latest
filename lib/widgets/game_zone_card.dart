@@ -162,7 +162,7 @@ class _GameZoneCardState extends State<GameZoneCard> {
                 top: 0,
                 bottom: 0,
                 width: safe.width * .45,
-                child: Image.asset('$sceneAssets/${widget.character}_1.png',
+                child: Image.asset('$sceneAssets/${widget.character}_1.webp',
                     key: ValueKey(
                         'game-character-${widget.title}-${widget.character}'),
                     fit: BoxFit.contain,

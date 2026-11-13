@@ -176,7 +176,7 @@ void main() {
   }
 
   testWidgets(
-      'Sound Match counts retry accuracy and awards each completed task once',
+      'Sound Match scores one submission per task and rewards correct answers',
       (t) async {
     t.platformDispatcher.accessibilityFeaturesTestValue =
         const FakeAccessibilityFeatures(disableAnimations: true);
@@ -194,8 +194,12 @@ void main() {
     wrong.onPressed!();
     await t.pump(const Duration(milliseconds: 650));
     await t.pump();
+    final nextAnswer =
+        t.widget<AudioButton>(find.byType(AudioButton)).phrase.split('-').last;
+    expect(nextAnswer, isNot(answer));
     final correct = t.widget<GameAnswerButton>(find.byWidgetPredicate((w) =>
-        w is GameAnswerButton && w.label == (answer == 'Q' ? 'Qu' : answer)));
+        w is GameAnswerButton &&
+        w.label == (nextAnswer == 'Q' ? 'Qu' : nextAnswer)));
     correct.onPressed!();
     correct.onPressed!();
     await t.pump();
@@ -203,10 +207,10 @@ void main() {
     final session = t.state(find.byType(SoundMatchScreen)) as GameSessionUi;
     expect(
         (session.scoredAttempts, session.correctAttempts, session.earnedStars),
-        (2, 1, 1));
+        (2, 1, 0));
     expect(p.dailyActivity.values.single.questionsAnswered, 2);
     expect(p.dailyActivity.values.single.correctAnswers, 1);
-    expect(p.stars, 1);
+    expect(p.stars, 0);
     expect(p.xp, 8); // Default Medium retains round(5 * 1.5).
     await close(t, p);
     p.phonicsAudio.dispose();

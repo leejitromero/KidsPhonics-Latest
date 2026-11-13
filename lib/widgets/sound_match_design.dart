@@ -4,7 +4,7 @@ import 'game_design.dart';
 import 'learner_widgets.dart';
 import 'quick_choice_art.dart';
 
-const magicalSoundOrbAsset = 'assets/images/new_ui/magical_sound_orb.png';
+const magicalSoundOrbAsset = 'assets/images/new_ui/magical_sound_orb.webp';
 
 /// Keeps controls at readable sizes; short screens can scroll instead of
 /// shrinking the entire game and its touch targets.
@@ -15,9 +15,10 @@ class SoundMatchLayout extends StatelessWidget {
     required this.enabled,
     required this.choices,
     this.result,
+    this.submitted = false,
   });
   final String phrase;
-  final bool enabled;
+  final bool enabled, submitted;
   final bool? result;
   final List<Widget> choices;
 
@@ -88,7 +89,7 @@ class SoundMatchLayout extends StatelessWidget {
                           ? Duration.zero
                           : const Duration(milliseconds: 220),
                       child: Container(
-                          key: ValueKey(result),
+                          key: ValueKey((result, submitted)),
                           padding: const EdgeInsets.symmetric(
                               horizontal: 14, vertical: 8),
                           decoration: BoxDecoration(
@@ -99,11 +100,13 @@ class SoundMatchLayout extends StatelessWidget {
                               border:
                                   Border.all(color: Colors.white, width: 2)),
                           child: Text(
-                              result == null
-                                  ? 'Tap the orb and listen!'
-                                  : result!
-                                      ? 'Wonderful! You found the sound!'
-                                      : 'Try Again!',
+                              submitted
+                                  ? 'Answer saved!'
+                                  : result == null
+                                      ? 'Tap the orb and listen!'
+                                      : result!
+                                          ? 'Wonderful! You found the sound!'
+                                          : 'Try Again!',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 16,

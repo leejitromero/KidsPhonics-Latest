@@ -72,7 +72,7 @@ class LessonMenuCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final scale = MediaQuery.textScalerOf(context);
     return Semantics(
-        hint: '$mastered of $total $unit. $action $title',
+        hint: '$action $title',
         child: LessonMenuPress(
             key: ValueKey('lesson-open-$id'),
             onTap: onPressed,
@@ -136,29 +136,8 @@ class LessonMenuCard extends StatelessWidget {
                                   fontSize: 15,
                                   height: 1.05))),
                       const SizedBox(height: 4),
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(14),
-                          child: SizedBox(
-                              height: scale.scale(11) * 1.4 + 2,
-                              child: Stack(fit: StackFit.expand, children: [
-                                LinearProgressIndicator(
-                                    key: ValueKey('lesson-progress-$id'),
-                                    value: mastered / total,
-                                    color: const Color(0xFFBF8AFF),
-                                    backgroundColor: const Color(0xFFFFF7EE)),
-                                Center(
-                                    child: Text('$mastered / $total $unit',
-                                        key: ValueKey('lesson-count-$id'),
-                                        style: const TextStyle(
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.w900,
-                                            color: Color(0xFF482514),
-                                            shadows: [
-                                              Shadow(
-                                                  color: Colors.white,
-                                                  blurRadius: 3)
-                                            ]))),
-                              ]))),
+                      // Preserve the existing artwork, title and button positions.
+                      SizedBox(height: scale.scale(11) * 1.4 + 2),
                       const SizedBox(height: 4),
                       _actionButton(context),
                     ])))));

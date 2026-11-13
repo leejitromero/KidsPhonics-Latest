@@ -18,7 +18,7 @@ double _textHeight(
 class ProgressStreakFrame extends StatelessWidget {
   const ProgressStreakFrame({super.key, required this.days});
   final int days;
-  static const asset = 'assets/images/progress_collection/frame_streak.png';
+  static const asset = 'assets/images/progress_collection/frame_streak.webp';
   static const _valueStyle = TextStyle(
       fontSize: 27,
       height: 1.2,
@@ -61,7 +61,7 @@ class ProgressLearningSummaryFrame extends StatelessWidget {
       required this.practicedLessons,
       required this.stars});
   final int exploredLetters, practicedLessons, stars;
-  static const asset = 'assets/images/progress_collection/frame_summary.png';
+  static const asset = 'assets/images/progress_collection/frame_summary.webp';
   static const _valueStyle =
       TextStyle(fontSize: 23, height: 1.2, fontWeight: FontWeight.w900);
   static const _labelStyle =

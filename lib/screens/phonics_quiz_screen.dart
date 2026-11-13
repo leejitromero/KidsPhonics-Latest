@@ -27,10 +27,13 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
   int _index = 0, _generation = 0, _cueRequest = 0, _feedbackStep = 0;
   String? _selected;
   bool _submitted = false, _reviewing = false, _completionAwarded = false;
-  bool _introFinished = false, _needsCue = true, _cuePlaying = false;
+  bool _readyForCue = false, _needsCue = true, _cuePlaying = false;
   bool _feedbackRunning = false, _workScheduled = false;
   Timer? _resumeTimer, _holdTimer;
   Completer<void>? _holdDone;
+  // The supplied correct effect is 2.04 seconds long. Let it finish before
+  // the next word claims the shared foreground audio channel.
+  static const _answerHold = Duration(milliseconds: 2200);
   QuizQuestion get _q => (_reviewing ? _reviewQuestions : _questions)[_index];
   bool get _active =>
       canAdvanceGameFeedback && TickerMode.valuesOf(context).enabled;
@@ -58,6 +61,11 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _options = List.of(_q.options)..shuffle();
+    unawaited(context.read<AppProvider>().ready.then((_) {
+      if (!mounted) return;
+      _readyForCue = true;
+      _scheduleWork();
+    }));
   }
 
   @override
@@ -85,16 +93,11 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
       if (!mounted || !_active) return;
       if (_submitted) {
         unawaited(_runFeedback());
-      } else if (_introFinished && _needsCue && _selected == null) {
+      } else if (_readyForCue && _needsCue && _selected == null) {
         unawaited(_playCue());
       }
     });
     WidgetsBinding.instance.ensureVisualUpdate();
-  }
-
-  void _introDone() {
-    _introFinished = true;
-    _scheduleWork();
   }
 
   void _cancelCue() {
@@ -136,9 +139,9 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
   }
 
   void _select(String letter) {
-    if (!_active || _submitted) return;
+    if (!_active || _submitted || !_options.contains(letter)) return;
     _cancelCue();
-    setState(() => _selected = letter);
+    _submit(letter);
   }
 
   void _hearSound(String letter) {
@@ -153,24 +156,36 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
     unawaited(gameNarration.word(_q.position.audioKey));
   }
 
-  void _check() {
-    if (!_active || _submitted || _selected == null) return;
-    _cancelCue();
-    final correct = _selected == _q.correctLetter;
+  void _submit(String letter) {
+    final correct = letter == _q.correctLetter;
     setState(() {
+      _selected = letter;
       _submitted = true;
       _feedbackStep = 0;
     });
     // A quiz has one submission per question. Review never changes its score,
     // daily-answer counts, completion bonus, or rewards.
     if (!_reviewing) {
-      recordGameAnswer(correct: correct);
+      recordGameAnswer(
+          reviewTarget: ReviewTarget.sound(_q.correctLetter),
+          correct: correct,
+          itemId: 'quiz-$_index',
+          prompt: '${_q.position.name} sound',
+          selected: _selected!,
+          expected: _q.correctLetter,
+          word: _q.word,
+          highlightedIndex: _q.position == QuizSoundPosition.beginning
+              ? 0
+              : _q.position == QuizSoundPosition.end
+                  ? _q.word.length - 1
+                  : _q.word.length ~/ 2);
       if (correct) {
         awardGameXp((5 * widget.difficulty.xpMultiplier).round());
-        awardGameStar();
       } else {
         _mistakes.add(_q);
       }
+    } else {
+      unawaited(correct ? playGameCorrect() : playGameWrong());
     }
     unawaited(_runFeedback());
   }
@@ -201,6 +216,15 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
   }
 
   Future<void> _runFeedback() async {
+    if (!_reviewing) {
+      if (_feedbackRunning || !mounted || !_submitted || resultOpen) return;
+      _feedbackRunning = true;
+      scheduleGameAdvance(() {
+        _feedbackRunning = false;
+        _advance();
+      }, delay: _answerHold);
+      return;
+    }
     if (_feedbackRunning || !mounted || !_submitted || resultOpen) return;
     if (!_active) {
       _retryFeedback();
@@ -215,10 +239,13 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
     try {
       while (current() && _feedbackStep < 3) {
         if (!_active) return;
-        if (_feedbackStep < 2) {
+        if (_feedbackStep == 0) {
+          await _hold(_answerHold);
+          if (!current() || !_active) return;
+        } else {
           gameNarration.updateEnvironment(
               enabled: p.voiceEnabled, active: true);
-          final playback = _feedbackStep == 0
+          final playback = _feedbackStep == 1
               ? gameNarration.word(_q.wordAudioKey)
               : gameNarration.letterSound(_q.correctLetter);
           final audioGeneration = gameNarration.generation;
@@ -229,15 +256,6 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
               audioGeneration != gameNarration.generation) {
             return;
           }
-        } else {
-          if (_selected == _q.correctLetter) {
-            await playGameCorrect();
-          } else {
-            await playGameWrong();
-          }
-          if (!current() || !_active) return;
-          await _hold(const Duration(milliseconds: 800));
-          if (!current() || !_active) return;
         }
         _feedbackStep++;
       }
@@ -249,6 +267,8 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
   }
 
   void _prepare(int index) {
+    cancelGameAdvance();
+    _feedbackRunning = false;
     _generation++;
     _cueRequest++;
     _resumeTimer?.cancel();
@@ -321,13 +341,22 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
   }
 
   @override
+  String get gameTitle => 'Phonics Quiz';
+  @override
+  Difficulty get roundDifficulty => widget.difficulty;
+  @override
+  Widget gameForDifficulty(Difficulty difficulty) =>
+      PhonicsQuizScreen(difficulty: difficulty);
+  @override
   int get totalGameItems => _questions.length;
 
   @override
   Widget build(BuildContext context) => GameScaffold(
       narration: gameNarration,
       fitViewport: true,
-      answerResult: !_submitted ? null : _selected == _q.correctLetter,
+      answerResult: _reviewing
+          ? (_submitted ? _selected == _q.correctLetter : null)
+          : gameAnswerFeedback,
       title: 'Phonics Quiz',
       roundHeader: ActivityRoundHeader(
           difficulty: widget.difficulty,
@@ -335,14 +364,16 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
           total: _reviewing ? _reviewQuestions.length : _questions.length,
           label: _reviewing ? 'Review' : 'Question',
           fitLabels: true),
-      instructions:
-          'Listen to the word, choose your answer, then tap Check Answer!',
+      instructions: 'Listen to the word, then tap your answer!',
       instructionPanel: GameMascotCoach(
           title: 'Phonics Quiz',
-          instructions: 'Listen, choose, then check.',
+          instructions: 'Listen, then tap your answer.',
           controller: gameNarration,
-          child: GameInstructionGuide(
-              gameTitle: 'Phonics Quiz', onFinished: _introDone)),
+          child: const GameInstructionGuide(
+              // The old recording mentions the removed Check Answer button.
+              // The word and sound-position cues start automatically instead.
+              gameTitle: 'Phonics Quiz',
+              autoPlay: false)),
       difficulty: widget.difficulty,
       hasProgress: (_selected != null || scoredAttempts > 0 || _reviewing) &&
           !resultOpen,
@@ -355,9 +386,9 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen>
           selected: _selected,
           submitted: _submitted,
           reviewing: _reviewing,
+          deferFeedback: !_reviewing,
           canInteract: _active,
           onSelect: _select,
-          onCheck: _check,
           onHearSound: _hearSound,
           onHearQuestion: _hearQuestion,
           onBeforeWord: _cancelCue));

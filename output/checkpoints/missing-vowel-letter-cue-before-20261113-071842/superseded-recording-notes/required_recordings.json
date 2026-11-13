@@ -1,0 +1,73 @@
+[
+  {
+    "filename": "vowel-oo-long.mp3",
+    "cueKey": "missing-vowel-oo-long",
+    "sound": "/uː/",
+    "recordingGuide": "mahabang oo sa MOON",
+    "words": [
+      "MOON",
+      "ROOSTER",
+      "SPOON"
+    ]
+  },
+  {
+    "filename": "vowel-oo-short.mp3",
+    "cueKey": "missing-vowel-oo-short",
+    "sound": "/ʊ/",
+    "recordingGuide": "maikling oo sa BOOK",
+    "words": [
+      "BOOK",
+      "WOLF"
+    ]
+  },
+  {
+    "filename": "vowel-ow.mp3",
+    "cueKey": "missing-vowel-ow",
+    "sound": "/aʊ/",
+    "recordingGuide": "ow sa COW at HOUSE",
+    "words": [
+      "COW",
+      "HOUSE"
+    ]
+  },
+  {
+    "filename": "vowel-or.mp3",
+    "cueKey": "missing-vowel-or",
+    "sound": "/ɔːr/",
+    "recordingGuide": "or sa CORN at DOOR",
+    "words": [
+      "CORN",
+      "DOOR",
+      "ORANGE"
+    ]
+  },
+  {
+    "filename": "vowel-ear.mp3",
+    "cueKey": "missing-vowel-ear",
+    "sound": "/ɪr/",
+    "recordingGuide": "ear sa EAR",
+    "words": [
+      "EAR"
+    ]
+  },
+  {
+    "filename": "vowel-air.mp3",
+    "cueKey": "missing-vowel-air",
+    "sound": "/ɛr/",
+    "recordingGuide": "air sa AIRPLANE",
+    "words": [
+      "AIRPLANE",
+      "FAIRY"
+    ]
+  },
+  {
+    "filename": "vowel-schwa.mp3",
+    "cueKey": "missing-vowel-schwa",
+    "sound": "/ə/",
+    "recordingGuide": "mahina at maikling uh; unang O ng POTATO at GORILLA",
+    "words": [
+      "GORILLA",
+      "POTATO"
+    ]
+  }
+]

@@ -73,9 +73,12 @@ void main() {
             q.blanks.map((c) => c ?? q.correctLetters[index++]).join();
         expect(rebuilt, q.word);
         expect(index, q.correctLetters.length);
-        expect(q.tiles.toSet(), hasLength(q.tiles.length));
+        expect(q.tiles, hasLength(d.index + 3));
         for (final answer in q.correctLetters) {
-          expect(q.tiles, contains(answer));
+          expect(
+              q.tiles.where((letter) => letter == answer).length,
+              greaterThanOrEqualTo(
+                  q.correctLetters.where((letter) => letter == answer).length));
         }
         hasWordAudio(q.word);
       }

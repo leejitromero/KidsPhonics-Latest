@@ -38,7 +38,7 @@ class ProgressRewardArtwork extends StatelessWidget {
             height: treasure
                 ? box.maxHeight + (size.height - crop.height) * scale
                 : size.height * box.maxHeight / crop.height,
-            child: Image.asset('assets/images/progress_collection/$name.png',
+            child: Image.asset('assets/images/progress_collection/$name.webp',
                 scale: treasure ? 1 / scale : null,
                 centerSlice: treasure
                     ? Rect.fromLTRB(

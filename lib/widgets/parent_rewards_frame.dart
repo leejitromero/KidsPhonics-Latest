@@ -13,7 +13,7 @@ class ParentRewardsFrame extends StatelessWidget {
       required this.total,
       required this.onViewAll});
 
-  static const asset = 'assets/images/parent_reports/frame_rewrds.png';
+  static const asset = 'assets/images/parent_reports/frame_rewrds.webp';
   static const _title = TextStyle(
       color: ParentReportFrame.ink,
       fontSize: 18,

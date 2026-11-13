@@ -30,7 +30,7 @@ class _FeedbackArt extends StatelessWidget {
 /// Readable success feedback shared by the games that previously used plain text.
 class GameCorrectFrame extends StatelessWidget {
   const GameCorrectFrame({super.key, this.height = 44, this.detail});
-  static const asset = 'assets/images/new_ui/correct_frame.png';
+  static const asset = 'assets/images/new_ui/correct_frame.webp';
   final double height;
   final String? detail;
 
@@ -79,7 +79,7 @@ class GameCorrectFrame extends StatelessWidget {
 /// The supplied Next artwork is used only by Missing Vowel.
 class MissingVowelNextButton extends StatelessWidget {
   const MissingVowelNextButton({super.key, required this.onPressed});
-  static const asset = 'assets/images/new_ui/missing_vowel_next.png';
+  static const asset = 'assets/images/new_ui/missing_vowel_next.webp';
   final VoidCallback? onPressed;
 
   @override

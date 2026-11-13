@@ -18,16 +18,17 @@ class PhonicsQuizQuestionView extends StatelessWidget {
       required this.reviewing,
       required this.canInteract,
       required this.onSelect,
-      required this.onCheck,
       required this.onHearSound,
       required this.onHearQuestion,
-      required this.onBeforeWord});
+      required this.onBeforeWord,
+      this.deferFeedback = false});
   final QuizQuestion question;
   final List<String> options;
   final String? selected;
   final bool submitted, reviewing, canInteract;
+  final bool deferFeedback;
   final ValueChanged<String> onSelect, onHearSound;
-  final VoidCallback onCheck, onHearQuestion, onBeforeWord;
+  final VoidCallback onHearQuestion, onBeforeWord;
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(builder: (_, box) {
@@ -39,7 +40,13 @@ class PhonicsQuizQuestionView extends StatelessWidget {
             word: question.word,
             pictureAsset: question.pictureAsset,
             pictureExtent:
-                compact ? 80 : (box.maxHeight * .30).clamp(130.0, 200.0),
+                compact ? 110 : (box.maxHeight * .34).clamp(150.0, 220.0),
+            pictureFrameBuilder: (picture) => Center(
+                child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 360),
+                    child: _QuizTextFrame(
+                        key: const ValueKey('quiz-picture-frame'),
+                        child: SizedBox.expand(child: picture)))),
             children: [
               _QuizTextFrame(
                   key: const ValueKey('quiz-question-frame'),
@@ -108,7 +115,8 @@ class PhonicsQuizQuestionView extends StatelessWidget {
                             compact: true,
                             floating: false,
                             selected: selected == letter,
-                            result: submitted &&
+                            result: !deferFeedback &&
+                                    submitted &&
                                     (letter == selected ||
                                         letter == question.correctLetter)
                                 ? letter == question.correctLetter
@@ -131,7 +139,10 @@ class PhonicsQuizQuestionView extends StatelessWidget {
                   ])),
               ]),
               SizedBox(height: gap),
-              if (submitted)
+              if (submitted && deferFeedback)
+                const Text('Answer saved!',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900))
+              else if (submitted)
                 Semantics(
                     liveRegion: true,
                     child: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -197,20 +208,7 @@ class PhonicsQuizQuestionView extends StatelessWidget {
                                                     color: GameDesign.ink)))),
                                 ]),
                           ])),
-                    ]))
-              else
-                SizedBox(
-                    height: 44,
-                    child: Center(
-                        child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: ForestAudioButton(
-                                key: const ValueKey('quiz-check-answer'),
-                                label: 'Check Answer',
-                                icon: Icons.check_circle_rounded,
-                                onPressed: selected == null || !canInteract
-                                    ? null
-                                    : onCheck)))),
+                    ])),
               if (reviewing)
                 const SizedBox(
                     height: 16,

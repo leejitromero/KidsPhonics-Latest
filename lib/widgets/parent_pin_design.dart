@@ -2,8 +2,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 const parentPinInk = Color(0xFF075132);
-const parentPinAccessArt = 'assets/images/parent_access/parent_access_lock.png';
-const parentPinSetupArt = 'assets/images/parent_access/parent_setup_lock.png';
+const parentPinAccessArt = 'assets/images/parent_access/parent_access_lock.webp';
+const parentPinSetupArt = 'assets/images/parent_access/parent_setup_lock.webp';
 
 class ParentPinPanel extends StatelessWidget {
   const ParentPinPanel({super.key, required this.child, this.compact = false});

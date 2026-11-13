@@ -1,3 +1,4 @@
+import 'verified_image_assets.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
@@ -30,9 +31,10 @@ void main() {
         .readAsStringSync()
         .replaceFirst('\uFEFF', '')) as Map;
     final bytes = await rootBundle.load(ProgressPhonicsSkillsFrame.asset);
-    expect(entry['path'], ProgressPhonicsSkillsFrame.asset);
+    expect(optimizedImagePath(entry['path'] as String),
+        ProgressPhonicsSkillsFrame.asset);
     expect(sha256.convert(bytes.buffer.asUint8List()).toString().toUpperCase(),
-        entry['sha256']);
+        optimizedImageHash(entry['path'] as String, entry['sha256']));
   });
 
   for (final (size, scale) in [

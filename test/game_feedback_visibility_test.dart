@@ -109,15 +109,11 @@ void main() {
       await t.pump(const Duration(milliseconds: 500));
       await t.pump(const Duration(milliseconds: 300));
       expect(t.widget<SoundMatchLayout>(find.byType(SoundMatchLayout)).phrase,
-          phrase);
-      expect(find.text('Try Again!'), findsOneWidget);
-      t
-          .widget<GameAnswerButton>(find.byWidgetPredicate(
-              (w) => w is GameAnswerButton && w.label == answer))
-          .onPressed!();
-      await t.pump(const Duration(milliseconds: 1500));
-      expect(t.widget<SoundMatchLayout>(find.byType(SoundMatchLayout)).phrase,
           isNot(phrase));
+      expect(find.text('Try Again!'), findsNothing);
+      final state = t.state<GameSessionUi>(find.byType(SoundMatchScreen));
+      expect((state.scoredAttempts, state.correctAttempts), (1, 0));
+      expect(p.stars, 0);
       await close(t, p);
     });
   }
@@ -138,9 +134,8 @@ void main() {
         .widget<GameAnswerButton>(find.byWidgetPredicate((w) =>
             w is GameAnswerButton && w.label == letterChoiceLabel(answer)))
         .onPressed!();
-    await submitQuiz(t);
     t.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
-    await t.pump(const Duration(seconds: 2));
+    await t.pump(const Duration(seconds: 3));
     expect(t.widget<WordGameLayout>(find.byType(WordGameLayout)).word, word);
     t.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
     await finishMutedQuizFeedback(t);

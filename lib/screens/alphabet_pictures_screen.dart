@@ -15,6 +15,7 @@ import '../widgets/letter_lesson_page.dart' show AlphabetLetterPicker;
 import '../widgets/lesson_control_button.dart';
 import '../widgets/lesson_frame.dart';
 import '../widgets/lessons_menu_page.dart';
+import '../widgets/lesson_swipe_navigation.dart';
 
 class AlphabetPicturesScreen extends StatefulWidget {
   const AlphabetPicturesScreen({super.key});
@@ -140,98 +141,111 @@ class _AlphabetPicturesScreenState extends State<AlphabetPicturesScreen> {
             builder: (_, __) {
               final entry = lesson.entry;
               final enabled = p.isReady && !p.timeLimitReached && !_gridOpen;
-              return LayoutBuilder(builder: (context, available) {
-                final scale = MediaQuery.textScalerOf(context).scale(18) / 18;
-                return SingleChildScrollView(
-                    child: SizedBox(
-                        height:
-                            math.max(available.maxHeight, 310 + 100 * scale),
-                        child: Column(children: [
-                          Expanded(child: LayoutBuilder(builder: (_, box) {
-                            final side = math.min(
-                                480.0, math.min(box.maxWidth, box.maxHeight));
-                            return Center(
-                                child: SizedBox(
-                                    width: side,
-                                    height: side,
-                                    child: LessonFrame(
-                                        radius: 32,
-                                        padding: EdgeInsets.all(side * .06),
-                                        child: Semantics(
-                                            label: entry.sentence,
-                                            image: true,
-                                            child: AnimatedScreenArt(
-                                                key: ValueKey(
-                                                    'alphabet-picture-${entry.letter}'),
-                                                frames: entry.frames,
-                                                fit: BoxFit.contain,
-                                                maxDecodeWidth: 720,
-                                                frameDuration: const Duration(
-                                                    milliseconds: 450))))));
-                          })),
-                          const SizedBox(height: 8),
-                          Text(entry.sentence,
-                              key: const ValueKey('alphabet-picture-caption'),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w900,
-                                  color: KidsUi.ink)),
-                          const SizedBox(height: 8),
-                          SizedBox(
-                              width: 150,
-                              child: LessonControlButton(
-                                  key: const ValueKey('alphabet-picture-sound'),
-                                  label:
-                                      lesson.playing ? 'Listening...' : 'Sound',
-                                  icon: Icons.volume_up_rounded,
-                                  art: LessonButtonArt.sound,
-                                  onPressed: enabled &&
-                                          p.voiceEnabled &&
-                                          lesson.hasRecording &&
-                                          !lesson.playing
-                                      ? _replay
-                                      : null)),
-                          if (!p.voiceEnabled || lesson.message != null)
-                            Text(
-                                !p.voiceEnabled
-                                    ? 'Audio is turned off.'
-                                    : lesson.message!,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                    fontSize: 12, color: KidsUi.ink)),
-                          const SizedBox(height: 16),
-                          Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                    child: LessonControlButton(
-                                        label: 'Previous',
-                                        icon: Icons.arrow_back_rounded,
-                                        art: LessonButtonArt.previous,
-                                        onPressed: !enabled || lesson.index == 0
-                                            ? null
-                                            : () => _select(lesson.index - 1))),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                    child: LessonControlButton(
-                                        label: 'A\u2013Z Grid',
-                                        icon: Icons.grid_view_rounded,
-                                        primary: true,
-                                        onPressed: enabled ? _openGrid : null)),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                    child: LessonControlButton(
-                                        label: 'Next',
-                                        icon: Icons.arrow_forward_rounded,
-                                        art: LessonButtonArt.next,
-                                        onPressed: !enabled ||
-                                                lesson.index == 25
-                                            ? null
-                                            : () => _select(lesson.index + 1))),
-                              ])
-                        ])));
-              });
+              final VoidCallback? previous = !enabled || lesson.index == 0
+                  ? null
+                  : () => _select(lesson.index - 1);
+              final VoidCallback? next = !enabled || lesson.index == 25
+                  ? null
+                  : () => _select(lesson.index + 1);
+              return LessonSwipeNavigation(
+                  navigationKey: lesson.index,
+                  enabled: enabled,
+                  onPrevious: previous,
+                  onNext: next,
+                  child: LayoutBuilder(builder: (context, available) {
+                    final scale =
+                        MediaQuery.textScalerOf(context).scale(18) / 18;
+                    return SingleChildScrollView(
+                        child: SizedBox(
+                            height: math.max(
+                                available.maxHeight, 310 + 100 * scale),
+                            child: Column(children: [
+                              Expanded(child: LayoutBuilder(builder: (_, box) {
+                                final side = math.min(480.0,
+                                    math.min(box.maxWidth, box.maxHeight));
+                                return Center(
+                                    child: SizedBox(
+                                        width: side,
+                                        height: side,
+                                        child: LessonFrame(
+                                            radius: 32,
+                                            padding: EdgeInsets.all(side * .06),
+                                            child: Semantics(
+                                                label: entry.sentence,
+                                                image: true,
+                                                child: AnimatedScreenArt(
+                                                    key: ValueKey(
+                                                        'alphabet-picture-${entry.letter}'),
+                                                    frames: entry.frames,
+                                                    fit: BoxFit.contain,
+                                                    maxDecodeWidth: 720,
+                                                    frameDuration:
+                                                        const Duration(
+                                                            milliseconds:
+                                                                450))))));
+                              })),
+                              const SizedBox(height: 8),
+                              Text(entry.sentence,
+                                  key: const ValueKey(
+                                      'alphabet-picture-caption'),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w900,
+                                      color: KidsUi.ink)),
+                              const SizedBox(height: 8),
+                              SizedBox(
+                                  width: 150,
+                                  child: LessonControlButton(
+                                      key: const ValueKey(
+                                          'alphabet-picture-sound'),
+                                      label: lesson.playing
+                                          ? 'Listening...'
+                                          : 'Sound',
+                                      icon: Icons.volume_up_rounded,
+                                      art: LessonButtonArt.sound,
+                                      onPressed: enabled &&
+                                              p.voiceEnabled &&
+                                              lesson.hasRecording &&
+                                              !lesson.playing
+                                          ? _replay
+                                          : null)),
+                              if (!p.voiceEnabled || lesson.message != null)
+                                Text(
+                                    !p.voiceEnabled
+                                        ? 'Audio is turned off.'
+                                        : lesson.message!,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        fontSize: 12, color: KidsUi.ink)),
+                              const SizedBox(height: 16),
+                              Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                        child: LessonControlButton(
+                                            label: 'Previous',
+                                            icon: Icons.arrow_back_rounded,
+                                            art: LessonButtonArt.previous,
+                                            onPressed: previous)),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                        child: LessonControlButton(
+                                            label: 'A\u2013Z Grid',
+                                            icon: Icons.grid_view_rounded,
+                                            primary: true,
+                                            onPressed:
+                                                enabled ? _openGrid : null)),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                        child: LessonControlButton(
+                                            label: 'Next',
+                                            icon: Icons.arrow_forward_rounded,
+                                            art: LessonButtonArt.next,
+                                            onPressed: next)),
+                                  ])
+                            ])));
+                  }));
             }));
   }
 }

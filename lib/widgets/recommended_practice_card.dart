@@ -19,7 +19,7 @@ class RecommendedPracticeCard extends StatelessWidget {
   final IconData buttonIcon;
   final Key? actionKey;
   static const asset =
-      'assets/images/progress_collection/recommended_practice_frame.png';
+      'assets/images/progress_collection/recommended_practice_frame.webp';
 
   @override
   Widget build(BuildContext context) => Center(

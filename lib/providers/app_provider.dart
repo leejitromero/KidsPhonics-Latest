@@ -5,8 +5,12 @@ import '../services/parent_auth_service.dart';
 import '../services/screen_time_service.dart';
 import '../services/preference_write_queue.dart';
 import '../models/learning_progress.dart';
+import '../models/smart_review.dart';
+import '../data/smart_review_catalog.dart';
 import '../models/word_lesson_progress.dart';
 import '../models/progress_badge.dart';
+import '../data/game_session_order.dart';
+import '../data/lesson_word_order.dart';
 import '../models/letter_adventure.dart';
 import '../models/weekly_learning_summary.dart';
 import 'package:flutter/material.dart';
@@ -152,6 +156,44 @@ class AppProvider extends ChangeNotifier {
     await _savePrefs();
   }
 
+  final SmartReviewState _smartReview = SmartReviewState();
+  List<ReviewEvidence> get smartReviewSuggestions => _smartReview.pending;
+
+  void _observeReview(ReviewTarget target, bool correct) {
+    if (SmartReviewCatalog.supported(target)) {
+      _smartReview.observe(target, correct);
+    }
+  }
+
+  void _observeAdventureReview(String letter, List<bool> answers) {
+    final content = adventureContents.firstWhere((c) => c.letter == letter);
+    final targets = [
+      ReviewTarget.letter(letter),
+      ReviewTarget.sound(letter),
+      ReviewTarget.word(content.word.toUpperCase()),
+      ReviewTarget.sound(letter),
+      ReviewTarget.letter(letter),
+    ];
+    for (var i = 0; i < answers.length; i++) {
+      _observeReview(targets[i], answers[i]);
+    }
+  }
+
+  /// Review updates its own evidence, never assessment scores or rewards.
+  Future<void> recordSmartReviewPractice(
+      ReviewTarget target, bool correct) async {
+    await ready;
+    if (!isReady ||
+        _disposed ||
+        timeLimitReached ||
+        !_smartReview.pending.any((e) => e.target.key == target.key)) {
+      return;
+    }
+    _observeReview(target, correct);
+    _changed();
+    await _savePrefs();
+  }
+
   final Map<String, AdventureProgress> _adventures = {};
   String? _recommendedAdventureLetter;
   AdventureProgress adventureProgress(String letter) =>
@@ -257,6 +299,72 @@ class AppProvider extends ChangeNotifier {
               target: target,
               milestone: true),
       ];
+
+  final Set<String> _knownBadgeUnlocks = {}, _shownBadgeUnlocks = {};
+  final List<String> _pendingBadgeUnlocks = [];
+  bool _badgeUnlocksInitialized = false;
+
+  List<String> get pendingBadgeUnlocks =>
+      List.unmodifiable(_pendingBadgeUnlocks);
+
+  void _loadBadgeUnlocks(Object? saved) {
+    final earned =
+        progressBadges.where((b) => b.earned).map((b) => b.id).toSet();
+    _knownBadgeUnlocks
+      ..clear()
+      ..addAll(earned);
+    _shownBadgeUnlocks.clear();
+    _pendingBadgeUnlocks.clear();
+    if (saved is Map) {
+      final shown = saved['shown'];
+      final pending = saved['pending'];
+      if (shown is List) {
+        _shownBadgeUnlocks
+            .addAll(shown.whereType<String>().where(earned.contains));
+      }
+      if (pending is List) {
+        _pendingBadgeUnlocks.addAll(pending
+            .whereType<String>()
+            .where(
+                (id) => earned.contains(id) && !_shownBadgeUnlocks.contains(id))
+            .toSet());
+      }
+    }
+    // Existing achievements form the migration baseline. Only genuinely queued
+    // unlocks resume; installing this feature never replays every old badge.
+    _shownBadgeUnlocks.addAll(earned.difference(_pendingBadgeUnlocks.toSet()));
+    _badgeUnlocksInitialized = true;
+  }
+
+  /// Claim before showing, so rebuilds, navigation and restarts cannot replay it.
+  /// This records presentation only; rewards and mastery remain evidence-based.
+  Future<ProgressBadge?> claimBadgeUnlock(String id) async {
+    await ready;
+    if (_disposed || !isReady || !_pendingBadgeUnlocks.contains(id)) {
+      return null;
+    }
+    final matches =
+        progressBadges.where((badge) => badge.id == id && badge.earned);
+    if (matches.isEmpty) return null;
+    final badge = matches.single;
+    _pendingBadgeUnlocks.remove(id);
+    _shownBadgeUnlocks.add(id);
+    _changed();
+    await _savePrefs();
+    if (_disposed || !progressBadges.any((b) => b.id == id && b.earned)) {
+      return null;
+    }
+    if (hasUnsavedChanges) {
+      _shownBadgeUnlocks.remove(id);
+      if (!_pendingBadgeUnlocks.contains(id)) {
+        _pendingBadgeUnlocks.insert(0, id);
+      }
+      _changed();
+      return null;
+    }
+    return badge;
+  }
+
   String? get recommendedAdventureLetter {
     // Keep a child's current target through retries and unrelated activities.
     // Only the existing AdventurePolicy mastery decision advances it.
@@ -302,6 +410,7 @@ class AppProvider extends ChangeNotifier {
         lastAnswers: List.unmodifiable(answers),
         sessionId: sessionId);
     _recommendedAdventureLetter = recommendedAdventureLetter;
+    _observeAdventureReview(letter, answers);
     for (final correct in answers) {
       _recordAnswer(correct);
     }
@@ -659,8 +768,10 @@ class AppProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> recordDailyAnswer({required bool correct}) async {
+  Future<void> recordDailyAnswer(
+      {required bool correct, ReviewTarget? reviewTarget}) async {
     await ready;
+    if (reviewTarget != null) _observeReview(reviewTarget, correct);
     _recordAnswer(correct);
     _changed();
     await _savePrefs();
@@ -705,6 +816,14 @@ class AppProvider extends ChangeNotifier {
   }
 
   void _changed() {
+    if (_badgeUnlocksInitialized) {
+      for (final badge in progressBadges.where((badge) => badge.earned)) {
+        if (_knownBadgeUnlocks.add(badge.id) &&
+            !_shownBadgeUnlocks.contains(badge.id)) {
+          _pendingBadgeUnlocks.add(badge.id);
+        }
+      }
+    }
     if (!_disposed) notifyListeners();
   }
 
@@ -726,11 +845,15 @@ class AppProvider extends ChangeNotifier {
     _letterProgress.clear();
     _wordLessons.clear();
     _adventures.clear();
+    _smartReview.clear();
     _recommendedAdventureLetter = null;
     _journeyScores.clear();
     _dailyActivity.clear();
     _lastPracticeDate = null;
     _rhymingWordsDone = false;
+    _knownBadgeUnlocks.clear();
+    _shownBadgeUnlocks.clear();
+    _pendingBadgeUnlocks.clear();
     _changed();
     await _savePrefs();
     return !hasUnsavedChanges;
@@ -756,6 +879,8 @@ class AppProvider extends ChangeNotifier {
     }
 
     if (_disposed) return;
+    GameSessionOrder.initialize(prefs);
+    LessonWordOrder.initialize(prefs);
     parentAuth = ParentAuthService(prefs, now: _now);
     screenTime = ScreenTimeService(prefs, parentAuth, now: _now);
     screenTime.addListener(_screenTimeChanged);
@@ -788,6 +913,17 @@ class AppProvider extends ChangeNotifier {
       if (RegExp(r'^[A-Z]$').hasMatch(entry.key) && entry.value is Map) {
         _adventures[entry.key] = AdventureProgress.fromJson(entry.value as Map);
       }
+    }
+    final review = read('smartReviewV1');
+    if (review == null) {
+      // Existing installations only have skill-level evidence from Quick Check.
+      for (final entry in _adventures.entries) {
+        if (entry.value.completed > 0 && entry.value.lastAnswers.length == 5) {
+          _observeAdventureReview(entry.key, entry.value.lastAnswers);
+        }
+      }
+    } else {
+      _smartReview.load(_decodeMap(review), SmartReviewCatalog.supported);
     }
     final recommendation = read('recommendedAdventureLetterV1');
     if (recommendation is String &&
@@ -837,6 +973,7 @@ class AppProvider extends ChangeNotifier {
           DailyActivity.fromJson(Map<String, dynamic>.from(entry.value as Map));
     }
     _lastPracticeDate = validLocalDate(read('lastPracticeDateV1'));
+    _loadBadgeUnlocks(_decodeMap(read('badgeUnlockPresentationV1')));
     audio.enabled = _sfxEnabled;
     _changed();
   }
@@ -870,9 +1007,14 @@ class AppProvider extends ChangeNotifier {
       'welcomeCompletedV1': _welcomeCompleted,
       'rhymingDone': _rhymingWordsDone,
       'journeyScoresV1': jsonEncode(_journeyScores),
+      'smartReviewV1': jsonEncode(_smartReview.toJson()),
       'wordLessonProgressV1': jsonEncode({
         for (final entry in _wordLessons.entries)
           entry.key.name: entry.value.toJson(),
+      }),
+      'badgeUnlockPresentationV1': jsonEncode({
+        'shown': _shownBadgeUnlocks.toList()..sort(),
+        'pending': List<String>.of(_pendingBadgeUnlocks),
       }),
       'xp': _xp,
       'stars': _stars,

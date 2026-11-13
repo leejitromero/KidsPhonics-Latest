@@ -109,6 +109,8 @@ void main() {
       final dock = t.getRect(find.byKey(const ValueKey('kids-navigation-bar')));
       expect(dock.bottom, lessThanOrEqualTo(scenario.size.height - 24));
       for (final id in ids) {
+        expect(find.byKey(ValueKey('lesson-count-$id')), findsNothing);
+        expect(find.byKey(ValueKey('lesson-progress-$id')), findsNothing);
         final image = t.widget<Image>(find.byKey(ValueKey('lesson-art-$id')));
         expect(image.fit, BoxFit.contain);
         await t.ensureVisible(action(id));
@@ -181,18 +183,15 @@ void main() {
     final p = await mount(t, const LessonsScreen());
     await t.runAsync(() => p.markLetterViewed('A'));
     await t.pump();
-    expect(find.text('0 / 26 Mastered'), findsNWidgets(2));
+    expect(find.text('0 / 26 Mastered'), findsNothing);
     await t.runAsync(
         () => p.completeAdventure('A', List.filled(5, true), 'lessons-a'));
     await t.pump();
-    expect(find.text('1 / 26 Mastered'), findsNWidgets(2));
-    expect(find.text('1 / 5 Mastered'), findsOneWidget);
-    expect(
-        t
-            .widget<LinearProgressIndicator>(find
-                .byKey(const ValueKey('lesson-progress-letter_recognition')))
-            .value,
-        1 / 26);
+    expect(find.text('1 / 26 Mastered'), findsNothing);
+    expect(find.text('1 / 5 Mastered'), findsNothing);
+    expect(find.byType(LinearProgressIndicator), findsNothing);
+    expect(p.overallMasteredCount, 1);
+    expect(p.quickCheckVowelsMastered, 1);
     await t.tap(find.byKey(const ValueKey('lessons-profile')));
     await t.pumpAndSettle();
     expect(find.byType(StudentCharacterPicker), findsOneWidget);
@@ -200,7 +199,7 @@ void main() {
     Navigator.of(t.element(find.byType(StudentCharacterPicker))).pop();
     await t.pumpAndSettle();
     expect(find.byKey(const ValueKey('lessons-profile-boy')), findsOneWidget);
-    expect(find.text('1 / 26 Mastered'), findsNWidgets(2));
+    expect(find.text('1 / 26 Mastered'), findsNothing);
     await close(t, p);
   });
   for (final lesson in WordLesson.values) {

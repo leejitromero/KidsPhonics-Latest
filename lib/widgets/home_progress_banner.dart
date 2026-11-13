@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import '../data/updated_scene.dart';
 
 abstract final class HomeBannerArt {
-  static const logo = 'assets/images/home_banner/logo.png';
-  static const panel = 'assets/images/home_banner/panel.png';
-  static const trophy = 'assets/images/home_banner/trophy.png';
-  static const xp = 'assets/images/home_banner/xp.png';
-  static const star = 'assets/images/home_banner/star.png';
-  static const fire = 'assets/images/home_banner/fire.png';
-  static const flower = 'assets/images/home_banner/flower.png';
+  static const logo = 'assets/images/home_banner/logo.webp';
+  static const panel = 'assets/images/home_banner/panel.webp';
+  static const trophy = 'assets/images/home_banner/trophy.webp';
+  static const xp = 'assets/images/home_banner/xp.webp';
+  static const star = 'assets/images/home_banner/star.webp';
+  static const fire = 'assets/images/home_banner/fire.webp';
+  static const flower = 'assets/images/home_banner/flower.webp';
   static const assets = [logo, panel, trophy, xp, star, fire, flower];
-  static String portrait(String character) => '$sceneAssets/${character}_1.png';
+  static String portrait(String character) => '$sceneAssets/${character}_1.webp';
 }
 
 /// Logo and panel keep their own original proportions on every viewport.

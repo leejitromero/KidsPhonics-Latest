@@ -108,15 +108,16 @@ void main() {
     for (var i = 1; i < blendingLessonWords.length; i++) {
       lesson.next();
     }
-    expect(lesson.word.word, 'WIG');
+    expect(lesson.word.word, 'TRACTOR');
     expect(lesson.place(0, 0), isTrue);
     expect(lesson.place(0, 2), isFalse);
-    expect(lesson.place(2, 2), isTrue);
-    expect(lesson.place(1, 1), isTrue);
+    for (var i = 1; i < lesson.word.word.length; i++) {
+      expect(lesson.place(i, i), isTrue);
+    }
     await finish(t);
     expect(lesson.phase, BlendingPhase.complete);
     lesson.next();
-    expect(lesson.word.word, 'WIG');
+    expect(lesson.word.word, 'TRACTOR');
     lesson.dispose();
   });
   testWidgets(
@@ -207,11 +208,11 @@ void main() {
     expect(lesson.running, isFalse);
     lesson.dispose();
   });
-  test(
-      'all 22 supplied words have bundled word, praise, phonemes and picture support',
+  test('all 100 supplied words have bundled word, praise and picture support',
       () async {
-    expect(blendingLessonWords, hasLength(22));
-    expect(blendingLessonWords.map((w) => w.word).toSet(), hasLength(22));
+    expect(blendingCoreWords, hasLength(22));
+    expect(blendingLessonWords, hasLength(100));
+    expect(blendingLessonWords.map((w) => w.word).toSet(), hasLength(100));
     for (final word in blendingLessonWords) {
       expect(
           word.imageAsset != null ||
@@ -229,7 +230,8 @@ void main() {
         'blend-intro-1',
         'blend-intro-2',
         'blend-try-another',
-        for (var i = 0; i < 3; i++) word.soundAudio(i)
+        for (final sound in word.sounds) sound.audio,
+        for (var i = 0; i < word.word.length; i++) word.placementSound(i).audio,
       ]) {
         final asset = PhonicsAudioService.assetForPhrase(phrase);
         expect(asset, isNotNull);
@@ -237,10 +239,13 @@ void main() {
         expect(data.lengthInBytes, greaterThan(44));
         expect(asset, endsWith('.mp3'));
       }
+      // Cached bundle reads can be SynchronousFuture instances. Unwind the
+      // test's async stack between words instead of chaining hundreds of them.
+      await Future<void>.delayed(Duration.zero);
     }
     expect(
         Directory('assets/audio/blending_lesson').listSync().whereType<File>(),
-        hasLength(45));
+        hasLength(blendingLessonWords.length * 2 + 1));
   });
 
   testWidgets(

@@ -189,22 +189,17 @@ void main() {
       await start(t);
       final word =
           t.widget<SpeechPictureCard>(find.byType(SpeechPictureCard)).word;
-      if (covered == 'dialog') {
-        speech.result!('zzzz', true);
-        await t.runAsync(
-            () => Future<void>.delayed(const Duration(milliseconds: 30)));
-        await t.pump();
-        await start(t);
-      }
       final late = speech.result!;
       final attempts = p.getWeeklySummary().speechAttempts;
       final stoppedBefore = speech.stops;
       if (covered == 'background') {
         t.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
       } else if (covered == 'dialog') {
-        await t.tap(find.byTooltip('Back'));
+        showDialog<void>(
+            context: t.element(find.byType(VoiceRecognitionScreen)),
+            builder: (_) => const AlertDialog(title: Text('Covered')));
         await t.pump(const Duration(milliseconds: 300));
-        expect(find.text('Leave this game?'), findsOneWidget);
+        expect(find.text('Covered'), findsOneWidget);
       } else {
         await t.runAsync(() async {
           await p.parentAuth.setup('2580', '2580');
@@ -219,7 +214,7 @@ void main() {
       if (covered == 'background') {
         t.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
       } else if (covered == 'dialog') {
-        await t.tap(find.text('Cancel'));
+        Navigator.of(t.element(find.byType(AlertDialog))).pop();
         await t.pump(const Duration(milliseconds: 300));
       }
       await close(t, p);

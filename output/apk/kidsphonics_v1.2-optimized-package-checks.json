@@ -1,0 +1,32 @@
+{
+  "apkBytes": 493827758,
+  "previousApkBytes": 557221118,
+  "savedBytes": 63393360,
+  "sha256": "9A4CE26E855FDE2ED275B4B077ED2738D40ACAFF31743BD776679E7DA3BF4E07",
+  "crcVerified": true,
+  "noDuplicateZipPaths": true,
+  "optimizedImagesVerified": 132,
+  "retiredPngDuplicatesAbsent": true,
+  "abis": [
+    "arm64-v8a",
+    "armeabi-v7a",
+    "x86_64"
+  ],
+  "compiledApplication": {
+    "arm64-v8a": {
+      "current": "07C67375E9D8AAFFFAE5EDBC565E34A65261CC6D4D3C6F028FD6914DC9B70B99",
+      "previous": "60031DA64DAF6D7BE9E811082AA1FA9309AEA3A69F0055582E20554AEF2C0D31",
+      "changed": true
+    },
+    "armeabi-v7a": {
+      "current": "FF68CE0091282DA974119C26E271DB2380374ACD7689D2C59214B7D5617909F1",
+      "previous": "9BEF3286B7DF1BAE0DC96378667F5B53CFB20C83F63A579DC7DF86AFF664CC51",
+      "changed": true
+    },
+    "x86_64": {
+      "current": "A54F7DA8AE84024814D3A3AC7BD2261A938860E362C6864FBEB2123026E748B1",
+      "previous": "DEB8A389BF0EA8DFC2EB6A58842CB6877DEE6432E7A54CB9A2DBDB148B1D8115",
+      "changed": true
+    }
+  }
+}
